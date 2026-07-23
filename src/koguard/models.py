@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 from enum import StrEnum
+from math import isfinite
 
 
 class MatchMethod(StrEnum):
@@ -26,6 +27,8 @@ class Match:
     score: float
 
     def __post_init__(self) -> None:
+        if self.method is MatchMethod.NONE:
+            raise ValueError("MatchMethod.NONE cannot be used for a detected match")
         if not self.term:
             raise ValueError("term must not be empty")
         if not self.matched_text:
@@ -48,8 +51,13 @@ class CheckResult:
     elapsed_ms: float = 0.0
 
     def __post_init__(self) -> None:
-        if self.elapsed_ms < 0.0:
-            raise ValueError("elapsed_ms must not be negative")
+        normalized_matches = tuple(self.matches)
+        if not all(isinstance(match, Match) for match in normalized_matches):
+            raise TypeError("matches must contain only Match instances")
+        object.__setattr__(self, "matches", normalized_matches)
+
+        if not isfinite(self.elapsed_ms) or self.elapsed_ms < 0.0:
+            raise ValueError("elapsed_ms must be finite and non-negative")
 
     @property
     def detected(self) -> bool:
