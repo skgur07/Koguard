@@ -16,7 +16,7 @@ class EngineConfig:
     unicode_form: NormalizationForm = "NFKC"
 
     def __post_init__(self) -> None:
-        if isinstance(self.max_input_length, bool) or self.max_input_length <= 0:
+        if type(self.max_input_length) is not int or self.max_input_length <= 0:
             raise ConfigurationError("max_input_length must be a positive integer")
         if self.unicode_form not in {"NFC", "NFKC"}:
             raise ConfigurationError("unicode_form must be either 'NFC' or 'NFKC'")

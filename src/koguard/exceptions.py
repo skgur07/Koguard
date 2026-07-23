@@ -19,6 +19,9 @@ class InputTooLongError(KoguardError, ValueError):
     def __init__(self, actual_length: int, max_length: int) -> None:
         self.actual_length = actual_length
         self.max_length = max_length
-        super().__init__(
-            f"input length {actual_length} exceeds the configured limit of {max_length}"
+        super().__init__(actual_length, max_length)
+
+    def __str__(self) -> str:
+        return (
+            f"input length {self.actual_length} exceeds the configured limit of {self.max_length}"
         )

@@ -14,10 +14,10 @@ def test_engine_config_defaults() -> None:
     assert config.unicode_form == "NFKC"
 
 
-@pytest.mark.parametrize("value", [0, -1, False])
-def test_engine_config_rejects_invalid_max_length(value: int) -> None:
+@pytest.mark.parametrize("value", [0, -1, False, 1.5])
+def test_engine_config_rejects_invalid_max_length(value: object) -> None:
     with pytest.raises(ConfigurationError, match="positive integer"):
-        EngineConfig(max_input_length=value)
+        EngineConfig(max_input_length=cast(int, value))
 
 
 def test_engine_config_rejects_invalid_unicode_form() -> None:
