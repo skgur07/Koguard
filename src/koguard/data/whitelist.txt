@@ -1,0 +1,3 @@
+# Minimal manually curated false-positive fixture
+병신년
+시발점
