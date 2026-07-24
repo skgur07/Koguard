@@ -41,8 +41,22 @@ uv run python -c "import koguard; print(koguard.__version__)"
 ## 개발 명령
 
 ```powershell
+uv run ruff format --check .
 uv run ruff check .
 uv run mypy
 uv run pytest
 uv build
 ```
+
+## AI 개발 하네스
+
+Koguard는 [Everything Claude Code(ECC)](https://github.com/affaan-m/ECC)의 계획, TDD,
+검증, 전문 역할 분리 패턴을 프로젝트 로컬 Codex 설정으로 적용합니다.
+
+- 저장소 규칙: [`AGENTS.md`](AGENTS.md)
+- Codex 탐색 지도: [`docs/CODEX-NAVIGATION-GUIDE.md`](docs/CODEX-NAVIGATION-GUIDE.md)
+- 개발 워크플로: [`docs/development-workflow.md`](docs/development-workflow.md)
+- 코드 리뷰 기준: [`docs/code-review.md`](docs/code-review.md)
+- DAILY/LIBRARY 분류: [`docs/ecc-install-plan.md`](docs/ecc-install-plan.md)
+
+전역 모델, 알림, MCP 서버, 자격 증명 설정은 변경하지 않습니다.
