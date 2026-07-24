@@ -1,4 +1,4 @@
-"""Low-cost exact matching with span-scoped whitelist protection."""
+"""Trie-based exact matching with span-scoped whitelist protection."""
 
 from dataclasses import dataclass
 
@@ -39,16 +39,45 @@ class _MappedCandidate:
         return normalized_overlap or original_overlap
 
 
-def _find_occurrences(text: str, term: str) -> tuple[_NormalizedCandidate, ...]:
-    occurrences: list[_NormalizedCandidate] = []
-    search_from = 0
-    while True:
-        start = text.find(term, search_from)
-        if start < 0:
-            break
-        occurrences.append(_NormalizedCandidate(term=term, start=start, end=start + len(term)))
-        search_from = start + 1
-    return tuple(occurrences)
+class _TrieNode:
+    """Mutable only while a term trie is being constructed."""
+
+    __slots__ = ("children", "terms")
+
+    def __init__(self) -> None:
+        self.children: dict[str, _TrieNode] = {}
+        self.terms: list[str] = []
+
+
+class _TermTrie:
+    """Read-only-after-construction prefix index for normalized terms."""
+
+    __slots__ = ("_root",)
+
+    def __init__(self, terms: tuple[str, ...]) -> None:
+        self._root = _TrieNode()
+        for term in terms:
+            node = self._root
+            for character in term:
+                node = node.children.setdefault(character, _TrieNode())
+            node.terms.append(term)
+
+    def find(self, text: str) -> tuple[_NormalizedCandidate, ...]:
+        occurrences: list[_NormalizedCandidate] = []
+        for start in range(len(text)):
+            node = self._root
+            end = start
+            while end < len(text):
+                child = node.children.get(text[end])
+                if child is None:
+                    break
+                node = child
+                end += 1
+                occurrences.extend(
+                    _NormalizedCandidate(term=term, start=start, end=end)
+                    for term in node.terms
+                )
+        return tuple(occurrences)
 
 
 def _map_candidate(
@@ -66,27 +95,25 @@ def _map_candidate(
     )
 
 
-class ExactMatcher:
-    """Find literal normalized terms and remove protected spans."""
+class TrieMatcher:
+    """Find normalized terms through prefix tries and remove protected spans."""
 
     __slots__ = ("_blacklist", "_whitelist")
 
     def __init__(self, dictionary: KoguardDictionary) -> None:
-        self._blacklist = dictionary.ordered_blacklist
-        self._whitelist = dictionary.ordered_whitelist
+        self._blacklist = _TermTrie(dictionary.ordered_blacklist)
+        self._whitelist = _TermTrie(dictionary.ordered_whitelist)
 
     def find(self, original_text: str, normalized: NormalizedText) -> tuple[Match, ...]:
         """Return deterministic, non-overlapping exact matches."""
 
         whitelist_spans = tuple(
             _map_candidate(candidate, normalized)
-            for term in self._whitelist
-            for candidate in _find_occurrences(normalized.text, term)
+            for candidate in self._whitelist.find(normalized.text)
         )
         candidates = [
             _map_candidate(candidate, normalized)
-            for term in self._blacklist
-            for candidate in _find_occurrences(normalized.text, term)
+            for candidate in self._blacklist.find(normalized.text)
         ]
         candidates = [
             candidate
