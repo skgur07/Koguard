@@ -74,8 +74,7 @@ class _TermTrie:
                 node = child
                 end += 1
                 occurrences.extend(
-                    _NormalizedCandidate(term=term, start=start, end=end)
-                    for term in node.terms
+                    _NormalizedCandidate(term=term, start=start, end=end) for term in node.terms
                 )
         return tuple(occurrences)
 
