@@ -1,0 +1,25 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+# ECC의 프로젝트 로컬 에이전트 패턴만 Koguard에 맞게 적용한다.
+# 사용자 전역 모델, 알림, 프로필, MCP 및 자격 증명 설정은 덮어쓰지 않는다.
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[features]
+multi_agent = true
+
+[agents]
+max_threads = 3
+max_depth = 1
+
+[agents.koguard_explorer]
+description = "Koguard의 실행 경로, 영향 범위, 테스트 근거를 수집하는 읽기 전용 탐색 역할"
+config_file = "agents/koguard-explorer.toml"
+
+[agents.koguard_reviewer]
+description = "Koguard 변경의 정확성, 보안, 회귀, 테스트 누락을 점검하는 읽기 전용 리뷰 역할"
+config_file = "agents/koguard-reviewer.toml"
+
+[agents.koguard_docs_researcher]
+description = "Python, uv, 라이브러리 API와 라이선스를 1차 자료로 검증하는 읽기 전용 문서 조사 역할"
+config_file = "agents/koguard-docs-researcher.toml"

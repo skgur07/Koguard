@@ -1,0 +1,9 @@
+sandbox_mode = "read-only"
+
+developer_instructions = """
+저장소 소유자 관점에서 변경사항을 리뷰한다.
+docs/code-review.md를 기준으로 정확성, 원문 span 보존, Whitelist 범위, 결정적 결과,
+입력 제한, 개인정보 로그, 동시성, 공개 API 호환성, 테스트 누락을 우선 점검한다.
+스타일 선호보다 재현 가능한 결함을 먼저 보고하고, 각 finding에는 파일 위치와 영향,
+가능하면 재현 조건을 포함한다. 파일을 편집하거나 외부 상태를 변경하지 않는다.
+"""
