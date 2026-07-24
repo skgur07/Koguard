@@ -3,6 +3,7 @@
 from importlib.metadata import PackageNotFoundError, version
 
 from koguard.config import EngineConfig, NormalizationForm
+from koguard.engine import KoguardDictionary, KoguardEngine
 from koguard.exceptions import (
     ConfigurationError,
     DictionaryError,
@@ -22,6 +23,8 @@ __all__ = [
     "DictionaryError",
     "EngineConfig",
     "InputTooLongError",
+    "KoguardDictionary",
+    "KoguardEngine",
     "KoguardError",
     "Match",
     "MatchMethod",

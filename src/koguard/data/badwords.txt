@@ -1,0 +1,3 @@
+# Minimal manually curated development fixture
+병신
+시발
