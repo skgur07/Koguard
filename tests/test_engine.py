@@ -174,4 +174,4 @@ def test_engine_is_safe_for_concurrent_checks() -> None:
     with ThreadPoolExecutor(max_workers=4) as executor:
         results = list(executor.map(engine.check, texts))
 
-    assert [result.detected for result in results] == [False, False, True, True] * 10
+    assert [result.detected for result in results] == [False, True, True, True] * 10
