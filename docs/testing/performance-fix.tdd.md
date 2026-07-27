@@ -18,7 +18,7 @@ Trie 시제품을 유지하는 대신 다음 최저 비용 경로를 선택했�
 ## RED
 
 - 테스트: `tests/test_matcher.py`, `tests/test_normalizer.py`
-- matcher 계약: 후보 간 `overlaps()` 호출을 금지하고 반복 접두사 입력 결과를 검증
+- matcher 계약: 반복 접두사 입력에서도 겹치지 않는 최장 매치 결과를 검증
 - normalizer 계약: 안정적인 ASCII·완성형 한글에서 `unicodedata.normalize()` 호출을 금지
 - 결과:
   - `ExactMatcher`가 없어 matcher 테스트가 import 단계에서 실패

@@ -1,5 +1,6 @@
 """Low-cost exact matching with span-scoped whitelist protection."""
 
+from collections.abc import Iterator
 from dataclasses import dataclass
 
 from koguard.engine.dictionary import KoguardDictionary
@@ -17,9 +18,6 @@ class _NormalizedCandidate:
     def length(self) -> int:
         return self.end - self.start
 
-    def overlaps(self, other: "_NormalizedCandidate") -> bool:
-        return self.start < other.end and other.start < self.end
-
 
 @dataclass(frozen=True, slots=True)
 class _MappedCandidate:
@@ -31,29 +29,19 @@ class _MappedCandidate:
     def length(self) -> int:
         return self.normalized.length
 
-    def overlaps(self, other: "_MappedCandidate") -> bool:
-        normalized_overlap = self.normalized.overlaps(other.normalized)
-        original_overlap = (
-            self.original_start < other.original_end and other.original_start < self.original_end
-        )
-        return normalized_overlap or original_overlap
 
-
-def _find_occurrences(text: str, term: str) -> tuple[_NormalizedCandidate, ...]:
+def _iter_occurrences(text: str, term: str) -> Iterator[_NormalizedCandidate]:
     """Find overlapping occurrences through CPython's optimized string search."""
 
-    occurrences: list[_NormalizedCandidate] = []
     search_from = 0
     while True:
         start = text.find(term, search_from)
         if start < 0:
-            return tuple(occurrences)
-        occurrences.append(
-            _NormalizedCandidate(
-                term=term,
-                start=start,
-                end=start + len(term),
-            )
+            return
+        yield _NormalizedCandidate(
+            term=term,
+            start=start,
+            end=start + len(term),
         )
         search_from = start + 1
 
@@ -129,7 +117,7 @@ class ExactMatcher:
         protected_normalized = bytearray(len(normalized.text))
         protected_original = bytearray(len(original_text))
         for term in self._whitelist:
-            for normalized_candidate in _find_occurrences(normalized.text, term):
+            for normalized_candidate in _iter_occurrences(normalized.text, term):
                 _occupy(
                     _map_candidate(normalized_candidate, normalized),
                     protected_normalized,
@@ -139,7 +127,7 @@ class ExactMatcher:
         candidates = [
             _map_candidate(normalized_candidate, normalized)
             for term in self._blacklist
-            for normalized_candidate in _find_occurrences(normalized.text, term)
+            for normalized_candidate in _iter_occurrences(normalized.text, term)
         ]
 
         selected_normalized = bytearray(len(normalized.text))

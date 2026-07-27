@@ -1,9 +1,7 @@
 """Unit tests for low-cost exact matching."""
 
-import pytest
-
 from koguard import KoguardDictionary
-from koguard.engine.matcher import ExactMatcher, _MappedCandidate
+from koguard.engine.matcher import ExactMatcher
 from koguard.engine.normalizer import normalize_text
 
 
@@ -42,16 +40,7 @@ def test_exact_matcher_applies_whitelist_to_only_overlapping_span() -> None:
     assert [match.term for match in matches] == ["병신"]
 
 
-def test_exact_matcher_does_not_compare_candidates_pairwise(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    def reject_pairwise_overlap(
-        self: _MappedCandidate,
-        other: _MappedCandidate,
-    ) -> bool:
-        raise AssertionError("candidate overlap must use position masks")
-
-    monkeypatch.setattr(_MappedCandidate, "overlaps", reject_pairwise_overlap)
+def test_exact_matcher_selects_non_overlapping_longest_matches_from_many_candidates() -> None:
     matcher = make_matcher(
         blacklist=["a" * size for size in range(1, 9)],
         whitelist=["정상"],
