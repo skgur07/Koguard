@@ -3,7 +3,11 @@
 import pytest
 
 import koguard.engine.normalizer as normalizer_module
-from koguard.engine.normalizer import NormalizedText, normalize_text
+from koguard.engine.normalizer import (
+    NormalizedText,
+    build_repeated_view,
+    normalize_text,
+)
 
 
 def test_normalizer_handles_empty_input() -> None:
@@ -62,6 +66,20 @@ def test_normalizer_skips_unicode_slow_path_for_stable_ascii_and_hangul(
 
     assert normalized.text == "abc한글"
     assert normalized.source_spans == tuple((index, index + 1) for index in range(5))
+
+
+def test_repeated_view_removes_repeated_vowel_extension_and_preserves_span() -> None:
+    repeated = build_repeated_view(normalize_text("시이이발", "NFKC"), threshold=2)
+
+    assert repeated.text == "시발"
+    assert repeated.source_spans == ((0, 3), (3, 4))
+    assert repeated.original_span(0, 2) == (0, 4)
+
+
+def test_repeated_view_keeps_single_vowel_extension() -> None:
+    normalized = normalize_text("시이발", "NFKC")
+
+    assert build_repeated_view(normalized, threshold=2) == normalized
 
 
 def test_normalized_text_rejects_mismatched_mapping() -> None:
