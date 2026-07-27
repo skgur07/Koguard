@@ -1,5 +1,9 @@
 # Trie matcher TDD 증거
 
+> 이 문서는 Trie 시제품의 구현 당시 증거다. 후속 벤치마크에서 현재 사전 규모에 부적합하다고
+> 판정되어 런타임 구현은 [Exact matcher 성능 수정 TDD 증거](performance-fix.tdd.md)로
+> 대체되었다.
+
 ## Source plan
 
 - [Phase 2 — v0.2 Normalizer + Trie + Benchmark](../implementation-plan.md)

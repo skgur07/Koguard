@@ -4,7 +4,7 @@ from time import perf_counter_ns
 
 from koguard.config import EngineConfig
 from koguard.engine.dictionary import KoguardDictionary
-from koguard.engine.matcher import TrieMatcher
+from koguard.engine.matcher import ExactMatcher
 from koguard.engine.normalizer import normalize_text
 from koguard.exceptions import ConfigurationError, InputTooLongError
 from koguard.models import CheckResult
@@ -13,7 +13,7 @@ from koguard.models import CheckResult
 class KoguardEngine:
     """Synchronous, thread-safe profanity detection engine."""
 
-    __slots__ = ("_config", "_dictionary", "_trie_matcher")
+    __slots__ = ("_config", "_dictionary", "_exact_matcher")
 
     def __init__(
         self,
@@ -29,7 +29,7 @@ class KoguardEngine:
 
         self._config = resolved_config
         self._dictionary = resolved_dictionary
-        self._trie_matcher = TrieMatcher(resolved_dictionary)
+        self._exact_matcher = ExactMatcher(resolved_dictionary)
 
     @property
     def config(self) -> EngineConfig:
@@ -53,7 +53,7 @@ class KoguardEngine:
 
         started_at = perf_counter_ns()
         normalized = normalize_text(text, self._config.unicode_form)
-        matches = self._trie_matcher.find(text, normalized)
+        matches = self._exact_matcher.find(text, normalized)
         elapsed_ms = (perf_counter_ns() - started_at) / 1_000_000
 
         return CheckResult(

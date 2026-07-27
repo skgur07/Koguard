@@ -2,6 +2,7 @@
 
 import pytest
 
+import koguard.engine.normalizer as normalizer_module
 from koguard.engine.normalizer import NormalizedText, normalize_text
 
 
@@ -47,6 +48,20 @@ def test_normalizer_maps_compatibility_expansion_to_one_source_character() -> No
 
     assert normalized.text == "ffi"
     assert normalized.source_spans == ((0, 1), (0, 1), (0, 1))
+
+
+def test_normalizer_skips_unicode_slow_path_for_stable_ascii_and_hangul(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def reject_slow_path(form: str, text: str) -> str:
+        raise AssertionError(f"stable text unexpectedly normalized with {form}: {text}")
+
+    monkeypatch.setattr(normalizer_module, "normalize", reject_slow_path)
+
+    normalized = normalize_text("abc한글", "NFKC")
+
+    assert normalized.text == "abc한글"
+    assert normalized.source_spans == tuple((index, index + 1) for index in range(5))
 
 
 def test_normalized_text_rejects_mismatched_mapping() -> None:
