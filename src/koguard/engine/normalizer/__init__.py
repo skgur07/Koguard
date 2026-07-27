@@ -5,22 +5,34 @@ from unicodedata import combining, normalize
 
 from koguard.config import NormalizationForm
 
-_JAMO_RANGES = (
-    (0x1100, 0x11FF),
-    (0x3130, 0x318F),
-    (0xA960, 0xA97F),
-    (0xD7B0, 0xD7FF),
-)
-
 
 def _is_jamo(character: str) -> bool:
     codepoint = ord(character)
-    return any(start <= codepoint <= end for start, end in _JAMO_RANGES)
+    return (
+        0x1100 <= codepoint <= 0x11FF
+        or 0x3130 <= codepoint <= 0x318F
+        or 0xA960 <= codepoint <= 0xA97F
+        or 0xD7B0 <= codepoint <= 0xD7FF
+    )
 
 
 def _is_variation_selector(character: str) -> bool:
     codepoint = ord(character)
     return 0xFE00 <= codepoint <= 0xFE0F or 0xE0100 <= codepoint <= 0xE01EF
+
+
+def _is_stable_character(character: str) -> bool:
+    """Return whether one character is unchanged by NFC and NFKC."""
+
+    codepoint = ord(character)
+    return codepoint < 0x80 or 0xAC00 <= codepoint <= 0xD7A3
+
+
+def _has_cluster_extension(text: str, start: int) -> bool:
+    if start + 1 >= len(text):
+        return False
+    next_character = text[start + 1]
+    return combining(next_character) != 0 or _is_variation_selector(next_character)
 
 
 def _cluster_end(text: str, start: int) -> int:
@@ -103,6 +115,17 @@ def normalize_text(text: str, unicode_form: NormalizationForm) -> NormalizedText
     start = 0
 
     while start < len(text):
+        character = text[start]
+        if (
+            not character.isspace()
+            and _is_stable_character(character)
+            and not _has_cluster_extension(text, start)
+        ):
+            normalized_parts.append(character)
+            source_spans.append((start, start + 1))
+            start += 1
+            continue
+
         end = _cluster_end(text, start)
         source = text[start:end]
         cluster_spans: tuple[tuple[int, int], ...]
