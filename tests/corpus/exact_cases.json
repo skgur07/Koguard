@@ -55,6 +55,11 @@
     "expected_terms": []
   },
   {
+    "id": "benign_words_near_excluded_ambiguous_terms",
+    "text": "새끼손가락을 다쳐 허리띠를 졸라매고 애니미즘을 공부했다",
+    "expected_terms": []
+  },
+  {
     "id": "empty_input",
     "text": "",
     "expected_terms": []
