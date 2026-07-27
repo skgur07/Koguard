@@ -12,6 +12,7 @@ def test_engine_config_defaults() -> None:
 
     assert config.max_input_length == 4096
     assert config.unicode_form == "NFKC"
+    assert config.repeat_reduction_threshold == 2
 
 
 @pytest.mark.parametrize("value", [0, -1, False, 1.5])

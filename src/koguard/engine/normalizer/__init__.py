@@ -1,9 +1,12 @@
 """Minimal Unicode and whitespace normalization with source span tracking."""
 
+import re
 from dataclasses import dataclass
 from unicodedata import combining, normalize
 
 from koguard.config import NormalizationForm
+
+_REPEATED_VOWEL_EXTENSION = re.compile(r"[아야어여오요우유으이애에얘예와워왜웨외위의]{2}")
 
 
 def _is_jamo(character: str) -> bool:
@@ -147,3 +150,63 @@ def normalize_text(text: str, unicode_form: NormalizationForm) -> NormalizedText
         text="".join(normalized_parts),
         source_spans=tuple(source_spans),
     )
+
+
+def _hangul_vowel_index(character: str) -> int | None:
+    codepoint = ord(character)
+    if not 0xAC00 <= codepoint <= 0xD7A3:
+        return None
+    return ((codepoint - 0xAC00) % 588) // 28
+
+
+def _is_standalone_vowel_extension(character: str, vowel_index: int) -> bool:
+    codepoint = ord(character)
+    if not 0xAC00 <= codepoint <= 0xD7A3:
+        return False
+    syllable_index = codepoint - 0xAC00
+    onset_index = syllable_index // 588
+    character_vowel_index = (syllable_index % 588) // 28
+    final_index = syllable_index % 28
+    return onset_index == 11 and character_vowel_index == vowel_index and final_index == 0
+
+
+def build_repeated_view(
+    normalized: NormalizedText,
+    *,
+    threshold: int,
+) -> NormalizedText:
+    """Remove repeated standalone Hangul vowel extensions from an extra view."""
+
+    if type(threshold) is not int or threshold < 2:
+        raise ValueError("threshold must be an integer greater than or equal to 2")
+    if _REPEATED_VOWEL_EXTENSION.search(normalized.text) is None:
+        return normalized
+
+    characters: list[str] = []
+    source_spans: list[tuple[int, int]] = []
+    index = 0
+    while index < len(normalized.text):
+        character = normalized.text[index]
+        previous_vowel = _hangul_vowel_index(characters[-1]) if characters else None
+        run_end = index + 1
+        while run_end < len(normalized.text) and normalized.text[run_end] == character:
+            run_end += 1
+
+        if (
+            previous_vowel is not None
+            and run_end - index >= threshold
+            and _is_standalone_vowel_extension(character, previous_vowel)
+        ):
+            previous_start, _ = source_spans[-1]
+            source_spans[-1] = (
+                previous_start,
+                normalized.source_spans[run_end - 1][1],
+            )
+            index = run_end
+            continue
+
+        characters.append(character)
+        source_spans.append(normalized.source_spans[index])
+        index += 1
+
+    return NormalizedText(text="".join(characters), source_spans=tuple(source_spans))

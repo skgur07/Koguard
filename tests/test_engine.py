@@ -157,6 +157,15 @@ def test_exact_match_keeps_priority_over_repeated_view() -> None:
     assert result.matches[0].method is MatchMethod.EXACT
 
 
+def test_exact_and_repeated_view_matches_are_both_preserved() -> None:
+    result = KoguardEngine().check("시이이발 그리고 병신")
+
+    assert [(match.term, match.method) for match in result.matches] == [
+        ("시발", MatchMethod.REPEATED),
+        ("병신", MatchMethod.EXACT),
+    ]
+
+
 def test_whitelist_protects_repeated_view_match() -> None:
     engine = make_engine(blacklist=["시발"], whitelist=["시발점"])
 

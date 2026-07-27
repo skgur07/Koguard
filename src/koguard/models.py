@@ -9,6 +9,7 @@ class MatchMethod(StrEnum):
     """Method responsible for a profanity match."""
 
     EXACT = "exact"
+    REPEATED = "repeated"
     TRIE = "trie"
     LEVENSHTEIN = "levenshtein"
     EMBEDDING = "embedding"
