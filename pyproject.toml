@@ -39,7 +39,7 @@ select = ["B", "E", "F", "I", "UP"]
 [tool.mypy]
 python_version = "3.11"
 strict = true
-files = ["src", "tests"]
+files = ["src", "tests", "benchmarks"]
 
 [tool.pytest.ini_options]
 addopts = [
@@ -48,6 +48,7 @@ addopts = [
     "--cov=koguard",
     "--cov-report=term-missing",
 ]
+pythonpath = ["."]
 testpaths = ["tests"]
 
 [tool.coverage.run]

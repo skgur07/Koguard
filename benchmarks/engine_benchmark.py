@@ -18,8 +18,8 @@ from typing import Any
 
 from koguard import KoguardDictionary, KoguardEngine
 
-DEFAULT_CORPUS_PATH = Path("benchmarks/corpus.json")
-DEFAULT_OUTPUT_PATH = Path("benchmarks/results/latest.json")
+DEFAULT_CORPUS_PATH = Path(__file__).with_name("corpus.json")
+DEFAULT_OUTPUT_PATH = Path(__file__).with_name("results") / "latest.json"
 
 
 class BenchmarkError(ValueError):

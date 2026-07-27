@@ -4,9 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
-
-from koguard import EngineConfig
-from koguard.benchmark import (
+from benchmarks.engine_benchmark import (
     BenchmarkCase,
     BenchmarkError,
     load_cases,
@@ -14,6 +12,8 @@ from koguard.benchmark import (
     percentile,
     run_benchmarks,
 )
+
+from koguard import EngineConfig
 
 CORPUS_PATH = Path("benchmarks/corpus.json")
 
