@@ -1,3 +1,4 @@
-# Minimal manually curated false-positive fixture
-병신년
-시발점
+# No default whitelist entries.
+#
+# Applications can provide domain-specific allow-list terms through
+# KoguardDictionary.from_sources(whitelist=...) or whitelist_path.

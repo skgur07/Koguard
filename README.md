@@ -29,6 +29,10 @@ dictionary = KoguardDictionary.from_sources(
 engine = KoguardEngine(dictionary=dictionary)
 ```
 
+기본 사전은 직접 선별한 Exact Match 표현을 포함하며 기본 Whitelist는 비어 있습니다.
+따라서 `시발점`, `병신년`처럼 금칙어를 포함한 복합어도 기본 정책에서는 탐지합니다.
+서비스 문맥에서 허용할 표현은 `whitelist` 또는 `whitelist_path`로 명시적으로 주입해야 합니다.
+
 ## 개발 환경
 
 Python 3.11.9와 [uv](https://docs.astral.sh/uv/)를 사용합니다.

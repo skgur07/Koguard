@@ -55,18 +55,21 @@ def test_default_engine_returns_clean_result() -> None:
     assert result.matches == ()
 
 
-def test_whitelist_protects_only_overlapping_span() -> None:
+def test_default_engine_detects_terms_inside_former_whitelist_examples() -> None:
     text = "시발점이지만 병신이라는 표현"
     result = KoguardEngine().check(text)
 
-    assert [match.term for match in result.matches] == ["병신"]
-    assert result.matches[0].start == text.index("병신")
+    assert [match.term for match in result.matches] == ["시발", "병신"]
+    assert [match.start for match in result.matches] == [
+        text.index("시발"),
+        text.index("병신"),
+    ]
 
 
-def test_whitelist_can_protect_every_match() -> None:
+def test_default_engine_detects_both_former_whitelist_examples() -> None:
     result = KoguardEngine().check("시발점과 병신년")
 
-    assert result.detected is False
+    assert [match.term for match in result.matches] == ["시발", "병신"]
 
 
 def test_multiple_matches_are_sorted_by_original_position() -> None:
@@ -171,4 +174,4 @@ def test_engine_is_safe_for_concurrent_checks() -> None:
     with ThreadPoolExecutor(max_workers=4) as executor:
         results = list(executor.map(engine.check, texts))
 
-    assert [result.detected for result in results] == [False, False, True, True] * 10
+    assert [result.detected for result in results] == [False, True, True, True] * 10
