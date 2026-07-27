@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "measured_at": "2026-07-27T08:14:10.718425+00:00",
+  "environment": {
+    "python_version": "3.11.9",
+    "implementation": "CPython",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 158 Stepping 13, GenuineIntel"
+  },
+  "configuration": {
+    "iterations": 100,
+    "warmups": 10
+  },
+  "results": [
+    {
+      "name": "short-clean",
+      "category": "short-chat",
+      "input_length": 15,
+      "dictionary_size": 2,
+      "expected_matches": 0,
+      "p50_ms": 0.0119,
+      "p95_ms": 0.0121,
+      "throughput_per_second": 83305.56481172932,
+      "cold_start_ms": 0.081,
+      "peak_memory_bytes": 1308
+    },
+    {
+      "name": "short-whitelist-and-match",
+      "category": "short-chat",
+      "input_length": 14,
+      "dictionary_size": 2,
+      "expected_matches": 1,
+      "p50_ms": 0.0228,
+      "p95_ms": 0.0272,
+      "throughput_per_second": 41900.61174893155,
+      "cold_start_ms": 0.0778,
+      "peak_memory_bytes": 1392
+    },
+    {
+      "name": "clean-1kb",
+      "category": "one-kilobyte",
+      "input_length": 1024,
+      "dictionary_size": 2,
+      "expected_matches": 0,
+      "p50_ms": 0.5973,
+      "p95_ms": 0.6506,
+      "throughput_per_second": 1647.5495994806927,
+      "cold_start_ms": 0.8598,
+      "peak_memory_bytes": 155098
+    },
+    {
+      "name": "clean-maximum-input",
+      "category": "maximum-input",
+      "input_length": 4096,
+      "dictionary_size": 2,
+      "expected_matches": 0,
+      "p50_ms": 2.5092,
+      "p95_ms": 2.8822,
+      "throughput_per_second": 383.07776938411814,
+      "cold_start_ms": 2.8386,
+      "peak_memory_bytes": 781770
+    },
+    {
+      "name": "overlapping-prefix-512",
+      "category": "adversarial",
+      "input_length": 512,
+      "dictionary_size": 8,
+      "expected_matches": 64,
+      "p50_ms": 10.3903,
+      "p95_ms": 13.3899,
+      "throughput_per_second": 93.10686144497942,
+      "cold_start_ms": 10.4698,
+      "peak_memory_bytes": 880165
+    },
+    {
+      "name": "dictionary-100",
+      "category": "dictionary-scale",
+      "input_length": 13,
+      "dictionary_size": 100,
+      "expected_matches": 0,
+      "p50_ms": 0.0328,
+      "p95_ms": 0.0333,
+      "throughput_per_second": 30357.30548556509,
+      "cold_start_ms": 0.7839,
+      "peak_memory_bytes": 1304
+    },
+    {
+      "name": "dictionary-1000",
+      "category": "dictionary-scale",
+      "input_length": 13,
+      "dictionary_size": 1000,
+      "expected_matches": 0,
+      "p50_ms": 0.2343,
+      "p95_ms": 0.2498,
+      "throughput_per_second": 4183.190268226159,
+      "cold_start_ms": 7.3855,
+      "peak_memory_bytes": 1304
+    }
+  ]
+}

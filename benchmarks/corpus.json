@@ -1,0 +1,57 @@
+{
+  "cases": [
+    {
+      "name": "short-clean",
+      "category": "short-chat",
+      "text": "오늘 저녁에 같이 게임할래?",
+      "dictionary_size": 2,
+      "expected_matches": 0
+    },
+    {
+      "name": "short-whitelist-and-match",
+      "category": "short-chat",
+      "text": "시발점에서 병신을 발견했다",
+      "dictionary_size": 2,
+      "expected_matches": 1
+    },
+    {
+      "name": "clean-1kb",
+      "category": "one-kilobyte",
+      "text_pattern": "가나다라마바사아자차카타파하",
+      "length": 1024,
+      "dictionary_size": 2,
+      "expected_matches": 0
+    },
+    {
+      "name": "clean-maximum-input",
+      "category": "maximum-input",
+      "text_pattern": "가나다라마바사아자차카타파하",
+      "length": 4096,
+      "dictionary_size": 2,
+      "expected_matches": 0
+    },
+    {
+      "name": "overlapping-prefix-512",
+      "category": "adversarial",
+      "text_pattern": "a",
+      "length": 512,
+      "dictionary_size": 8,
+      "dictionary_profile": "overlapping-prefix",
+      "expected_matches": 64
+    },
+    {
+      "name": "dictionary-100",
+      "category": "dictionary-scale",
+      "text": "정상적인 짧은 문장입니다",
+      "dictionary_size": 100,
+      "expected_matches": 0
+    },
+    {
+      "name": "dictionary-1000",
+      "category": "dictionary-scale",
+      "text": "정상적인 짧은 문장입니다",
+      "dictionary_size": 1000,
+      "expected_matches": 0
+    }
+  ]
+}

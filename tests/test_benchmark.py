@@ -5,7 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from benchmarks.engine_benchmark import (
+from koguard import EngineConfig
+from koguard.benchmark import (
     BenchmarkCase,
     BenchmarkError,
     load_cases,
@@ -27,7 +28,7 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         "adversarial",
         "dictionary-scale",
     }
-    assert max(len(case.text) for case in cases) == 10_000
+    assert max(len(case.text) for case in cases) == EngineConfig().max_input_length
 
 
 def test_percentile_uses_nearest_rank() -> None:
