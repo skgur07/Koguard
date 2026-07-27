@@ -48,6 +48,20 @@ uv run pytest
 uv build
 ```
 
+## 성능 기준선
+
+저장소 루트에서 다음 명령을 실행하면 고정 corpus의 p50·p95 지연 시간, 처리량, cold start,
+steady-state peak memory를 JSON으로 기록합니다.
+
+```powershell
+uv run python -m benchmarks.engine_benchmark `
+  --iterations 100 `
+  --warmups 10 `
+  --output benchmarks/results/local.json
+```
+
+측정 항목과 결과 해석은 [`benchmarks/README.md`](benchmarks/README.md)를 참고합니다.
+
 ## AI 개발 하네스
 
 Koguard는 [Everything Claude Code(ECC)](https://github.com/affaan-m/ECC)의 계획, TDD,
