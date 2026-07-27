@@ -11,10 +11,19 @@ from koguard import DictionaryError, KoguardDictionary
 def test_default_dictionary_loads_bundled_terms() -> None:
     dictionary = KoguardDictionary.default()
 
-    assert "병신" in dictionary.blacklist
-    assert "시발" in dictionary.blacklist
-    assert "병신년" in dictionary.whitelist
-    assert "시발점" in dictionary.whitelist
+    assert {
+        "병신",
+        "시발",
+        "씨발",
+        "개새끼",
+        "좆같다",
+        "지랄",
+        "염병",
+        "꺼져",
+    } <= dictionary.blacklist
+    assert len(dictionary.blacklist) >= 30
+    assert "병신년" not in dictionary.whitelist
+    assert "시발점" not in dictionary.whitelist
 
 
 def test_dictionary_normalizes_deduplicates_and_skips_comments() -> None:

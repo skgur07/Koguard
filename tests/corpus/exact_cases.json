@@ -15,24 +15,34 @@
     "expected_terms": ["시발"]
   },
   {
-    "id": "first_whitelist_term",
+    "id": "former_first_whitelist_term",
     "text": "이 사건의 시발점",
-    "expected_terms": []
+    "expected_terms": ["시발"]
   },
   {
-    "id": "second_whitelist_term",
+    "id": "former_second_whitelist_term",
     "text": "역사 기록의 병신년",
-    "expected_terms": []
+    "expected_terms": ["병신"]
   },
   {
-    "id": "whitelist_and_exact_term",
+    "id": "former_whitelist_and_exact_term",
     "text": "시발점 이후 병신이라는 표현",
-    "expected_terms": ["병신"]
+    "expected_terms": ["시발", "병신"]
   },
   {
     "id": "multiple_exact_terms",
     "text": "병신 그리고 시발",
     "expected_terms": ["병신", "시발"]
+  },
+  {
+    "id": "expanded_strong_profanity",
+    "text": "개새끼라고 욕하고 씨발이라고 말했다",
+    "expected_terms": ["개새끼", "씨발"]
+  },
+  {
+    "id": "expanded_abusive_expressions",
+    "text": "좆같다며 지랄하고 꺼져라고 했다",
+    "expected_terms": ["좆같다", "지랄", "꺼져"]
   },
   {
     "id": "repeated_exact_term",
