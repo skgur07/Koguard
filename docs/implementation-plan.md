@@ -91,10 +91,12 @@ result.matches   # (Match(term="병신", start=5, end=7, method=MatchMethod.EXAC
 
 각 view는 가능하면 원문 인덱스 매핑을 함께 유지한다. 자판 변환과 초성 변환은 오탐 위험이 크므로 기본 view를 대체하지 않고 추가 탐색 view로만 사용한다. 반복 허용 개수, 결합할 특수문자, 최대 입력 길이는 `EngineConfig`로 관리한다.
 
-### 2.5 Exact, Trie, Whitelist 의미
+### 2.5 Exact index와 Whitelist 의미
 
 - Exact는 입력 문장 전체가 아니라 토큰 또는 사전 term과 동일한 구간을 찾는 단계로 정의한다.
-- Trie는 문장 안의 substring 후보를 찾으며 longest-match-first 규칙을 사용한다.
+- Exact index는 실제 사전 크기와 입력 corpus를 벤치마크해 선택하며 longest-match-first 규칙을
+  유지한다. Python prefix Trie 시제품은 작은 사전과 긴 입력에서 `str.find` 기반 검색보다
+  느려 런타임 경로에서 제외했다.
 - 화이트리스트는 결과 전체를 무효화하지 않고 겹치는 블랙리스트 매치 구간만 보호한다. 예를 들어 `시발점` 안의 매치는 제외하되 같은 문장의 다른 욕설은 계속 반환한다.
 - 블랙리스트와 화이트리스트가 완전히 같은 term을 포함하면 화이트리스트가 우선한다.
 - 화이트리스트 판정은 각 정규화 view에서 동일한 규칙으로 수행한다.
@@ -230,12 +232,12 @@ Koguard/
 - corpus 기반 Exact precision/recall 기준선 기록
 - wheel에 기본 사전과 `py.typed`가 포함됨
 
-### Phase 2 — v0.2 Normalizer + Trie + Benchmark
+### Phase 2 — v0.2 Normalizer + Exact Index + Benchmark
 
 작업:
 
 - 반복 문자, 특수문자 우회, 자판, 초성 view를 각각 독립 단계로 구현
-- longest-match-first Trie 구현
+- longest-match-first Exact index 구현 및 후보 선택 비용 최적화
 - 정규화 view별 원문 위치 매핑
 - pytest-benchmark 또는 별도 benchmark CLI 구성
 
