@@ -111,7 +111,13 @@ class ExactMatcher:
         self._blacklist = dictionary.ordered_blacklist
         self._whitelist = dictionary.ordered_whitelist
 
-    def find(self, original_text: str, normalized: NormalizedText) -> tuple[Match, ...]:
+    def find(
+        self,
+        original_text: str,
+        normalized: NormalizedText,
+        *,
+        method: MatchMethod = MatchMethod.EXACT,
+    ) -> tuple[Match, ...]:
         """Return deterministic, non-overlapping exact matches."""
 
         protected_normalized = bytearray(len(normalized.text))
@@ -173,7 +179,7 @@ class ExactMatcher:
                     ],
                     start=mapped_candidate.original_start,
                     end=mapped_candidate.original_end,
-                    method=MatchMethod.EXACT,
+                    method=method,
                     score=1.0,
                 )
             )

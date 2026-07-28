@@ -12,6 +12,7 @@ def test_engine_config_defaults() -> None:
 
     assert config.max_input_length == 4096
     assert config.unicode_form == "NFKC"
+    assert config.repeat_reduction_threshold == 2
 
 
 @pytest.mark.parametrize("value", [0, -1, False, 1.5])
@@ -25,3 +26,11 @@ def test_engine_config_rejects_invalid_unicode_form() -> None:
 
     with pytest.raises(ConfigurationError, match="NFC"):
         EngineConfig(unicode_form=invalid_form)
+
+
+@pytest.mark.parametrize("threshold", [True, 0, 1])
+def test_engine_config_rejects_invalid_repeat_reduction_threshold(
+    threshold: int,
+) -> None:
+    with pytest.raises(ConfigurationError, match="repeat_reduction_threshold"):
+        EngineConfig(repeat_reduction_threshold=threshold)

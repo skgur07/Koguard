@@ -45,6 +45,16 @@
     "expected_terms": ["좆같다", "지랄", "꺼져"]
   },
   {
+    "id": "repeated_vowel_extension",
+    "text": "그 표현은 시이이발이라고 쓰였다",
+    "expected_terms": ["시발"]
+  },
+  {
+    "id": "single_vowel_extension_is_not_reduced",
+    "text": "시이발",
+    "expected_terms": []
+  },
+  {
     "id": "repeated_exact_term",
     "text": "병신과 병신",
     "expected_terms": ["병신", "병신"]

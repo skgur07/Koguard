@@ -33,6 +33,10 @@ engine = KoguardEngine(dictionary=dictionary)
 따라서 `시발점`, `병신년`처럼 금칙어를 포함한 복합어도 기본 정책에서는 탐지합니다.
 서비스 문맥에서 허용할 표현은 `whitelist` 또는 `whitelist_path`로 명시적으로 주입해야 합니다.
 
+앞 음절과 같은 모음의 독립 음절을 두 번 이상 늘인 표현은 반복 문자 view에서 추가로
+탐지합니다. 예를 들어 `시이이발`은 `시발`로 탐지되며 결과의 `matched_text`와 span은
+원문 전체를 가리킵니다. 한 번만 추가된 `시이발`은 기본값에서 축약하지 않습니다.
+
 ## 개발 환경
 
 Python 3.11.9와 [uv](https://docs.astral.sh/uv/)를 사용합니다.
