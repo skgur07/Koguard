@@ -5,25 +5,29 @@ from time import perf_counter_ns
 from koguard.config import EngineConfig
 from koguard.engine.dictionary import KoguardDictionary
 from koguard.engine.matcher import ExactMatcher
-from koguard.engine.normalizer import build_repeated_view, normalize_text
+from koguard.engine.normalizer import (
+    build_repeated_view,
+    build_separator_view,
+    normalize_text,
+)
 from koguard.exceptions import ConfigurationError, InputTooLongError
 from koguard.models import CheckResult, Match, MatchMethod
 
 
 def _merge_view_matches(
     original_length: int,
-    exact_matches: tuple[Match, ...],
-    repeated_matches: tuple[Match, ...],
+    *match_groups: tuple[Match, ...],
 ) -> tuple[Match, ...]:
     occupied = bytearray(original_length)
     selected: list[Match] = []
-    for match in (*exact_matches, *repeated_matches):
-        if match.start is None or match.end is None:
-            continue
-        if occupied.find(b"\x01", match.start, match.end) >= 0:
-            continue
-        selected.append(match)
-        occupied[match.start : match.end] = b"\x01" * (match.end - match.start)
+    for matches in match_groups:
+        for match in matches:
+            if match.start is None or match.end is None:
+                continue
+            if occupied.find(b"\x01", match.start, match.end) >= 0:
+                continue
+            selected.append(match)
+            occupied[match.start : match.end] = b"\x01" * (match.end - match.start)
     return tuple(
         sorted(
             selected,
@@ -91,7 +95,23 @@ class KoguardEngine:
                 repeated,
                 method=MatchMethod.REPEATED,
             )
-        matches = _merge_view_matches(len(text), exact_matches, repeated_matches)
+        separated = build_separator_view(
+            normalized,
+            separators=self._config.obfuscation_separators,
+        )
+        separator_matches: tuple[Match, ...] = ()
+        if separated != normalized:
+            separator_matches = self._exact_matcher.find(
+                text,
+                separated,
+                method=MatchMethod.SEPARATOR,
+            )
+        matches = _merge_view_matches(
+            len(text),
+            exact_matches,
+            repeated_matches,
+            separator_matches,
+        )
         elapsed_ms = (perf_counter_ns() - started_at) / 1_000_000
 
         return CheckResult(

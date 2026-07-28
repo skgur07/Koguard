@@ -174,6 +174,50 @@ def test_whitelist_protects_repeated_view_match() -> None:
     assert result.detected is False
 
 
+def test_special_character_obfuscation_is_detected_with_original_span() -> None:
+    result = KoguardEngine().check("앞 시*!발 뒤")
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == "시발"
+    assert result.matches[0].matched_text == "시*!발"
+    assert result.matches[0].method is MatchMethod.SEPARATOR
+    assert (result.matches[0].start, result.matches[0].end) == (2, 6)
+
+
+def test_exact_match_keeps_priority_over_separator_view() -> None:
+    result = KoguardEngine().check("시발")
+
+    assert len(result.matches) == 1
+    assert result.matches[0].method is MatchMethod.EXACT
+
+
+def test_whitelist_protects_separator_view_match() -> None:
+    engine = make_engine(blacklist=["시발"], whitelist=["시발점"])
+
+    result = engine.check("시*발점")
+
+    assert result.detected is False
+
+
+def test_unconfigured_separator_does_not_trigger_obfuscation_view() -> None:
+    config = EngineConfig(obfuscation_separators=frozenset({"*"}))
+    engine = make_engine(blacklist=["시발"], config=config)
+
+    assert engine.check("시/발").detected is False
+
+
+def test_compatibility_separator_setting_matches_normalized_input() -> None:
+    config = EngineConfig(obfuscation_separators=frozenset({"＊"}))
+    engine = make_engine(blacklist=["시발"], config=config)
+
+    result = engine.check("시＊발")
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == "시발"
+    assert result.matches[0].matched_text == "시＊발"
+    assert result.matches[0].method is MatchMethod.SEPARATOR
+
+
 def test_engine_rejects_non_string_input() -> None:
     invalid_text = cast(str, 123)
 

@@ -15,6 +15,13 @@
       "expected_matches": 1
     },
     {
+      "name": "short-separator-obfuscation",
+      "category": "obfuscation",
+      "text": "시*!발이라고 쓰였다",
+      "dictionary_size": 2,
+      "expected_matches": 1
+    },
+    {
       "name": "clean-1kb",
       "category": "one-kilobyte",
       "text_pattern": "가나다라마바사아자차카타파하",

@@ -210,3 +210,49 @@ def build_repeated_view(
         index += 1
 
     return NormalizedText(text="".join(characters), source_spans=tuple(source_spans))
+
+
+def build_separator_view(
+    normalized: NormalizedText,
+    *,
+    separators: frozenset[str],
+) -> NormalizedText:
+    """Remove configured separator runs between alphanumeric characters."""
+
+    if not separators or separators.isdisjoint(normalized.text):
+        return normalized
+
+    characters: list[str] = []
+    source_spans: list[tuple[int, int]] = []
+    index = 0
+    while index < len(normalized.text):
+        character = normalized.text[index]
+        if character not in separators:
+            characters.append(character)
+            source_spans.append(normalized.source_spans[index])
+            index += 1
+            continue
+
+        run_end = index + 1
+        while run_end < len(normalized.text) and normalized.text[run_end] in separators:
+            run_end += 1
+
+        if (
+            characters
+            and characters[-1].isalnum()
+            and run_end < len(normalized.text)
+            and normalized.text[run_end].isalnum()
+        ):
+            previous_start, _ = source_spans[-1]
+            source_spans[-1] = (
+                previous_start,
+                normalized.source_spans[run_end - 1][1],
+            )
+            index = run_end
+            continue
+
+        characters.extend(normalized.text[index:run_end])
+        source_spans.extend(normalized.source_spans[index:run_end])
+        index = run_end
+
+    return NormalizedText(text="".join(characters), source_spans=tuple(source_spans))
