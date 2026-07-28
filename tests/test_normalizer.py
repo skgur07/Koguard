@@ -6,6 +6,7 @@ import koguard.engine.normalizer as normalizer_module
 from koguard.engine.normalizer import (
     NormalizedText,
     build_repeated_view,
+    build_separator_view,
     normalize_text,
 )
 
@@ -80,6 +81,24 @@ def test_repeated_view_keeps_single_vowel_extension() -> None:
     normalized = normalize_text("시이발", "NFKC")
 
     assert build_repeated_view(normalized, threshold=2) == normalized
+
+
+def test_separator_view_removes_allowed_run_between_characters_and_preserves_span() -> None:
+    separated = build_separator_view(
+        normalize_text("시*!발", "NFKC"),
+        separators=frozenset({"*", "!"}),
+    )
+
+    assert separated.text == "시발"
+    assert separated.source_spans == ((0, 3), (3, 4))
+    assert separated.original_span(0, 2) == (0, 4)
+
+
+@pytest.mark.parametrize("text", ["*시발", "시발*", "시 발", "시/발"])
+def test_separator_view_keeps_boundaries_whitespace_and_unconfigured_symbols(text: str) -> None:
+    normalized = normalize_text(text, "NFKC")
+
+    assert build_separator_view(normalized, separators=frozenset({"*"})) == normalized
 
 
 def test_normalized_text_rejects_mismatched_mapping() -> None:

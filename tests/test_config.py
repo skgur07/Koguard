@@ -13,6 +13,7 @@ def test_engine_config_defaults() -> None:
     assert config.max_input_length == 4096
     assert config.unicode_form == "NFKC"
     assert config.repeat_reduction_threshold == 2
+    assert "*" in config.obfuscation_separators
 
 
 @pytest.mark.parametrize("value", [0, -1, False, 1.5])
@@ -34,3 +35,9 @@ def test_engine_config_rejects_invalid_repeat_reduction_threshold(
 ) -> None:
     with pytest.raises(ConfigurationError, match="repeat_reduction_threshold"):
         EngineConfig(repeat_reduction_threshold=threshold)
+
+
+@pytest.mark.parametrize("separators", [{"ab"}, {"a"}, {" "}, {""}])
+def test_config_rejects_invalid_obfuscation_separators(separators: set[str]) -> None:
+    with pytest.raises(ConfigurationError, match="obfuscation_separators"):
+        EngineConfig(obfuscation_separators=frozenset(separators))

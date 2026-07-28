@@ -55,6 +55,11 @@
     "expected_terms": []
   },
   {
+    "id": "special_character_obfuscation",
+    "text": "그 표현은 시*!발이라고 쓰였다",
+    "expected_terms": ["시발"]
+  },
+  {
     "id": "repeated_exact_term",
     "text": "병신과 병신",
     "expected_terms": ["병신", "병신"]
