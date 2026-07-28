@@ -219,7 +219,7 @@ def build_separator_view(
 ) -> NormalizedText:
     """Remove configured separator runs between alphanumeric characters."""
 
-    if not separators or not any(character in separators for character in normalized.text):
+    if not separators or separators.isdisjoint(normalized.text):
         return normalized
 
     characters: list[str] = []

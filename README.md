@@ -37,6 +37,11 @@ engine = KoguardEngine(dictionary=dictionary)
 탐지합니다. 예를 들어 `시이이발`은 `시발`로 탐지되며 결과의 `matched_text`와 span은
 원문 전체를 가리킵니다. 한 번만 추가된 `시이발`은 기본값에서 축약하지 않습니다.
 
+문자 사이에 삽입된 `!@#$%^&*_-+=~.·,` 기호는 특수문자 view에서 제거해 탐지합니다.
+예를 들어 `시*!발`은 `시발`로 탐지되며 원문 span은 삽입된 기호까지 포함합니다. 제거할
+문자 집합은 `EngineConfig.obfuscation_separators`로 제한할 수 있고, 공백이나 영숫자는
+구분자로 설정할 수 없습니다.
+
 ## 개발 환경
 
 Python 3.11.9와 [uv](https://docs.astral.sh/uv/)를 사용합니다.

@@ -27,6 +27,7 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         "maximum-input",
         "adversarial",
         "dictionary-scale",
+        "obfuscation",
     }
     assert max(len(case.text) for case in cases) == EngineConfig().max_input_length
 
