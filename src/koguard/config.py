@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 from typing import Literal, TypeAlias
+from unicodedata import normalize
 
 from koguard.exceptions import ConfigurationError
 
@@ -26,11 +27,20 @@ class EngineConfig:
             raise ConfigurationError(
                 "repeat_reduction_threshold must be an integer greater than or equal to 2"
             )
-        if not isinstance(self.obfuscation_separators, frozenset) or any(
-            len(separator) != 1 or separator.isalnum() or separator.isspace()
-            for separator in self.obfuscation_separators
-        ):
+        if not isinstance(self.obfuscation_separators, frozenset):
             raise ConfigurationError(
                 "obfuscation_separators must be a frozenset of single "
                 "non-alphanumeric, non-whitespace characters"
             )
+        normalized_separators = frozenset(
+            normalize(self.unicode_form, separator) for separator in self.obfuscation_separators
+        )
+        if any(
+            len(separator) != 1 or separator.isalnum() or separator.isspace()
+            for separator in normalized_separators
+        ):
+            raise ConfigurationError(
+                "obfuscation_separators must normalize to single "
+                "non-alphanumeric, non-whitespace characters"
+            )
+        object.__setattr__(self, "obfuscation_separators", normalized_separators)

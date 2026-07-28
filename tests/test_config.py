@@ -43,6 +43,13 @@ def test_config_rejects_invalid_obfuscation_separators(separators: set[str]) -> 
         EngineConfig(obfuscation_separators=frozenset(separators))
 
 
+def test_config_rejects_mutable_obfuscation_separator_set() -> None:
+    separators = cast(frozenset[str], {"*"})
+
+    with pytest.raises(ConfigurationError, match="obfuscation_separators"):
+        EngineConfig(obfuscation_separators=separators)
+
+
 def test_config_normalizes_obfuscation_separators_with_unicode_form() -> None:
     config = EngineConfig(
         unicode_form="NFKC",
