@@ -206,6 +206,18 @@ def test_unconfigured_separator_does_not_trigger_obfuscation_view() -> None:
     assert engine.check("시/발").detected is False
 
 
+def test_compatibility_separator_setting_matches_normalized_input() -> None:
+    config = EngineConfig(obfuscation_separators=frozenset({"＊"}))
+    engine = make_engine(blacklist=["시발"], config=config)
+
+    result = engine.check("시＊발")
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == "시발"
+    assert result.matches[0].matched_text == "시＊발"
+    assert result.matches[0].method is MatchMethod.SEPARATOR
+
+
 def test_engine_rejects_non_string_input() -> None:
     invalid_text = cast(str, 123)
 

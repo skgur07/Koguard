@@ -41,3 +41,12 @@ def test_engine_config_rejects_invalid_repeat_reduction_threshold(
 def test_config_rejects_invalid_obfuscation_separators(separators: set[str]) -> None:
     with pytest.raises(ConfigurationError, match="obfuscation_separators"):
         EngineConfig(obfuscation_separators=frozenset(separators))
+
+
+def test_config_normalizes_obfuscation_separators_with_unicode_form() -> None:
+    config = EngineConfig(
+        unicode_form="NFKC",
+        obfuscation_separators=frozenset({"＊"}),
+    )
+
+    assert config.obfuscation_separators == frozenset({"*"})
