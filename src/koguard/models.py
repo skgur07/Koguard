@@ -10,6 +10,7 @@ class MatchMethod(StrEnum):
 
     EXACT = "exact"
     REPEATED = "repeated"
+    SEPARATOR = "separator"
     TRIE = "trie"
     LEVENSHTEIN = "levenshtein"
     EMBEDDING = "embedding"

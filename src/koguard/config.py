@@ -15,6 +15,7 @@ class EngineConfig:
     max_input_length: int = 4096
     unicode_form: NormalizationForm = "NFKC"
     repeat_reduction_threshold: int = 2
+    obfuscation_separators: frozenset[str] = frozenset("!@#$%^&*_-+=~.·,")
 
     def __post_init__(self) -> None:
         if type(self.max_input_length) is not int or self.max_input_length <= 0:
@@ -24,4 +25,12 @@ class EngineConfig:
         if type(self.repeat_reduction_threshold) is not int or self.repeat_reduction_threshold < 2:
             raise ConfigurationError(
                 "repeat_reduction_threshold must be an integer greater than or equal to 2"
+            )
+        if not isinstance(self.obfuscation_separators, frozenset) or any(
+            len(separator) != 1 or separator.isalnum() or separator.isspace()
+            for separator in self.obfuscation_separators
+        ):
+            raise ConfigurationError(
+                "obfuscation_separators must be a frozenset of single "
+                "non-alphanumeric, non-whitespace characters"
             )
