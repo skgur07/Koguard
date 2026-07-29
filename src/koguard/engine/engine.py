@@ -59,7 +59,10 @@ class KoguardEngine:
 
         self._config = resolved_config
         self._dictionary = resolved_dictionary
-        self._exact_matcher = ExactMatcher(resolved_dictionary)
+        self._exact_matcher = ExactMatcher(
+            resolved_dictionary,
+            whitespace_gap_matching=resolved_config.whitespace_gap_matching,
+        )
 
     @property
     def config(self) -> EngineConfig:
@@ -106,11 +109,19 @@ class KoguardEngine:
                 separated,
                 method=MatchMethod.SEPARATOR,
             )
+        whitespace_matches: tuple[Match, ...] = ()
+        if self._config.whitespace_gap_matching:
+            whitespace_matches = self._exact_matcher.find_with_whitespace_gaps(
+                text,
+                normalized,
+                max_whitespace_gap=self._config.max_whitespace_gap,
+            )
         matches = _merge_view_matches(
             len(text),
             exact_matches,
             repeated_matches,
             separator_matches,
+            whitespace_matches,
         )
         elapsed_ms = (perf_counter_ns() - started_at) / 1_000_000
 

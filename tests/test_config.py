@@ -14,6 +14,16 @@ def test_engine_config_defaults() -> None:
     assert config.unicode_form == "NFKC"
     assert config.repeat_reduction_threshold == 2
     assert "*" in config.obfuscation_separators
+    assert config.whitespace_gap_matching is False
+    assert config.max_whitespace_gap == 3
+
+
+def test_engine_config_preserves_obfuscation_separator_positional_argument() -> None:
+    config = EngineConfig(4096, "NFKC", 2, frozenset({"*"}))
+
+    assert config.obfuscation_separators == frozenset({"*"})
+    assert config.whitespace_gap_matching is False
+    assert config.max_whitespace_gap == 3
 
 
 @pytest.mark.parametrize("value", [0, -1, False, 1.5])
@@ -35,6 +45,18 @@ def test_engine_config_rejects_invalid_repeat_reduction_threshold(
 ) -> None:
     with pytest.raises(ConfigurationError, match="repeat_reduction_threshold"):
         EngineConfig(repeat_reduction_threshold=threshold)
+
+
+@pytest.mark.parametrize("enabled", [1, "yes", None])
+def test_engine_config_rejects_invalid_whitespace_gap_matching(enabled: object) -> None:
+    with pytest.raises(ConfigurationError, match="whitespace_gap_matching"):
+        EngineConfig(whitespace_gap_matching=cast(bool, enabled))
+
+
+@pytest.mark.parametrize("gap", [0, -1, True, 1.5])
+def test_engine_config_rejects_invalid_max_whitespace_gap(gap: object) -> None:
+    with pytest.raises(ConfigurationError, match="max_whitespace_gap"):
+        EngineConfig(max_whitespace_gap=cast(int, gap))
 
 
 @pytest.mark.parametrize("separators", [{"ab"}, {"a"}, {" "}, {""}])
