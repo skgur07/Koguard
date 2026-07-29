@@ -218,6 +218,68 @@ def test_compatibility_separator_setting_matches_normalized_input() -> None:
     assert result.matches[0].method is MatchMethod.SEPARATOR
 
 
+def test_whitespace_gap_matching_is_opt_in() -> None:
+    engine = make_engine(blacklist=["시발"])
+
+    assert engine.check("시 발").detected is False
+
+
+def test_whitespace_gap_matching_detects_term_with_original_span() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(blacklist=["시발"], config=config)
+    text = "이런 시 발 표현"
+
+    result = engine.check(text)
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == "시발"
+    assert result.matches[0].matched_text == "시 발"
+    assert (result.matches[0].start, result.matches[0].end) == (3, 6)
+    assert result.matches[0].method is MatchMethod.WHITESPACE
+
+
+@pytest.mark.parametrize(
+    "blacklist,text",
+    [
+        (["시발"], "시 발표"),
+        (["시발"], "도시 발"),
+        (["개새끼"], "개 새끼손가락"),
+    ],
+)
+def test_whitespace_gap_matching_rejects_partial_alphanumeric_tokens(
+    blacklist: list[str],
+    text: str,
+) -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(blacklist=blacklist, config=config)
+
+    assert engine.check(text).detected is False
+
+
+def test_whitespace_gap_matching_respects_gap_limit_and_rejects_line_breaks() -> None:
+    config = EngineConfig(
+        whitespace_gap_matching=True,
+        max_whitespace_gap=2,
+    )
+    engine = make_engine(blacklist=["시발"], config=config)
+
+    assert engine.check("시\t\t발").detected is True
+    assert engine.check("시   발").detected is False
+    assert engine.check("시\n발").detected is False
+
+
+def test_exact_and_whitespace_gap_matches_are_both_preserved() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(blacklist=["병신", "시발"], config=config)
+
+    result = engine.check("병신 그리고 시 발")
+
+    assert [(match.term, match.method) for match in result.matches] == [
+        ("병신", MatchMethod.EXACT),
+        ("시발", MatchMethod.WHITESPACE),
+    ]
+
+
 def test_engine_rejects_non_string_input() -> None:
     invalid_text = cast(str, 123)
 
