@@ -1,12 +1,14 @@
 """Tests for the reproducible engine benchmark harness."""
 
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
 from benchmarks.engine_benchmark import (
     BenchmarkCase,
     BenchmarkError,
+    benchmark_case_fingerprint,
     load_cases,
     main,
     percentile,
@@ -51,6 +53,33 @@ def test_percentile_uses_nearest_rank() -> None:
     assert percentile(samples, 0.95) == 100.0
 
 
+def test_benchmark_case_fingerprint_covers_complete_workload_definition() -> None:
+    case = BenchmarkCase(
+        name="fingerprint-case",
+        category="whitespace-gap",
+        text="시 발",
+        dictionary_size=2,
+        expected_matches=1,
+        dictionary_profile="standard",
+        engine_profile="whitespace-gap",
+    )
+    variants = (
+        replace(case, name="renamed"),
+        replace(case, category="short-chat"),
+        replace(case, text="시  발"),
+        replace(case, dictionary_size=3),
+        replace(case, expected_matches=0),
+        replace(case, dictionary_profile="deep-whitespace-prefix"),
+        replace(case, engine_profile="default"),
+    )
+
+    fingerprint = benchmark_case_fingerprint(case)
+
+    assert len(fingerprint) == 64
+    assert fingerprint == benchmark_case_fingerprint(case)
+    assert all(benchmark_case_fingerprint(variant) != fingerprint for variant in variants)
+
+
 def test_run_benchmarks_records_latency_throughput_memory_and_environment() -> None:
     case = BenchmarkCase(
         name="unit-clean",
@@ -68,6 +97,8 @@ def test_run_benchmarks_records_latency_throughput_memory_and_environment() -> N
     result = report.results[0]
     assert result.name == "unit-clean"
     assert result.engine_profile == "default"
+    assert result.dictionary_profile == "standard"
+    assert result.case_fingerprint == benchmark_case_fingerprint(case)
     assert result.p50_ms > 0
     assert result.p95_ms >= result.p50_ms
     assert result.throughput_per_second > 0
@@ -158,13 +189,15 @@ def test_benchmark_cli_writes_machine_readable_report(tmp_path: Path) -> None:
     assert payload["configuration"] == {"iterations": 2, "warmups": 0}
     assert payload["results"][0]["name"] == "cli-clean"
     assert payload["results"][0]["engine_profile"] == "default"
+    assert payload["results"][0]["dictionary_profile"] == "standard"
+    assert len(payload["results"][0]["case_fingerprint"]) == 64
 
 
-def test_windows_baseline_matches_corpus_cases_and_profiles() -> None:
+def test_windows_baseline_matches_ordered_complete_corpus_cases() -> None:
     cases = load_cases(CORPUS_PATH)
     payload = json.loads(BASELINE_PATH.read_text(encoding="utf-8"))
 
     assert payload["schema_version"] == 2
-    assert {(result["name"], result["engine_profile"]) for result in payload["results"]} == {
-        (case.name, case.engine_profile) for case in cases
-    }
+    assert [result["case_fingerprint"] for result in payload["results"]] == [
+        benchmark_case_fingerprint(case) for case in cases
+    ]
