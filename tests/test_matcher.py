@@ -116,3 +116,18 @@ def test_whitespace_gap_matcher_applies_whitelist_to_only_overlapping_span() -> 
     )
 
     assert [match.term for match in matches] == ["병신"]
+
+
+def test_whitespace_gap_matcher_keeps_shorter_candidate_after_longer_overlap() -> None:
+    matcher = make_matcher(
+        blacklist=["ab", "abcdef", "defghijk"],
+    )
+    text = "a b c d e f g h i j k"
+
+    matches = matcher.find_with_whitespace_gaps(
+        text,
+        normalize_text(text, "NFKC"),
+        max_whitespace_gap=1,
+    )
+
+    assert [match.term for match in matches] == ["ab", "defghijk"]

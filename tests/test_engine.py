@@ -280,6 +280,33 @@ def test_exact_and_whitespace_gap_matches_are_both_preserved() -> None:
     ]
 
 
+def test_whitespace_gap_matching_does_not_expand_whitelist_spacing() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(
+        blacklist=["시발"],
+        whitelist=["시발 자동차"],
+        config=config,
+    )
+
+    result = engine.check("시 발 자동차")
+
+    assert [match.term for match in result.matches] == ["시발"]
+
+
+def test_whitespace_gap_matching_bounds_deep_shared_prefix_work() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(
+        blacklist=["a" * length for length in range(2, 258)],
+        config=config,
+    )
+    text = ("a " * 2_048)[:4_095] + "a"
+
+    result = engine.check(text)
+
+    assert len(result.matches) == 8
+    assert result.elapsed_ms < 500
+
+
 def test_engine_rejects_non_string_input() -> None:
     invalid_text = cast(str, 123)
 
