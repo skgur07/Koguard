@@ -78,4 +78,32 @@
 | --- | --- | --- | --- | --- |
 | 6 | 공백 profile이 opt-in 엔진 설정을 적용한다 | `test_run_benchmarks_applies_whitespace_gap_engine_profile` | integration | PASS |
 | 7 | 알 수 없는 엔진 profile은 측정 전에 실패한다 | `test_run_benchmarks_rejects_unknown_engine_profile` | unit | PASS |
-| 8 | 기준선과 corpus의 case·profile 구성이 일치한다 | `test_windows_baseline_matches_corpus_cases_and_profiles` | integration | PASS |
+| 8 | 기준선과 corpus의 순서 및 전체 workload가 일치한다 | `test_windows_baseline_matches_ordered_complete_corpus_cases` | integration | PASS |
+
+## 리뷰 수정 RED/GREEN
+
+리뷰에서 기준선 검증이 case 이름과 엔진 profile의 집합만 비교해 입력이나 사전 구성이 바뀐
+오래된 기준선과 중복 결과를 허용할 수 있음을 확인했다.
+
+### RED
+
+- 전체 workload fingerprint와 순서 보존 비교 계약을 테스트에 추가했다.
+- 명령: `.venv\Scripts\python.exe -m pytest tests\test_benchmark.py -q --no-cov`
+- 결과: `benchmark_case_fingerprint`가 없어 collection 단계에서 의도대로 실패
+- 체크포인트: `09e22c9 test: benchmark 기준선 무결성 결함 재현`
+
+### GREEN
+
+- `BenchmarkCase`의 모든 필드를 canonical JSON으로 직렬화하고 SHA-256 fingerprint를 만든다.
+- 각 결과에 `dictionary_profile`과 `case_fingerprint`를 기록한다.
+- 기준선과 corpus의 fingerprint를 list로 비교해 입력·사전·기대값 변경, 순서 변경, 중복 및
+  누락을 모두 탐지한다.
+- 구현 후 이전 기준선에 fingerprint가 없어 `8 passed, 1 failed`인 것을 확인하고, 100회·
+  warmup 10회 설정으로 11개 case 기준선을 다시 생성했다.
+
+### 추가 Test specification
+
+| # | 보장 동작 | 테스트 | 유형 | 결과 |
+| --- | --- | --- | --- | --- |
+| 9 | fingerprint가 모든 workload 필드 변경을 구분한다 | `test_benchmark_case_fingerprint_covers_complete_workload_definition` | unit | PASS |
+| 10 | report가 사전 profile과 fingerprint를 기록한다 | `test_run_benchmarks_records_latency_throughput_memory_and_environment` | integration | PASS |

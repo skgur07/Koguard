@@ -55,5 +55,6 @@ uv run python -m benchmarks.engine_benchmark
 
 `results/windows-python311.json`은 Windows와 CPython 3.11.9에서 100회 측정한 최초 기준선이다.
 새 결과를 검토할 때는 환경 메타데이터, 정확도 기대값, p50/p95, peak memory를 함께 비교한다.
-report schema 2부터 각 결과에 `engine_profile`을 기록하므로 서로 다른 엔진 설정의 수치를
-혼동하지 않고 비교할 수 있다.
+report schema 2부터 각 결과에 `engine_profile`, `dictionary_profile`, `case_fingerprint`를
+기록한다. fingerprint는 이름, category, 확장된 전체 입력, 사전 크기와 profile, 엔진 profile,
+정확도 기대값을 포함하므로 corpus가 바뀐 뒤 이전 기준선을 실수로 사용하는 것을 막는다.

@@ -12,6 +12,7 @@ import tracemalloc
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
+from hashlib import sha256
 from pathlib import Path
 from time import perf_counter_ns
 from typing import Any
@@ -40,6 +41,18 @@ class BenchmarkCase:
     engine_profile: str = "default"
 
 
+def benchmark_case_fingerprint(case: BenchmarkCase) -> str:
+    """Return a stable digest covering the complete semantic workload."""
+
+    serialized = json.dumps(
+        asdict(case),
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    )
+    return sha256(serialized.encode("utf-8")).hexdigest()
+
+
 @dataclass(frozen=True, slots=True)
 class BenchmarkEnvironment:
     """Runtime metadata required to interpret benchmark results."""
@@ -57,6 +70,8 @@ class BenchmarkResult:
     name: str
     category: str
     engine_profile: str
+    dictionary_profile: str
+    case_fingerprint: str
     input_length: int
     dictionary_size: int
     expected_matches: int
@@ -251,6 +266,8 @@ def _measure_case(
         name=case.name,
         category=case.category,
         engine_profile=case.engine_profile,
+        dictionary_profile=case.dictionary_profile,
+        case_fingerprint=benchmark_case_fingerprint(case),
         input_length=len(case.text),
         dictionary_size=case.dictionary_size,
         expected_matches=case.expected_matches,
