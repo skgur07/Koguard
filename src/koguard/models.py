@@ -11,6 +11,7 @@ class MatchMethod(StrEnum):
     EXACT = "exact"
     REPEATED = "repeated"
     SEPARATOR = "separator"
+    WHITESPACE = "whitespace"
     TRIE = "trie"
     LEVENSHTEIN = "levenshtein"
     EMBEDDING = "embedding"

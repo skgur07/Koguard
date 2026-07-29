@@ -1,7 +1,7 @@
 """Low-cost exact matching with span-scoped whitelist protection."""
 
 from collections.abc import Iterator
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from koguard.engine.dictionary import KoguardDictionary
 from koguard.engine.normalizer import NormalizedText
@@ -16,7 +16,7 @@ class _NormalizedCandidate:
 
     @property
     def length(self) -> int:
-        return self.end - self.start
+        return len(self.term)
 
 
 @dataclass(frozen=True, slots=True)
@@ -28,6 +28,12 @@ class _MappedCandidate:
     @property
     def length(self) -> int:
         return self.normalized.length
+
+
+@dataclass(slots=True)
+class _WhitespaceTrieNode:
+    children: dict[str, "_WhitespaceTrieNode"] = field(default_factory=dict)
+    term: str | None = None
 
 
 def _iter_occurrences(text: str, term: str) -> Iterator[_NormalizedCandidate]:
@@ -44,6 +50,75 @@ def _iter_occurrences(text: str, term: str) -> Iterator[_NormalizedCandidate]:
             end=start + len(term),
         )
         search_from = start + 1
+
+
+def _is_allowed_whitespace_gap(
+    original_text: str,
+    normalized: NormalizedText,
+    index: int,
+    max_whitespace_gap: int,
+) -> bool:
+    original_start, original_end = normalized.source_spans[index]
+    gap = original_text[original_start:original_end]
+    return len(gap) <= max_whitespace_gap and all(character in {" ", "\t"} for character in gap)
+
+
+def _has_alphanumeric_boundaries(text: str, start: int, end: int) -> bool:
+    return (start == 0 or not text[start - 1].isalnum()) and (
+        end == len(text) or not text[end].isalnum()
+    )
+
+
+def _build_whitespace_trie(terms: tuple[str, ...]) -> _WhitespaceTrieNode:
+    root = _WhitespaceTrieNode()
+    for term in terms:
+        if len(term) < 2 or any(character.isspace() for character in term):
+            continue
+        node = root
+        for character in term:
+            node = node.children.setdefault(character, _WhitespaceTrieNode())
+        node.term = term
+    return root
+
+
+def _iter_whitespace_gap_occurrences(
+    original_text: str,
+    normalized: NormalizedText,
+    root: _WhitespaceTrieNode,
+    max_whitespace_gap: int,
+) -> Iterator[_NormalizedCandidate]:
+    """Find terms whose characters are separated by bounded spaces or tabs."""
+
+    for start, first_character in enumerate(normalized.text):
+        node = root.children.get(first_character)
+        if node is None:
+            continue
+        cursor = start + 1
+        used_gap = False
+        while cursor < len(normalized.text):
+            if normalized.text[cursor] == " ":
+                if not _is_allowed_whitespace_gap(
+                    original_text,
+                    normalized,
+                    cursor,
+                    max_whitespace_gap,
+                ):
+                    break
+                used_gap = True
+                cursor += 1
+            if cursor >= len(normalized.text):
+                break
+
+            node = node.children.get(normalized.text[cursor])
+            if node is None:
+                break
+            cursor += 1
+            if (
+                node.term is not None
+                and used_gap
+                and _has_alphanumeric_boundaries(normalized.text, start, cursor)
+            ):
+                yield _NormalizedCandidate(term=node.term, start=start, end=cursor)
 
 
 def _map_candidate(
@@ -105,11 +180,19 @@ def _occupy(
 class ExactMatcher:
     """Find normalized terms and remove protected or overlapping spans."""
 
-    __slots__ = ("_blacklist", "_whitelist")
+    __slots__ = ("_blacklist", "_whitelist", "_whitespace_trie")
 
-    def __init__(self, dictionary: KoguardDictionary) -> None:
+    def __init__(
+        self,
+        dictionary: KoguardDictionary,
+        *,
+        whitespace_gap_matching: bool = True,
+    ) -> None:
         self._blacklist = dictionary.ordered_blacklist
         self._whitelist = dictionary.ordered_whitelist
+        self._whitespace_trie = (
+            _build_whitespace_trie(self._blacklist) if whitespace_gap_matching else None
+        )
 
     def find(
         self,
@@ -120,6 +203,58 @@ class ExactMatcher:
     ) -> tuple[Match, ...]:
         """Return deterministic, non-overlapping exact matches."""
 
+        candidates = [
+            _map_candidate(normalized_candidate, normalized)
+            for term in self._blacklist
+            for normalized_candidate in _iter_occurrences(normalized.text, term)
+        ]
+        return self._select_matches(
+            original_text,
+            normalized,
+            candidates,
+            method=method,
+        )
+
+    def find_with_whitespace_gaps(
+        self,
+        original_text: str,
+        normalized: NormalizedText,
+        *,
+        max_whitespace_gap: int,
+    ) -> tuple[Match, ...]:
+        """Return bounded space/tab-obfuscated matches at token boundaries."""
+
+        if type(max_whitespace_gap) is not int or max_whitespace_gap <= 0:
+            raise ValueError("max_whitespace_gap must be a positive integer")
+        if self._whitespace_trie is None or " " not in normalized.text:
+            return ()
+
+        candidates = [
+            _map_candidate(normalized_candidate, normalized)
+            for normalized_candidate in _iter_whitespace_gap_occurrences(
+                original_text,
+                normalized,
+                self._whitespace_trie,
+                max_whitespace_gap,
+            )
+        ]
+        return self._select_matches(
+            original_text,
+            normalized,
+            candidates,
+            method=MatchMethod.WHITESPACE,
+        )
+
+    def _select_matches(
+        self,
+        original_text: str,
+        normalized: NormalizedText,
+        candidates: list[_MappedCandidate],
+        *,
+        method: MatchMethod,
+    ) -> tuple[Match, ...]:
+        """Apply whitelist and overlap rules to mapped candidates."""
+
         protected_normalized = bytearray(len(normalized.text))
         protected_original = bytearray(len(original_text))
         for term in self._whitelist:
@@ -129,12 +264,6 @@ class ExactMatcher:
                     protected_normalized,
                     protected_original,
                 )
-
-        candidates = [
-            _map_candidate(normalized_candidate, normalized)
-            for term in self._blacklist
-            for normalized_candidate in _iter_occurrences(normalized.text, term)
-        ]
 
         selected_normalized = bytearray(len(normalized.text))
         selected_original = bytearray(len(original_text))

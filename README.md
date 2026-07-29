@@ -42,6 +42,24 @@ engine = KoguardEngine(dictionary=dictionary)
 문자 집합은 `EngineConfig.obfuscation_separators`로 제한할 수 있고, 공백이나 영숫자는
 구분자로 설정할 수 없습니다.
 
+공백 삽입 우회 탐지는 오탐을 줄이기 위해 명시적으로 활성화합니다.
+
+```python
+from koguard import EngineConfig, KoguardEngine
+
+config = EngineConfig(
+    whitespace_gap_matching=True,
+    max_whitespace_gap=3,
+)
+engine = KoguardEngine(config=config)
+```
+
+이 설정은 사전 단어의 글자 사이에 들어간 짧은 공백과 탭만 허용합니다. 각 공백 구간은
+`max_whitespace_gap` 이하이어야 하며 줄바꿈은 허용하지 않습니다. 또한 매치 양끝이 영숫자
+토큰 중간이면 후보를 버리므로 `시 발`과 `개 새끼`는 탐지하지만 `시 발표`와
+`개 새끼손가락`은 탐지하지 않습니다. 결과의 `matched_text`, `start`, `end`에는 공백을
+포함한 원문 구간이 그대로 보존되고 `method`는 `MatchMethod.WHITESPACE`입니다.
+
 ## 개발 환경
 
 Python 3.11.9와 [uv](https://docs.astral.sh/uv/)를 사용합니다.
