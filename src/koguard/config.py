@@ -16,9 +16,9 @@ class EngineConfig:
     max_input_length: int = 4096
     unicode_form: NormalizationForm = "NFKC"
     repeat_reduction_threshold: int = 2
+    obfuscation_separators: frozenset[str] = frozenset("!@#$%^&*_-+=~.·,")
     whitespace_gap_matching: bool = False
     max_whitespace_gap: int = 3
-    obfuscation_separators: frozenset[str] = frozenset("!@#$%^&*_-+=~.·,")
 
     def __post_init__(self) -> None:
         if type(self.max_input_length) is not int or self.max_input_length <= 0:

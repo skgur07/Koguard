@@ -60,6 +60,10 @@ engine = KoguardEngine(config=config)
 `개 새끼손가락`은 탐지하지 않습니다. 결과의 `matched_text`, `start`, `end`에는 공백을
 포함한 원문 구간이 그대로 보존되고 `method`는 `MatchMethod.WHITESPACE`입니다.
 
+Whitespace 매칭에서는 Whitelist의 공백 형태를 별도로 확장하지 않습니다. 예를 들어
+Whitelist에 `시발 자동차`가 있어도 입력 `시 발 자동차`의 `시 발`은 탐지합니다. Whitelist는
+입력에 실제로 겹치는 exact 정규화 구간만 보호합니다.
+
 ## 개발 환경
 
 Python 3.11.9와 [uv](https://docs.astral.sh/uv/)를 사용합니다.

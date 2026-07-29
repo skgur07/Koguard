@@ -2,6 +2,7 @@
 
 from collections.abc import Iterator
 from dataclasses import dataclass, field
+from heapq import heappop, heappush
 
 from koguard.engine.dictionary import KoguardDictionary
 from koguard.engine.normalizer import NormalizedText
@@ -36,6 +37,12 @@ class _WhitespaceTrieNode:
     term: str | None = None
 
 
+@dataclass(order=True, slots=True)
+class _PrioritizedCandidate:
+    priority: tuple[int, int, str, int, int]
+    candidate: _MappedCandidate = field(compare=False)
+
+
 def _iter_occurrences(text: str, term: str) -> Iterator[_NormalizedCandidate]:
     """Find overlapping occurrences through CPython's optimized string search."""
 
@@ -63,6 +70,23 @@ def _is_allowed_whitespace_gap(
     return len(gap) <= max_whitespace_gap and all(character in {" ", "\t"} for character in gap)
 
 
+def _build_allowed_whitespace_gap_mask(
+    original_text: str,
+    normalized: NormalizedText,
+    max_whitespace_gap: int,
+) -> bytearray:
+    mask = bytearray(len(normalized.text))
+    for index, character in enumerate(normalized.text):
+        if character == " " and _is_allowed_whitespace_gap(
+            original_text,
+            normalized,
+            index,
+            max_whitespace_gap,
+        ):
+            mask[index] = 1
+    return mask
+
+
 def _has_alphanumeric_boundaries(text: str, start: int, end: int) -> bool:
     return (start == 0 or not text[start - 1].isalnum()) and (
         end == len(text) or not text[end].isalnum()
@@ -81,44 +105,52 @@ def _build_whitespace_trie(terms: tuple[str, ...]) -> _WhitespaceTrieNode:
     return root
 
 
-def _iter_whitespace_gap_occurrences(
-    original_text: str,
+def _find_longest_whitespace_gap_occurrence(
     normalized: NormalizedText,
     root: _WhitespaceTrieNode,
-    max_whitespace_gap: int,
-) -> Iterator[_NormalizedCandidate]:
-    """Find terms whose characters are separated by bounded spaces or tabs."""
+    allowed_gap_mask: bytearray,
+    start: int,
+    *,
+    shorter_than: int | None = None,
+) -> _NormalizedCandidate | None:
+    """Return the longest eligible candidate at one normalized start."""
 
-    for start, first_character in enumerate(normalized.text):
-        node = root.children.get(first_character)
-        if node is None:
-            continue
-        cursor = start + 1
-        used_gap = False
-        while cursor < len(normalized.text):
-            if normalized.text[cursor] == " ":
-                if not _is_allowed_whitespace_gap(
-                    original_text,
-                    normalized,
-                    cursor,
-                    max_whitespace_gap,
-                ):
-                    break
-                used_gap = True
-                cursor += 1
-            if cursor >= len(normalized.text):
-                break
+    node = root.children.get(normalized.text[start])
+    if node is None:
+        return None
 
-            node = node.children.get(normalized.text[cursor])
-            if node is None:
+    cursor = start + 1
+    term_length = 1
+    used_gap = False
+    longest_term: str | None = None
+    longest_end = 0
+    while cursor < len(normalized.text):
+        if normalized.text[cursor] == " ":
+            if not allowed_gap_mask[cursor]:
                 break
+            used_gap = True
             cursor += 1
-            if (
-                node.term is not None
-                and used_gap
-                and _has_alphanumeric_boundaries(normalized.text, start, cursor)
-            ):
-                yield _NormalizedCandidate(term=node.term, start=start, end=cursor)
+        if cursor >= len(normalized.text):
+            break
+
+        node = node.children.get(normalized.text[cursor])
+        if node is None:
+            break
+        cursor += 1
+        term_length += 1
+        if shorter_than is not None and term_length >= shorter_than:
+            break
+        if (
+            node.term is not None
+            and used_gap
+            and _has_alphanumeric_boundaries(normalized.text, start, cursor)
+        ):
+            longest_term = node.term
+            longest_end = cursor
+
+    if longest_term is None:
+        return None
+    return _NormalizedCandidate(term=longest_term, start=start, end=longest_end)
 
 
 def _map_candidate(
@@ -160,6 +192,16 @@ def _is_occupied(
     )
 
 
+def _is_start_occupied(
+    candidate: _MappedCandidate,
+    normalized_mask: bytearray,
+    original_mask: bytearray,
+) -> bool:
+    return bool(
+        normalized_mask[candidate.normalized.start] or original_mask[candidate.original_start]
+    )
+
+
 def _occupy(
     candidate: _MappedCandidate,
     normalized_mask: bytearray,
@@ -174,6 +216,46 @@ def _occupy(
         original_mask,
         candidate.original_start,
         candidate.original_end,
+    )
+
+
+def _prioritize(candidate: _MappedCandidate) -> _PrioritizedCandidate:
+    return _PrioritizedCandidate(
+        priority=(
+            -candidate.length,
+            candidate.original_start,
+            candidate.normalized.term,
+            candidate.normalized.start,
+            candidate.original_end,
+        ),
+        candidate=candidate,
+    )
+
+
+def _build_matches(
+    original_text: str,
+    selected: list[_MappedCandidate],
+    method: MatchMethod,
+) -> tuple[Match, ...]:
+    return tuple(
+        Match(
+            term=mapped_candidate.normalized.term,
+            matched_text=original_text[
+                mapped_candidate.original_start : mapped_candidate.original_end
+            ],
+            start=mapped_candidate.original_start,
+            end=mapped_candidate.original_end,
+            method=method,
+            score=1.0,
+        )
+        for mapped_candidate in sorted(
+            selected,
+            key=lambda item: (
+                item.original_start,
+                item.original_end,
+                item.normalized.term,
+            ),
+        )
     )
 
 
@@ -229,21 +311,107 @@ class ExactMatcher:
         if self._whitespace_trie is None or " " not in normalized.text:
             return ()
 
-        candidates = [
-            _map_candidate(normalized_candidate, normalized)
-            for normalized_candidate in _iter_whitespace_gap_occurrences(
-                original_text,
-                normalized,
-                self._whitespace_trie,
-                max_whitespace_gap,
-            )
-        ]
-        return self._select_matches(
+        return self._select_whitespace_matches(
             original_text,
             normalized,
-            candidates,
-            method=MatchMethod.WHITESPACE,
+            max_whitespace_gap=max_whitespace_gap,
         )
+
+    def _build_protected_masks(
+        self,
+        original_text: str,
+        normalized: NormalizedText,
+    ) -> tuple[bytearray, bytearray]:
+        protected_normalized = bytearray(len(normalized.text))
+        protected_original = bytearray(len(original_text))
+        for term in self._whitelist:
+            for normalized_candidate in _iter_occurrences(normalized.text, term):
+                _occupy(
+                    _map_candidate(normalized_candidate, normalized),
+                    protected_normalized,
+                    protected_original,
+                )
+        return protected_normalized, protected_original
+
+    def _select_whitespace_matches(
+        self,
+        original_text: str,
+        normalized: NormalizedText,
+        *,
+        max_whitespace_gap: int,
+    ) -> tuple[Match, ...]:
+        if self._whitespace_trie is None:
+            return ()
+
+        protected_normalized, protected_original = self._build_protected_masks(
+            original_text,
+            normalized,
+        )
+        selected_normalized = bytearray(len(normalized.text))
+        selected_original = bytearray(len(original_text))
+        selected: list[_MappedCandidate] = []
+        candidates: list[_PrioritizedCandidate] = []
+        allowed_gap_mask = _build_allowed_whitespace_gap_mask(
+            original_text,
+            normalized,
+            max_whitespace_gap,
+        )
+
+        for start in range(len(normalized.text)):
+            normalized_candidate = _find_longest_whitespace_gap_occurrence(
+                normalized,
+                self._whitespace_trie,
+                allowed_gap_mask,
+                start,
+            )
+            if normalized_candidate is not None:
+                heappush(
+                    candidates,
+                    _prioritize(_map_candidate(normalized_candidate, normalized)),
+                )
+
+        while candidates:
+            mapped_candidate = heappop(candidates).candidate
+            protected = _is_occupied(
+                mapped_candidate,
+                protected_normalized,
+                protected_original,
+            )
+            overlaps_selected = _is_occupied(
+                mapped_candidate,
+                selected_normalized,
+                selected_original,
+            )
+            if not protected and not overlaps_selected:
+                selected.append(mapped_candidate)
+                _occupy(mapped_candidate, selected_normalized, selected_original)
+                continue
+
+            if _is_start_occupied(
+                mapped_candidate,
+                protected_normalized,
+                protected_original,
+            ) or _is_start_occupied(
+                mapped_candidate,
+                selected_normalized,
+                selected_original,
+            ):
+                continue
+
+            next_candidate = _find_longest_whitespace_gap_occurrence(
+                normalized,
+                self._whitespace_trie,
+                allowed_gap_mask,
+                mapped_candidate.normalized.start,
+                shorter_than=mapped_candidate.length,
+            )
+            if next_candidate is not None:
+                heappush(
+                    candidates,
+                    _prioritize(_map_candidate(next_candidate, normalized)),
+                )
+
+        return _build_matches(original_text, selected, MatchMethod.WHITESPACE)
 
     def _select_matches(
         self,
@@ -255,15 +423,10 @@ class ExactMatcher:
     ) -> tuple[Match, ...]:
         """Apply whitelist and overlap rules to mapped candidates."""
 
-        protected_normalized = bytearray(len(normalized.text))
-        protected_original = bytearray(len(original_text))
-        for term in self._whitelist:
-            for normalized_candidate in _iter_occurrences(normalized.text, term):
-                _occupy(
-                    _map_candidate(normalized_candidate, normalized),
-                    protected_normalized,
-                    protected_original,
-                )
+        protected_normalized, protected_original = self._build_protected_masks(
+            original_text,
+            normalized,
+        )
 
         selected_normalized = bytearray(len(normalized.text))
         selected_original = bytearray(len(original_text))
@@ -291,25 +454,4 @@ class ExactMatcher:
             selected.append(mapped_candidate)
             _occupy(mapped_candidate, selected_normalized, selected_original)
 
-        matches: list[Match] = []
-        for mapped_candidate in sorted(
-            selected,
-            key=lambda item: (
-                item.original_start,
-                item.original_end,
-                item.normalized.term,
-            ),
-        ):
-            matches.append(
-                Match(
-                    term=mapped_candidate.normalized.term,
-                    matched_text=original_text[
-                        mapped_candidate.original_start : mapped_candidate.original_end
-                    ],
-                    start=mapped_candidate.original_start,
-                    end=mapped_candidate.original_end,
-                    method=method,
-                    score=1.0,
-                )
-            )
-        return tuple(matches)
+        return _build_matches(original_text, selected, method)

@@ -1,6 +1,7 @@
 """Integration tests for the synchronous Koguard engine."""
 
 from concurrent.futures import ThreadPoolExecutor
+from sys import gettrace
 from typing import cast
 
 import pytest
@@ -302,9 +303,10 @@ def test_whitespace_gap_matching_bounds_deep_shared_prefix_work() -> None:
     text = ("a " * 2_048)[:4_095] + "a"
 
     result = engine.check(text)
+    elapsed_budget_ms = 2_500 if gettrace() is not None else 500
 
     assert len(result.matches) == 8
-    assert result.elapsed_ms < 500
+    assert result.elapsed_ms < elapsed_budget_ms
 
 
 def test_engine_rejects_non_string_input() -> None:

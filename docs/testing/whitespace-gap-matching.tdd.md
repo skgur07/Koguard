@@ -13,6 +13,7 @@ Repeated, Separator 및 Whitelist 동작을 유지해야 한다.
 - ASCII 공백과 탭만 허용하고 줄바꿈과 다른 Unicode 공백은 허용하지 않는다.
 - 사전 단어 자체에 공백이 있는 항목은 기존 Exact Match가 처리한다.
 - 공백을 사용한 후보의 양끝이 영숫자 토큰 중간이면 후보를 버린다.
+- Whitelist는 공백 변형을 별도로 확장하지 않고 입력에 exact로 겹치는 정규화 구간만 보호한다.
 - 매칭 우선순위는 Exact, Repeated, Separator, Whitespace 순서다.
 - 공백 매치는 `MatchMethod.WHITESPACE`로 구분한다.
 
@@ -29,6 +30,9 @@ Repeated, Separator 및 Whitelist 동작을 유지해야 한다.
 - 공백 매칭 전용 Trie를 엔진 초기화 시 한 번 구성하고, 정규화된 입력을 따라가며 각 글자
   사이의 공백 구간만 제한적으로 허용한다.
 - 정규화 단계가 보존한 source span으로 원문의 공백 종류와 길이를 검증한다.
+- 입력의 공백 허용 여부는 mask로 한 번만 계산하고 Trie의 각 경로에서 재사용한다.
+- 시작점마다 최장 후보 하나만 heap에 보관한다. 겹침으로 최장 후보를 쓸 수 없을 때만 다음
+  짧은 후보를 지연 탐색해 기존 longest-first 결과를 유지한다.
 - 기존 Whitelist 마스크와 비중첩 선택 로직을 공백 후보에도 동일하게 적용한다.
 - 엔진에서 기능이 활성화된 경우에만 Whitespace 후보를 계산하고 마지막 우선순위로 병합한다.
 - `tests/corpus/whitespace_gap_cases.json`에서 긍정·오탐 방지 사례의 precision과 recall을
@@ -47,18 +51,33 @@ Repeated, Separator 및 Whitelist 동작을 유지해야 한다.
 | `시 ` 반복 4,096자 | 2.210 ms/check | 3.981 ms/check |
 | `시 발 ` 반복 4,096자, 1,024매치 | - | 9.433 ms/check |
 | 공통 접두사 사전 1,000개와 후보 반복 4,096자 | - | 4.381 ms/check |
+| 깊은 공통 접두사 256개와 최대 입력 | 2,060.431 ms/check | 222.879~233.565 ms/check |
 
 기능이 꺼진 기본 경로는 조건 분기만 추가한다. 기능을 켠 최악 후보 입력도 현재 최대 입력 길이와
 기본 사전에서 한 번의 검사가 10 ms 이내였다. 사전 1,000개가 같은 접두사를 공유하는 입력은
 term별 스캔에서 약 1,916.623 ms가 걸렸으나 Trie 스캔으로 바꾼 뒤 4.381 ms로 줄었다. 기능이
 꺼지면 Trie를 구성하지 않으며, 별도 캐시나 런타임 네트워크 의존성도 추가하지 않았다.
 
+## 리뷰 수정 RED/GREEN
+
+- RED 위치 인자: 기존 네 번째 위치 인자 `obfuscation_separators`가 새 boolean 필드로
+  해석되어 `ConfigurationError` 발생
+- GREEN 위치 인자: 새 필드를 기존 공개 필드 뒤로 이동해 이전 호출 의미 보존
+- RED 성능: 깊은 공통 접두사 256개와 최대 입력에서 `2,060.431 ms`
+- GREEN 성능: 전체 후보 materialization을 지연 heap 선택으로 교체해 5회 측정
+  `222.879~233.565 ms`
+- 성능 회귀 예산: 일반 실행 500 ms, coverage tracer 실행 2,500 ms
+- Whitelist 정책: `시발 자동차`가 `시 발 자동차`를 보호하지 않는 동작을 사용자 결정에 따라
+  회귀 테스트로 고정
+- RED 체크포인트: `5670950 test: 리뷰 결함 재현과 공백 정책 고정`
+
 ## 최종 검증
 
 - Ruff format check: 22 files formatted
 - Ruff lint: PASS
 - mypy strict: 22 source files PASS
-- pytest: `115 passed`, branch coverage `97.39%`
+- pytest: `120 passed`, branch coverage `97.23%`
+- 지연 heap 선택과 전체 후보 기준 구현의 무작위 1,000개 비교: 일치
 - build: sdist와 wheel 생성 PASS
 
 ## Test specification
@@ -71,6 +90,10 @@ term별 스캔에서 약 1,916.623 ms가 걸렸으나 Trie 스캔으로 바꾼 �
 | 4 | 최대 간격을 초과하거나 줄바꿈이 포함된 후보를 거부한다 | `test_whitespace_gap_matching_respects_gap_limit_and_rejects_line_breaks` | integration | PASS |
 | 5 | Whitelist는 겹치는 공백 후보 구간만 보호한다 | `test_whitespace_gap_matcher_applies_whitelist_to_only_overlapping_span` | unit | PASS |
 | 6 | Exact와 Whitespace 결과를 원문 순서로 함께 보존한다 | `test_exact_and_whitespace_gap_matches_are_both_preserved` | integration | PASS |
+| 7 | 기존 네 번째 위치 인자는 계속 구분자 설정으로 해석한다 | `test_engine_config_preserves_obfuscation_separator_positional_argument` | unit | PASS |
+| 8 | 긴 후보가 겹치거나 보호되어도 가능한 짧은 후보를 보존한다 | `test_whitespace_gap_matcher_keeps_shorter_candidate_after_longer_overlap` | unit | PASS |
+| 9 | 깊은 공통 접두사에서도 최대 입력 계산 예산을 지킨다 | `test_whitespace_gap_matching_bounds_deep_shared_prefix_work` | integration | PASS |
+| 10 | Whitelist의 공백 형태를 자동 확장하지 않는다 | `test_whitespace_gap_matching_does_not_expand_whitelist_spacing` | integration | PASS |
 
 ## 알려진 제한
 
