@@ -16,10 +16,11 @@ from pathlib import Path
 from time import perf_counter_ns
 from typing import Any
 
-from koguard import KoguardDictionary, KoguardEngine
+from koguard import EngineConfig, KoguardDictionary, KoguardEngine
 
 DEFAULT_CORPUS_PATH = Path(__file__).with_name("corpus.json")
 DEFAULT_OUTPUT_PATH = Path(__file__).with_name("results") / "latest.json"
+_ENGINE_PROFILES = frozenset({"default", "whitespace-gap"})
 
 
 class BenchmarkError(ValueError):
@@ -36,6 +37,7 @@ class BenchmarkCase:
     dictionary_size: int
     expected_matches: int
     dictionary_profile: str = "standard"
+    engine_profile: str = "default"
 
 
 @dataclass(frozen=True, slots=True)
@@ -54,6 +56,7 @@ class BenchmarkResult:
 
     name: str
     category: str
+    engine_profile: str
     input_length: int
     dictionary_size: int
     expected_matches: int
@@ -137,6 +140,9 @@ def _case_from_payload(payload: object) -> BenchmarkCase:
     dictionary_profile = typed_payload.get("dictionary_profile", "standard")
     if not isinstance(dictionary_profile, str):
         raise BenchmarkError("dictionary_profile must be a string")
+    engine_profile = typed_payload.get("engine_profile", "default")
+    if not isinstance(engine_profile, str):
+        raise BenchmarkError("engine_profile must be a string")
 
     case = BenchmarkCase(
         name=_require_string(typed_payload, "name"),
@@ -145,11 +151,14 @@ def _case_from_payload(payload: object) -> BenchmarkCase:
         dictionary_size=_require_int(typed_payload, "dictionary_size"),
         expected_matches=_require_int(typed_payload, "expected_matches"),
         dictionary_profile=dictionary_profile,
+        engine_profile=engine_profile,
     )
     if case.dictionary_size < 2:
         raise BenchmarkError("dictionary_size must be at least 2")
     if case.expected_matches < 0:
         raise BenchmarkError("expected_matches must be non-negative")
+    if case.engine_profile not in _ENGINE_PROFILES:
+        raise BenchmarkError(f"unknown engine profile: {case.engine_profile}")
     return case
 
 
@@ -174,6 +183,8 @@ def load_cases(path: Path) -> tuple[BenchmarkCase, ...]:
 def _dictionary_for(case: BenchmarkCase) -> KoguardDictionary:
     if case.dictionary_profile == "overlapping-prefix":
         blacklist = ["a" * size for size in range(1, case.dictionary_size + 1)]
+    elif case.dictionary_profile == "deep-whitespace-prefix":
+        blacklist = ["a" * size for size in range(2, case.dictionary_size + 2)]
     elif case.dictionary_profile == "standard":
         blacklist = ["병신", "시발"]
         blacklist.extend(f"합성금칙어{index:06d}" for index in range(case.dictionary_size - 2))
@@ -185,6 +196,14 @@ def _dictionary_for(case: BenchmarkCase) -> KoguardDictionary:
         whitelist=["병신년", "시발점"],
         include_defaults=False,
     )
+
+
+def _config_for(case: BenchmarkCase) -> EngineConfig:
+    if case.engine_profile == "default":
+        return EngineConfig()
+    if case.engine_profile == "whitespace-gap":
+        return EngineConfig(whitespace_gap_matching=True)
+    raise BenchmarkError(f"unknown engine profile: {case.engine_profile}")
 
 
 def _validate_result(case: BenchmarkCase, match_count: int) -> None:
@@ -201,7 +220,10 @@ def _measure_case(
     warmups: int,
 ) -> BenchmarkResult:
     cold_started_at = perf_counter_ns()
-    engine = KoguardEngine(dictionary=_dictionary_for(case))
+    engine = KoguardEngine(
+        config=_config_for(case),
+        dictionary=_dictionary_for(case),
+    )
     cold_result = engine.check(case.text)
     cold_start_ms = (perf_counter_ns() - cold_started_at) / 1_000_000
     _validate_result(case, len(cold_result.matches))
@@ -228,6 +250,7 @@ def _measure_case(
     return BenchmarkResult(
         name=case.name,
         category=case.category,
+        engine_profile=case.engine_profile,
         input_length=len(case.text),
         dictionary_size=case.dictionary_size,
         expected_matches=case.expected_matches,
@@ -266,7 +289,7 @@ def run_benchmarks(
 
     results = tuple(_measure_case(case, iterations=iterations, warmups=warmups) for case in cases)
     return BenchmarkReport(
-        schema_version=1,
+        schema_version=2,
         measured_at=datetime.now(UTC).isoformat(),
         environment=_environment(),
         iterations=iterations,

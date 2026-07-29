@@ -165,7 +165,6 @@ def test_windows_baseline_matches_corpus_cases_and_profiles() -> None:
     payload = json.loads(BASELINE_PATH.read_text(encoding="utf-8"))
 
     assert payload["schema_version"] == 2
-    assert {
-        (result["name"], result["engine_profile"])
-        for result in payload["results"]
-    } == {(case.name, case.engine_profile) for case in cases}
+    assert {(result["name"], result["engine_profile"]) for result in payload["results"]} == {
+        (case.name, case.engine_profile) for case in cases
+    }

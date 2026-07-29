@@ -42,8 +42,40 @@
 
 - 환경: Windows 10, CPython 3.11.9
 - 설정: warmup 10회, 측정 100회
-- corpus: 7 cases
+- corpus: 11 cases
 - 결과: `benchmarks/results/windows-python311.json`
 
 이 수치는 동일 환경 회귀 비교용이며 장비가 다른 CI의 절대 합격 기준은 아니다. cold start는
 한 번 측정한 관찰값이고 peak memory는 Engine 생성 후 한 번의 `check()` allocation 범위다.
+
+## 공백 매칭 profile 확장
+
+공백 매칭은 opt-in 기능이므로 기본 엔진만 측정하는 기존 corpus로는 기능의 정확도와 성능
+회귀를 비교할 수 없었다. case별 `engine_profile`을 추가하고 report schema를 2로 올려 결과마다
+실제 측정 설정을 기록했다.
+
+### RED
+
+- 테스트: `tests/test_benchmark.py`
+- 명령: `.venv\Scripts\python.exe -m pytest tests/test_benchmark.py -q --no-cov`
+- 결과: profile 계약과 schema 2, 새 corpus 및 기준선이 없어 `6 failed, 2 passed`
+- 체크포인트: `a9a0156 test: 공백 매칭 benchmark 프로필 계약 추가`
+
+### GREEN
+
+- `default`와 `whitespace-gap` 엔진 profile을 지원하고 알 수 없는 profile은 거부한다.
+- `시 발` 긍정 사례와 `시 발표` 경계 오탐 방지 사례를 고정했다.
+- 256개 공통 접두사와 4,096자 공백 입력을 결합해 최악 후보 경로를 측정한다.
+- corpus와 Windows 기준선의 case 이름 및 profile이 정확히 일치하는지 테스트한다.
+- 기준선 명령:
+  `.venv\Scripts\python.exe -m benchmarks.engine_benchmark --corpus benchmarks\corpus.json
+  --iterations 100 --warmups 10 --output benchmarks\results\windows-python311.json`
+- 결과: schema 2의 11개 case 기록
+
+### 추가 Test specification
+
+| # | 보장 동작 | 테스트 | 유형 | 결과 |
+| --- | --- | --- | --- | --- |
+| 6 | 공백 profile이 opt-in 엔진 설정을 적용한다 | `test_run_benchmarks_applies_whitespace_gap_engine_profile` | integration | PASS |
+| 7 | 알 수 없는 엔진 profile은 측정 전에 실패한다 | `test_run_benchmarks_rejects_unknown_engine_profile` | unit | PASS |
+| 8 | 기준선과 corpus의 case·profile 구성이 일치한다 | `test_windows_baseline_matches_corpus_cases_and_profiles` | integration | PASS |
