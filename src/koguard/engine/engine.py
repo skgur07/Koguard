@@ -4,7 +4,7 @@ from time import perf_counter_ns
 
 from koguard.config import EngineConfig
 from koguard.engine.dictionary import KoguardDictionary
-from koguard.engine.matcher import ExactMatcher
+from koguard.engine.matcher import ExactMatcher, _ProtectedMasks
 from koguard.engine.normalizer import (
     build_repeated_view,
     build_separator_view,
@@ -12,6 +12,20 @@ from koguard.engine.normalizer import (
 )
 from koguard.exceptions import ConfigurationError, InputTooLongError
 from koguard.models import CheckResult, Match, MatchMethod
+
+
+def _union_original_masks(
+    original_length: int,
+    *protected_masks: _ProtectedMasks,
+) -> bytes:
+    """Union view-local Whitelist spans into one original-text mask."""
+
+    combined = bytearray(original_length)
+    for protected in protected_masks:
+        for index, value in enumerate(protected.original):
+            if value:
+                combined[index] = 1
+    return bytes(combined)
 
 
 def _merge_view_matches(
@@ -92,37 +106,57 @@ class KoguardEngine:
 
         started_at = perf_counter_ns()
         normalized = normalize_text(text, self._config.unicode_form)
-        protected_original_masks = [
-            self._exact_matcher.build_protected_original_mask(text, normalized)
-        ]
-        exact_matches = self._exact_matcher.find(text, normalized)
         repeated = build_repeated_view(
             normalized,
             threshold=self._config.repeat_reduction_threshold,
         )
-        repeated_matches: tuple[Match, ...] = ()
-        if repeated != normalized:
-            protected_original_masks.append(
-                self._exact_matcher.build_protected_original_mask(text, repeated)
-            )
-            repeated_matches = self._exact_matcher.find(
-                text,
-                repeated,
-                method=MatchMethod.REPEATED,
-            )
         separated = build_separator_view(
             normalized,
             separators=self._config.obfuscation_separators,
         )
+
+        normalized_protected = self._exact_matcher.build_protected_masks(text, normalized)
+        repeated_protected = (
+            normalized_protected
+            if repeated == normalized
+            else self._exact_matcher.build_protected_masks(text, repeated)
+        )
+        if separated == normalized:
+            separated_protected = normalized_protected
+        elif separated == repeated:
+            separated_protected = repeated_protected
+        else:
+            separated_protected = self._exact_matcher.build_protected_masks(text, separated)
+        protected_original = _union_original_masks(
+            len(text),
+            normalized_protected,
+            repeated_protected,
+            separated_protected,
+        )
+
+        exact_matches = self._exact_matcher.find(
+            text,
+            normalized,
+            protected_masks=normalized_protected,
+            protected_original=protected_original,
+        )
+        repeated_matches: tuple[Match, ...] = ()
+        if repeated != normalized:
+            repeated_matches = self._exact_matcher.find(
+                text,
+                repeated,
+                method=MatchMethod.REPEATED,
+                protected_masks=repeated_protected,
+                protected_original=protected_original,
+            )
         separator_matches: tuple[Match, ...] = ()
         if separated != normalized:
-            protected_original_masks.append(
-                self._exact_matcher.build_protected_original_mask(text, separated)
-            )
             separator_matches = self._exact_matcher.find(
                 text,
                 separated,
                 method=MatchMethod.SEPARATOR,
+                protected_masks=separated_protected,
+                protected_original=protected_original,
             )
         whitespace_matches: tuple[Match, ...] = ()
         if self._config.whitespace_gap_matching:
@@ -130,6 +164,8 @@ class KoguardEngine:
                 text,
                 normalized,
                 max_whitespace_gap=self._config.max_whitespace_gap,
+                protected_masks=normalized_protected,
+                protected_original=protected_original,
             )
         matches = _merge_view_matches(
             len(text),
@@ -137,7 +173,7 @@ class KoguardEngine:
             repeated_matches,
             separator_matches,
             whitespace_matches,
-            protected_original_masks=tuple(protected_original_masks),
+            protected_original_masks=(protected_original,),
         )
         elapsed_ms = (perf_counter_ns() - started_at) / 1_000_000
 

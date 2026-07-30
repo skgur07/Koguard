@@ -232,6 +232,24 @@ def test_global_whitelist_falls_back_to_shorter_exact_candidate() -> None:
     assert result.matches[0].method is MatchMethod.EXACT
 
 
+def test_global_whitelist_falls_back_to_shorter_whitespace_candidate() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    text = "a b c-cd"
+    engine = make_engine(
+        blacklist=["ab", "abc"],
+        whitelist=["ccd"],
+        config=config,
+    )
+
+    result = engine.check(text)
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == "ab"
+    assert result.matches[0].matched_text == "a b"
+    assert (result.matches[0].start, result.matches[0].end) == (0, 3)
+    assert result.matches[0].method is MatchMethod.WHITESPACE
+
+
 def test_engine_bounds_overlapping_whitelist_mapping_and_reuses_view_mask() -> None:
     text = "a" * 512
     engine = make_engine(

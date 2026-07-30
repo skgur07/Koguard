@@ -101,23 +101,22 @@ def test_exact_matcher_bounds_candidates_and_keeps_deterministic_results() -> No
 
 def test_exact_matcher_skips_starts_too_short_for_single_long_term() -> None:
     term = "a" * 4_096
+    counted_text = ReadCountingText(term)
+    counted_text.read_count = 0
     matcher = make_matcher(blacklist=[term])
-    normalized = normalize_text(term, "NFKC")
+    normalized = NormalizedText(
+        text=counted_text,
+        source_spans=tuple((index, index + 1) for index in range(len(term))),
+    )
 
-    with patch.object(
-        matcher_module,
-        "_find_longest_exact_occurrence",
-        wraps=matcher_module._find_longest_exact_occurrence,
-    ) as find_longest:
-        matches = matcher.find(term, normalized)
+    matches = matcher.find(term, normalized)
 
     assert len(matches) == 1
     assert matches[0].term == term
     assert matches[0].matched_text == term
     assert (matches[0].start, matches[0].end) == (0, len(term))
     assert matches[0].method is MatchMethod.EXACT
-    viable_start_count = len(term) - len(term) + 1
-    assert find_longest.call_count <= viable_start_count
+    assert counted_text.read_count <= len(term)
 
 
 def test_exact_matcher_bounds_character_reads_with_short_and_long_term() -> None:
