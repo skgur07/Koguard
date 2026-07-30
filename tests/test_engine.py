@@ -3,6 +3,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from sys import gettrace
 from typing import cast
+from unittest.mock import patch
 
 import pytest
 
@@ -14,6 +15,7 @@ from koguard import (
     KoguardEngine,
     MatchMethod,
 )
+from koguard.engine import matcher as matcher_module
 
 
 def make_engine(
@@ -212,6 +214,45 @@ def test_separator_view_whitelist_protects_overlapping_exact_view_match() -> Non
 
     assert result.detected is False
     assert result.matches == ()
+
+
+def test_global_whitelist_falls_back_to_shorter_exact_candidate() -> None:
+    text = "시이이X바아아보"
+    engine = make_engine(
+        blacklist=["시이이", "시이이X"],
+        whitelist=["X바보"],
+    )
+
+    result = engine.check(text)
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == "시이이"
+    assert result.matches[0].matched_text == "시이이"
+    assert (result.matches[0].start, result.matches[0].end) == (0, 3)
+    assert result.matches[0].method is MatchMethod.EXACT
+
+
+def test_engine_bounds_overlapping_whitelist_mapping_and_reuses_view_mask() -> None:
+    text = "a" * 512
+    engine = make_engine(
+        blacklist=["a"],
+        whitelist=["a" * size for size in range(2, 130)],
+    )
+
+    with patch.object(
+        matcher_module,
+        "_map_candidate",
+        wraps=matcher_module._map_candidate,
+    ) as map_candidate:
+        result = engine.check(text)
+
+    assert result.detected is False
+    assert result.matches == ()
+    maximum_blacklist_candidates = len(text)
+    maximum_whitelist_union_candidates = len(text)
+    assert map_candidate.call_count <= (
+        maximum_blacklist_candidates + maximum_whitelist_union_candidates
+    )
 
 
 def test_unconfigured_separator_does_not_trigger_obfuscation_view() -> None:

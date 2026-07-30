@@ -1,5 +1,6 @@
 """Unit tests for low-cost exact matching."""
 
+from typing import SupportsIndex
 from unittest.mock import patch
 
 import pytest
@@ -7,7 +8,18 @@ import pytest
 from koguard import KoguardDictionary, MatchMethod
 from koguard.engine import matcher as matcher_module
 from koguard.engine.matcher import ExactMatcher
-from koguard.engine.normalizer import normalize_text
+from koguard.engine.normalizer import NormalizedText, normalize_text
+
+
+class ReadCountingText(str):
+    """Count deterministic character reads performed by matching code."""
+
+    read_count: int
+
+    def __getitem__(self, key: SupportsIndex | slice, /) -> str:
+        if not isinstance(key, slice):
+            self.read_count += 1
+        return super().__getitem__(key)
 
 
 def make_matcher(
@@ -106,6 +118,26 @@ def test_exact_matcher_skips_starts_too_short_for_single_long_term() -> None:
     assert matches[0].method is MatchMethod.EXACT
     viable_start_count = len(term) - len(term) + 1
     assert find_longest.call_count <= viable_start_count
+
+
+def test_exact_matcher_bounds_character_reads_with_short_and_long_term() -> None:
+    text = "a" * 4_096
+    counted_text = ReadCountingText(text)
+    counted_text.read_count = 0
+    normalized = NormalizedText(
+        text=counted_text,
+        source_spans=tuple((index, index + 1) for index in range(len(text))),
+    )
+    matcher = make_matcher(blacklist=["a", text])
+
+    matches = matcher.find(text, normalized)
+
+    assert len(matches) == 1
+    assert matches[0].term == text
+    assert matches[0].matched_text == text
+    assert (matches[0].start, matches[0].end) == (0, len(text))
+    assert matches[0].method is MatchMethod.EXACT
+    assert counted_text.read_count <= len(text) * 4
 
 
 def test_whitespace_gap_matcher_returns_full_original_span() -> None:
