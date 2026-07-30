@@ -87,6 +87,27 @@ def test_exact_matcher_bounds_candidates_and_keeps_deterministic_results() -> No
     assert second_candidate_count == first_candidate_count
 
 
+def test_exact_matcher_skips_starts_too_short_for_single_long_term() -> None:
+    term = "a" * 4_096
+    matcher = make_matcher(blacklist=[term])
+    normalized = normalize_text(term, "NFKC")
+
+    with patch.object(
+        matcher_module,
+        "_find_longest_exact_occurrence",
+        wraps=matcher_module._find_longest_exact_occurrence,
+    ) as find_longest:
+        matches = matcher.find(term, normalized)
+
+    assert len(matches) == 1
+    assert matches[0].term == term
+    assert matches[0].matched_text == term
+    assert (matches[0].start, matches[0].end) == (0, len(term))
+    assert matches[0].method is MatchMethod.EXACT
+    viable_start_count = len(term) - len(term) + 1
+    assert find_longest.call_count <= viable_start_count
+
+
 def test_whitespace_gap_matcher_returns_full_original_span() -> None:
     matcher = make_matcher(blacklist=["시발"])
     text = "이런 시\t\t발 표현"
