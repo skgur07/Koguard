@@ -1,5 +1,7 @@
 """Tests for Unicode normalization and source span tracking."""
 
+from unicodedata import normalize as unicode_normalize
+
 import pytest
 
 import koguard.engine.normalizer as normalizer_module
@@ -46,6 +48,31 @@ def test_normalizer_composes_combining_character() -> None:
 
     assert normalized.text == "é"
     assert normalized.source_spans == ((0, 2),)
+
+
+def test_normalizer_processes_max_length_combining_cluster_with_linear_work(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    source = "e" + "\u0301" * 4095
+    expected_text = unicode_normalize("NFC", source)
+    normalized_input_length = 0
+    real_normalize = normalizer_module.normalize
+
+    def count_normalized_input(form: str, text: str) -> str:
+        nonlocal normalized_input_length
+        normalized_input_length += len(text)
+        return real_normalize(form, text)
+
+    monkeypatch.setattr(normalizer_module, "normalize", count_normalized_input)
+
+    normalized = normalize_text(source, "NFC")
+
+    assert normalized.text == expected_text
+    assert normalized.source_spans == ((0, 2),) + tuple(
+        (index, index + 1) for index in range(2, len(source))
+    )
+    assert normalized.original_span(0, len(normalized.text)) == (0, len(source))
+    assert normalized_input_length <= len(source) * 2
 
 
 def test_normalizer_maps_compatibility_expansion_to_one_source_character() -> None:

@@ -200,6 +200,20 @@ def test_whitelist_protects_separator_view_match() -> None:
     assert result.detected is False
 
 
+def test_separator_view_whitelist_protects_overlapping_exact_view_match() -> None:
+    config = EngineConfig(obfuscation_separators=frozenset({"-"}))
+    engine = make_engine(
+        blacklist=["ab", "abcd"],
+        whitelist=["abcd"],
+        config=config,
+    )
+
+    result = engine.check("ab-cd")
+
+    assert result.detected is False
+    assert result.matches == ()
+
+
 def test_unconfigured_separator_does_not_trigger_obfuscation_view() -> None:
     config = EngineConfig(obfuscation_separators=frozenset({"*"}))
     engine = make_engine(blacklist=["시발"], config=config)

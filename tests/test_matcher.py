@@ -1,8 +1,11 @@
 """Unit tests for low-cost exact matching."""
 
+from unittest.mock import patch
+
 import pytest
 
 from koguard import KoguardDictionary, MatchMethod
+from koguard.engine import matcher as matcher_module
 from koguard.engine.matcher import ExactMatcher
 from koguard.engine.normalizer import normalize_text
 
@@ -52,6 +55,36 @@ def test_exact_matcher_selects_non_overlapping_longest_matches_from_many_candida
 
     assert len(matches) == 8
     assert all(match.term == "a" * 8 for match in matches)
+
+
+def test_exact_matcher_bounds_candidates_and_keeps_deterministic_results() -> None:
+    text = "a" * 512
+    matcher = make_matcher(
+        blacklist=["a" * size for size in range(2, 130)],
+    )
+    normalized = normalize_text(text, "NFKC")
+
+    with patch.object(
+        matcher_module,
+        "_map_candidate",
+        wraps=matcher_module._map_candidate,
+    ) as map_candidate:
+        first = matcher.find(text, normalized)
+        first_candidate_count = map_candidate.call_count
+        map_candidate.reset_mock()
+        second = matcher.find(text, normalized)
+        second_candidate_count = map_candidate.call_count
+
+    expected = [
+        (129, 0, 129),
+        (129, 129, 258),
+        (129, 258, 387),
+        (125, 387, 512),
+    ]
+    assert [(len(match.term), match.start, match.end) for match in first] == expected
+    assert second == first
+    assert first_candidate_count <= len(text) * 4
+    assert second_candidate_count == first_candidate_count
 
 
 def test_whitespace_gap_matcher_returns_full_original_span() -> None:
