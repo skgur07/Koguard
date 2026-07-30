@@ -25,6 +25,7 @@ packages = ["src/koguard"]
 include = [
     "/src",
     "/tests",
+    "/benchmarks",
     "/README.md",
 ]
 
