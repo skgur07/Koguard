@@ -140,6 +140,28 @@ def test_exact_matcher_bounds_character_reads_with_short_and_long_term() -> None
     assert counted_text.read_count <= len(text) * 4
 
 
+def test_exact_matcher_bounds_character_reads_with_dense_prefix_terms() -> None:
+    text = "a" * 512
+    counted_text = ReadCountingText(text)
+    counted_text.read_count = 0
+    normalized = NormalizedText(
+        text=counted_text,
+        source_spans=tuple((index, index + 1) for index in range(len(text))),
+    )
+    matcher = make_matcher(
+        blacklist=["a" * size for size in range(1, len(text) + 1)],
+    )
+
+    matches = matcher.find(text, normalized)
+
+    assert len(matches) == 1
+    assert matches[0].term == text
+    assert matches[0].matched_text == text
+    assert (matches[0].start, matches[0].end) == (0, len(text))
+    assert matches[0].method is MatchMethod.EXACT
+    assert counted_text.read_count <= len(text) * 8
+
+
 def test_whitespace_gap_matcher_returns_full_original_span() -> None:
     matcher = make_matcher(blacklist=["시발"])
     text = "이런 시\t\t발 표현"
