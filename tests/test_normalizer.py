@@ -1,10 +1,13 @@
 """Tests for Unicode normalization and source span tracking."""
 
+from collections.abc import Callable
+from typing import cast
 from unicodedata import normalize as unicode_normalize
 
 import pytest
 
 import koguard.engine.normalizer as normalizer_module
+from koguard.config import NormalizationForm
 from koguard.engine.normalizer import (
     NormalizedText,
     build_repeated_view,
@@ -50,15 +53,48 @@ def test_normalizer_composes_combining_character() -> None:
     assert normalized.source_spans == ((0, 2),)
 
 
+def test_normalizer_keeps_reordered_combining_spans_forward() -> None:
+    normalized = normalize_text("a\u0315\u0327", "NFC")
+
+    assert normalized.text == "a\u0327\u0315"
+    assert normalized.source_spans == ((0, 1), (1, 3), (1, 3))
+    assert normalized.original_span(1, 3) == (1, 3)
+
+
+def test_normalizer_reordered_combining_spans_cover_each_source_character() -> None:
+    source = "B\u0315\u0304\u035e\u0348\u0333\u0347\u034b\u0307"
+
+    normalized = normalize_text(source, "NFC")
+
+    assert all(
+        left_start <= right_start and left_end <= right_end
+        for (left_start, left_end), (right_start, right_end) in zip(
+            normalized.source_spans,
+            normalized.source_spans[1:],
+            strict=False,
+        )
+    )
+    for normalized_index, character in enumerate(normalized.text):
+        source_index = source.index(character)
+        original_start, original_end = normalized.original_span(
+            normalized_index,
+            normalized_index + 1,
+        )
+        assert original_start <= source_index < original_end
+
+
 def test_normalizer_processes_max_length_combining_cluster_with_linear_work(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     source = "e" + "\u0301" * 4095
     expected_text = unicode_normalize("NFC", source)
     normalized_input_length = 0
-    real_normalize = normalizer_module.normalize
+    real_normalize = cast(
+        Callable[[NormalizationForm, str], str],
+        vars(normalizer_module)["normalize"],
+    )
 
-    def count_normalized_input(form: str, text: str) -> str:
+    def count_normalized_input(form: NormalizationForm, text: str) -> str:
         nonlocal normalized_input_length
         normalized_input_length += len(text)
         return real_normalize(form, text)

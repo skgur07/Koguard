@@ -2,11 +2,19 @@
 
 import re
 from dataclasses import dataclass
-from unicodedata import combining, normalize
+from unicodedata import combining, decomposition, normalize
 
 from koguard.config import NormalizationForm
 
 _REPEATED_VOWEL_EXTENSION = re.compile(r"[아야어여오요우유으이애에얘예와워왜웨외위의]{2}")
+_HANGUL_SYLLABLE_BASE = 0xAC00
+_HANGUL_SYLLABLE_COUNT = 11172
+_HANGUL_LEADING_BASE = 0x1100
+_HANGUL_VOWEL_BASE = 0x1161
+_HANGUL_TRAILING_BASE = 0x11A7
+_HANGUL_VOWEL_COUNT = 21
+_HANGUL_TRAILING_COUNT = 28
+_HANGUL_N_COUNT = _HANGUL_VOWEL_COUNT * _HANGUL_TRAILING_COUNT
 
 
 def _is_jamo(character: str) -> bool:
@@ -65,30 +73,122 @@ def _normalize_cluster(
     source_start: int,
     unicode_form: NormalizationForm,
 ) -> tuple[str, tuple[tuple[int, int], ...]]:
-    normalized = ""
-    spans: list[tuple[int, int]] = []
+    normalized = normalize(unicode_form, source)
+    compatibility = unicode_form == "NFKC"
+    source_decomposition = _decompose_with_origins(source, compatibility=compatibility)
+    normalized_decomposition = _decompose_with_origins(
+        normalized,
+        compatibility=compatibility,
+    )
 
-    for relative_end in range(1, len(source) + 1):
-        current = normalize(unicode_form, source[:relative_end])
-        common_prefix_length = 0
-        while (
-            common_prefix_length < len(normalized)
-            and common_prefix_length < len(current)
-            and normalized[common_prefix_length] == current[common_prefix_length]
-        ):
-            common_prefix_length += 1
+    if [character for character, _ in source_decomposition] != [
+        character for character, _ in normalized_decomposition
+    ]:
+        full_span = (source_start, source_start + len(source))
+        return normalized, (full_span,) * len(normalized)
 
-        changed_start = source_start + relative_end - 1
-        if common_prefix_length < len(spans):
-            changed_start = spans[common_prefix_length][0]
+    source_indexes_by_output: list[list[int]] = [[] for _ in normalized]
+    for (_, source_index), (_, output_index) in zip(
+        source_decomposition,
+        normalized_decomposition,
+        strict=True,
+    ):
+        source_indexes_by_output[output_index].append(source_index)
 
-        changed_span = (changed_start, source_start + relative_end)
-        spans = spans[:common_prefix_length] + [changed_span] * (
-            len(current) - common_prefix_length
+    spans = tuple(
+        (
+            source_start + min(source_indexes),
+            source_start + max(source_indexes) + 1,
         )
-        normalized = current
+        for source_indexes in source_indexes_by_output
+    )
+    return normalized, _make_spans_monotonic(spans)
 
-    return normalized, tuple(spans)
+
+def _make_spans_monotonic(
+    spans: tuple[tuple[int, int], ...],
+) -> tuple[tuple[int, int], ...]:
+    """Widen reordered origins so every normalized range maps forward."""
+
+    starts = [start for start, _ in spans]
+    ends = [end for _, end in spans]
+
+    for index in range(len(starts) - 2, -1, -1):
+        starts[index] = min(starts[index], starts[index + 1])
+    for index in range(1, len(ends)):
+        ends[index] = max(ends[index], ends[index - 1])
+
+    return tuple(zip(starts, ends, strict=True))
+
+
+def _decompose_character(
+    character: str,
+    *,
+    compatibility: bool,
+) -> tuple[str, ...]:
+    codepoint = ord(character)
+    syllable_index = codepoint - _HANGUL_SYLLABLE_BASE
+    if 0 <= syllable_index < _HANGUL_SYLLABLE_COUNT:
+        leading = chr(_HANGUL_LEADING_BASE + syllable_index // _HANGUL_N_COUNT)
+        vowel = chr(
+            _HANGUL_VOWEL_BASE + (syllable_index % _HANGUL_N_COUNT) // _HANGUL_TRAILING_COUNT
+        )
+        trailing_index = syllable_index % _HANGUL_TRAILING_COUNT
+        if trailing_index == 0:
+            return leading, vowel
+        return leading, vowel, chr(_HANGUL_TRAILING_BASE + trailing_index)
+
+    mapping = decomposition(character)
+    if not mapping:
+        return (character,)
+
+    codepoints = mapping.split()
+    if codepoints[0].startswith("<"):
+        if not compatibility:
+            return (character,)
+        codepoints = codepoints[1:]
+
+    decomposed: list[str] = []
+    for mapped_codepoint in codepoints:
+        decomposed.extend(
+            _decompose_character(
+                chr(int(mapped_codepoint, 16)),
+                compatibility=compatibility,
+            )
+        )
+    return tuple(decomposed)
+
+
+def _decompose_with_origins(
+    text: str,
+    *,
+    compatibility: bool,
+) -> list[tuple[str, int]]:
+    decomposed = [
+        (decomposed_character, index)
+        for index, character in enumerate(text)
+        for decomposed_character in _decompose_character(
+            character,
+            compatibility=compatibility,
+        )
+    ]
+    return _canonical_order(decomposed)
+
+
+def _canonical_order(items: list[tuple[str, int]]) -> list[tuple[str, int]]:
+    ordered: list[tuple[str, int]] = []
+    combining_run: list[tuple[str, int]] = []
+
+    for item in items:
+        if combining(item[0]) == 0:
+            ordered.extend(sorted(combining_run, key=lambda candidate: combining(candidate[0])))
+            combining_run.clear()
+            ordered.append(item)
+        else:
+            combining_run.append(item)
+
+    ordered.extend(sorted(combining_run, key=lambda candidate: combining(candidate[0])))
+    return ordered
 
 
 @dataclass(frozen=True, slots=True)
