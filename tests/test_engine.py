@@ -408,6 +408,7 @@ def test_mixed_gap_matching_is_opt_in() -> None:
         (["시발"], "시 / 발"),
         (["시발"], "시\n*발"),
         (["시발"], "시*\n발"),
+        (["시발"], "시\u00a0*발"),
         (["시발"], "시   *발"),
         (["시발"], "시 *   발"),
     ],
@@ -469,6 +470,40 @@ def test_global_whitelist_falls_back_to_shorter_mixed_candidate() -> None:
     assert result.matches[0].matched_text == "a * b"
     assert (result.matches[0].start, result.matches[0].end) == (0, 5)
     assert result.matches[0].method is MatchMethod.MIXED
+
+
+def test_mixed_gap_matching_falls_back_when_longest_candidate_has_no_token_boundary() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(
+        blacklist=["ab", "abc"],
+        config=config,
+    )
+
+    result = engine.check("a * b-cd")
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == "ab"
+    assert result.matches[0].matched_text == "a * b"
+    assert (result.matches[0].start, result.matches[0].end) == (0, 5)
+    assert result.matches[0].method is MatchMethod.MIXED
+
+
+def test_exact_priority_does_not_hide_non_overlapping_mixed_fallback() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(
+        blacklist=["ab", "abcde", "defg"],
+        config=config,
+    )
+
+    result = engine.check("ab * c d * e f*g")
+
+    assert [
+        (match.term, match.matched_text, match.start, match.end, match.method)
+        for match in result.matches
+    ] == [
+        ("ab", "ab", 0, 2, MatchMethod.EXACT),
+        ("defg", "d * e f*g", 7, 16, MatchMethod.MIXED),
+    ]
 
 
 def test_mixed_gap_matching_keeps_shorter_candidate_after_longer_overlap() -> None:
