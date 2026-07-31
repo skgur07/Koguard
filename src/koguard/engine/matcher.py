@@ -284,11 +284,11 @@ def _build_mixed_projection(
     )
 
 
-def _is_mixed_candidate(
+def _uses_mixed_gaps(
     candidate: _NormalizedCandidate,
     projection: _MixedProjection,
 ) -> bool:
-    """Return whether a candidate crosses both gap types at token boundaries."""
+    """Return whether a candidate crosses both whitespace and separator gaps."""
 
     first_boundary = candidate.start + 1
     uses_whitespace = (
@@ -298,15 +298,29 @@ def _is_mixed_candidate(
     uses_separator = (
         projection.separator_prefix[candidate.end] - projection.separator_prefix[first_boundary] > 0
     )
-    if not uses_whitespace or not uses_separator:
-        return False
+    return uses_whitespace and uses_separator
+
+
+def _has_mixed_start_boundary(
+    candidate: _NormalizedCandidate,
+    projection: _MixedProjection,
+) -> bool:
+    """Return whether a projected candidate starts at a source-view boundary."""
 
     source_start = projection.source_indexes[candidate.start]
+    return source_start == 0 or not projection.source.text[source_start - 1].isalnum()
+
+
+def _has_mixed_end_boundary(
+    candidate: _NormalizedCandidate,
+    projection: _MixedProjection,
+) -> bool:
+    """Return whether a projected candidate ends at a source-view boundary."""
+
     source_end = projection.source_indexes[candidate.end - 1] + 1
-    return _has_alphanumeric_boundaries(
-        projection.source.text,
-        source_start,
-        source_end,
+    return (
+        source_end == len(projection.source.text)
+        or not projection.source.text[source_end].isalnum()
     )
 
 
@@ -317,9 +331,13 @@ def _next_mixed_occurrence(
 ) -> _NormalizedCandidate | None:
     """Return the next shorter mixed candidate without rescanning the input."""
 
+    if not _has_mixed_start_boundary(candidate, projection):
+        return None
     next_candidate = _next_shorter_occurrence(candidate, automaton)
     while next_candidate is not None:
-        if _is_mixed_candidate(next_candidate, projection):
+        if not _uses_mixed_gaps(next_candidate, projection):
+            return None
+        if _has_mixed_end_boundary(next_candidate, projection):
             return next_candidate
         next_candidate = _next_shorter_occurrence(next_candidate, automaton)
     return None
@@ -332,7 +350,12 @@ def _first_mixed_occurrence(
 ) -> _NormalizedCandidate | None:
     """Return the longest valid mixed candidate in one start's fallback chain."""
 
-    if _is_mixed_candidate(candidate, projection):
+    if not _uses_mixed_gaps(candidate, projection) or not _has_mixed_start_boundary(
+        candidate,
+        projection,
+    ):
+        return None
+    if _has_mixed_end_boundary(candidate, projection):
         return candidate
     return _next_mixed_occurrence(candidate, automaton, projection)
 
