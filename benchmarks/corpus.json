@@ -38,6 +38,22 @@
       "expected_matches": 0
     },
     {
+      "name": "short-mixed-gap",
+      "category": "mixed-gap",
+      "text": "시 * 발",
+      "dictionary_size": 2,
+      "engine_profile": "whitespace-gap",
+      "expected_matches": 1
+    },
+    {
+      "name": "short-mixed-boundary",
+      "category": "mixed-gap",
+      "text": "시 * 발표",
+      "dictionary_size": 2,
+      "engine_profile": "whitespace-gap",
+      "expected_matches": 0
+    },
+    {
       "name": "clean-1kb",
       "category": "one-kilobyte",
       "text_pattern": "가나다라마바사아자차카타파하",
@@ -71,6 +87,16 @@
       "dictionary_profile": "deep-whitespace-prefix",
       "engine_profile": "whitespace-gap",
       "expected_matches": 8
+    },
+    {
+      "name": "deep-mixed-prefix-maximum",
+      "category": "mixed-gap",
+      "text_pattern": "a * ",
+      "length": 4096,
+      "dictionary_size": 256,
+      "dictionary_profile": "deep-whitespace-prefix",
+      "engine_profile": "whitespace-gap",
+      "expected_matches": 4
     },
     {
       "name": "dictionary-100",

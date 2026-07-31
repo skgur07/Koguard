@@ -20,6 +20,21 @@
     "expected_terms": ["시발", "병신"]
   },
   {
+    "id": "mixed-space-separator",
+    "text": "시 * 발",
+    "expected_terms": ["시발"]
+  },
+  {
+    "id": "mixed-tab-separators",
+    "text": "시\t-*발",
+    "expected_terms": ["시발"]
+  },
+  {
+    "id": "mixed-multiple-internal-gaps",
+    "text": "개 * 새 * 끼",
+    "expected_terms": ["개새끼"]
+  },
+  {
     "id": "right-partial-token",
     "text": "시 발표",
     "expected_terms": []
@@ -35,6 +50,26 @@
     "expected_terms": []
   },
   {
+    "id": "mixed-right-partial-token",
+    "text": "시 * 발표",
+    "expected_terms": []
+  },
+  {
+    "id": "mixed-left-partial-token",
+    "text": "도시 * 발",
+    "expected_terms": []
+  },
+  {
+    "id": "mixed-compound-word",
+    "text": "개 * 새끼손가락",
+    "expected_terms": []
+  },
+  {
+    "id": "mixed-unconfigured-separator",
+    "text": "시 / 발",
+    "expected_terms": []
+  },
+  {
     "id": "gap-over-limit",
     "text": "시    발",
     "expected_terms": []
@@ -42,6 +77,26 @@
   {
     "id": "line-break-gap",
     "text": "시\n발",
+    "expected_terms": []
+  },
+  {
+    "id": "mixed-gap-over-limit-before-separator",
+    "text": "시    *발",
+    "expected_terms": []
+  },
+  {
+    "id": "mixed-gap-over-limit-after-separator",
+    "text": "시 *    발",
+    "expected_terms": []
+  },
+  {
+    "id": "mixed-line-break-gap",
+    "text": "시\n*발",
+    "expected_terms": []
+  },
+  {
+    "id": "mixed-unicode-whitespace-gap",
+    "text": "시 *발",
     "expected_terms": []
   },
   {

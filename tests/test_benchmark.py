@@ -32,6 +32,7 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         "dictionary-scale",
         "obfuscation",
         "whitespace-gap",
+        "mixed-gap",
     }
     assert max(len(case.text) for case in cases) == EngineConfig().max_input_length
     assert {case.engine_profile for case in cases} >= {
@@ -40,6 +41,12 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
     }
     assert any(
         case.engine_profile == "whitespace-gap"
+        and case.dictionary_profile == "deep-whitespace-prefix"
+        and len(case.text) == EngineConfig().max_input_length
+        for case in cases
+    )
+    assert any(
+        case.category == "mixed-gap"
         and case.dictionary_profile == "deep-whitespace-prefix"
         and len(case.text) == EngineConfig().max_input_length
         for case in cases
