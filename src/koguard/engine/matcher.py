@@ -325,6 +325,18 @@ def _next_mixed_occurrence(
     return None
 
 
+def _first_mixed_occurrence(
+    candidate: _NormalizedCandidate,
+    automaton: _TermAutomaton,
+    projection: _MixedProjection,
+) -> _NormalizedCandidate | None:
+    """Return the longest valid mixed candidate in one start's fallback chain."""
+
+    if _is_mixed_candidate(candidate, projection):
+        return candidate
+    return _next_mixed_occurrence(candidate, automaton, projection)
+
+
 def _find_longest_whitespace_gap_occurrence(
     normalized: NormalizedText,
     root: _TermTrieNode,
@@ -588,6 +600,7 @@ class ExactMatcher:
         max_whitespace_gap: int,
         separators: frozenset[str],
         protected_original: bytes | None = None,
+        occupied_original: bytes | None = None,
     ) -> tuple[Match, ...]:
         """Return matches obfuscated with both spaces/tabs and separators."""
 
@@ -619,6 +632,7 @@ class ExactMatcher:
             original_text,
             projection,
             protected_original=resolved_protected_original,
+            occupied_original=occupied_original,
         )
 
     def _select_exact_matches(
@@ -782,13 +796,18 @@ class ExactMatcher:
         projection: _MixedProjection,
         *,
         protected_original: bytes,
+        occupied_original: bytes | None,
     ) -> tuple[Match, ...]:
         if self._mixed_automaton is None:
             return ()
 
         protected_normalized = bytes(len(projection.normalized.text))
         selected_normalized = bytearray(len(projection.normalized.text))
-        selected_original = bytearray(len(original_text))
+        selected_original = (
+            bytearray(len(original_text))
+            if occupied_original is None
+            else bytearray(occupied_original)
+        )
         selected: list[_MappedCandidate] = []
         candidates: list[_PrioritizedCandidate] = []
 
@@ -796,10 +815,15 @@ class ExactMatcher:
             projection.normalized.text,
             self._mixed_automaton,
         ):
-            if _is_mixed_candidate(normalized_candidate, projection):
+            mixed_candidate = _first_mixed_occurrence(
+                normalized_candidate,
+                self._mixed_automaton,
+                projection,
+            )
+            if mixed_candidate is not None:
                 heappush(
                     candidates,
-                    _prioritize(_map_candidate(normalized_candidate, projection.normalized)),
+                    _prioritize(_map_candidate(mixed_candidate, projection.normalized)),
                 )
 
         while candidates:
