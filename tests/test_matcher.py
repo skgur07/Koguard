@@ -272,3 +272,26 @@ def test_mixed_gap_matcher_returns_full_original_span() -> None:
     assert matches[0].matched_text == "시\t-*발"
     assert (matches[0].start, matches[0].end) == (3, 8)
     assert matches[0].method is MatchMethod.MIXED
+
+
+def test_mixed_gap_matcher_reads_maximum_input_a_bounded_number_of_times() -> None:
+    text = "a * " * 1_024
+    counted_text = ReadCountingText(text)
+    counted_text.read_count = 0
+    normalized = NormalizedText(
+        text=counted_text,
+        source_spans=tuple((index, index + 1) for index in range(len(text))),
+    )
+    matcher = make_matcher(
+        blacklist=["a" * length for length in range(2, 258)],
+    )
+
+    matches = matcher.find_with_mixed_gaps(
+        text,
+        normalized,
+        max_whitespace_gap=1,
+        separators=frozenset({"*"}),
+    )
+
+    assert [len(match.term) for match in matches] == [257, 257, 257, 253]
+    assert counted_text.read_count <= len(text) * 2
