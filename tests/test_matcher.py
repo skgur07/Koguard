@@ -295,3 +295,26 @@ def test_mixed_gap_matcher_reads_maximum_input_a_bounded_number_of_times() -> No
 
     assert [len(match.term) for match in matches] == [257, 257, 257, 253]
     assert counted_text.read_count <= len(text) * 2
+
+
+def test_mixed_gap_matcher_skips_impossible_shared_prefix_fallbacks() -> None:
+    text = "a * " + ("a" * 4_092)
+    matcher = make_matcher(
+        blacklist=["a" * length for length in range(2, 258)],
+    )
+
+    with patch.object(
+        matcher_module,
+        "_next_shorter_occurrence",
+        wraps=matcher_module._next_shorter_occurrence,
+    ) as next_shorter:
+        matches = matcher.find_with_mixed_gaps(
+            text,
+            normalize_text(text, "NFKC"),
+            max_whitespace_gap=1,
+            separators=frozenset({"*"}),
+        )
+
+    assert len(text) == 4_096
+    assert matches == ()
+    assert next_shorter.call_count <= len(text)
