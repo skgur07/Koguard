@@ -367,6 +367,145 @@ def test_whitespace_gap_matching_does_not_expand_whitelist_spacing() -> None:
     assert [match.term for match in result.matches] == ["시발"]
 
 
+@pytest.mark.parametrize(
+    ("blacklist", "text", "expected_term"),
+    [
+        (["시발"], "시 * 발", "시발"),
+        (["시발"], "시\t-*발", "시발"),
+        (["시발"], "시\t*\t발", "시발"),
+        (["개새끼"], "개 * 새 * 끼", "개새끼"),
+    ],
+)
+def test_mixed_gap_matching_detects_whitespace_and_configured_separators(
+    blacklist: list[str],
+    text: str,
+    expected_term: str,
+) -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(blacklist=blacklist, config=config)
+
+    result = engine.check(text)
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == expected_term
+    assert result.matches[0].matched_text == text
+    assert (result.matches[0].start, result.matches[0].end) == (0, len(text))
+    assert result.matches[0].method is MatchMethod.MIXED
+
+
+def test_mixed_gap_matching_is_opt_in() -> None:
+    engine = make_engine(blacklist=["시발"])
+
+    assert engine.check("시 * 발").detected is False
+
+
+@pytest.mark.parametrize(
+    ("blacklist", "text"),
+    [
+        (["시발"], "시 * 발표"),
+        (["시발"], "도시 * 발"),
+        (["개새끼"], "개 * 새끼손가락"),
+        (["시발"], "시 / 발"),
+        (["시발"], "시\n*발"),
+        (["시발"], "시   *발"),
+    ],
+)
+def test_mixed_gap_matching_rejects_invalid_gaps_and_partial_tokens(
+    blacklist: list[str],
+    text: str,
+) -> None:
+    config = EngineConfig(
+        whitespace_gap_matching=True,
+        max_whitespace_gap=2,
+        obfuscation_separators=frozenset({"*"}),
+    )
+    engine = make_engine(blacklist=blacklist, config=config)
+
+    assert engine.check(text).detected is False
+
+
+def test_mixed_gap_matching_does_not_expand_whitelist_obfuscation() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(
+        blacklist=["시발"],
+        whitelist=["시발 자동차"],
+        config=config,
+    )
+
+    result = engine.check("시 * 발 자동차")
+
+    assert [match.term for match in result.matches] == ["시발"]
+    assert result.matches[0].method is MatchMethod.MIXED
+
+
+def test_exact_whitelist_span_protects_mixed_gap_match() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(
+        blacklist=["시발"],
+        whitelist=["시 * 발"],
+        config=config,
+    )
+
+    assert engine.check("시 * 발").detected is False
+
+
+def test_global_whitelist_falls_back_to_shorter_mixed_candidate() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(
+        blacklist=["ab", "abc"],
+        whitelist=["ccd"],
+        config=config,
+    )
+
+    result = engine.check("a * b * c-cd")
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == "ab"
+    assert result.matches[0].matched_text == "a * b"
+    assert (result.matches[0].start, result.matches[0].end) == (0, 5)
+    assert result.matches[0].method is MatchMethod.MIXED
+
+
+def test_mixed_gap_matching_keeps_shorter_candidate_after_longer_overlap() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(
+        blacklist=["ab", "abcdef", "defghijk"],
+        config=config,
+    )
+    text = "a * b c * d e * f g * h i * j k"
+
+    first = engine.check(text)
+    second = engine.check(text)
+
+    assert [(match.term, match.method) for match in first.matches] == [
+        ("ab", MatchMethod.MIXED),
+        ("defghijk", MatchMethod.MIXED),
+    ]
+    assert second.matches == first.matches
+
+
+def test_mixed_gap_matching_bounds_deep_shared_prefix_work() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(
+        blacklist=["a" * length for length in range(2, 258)],
+        config=config,
+    )
+    text = "a * " * 1_024
+
+    with patch.object(
+        matcher_module,
+        "_map_candidate",
+        wraps=matcher_module._map_candidate,
+    ) as map_candidate:
+        result = engine.check(text)
+    elapsed_budget_ms = 3_000 if gettrace() is not None else 750
+
+    assert len(result.matches) == 4
+    assert all(match.method is MatchMethod.MIXED for match in result.matches)
+    assert map_candidate.call_count <= len(text)
+    assert result.elapsed_ms < elapsed_budget_ms
+
+
 def test_whitespace_gap_matching_bounds_deep_shared_prefix_work() -> None:
     config = EngineConfig(whitespace_gap_matching=True)
     engine = make_engine(

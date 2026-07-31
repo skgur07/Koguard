@@ -18,6 +18,10 @@ def make_match() -> Match:
     )
 
 
+def test_mixed_match_method_has_stable_public_value() -> None:
+    assert MatchMethod.MIXED.value == "mixed"
+
+
 def test_detected_result_exposes_first_match_compatibility_properties() -> None:
     match = make_match()
     result = CheckResult(normalized_text="문장금칙어", matches=(match,), elapsed_ms=0.25)
