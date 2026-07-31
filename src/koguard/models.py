@@ -12,6 +12,7 @@ class MatchMethod(StrEnum):
     REPEATED = "repeated"
     SEPARATOR = "separator"
     WHITESPACE = "whitespace"
+    MIXED = "mixed"
     TRIE = "trie"
     LEVENSHTEIN = "levenshtein"
     EMBEDDING = "embedding"

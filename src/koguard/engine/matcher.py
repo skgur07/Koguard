@@ -58,6 +58,15 @@ class _ProtectedMasks:
     original: bytes
 
 
+@dataclass(frozen=True, slots=True)
+class _MixedProjection:
+    normalized: NormalizedText
+    source: NormalizedText
+    source_indexes: tuple[int, ...]
+    whitespace_prefix: tuple[int, ...]
+    separator_prefix: tuple[int, ...]
+
+
 @dataclass(order=True, slots=True)
 class _PrioritizedCandidate:
     priority: tuple[int, int, str, int, int]
@@ -217,6 +226,105 @@ def _build_whitespace_trie(terms: tuple[str, ...]) -> _TermTrieNode:
     return _build_term_trie(eligible_terms)
 
 
+def _build_mixed_automaton(terms: tuple[str, ...]) -> _TermAutomaton:
+    eligible_terms = tuple(term for term in terms if len(term) >= 2 and term.isalnum())
+    return _build_term_automaton(eligible_terms)
+
+
+def _build_mixed_projection(
+    original_text: str,
+    normalized: NormalizedText,
+    *,
+    max_whitespace_gap: int,
+    separators: frozenset[str],
+) -> _MixedProjection:
+    """Remove bounded spaces/tabs and configured separators in one linear view."""
+
+    allowed_whitespace = _build_allowed_whitespace_gap_mask(
+        original_text,
+        normalized,
+        max_whitespace_gap,
+    )
+    characters: list[str] = []
+    source_spans: list[tuple[int, int]] = []
+    source_indexes: list[int] = []
+    whitespace_prefix = [0]
+    separator_prefix = [0]
+    pending_whitespace = False
+    pending_separator = False
+
+    for index in range(len(normalized.text)):
+        character = normalized.text[index]
+        if character == " " and allowed_whitespace[index]:
+            if characters:
+                pending_whitespace = True
+            continue
+        if character in separators:
+            if characters:
+                pending_separator = True
+            continue
+
+        characters.append(character)
+        source_spans.append(normalized.source_spans[index])
+        source_indexes.append(index)
+        whitespace_prefix.append(whitespace_prefix[-1] + int(pending_whitespace))
+        separator_prefix.append(separator_prefix[-1] + int(pending_separator))
+        pending_whitespace = False
+        pending_separator = False
+
+    return _MixedProjection(
+        normalized=NormalizedText(
+            text="".join(characters),
+            source_spans=tuple(source_spans),
+        ),
+        source=normalized,
+        source_indexes=tuple(source_indexes),
+        whitespace_prefix=tuple(whitespace_prefix),
+        separator_prefix=tuple(separator_prefix),
+    )
+
+
+def _is_mixed_candidate(
+    candidate: _NormalizedCandidate,
+    projection: _MixedProjection,
+) -> bool:
+    """Return whether a candidate crosses both gap types at token boundaries."""
+
+    first_boundary = candidate.start + 1
+    uses_whitespace = (
+        projection.whitespace_prefix[candidate.end] - projection.whitespace_prefix[first_boundary]
+        > 0
+    )
+    uses_separator = (
+        projection.separator_prefix[candidate.end] - projection.separator_prefix[first_boundary] > 0
+    )
+    if not uses_whitespace or not uses_separator:
+        return False
+
+    source_start = projection.source_indexes[candidate.start]
+    source_end = projection.source_indexes[candidate.end - 1] + 1
+    return _has_alphanumeric_boundaries(
+        projection.source.text,
+        source_start,
+        source_end,
+    )
+
+
+def _next_mixed_occurrence(
+    candidate: _NormalizedCandidate,
+    automaton: _TermAutomaton,
+    projection: _MixedProjection,
+) -> _NormalizedCandidate | None:
+    """Return the next shorter mixed candidate without rescanning the input."""
+
+    next_candidate = _next_shorter_occurrence(candidate, automaton)
+    while next_candidate is not None:
+        if _is_mixed_candidate(next_candidate, projection):
+            return next_candidate
+        next_candidate = _next_shorter_occurrence(next_candidate, automaton)
+    return None
+
+
 def _find_longest_whitespace_gap_occurrence(
     normalized: NormalizedText,
     root: _TermTrieNode,
@@ -374,7 +482,12 @@ def _build_matches(
 class ExactMatcher:
     """Find normalized terms and remove protected or overlapping spans."""
 
-    __slots__ = ("_exact_automaton", "_whitelist_automaton", "_whitespace_trie")
+    __slots__ = (
+        "_exact_automaton",
+        "_mixed_automaton",
+        "_whitelist_automaton",
+        "_whitespace_trie",
+    )
 
     def __init__(
         self,
@@ -387,6 +500,9 @@ class ExactMatcher:
         self._whitelist_automaton = _build_term_automaton(dictionary.ordered_whitelist)
         self._whitespace_trie = (
             _build_whitespace_trie(blacklist) if whitespace_gap_matching else None
+        )
+        self._mixed_automaton = (
+            _build_mixed_automaton(blacklist) if whitespace_gap_matching else None
         )
 
     def find(
@@ -462,6 +578,47 @@ class ExactMatcher:
             max_whitespace_gap=max_whitespace_gap,
             protected_masks=protected_masks,
             protected_original=protected_original,
+        )
+
+    def find_with_mixed_gaps(
+        self,
+        original_text: str,
+        normalized: NormalizedText,
+        *,
+        max_whitespace_gap: int,
+        separators: frozenset[str],
+        protected_original: bytes | None = None,
+    ) -> tuple[Match, ...]:
+        """Return matches obfuscated with both spaces/tabs and separators."""
+
+        if type(max_whitespace_gap) is not int or max_whitespace_gap <= 0:
+            raise ValueError("max_whitespace_gap must be a positive integer")
+        if (
+            self._mixed_automaton is None
+            or not separators
+            or " " not in normalized.text
+            or separators.isdisjoint(normalized.text)
+        ):
+            return ()
+
+        projection = _build_mixed_projection(
+            original_text,
+            normalized,
+            max_whitespace_gap=max_whitespace_gap,
+            separators=separators,
+        )
+        if projection.whitespace_prefix[-1] == 0 or projection.separator_prefix[-1] == 0:
+            return ()
+
+        resolved_protected_original = (
+            self.build_protected_masks(original_text, normalized).original
+            if protected_original is None
+            else protected_original
+        )
+        return self._select_mixed_matches(
+            original_text,
+            projection,
+            protected_original=resolved_protected_original,
         )
 
     def _select_exact_matches(
@@ -618,3 +775,70 @@ class ExactMatcher:
                 )
 
         return _build_matches(original_text, selected, MatchMethod.WHITESPACE)
+
+    def _select_mixed_matches(
+        self,
+        original_text: str,
+        projection: _MixedProjection,
+        *,
+        protected_original: bytes,
+    ) -> tuple[Match, ...]:
+        if self._mixed_automaton is None:
+            return ()
+
+        protected_normalized = bytes(len(projection.normalized.text))
+        selected_normalized = bytearray(len(projection.normalized.text))
+        selected_original = bytearray(len(original_text))
+        selected: list[_MappedCandidate] = []
+        candidates: list[_PrioritizedCandidate] = []
+
+        for normalized_candidate in _iter_longest_occurrences(
+            projection.normalized.text,
+            self._mixed_automaton,
+        ):
+            if _is_mixed_candidate(normalized_candidate, projection):
+                heappush(
+                    candidates,
+                    _prioritize(_map_candidate(normalized_candidate, projection.normalized)),
+                )
+
+        while candidates:
+            mapped_candidate = heappop(candidates).candidate
+            protected = _is_occupied(
+                mapped_candidate,
+                protected_normalized,
+                protected_original,
+            )
+            overlaps_selected = _is_occupied(
+                mapped_candidate,
+                selected_normalized,
+                selected_original,
+            )
+            if not protected and not overlaps_selected:
+                selected.append(mapped_candidate)
+                _occupy(mapped_candidate, selected_normalized, selected_original)
+                continue
+
+            if _is_start_occupied(
+                mapped_candidate,
+                protected_normalized,
+                protected_original,
+            ) or _is_start_occupied(
+                mapped_candidate,
+                selected_normalized,
+                selected_original,
+            ):
+                continue
+
+            next_candidate = _next_mixed_occurrence(
+                mapped_candidate.normalized,
+                self._mixed_automaton,
+                projection,
+            )
+            if next_candidate is not None:
+                heappush(
+                    candidates,
+                    _prioritize(_map_candidate(next_candidate, projection.normalized)),
+                )
+
+        return _build_matches(original_text, selected, MatchMethod.MIXED)

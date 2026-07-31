@@ -159,6 +159,7 @@ class KoguardEngine:
                 protected_original=protected_original,
             )
         whitespace_matches: tuple[Match, ...] = ()
+        mixed_matches: tuple[Match, ...] = ()
         if self._config.whitespace_gap_matching:
             whitespace_matches = self._exact_matcher.find_with_whitespace_gaps(
                 text,
@@ -167,12 +168,20 @@ class KoguardEngine:
                 protected_masks=normalized_protected,
                 protected_original=protected_original,
             )
+            mixed_matches = self._exact_matcher.find_with_mixed_gaps(
+                text,
+                normalized,
+                max_whitespace_gap=self._config.max_whitespace_gap,
+                separators=self._config.obfuscation_separators,
+                protected_original=protected_original,
+            )
         matches = _merge_view_matches(
             len(text),
             exact_matches,
             repeated_matches,
             separator_matches,
             whitespace_matches,
+            mixed_matches,
             protected_original_masks=(protected_original,),
         )
         elapsed_ms = (perf_counter_ns() - started_at) / 1_000_000
