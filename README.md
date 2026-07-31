@@ -54,15 +54,19 @@ config = EngineConfig(
 engine = KoguardEngine(config=config)
 ```
 
-이 설정은 사전 단어의 글자 사이에 들어간 짧은 공백과 탭만 허용합니다. 각 공백 구간은
+이 설정은 사전 단어의 글자 사이에 들어간 짧은 공백과 탭을 허용하며, 공백과 설정된
+`obfuscation_separators`를 함께 섞은 `시 * 발`도 탐지합니다. 각 공백 구간은
 `max_whitespace_gap` 이하이어야 하며 줄바꿈은 허용하지 않습니다. 또한 매치 양끝이 영숫자
-토큰 중간이면 후보를 버리므로 `시 발`과 `개 새끼`는 탐지하지만 `시 발표`와
-`개 새끼손가락`은 탐지하지 않습니다. 결과의 `matched_text`, `start`, `end`에는 공백을
-포함한 원문 구간이 그대로 보존되고 `method`는 `MatchMethod.WHITESPACE`입니다.
+토큰 중간이면 후보를 버리므로 `시 발`, `시 * 발`, `개 새끼`는 탐지하지만 `시 발표`,
+`시 * 발표`, `개 새끼손가락`은 탐지하지 않습니다.
 
-Whitespace 매칭에서는 Whitelist의 공백 형태를 별도로 확장하지 않습니다. 예를 들어
-Whitelist에 `시발 자동차`가 있어도 입력 `시 발 자동차`의 `시 발`은 탐지합니다. Whitelist는
-입력에 실제로 겹치는 exact 정규화 구간만 보호합니다.
+결과의 `matched_text`, `start`, `end`에는 우회 문자를 포함한 원문 구간이 그대로 보존됩니다.
+공백·탭만 사용한 결과의 `method`는 `MatchMethod.WHITESPACE`, 공백과 구분자를 모두 사용한
+결과는 `MatchMethod.MIXED`입니다.
+
+Whitespace와 Mixed 매칭에서는 Whitelist의 우회 형태를 별도로 확장하지 않습니다. 예를 들어
+Whitelist에 `시발 자동차`가 있어도 입력 `시 발 자동차`와 `시 * 발 자동차`의 욕설 구간은
+탐지합니다. Whitelist는 입력에 실제로 겹치는 기존 정규화 view의 구간만 보호합니다.
 
 ## 개발 환경
 

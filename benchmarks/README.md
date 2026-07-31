@@ -30,7 +30,9 @@ uv run python -m benchmarks.engine_benchmark
 - 기본 최대 입력 길이인 4,096자
 - 공통 접두사 후보가 대량 생성되는 512자 적대적 입력
 - 공백 매칭을 활성화한 `시 발` 탐지와 `시 발표` 경계 오탐 방지
+- 공백과 설정 구분자를 함께 사용한 `시 * 발` 탐지와 `시 * 발표` 경계 오탐 방지
 - 공백 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
+- 혼합 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 100개와 1,000개 합성 사전
 
 각 case에는 `expected_matches`가 있다. 탐지 결과가 기대값과 다르면 성능 수치를 저장하지 않고
@@ -38,6 +40,7 @@ uv run python -m benchmarks.engine_benchmark
 
 `engine_profile`은 case마다 사용할 엔진 설정을 지정한다. 생략하거나 `default`이면 기본 설정을
 사용하고, `whitespace-gap`이면 `EngineConfig(whitespace_gap_matching=True)`를 사용한다.
+이 profile은 공백 전용 매칭과 혼합 공백·구분자 매칭을 함께 활성화한다.
 `dictionary_profile`은 합성 사전 형태를 지정하며 `standard`, `overlapping-prefix`,
 `deep-whitespace-prefix`를 지원한다. 알 수 없는 profile은 측정을 시작하기 전에 실패한다.
 

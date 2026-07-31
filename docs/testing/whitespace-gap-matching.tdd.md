@@ -14,7 +14,8 @@ Repeated, Separator 및 Whitelist 동작을 유지해야 한다.
 - 사전 단어 자체에 공백이 있는 항목은 기존 Exact Match가 처리한다.
 - 공백을 사용한 후보의 양끝이 영숫자 토큰 중간이면 후보를 버린다.
 - Whitelist는 공백 변형을 별도로 확장하지 않고 입력에 exact로 겹치는 정규화 구간만 보호한다.
-- 매칭 우선순위는 Exact, Repeated, Separator, Whitespace 순서다.
+- 이 문서에서 구현한 매칭 우선순위는 Exact, Repeated, Separator, Whitespace 순서다.
+  이후 Mixed 매칭이 마지막 단계로 추가되었다.
 - 공백 매치는 `MatchMethod.WHITESPACE`로 구분한다.
 
 ## RED
@@ -99,5 +100,6 @@ term별 스캔에서 약 1,916.623 ms가 걸렸으나 Trie 스캔으로 바꾼 �
 
 - 보수적인 토큰 경계 규칙 때문에 `시 발놈`처럼 욕설 뒤에 접미 표현을 바로 붙인 입력은 현재
   탐지하지 않는다. 접미 표현 사전이나 형태소 경계 정책을 별도로 정의한 뒤 확장한다.
-- 공백과 특수문자를 동시에 섞은 `시 * 발`은 view를 합성하지 않으므로 현재 탐지하지 않는다.
-  합성 view는 정확도 corpus와 계산량 상한을 먼저 정의한 뒤 검토한다.
+- 공백과 특수문자를 동시에 섞은 `시 * 발`은 후속
+  [혼합 공백·구분자 매칭](mixed-gap-matching.tdd.md)에서 독립 projection으로 지원한다.
+- 반복 축약과 혼합 우회를 동시에 요구하는 `시이이 * 발`은 아직 view를 합성하지 않는다.
