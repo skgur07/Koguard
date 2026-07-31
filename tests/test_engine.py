@@ -407,7 +407,9 @@ def test_mixed_gap_matching_is_opt_in() -> None:
         (["개새끼"], "개 * 새끼손가락"),
         (["시발"], "시 / 발"),
         (["시발"], "시\n*발"),
+        (["시발"], "시*\n발"),
         (["시발"], "시   *발"),
+        (["시발"], "시 *   발"),
     ],
 )
 def test_mixed_gap_matching_rejects_invalid_gaps_and_partial_tokens(
@@ -441,12 +443,15 @@ def test_mixed_gap_matching_does_not_expand_whitelist_obfuscation() -> None:
 def test_exact_whitelist_span_protects_mixed_gap_match() -> None:
     config = EngineConfig(whitespace_gap_matching=True)
     engine = make_engine(
-        blacklist=["시발"],
+        blacklist=["시발", "병신"],
         whitelist=["시 * 발"],
         config=config,
     )
 
-    assert engine.check("시 * 발").detected is False
+    result = engine.check("시 * 발 그리고 병 * 신")
+
+    assert [match.term for match in result.matches] == ["병신"]
+    assert result.matches[0].method is MatchMethod.MIXED
 
 
 def test_global_whitelist_falls_back_to_shorter_mixed_candidate() -> None:
@@ -500,7 +505,14 @@ def test_mixed_gap_matching_bounds_deep_shared_prefix_work() -> None:
         result = engine.check(text)
     elapsed_budget_ms = 3_000 if gettrace() is not None else 750
 
-    assert len(result.matches) == 4
+    assert len(text) == config.max_input_length
+    assert [len(match.term) for match in result.matches] == [257, 257, 257, 253]
+    assert [(match.start, match.end) for match in result.matches] == [
+        (0, 1_025),
+        (1_028, 2_053),
+        (2_056, 3_081),
+        (3_084, 4_093),
+    ]
     assert all(match.method is MatchMethod.MIXED for match in result.matches)
     assert map_candidate.call_count <= len(text)
     assert result.elapsed_ms < elapsed_budget_ms
