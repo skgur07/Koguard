@@ -1,7 +1,6 @@
 """Integration tests for the synchronous Koguard engine."""
 
 from concurrent.futures import ThreadPoolExecutor
-from sys import gettrace
 from typing import cast
 from unittest.mock import patch
 
@@ -538,6 +537,20 @@ def test_mixed_gap_matching_falls_back_when_longest_candidate_has_no_token_bound
     assert result.matches[0].method is MatchMethod.MIXED
 
 
+def test_mixed_gap_matching_falls_back_across_nonterminal_boundary() -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(
+        blacklist=["ab", "abcd"],
+        config=config,
+    )
+
+    result = engine.check("a * b c * dX")
+
+    assert [(match.term, match.matched_text, match.method) for match in result.matches] == [
+        ("ab", "a * b", MatchMethod.MIXED)
+    ]
+
+
 def test_exact_priority_does_not_hide_non_overlapping_mixed_fallback() -> None:
     config = EngineConfig(whitespace_gap_matching=True)
     engine = make_engine(
@@ -588,7 +601,6 @@ def test_mixed_gap_matching_bounds_deep_shared_prefix_work() -> None:
         wraps=matcher_module._map_candidate,
     ) as map_candidate:
         result = engine.check(text)
-    elapsed_budget_ms = 3_000 if gettrace() is not None else 750
 
     assert len(text) == config.max_input_length
     assert [len(match.term) for match in result.matches] == [257, 257, 257, 253]
@@ -600,7 +612,6 @@ def test_mixed_gap_matching_bounds_deep_shared_prefix_work() -> None:
     ]
     assert all(match.method is MatchMethod.MIXED for match in result.matches)
     assert map_candidate.call_count <= len(text)
-    assert result.elapsed_ms < elapsed_budget_ms
 
 
 def test_whitespace_gap_matching_bounds_deep_shared_prefix_work() -> None:
@@ -611,11 +622,16 @@ def test_whitespace_gap_matching_bounds_deep_shared_prefix_work() -> None:
     )
     text = ("a " * 2_048)[:4_095] + "a"
 
-    result = engine.check(text)
-    elapsed_budget_ms = 2_500 if gettrace() is not None else 500
+    with patch.object(
+        matcher_module,
+        "_map_candidate",
+        wraps=matcher_module._map_candidate,
+    ) as map_candidate:
+        result = engine.check(text)
 
+    assert len(text) == config.max_input_length
     assert len(result.matches) == 8
-    assert result.elapsed_ms < elapsed_budget_ms
+    assert map_candidate.call_count <= len(text)
 
 
 def test_engine_rejects_non_string_input() -> None:

@@ -7,7 +7,7 @@ from heapq import heappop, heappush
 from types import MappingProxyType
 
 from koguard.engine.dictionary import KoguardDictionary
-from koguard.engine.normalizer import NormalizedText
+from koguard.engine.normalizer import NormalizedText, _is_unicode_cluster_extension
 from koguard.models import Match, MatchMethod
 
 
@@ -52,10 +52,51 @@ class _TermAutomaton:
     fallback_terms: Mapping[str, str | None]
 
 
+@dataclass(slots=True)
+class _FallbackNavigator:
+    """Resolve length-bounded fallback ancestors with a per-check jump cache."""
+
+    automaton: _TermAutomaton
+    jumps: dict[tuple[str, int], str | None] = field(default_factory=dict)
+
+    def longest_not_longer_than(self, term: str, maximum_length: int) -> str | None:
+        """Return the longest fallback ancestor within one length bound."""
+
+        if len(term) <= maximum_length:
+            return term
+
+        current = term
+        for power in range(len(term).bit_length() - 1, -1, -1):
+            ancestor = self._jump(current, power)
+            if ancestor is not None and len(ancestor) > maximum_length:
+                current = ancestor
+
+        return self._jump(current, 0)
+
+    def _jump(self, term: str, power: int) -> str | None:
+        key = (term, power)
+        if key in self.jumps:
+            return self.jumps[key]
+
+        if power == 0:
+            ancestor = self.automaton.fallback_terms[term]
+        else:
+            midpoint = self._jump(term, power - 1)
+            ancestor = None if midpoint is None else self._jump(midpoint, power - 1)
+        self.jumps[key] = ancestor
+        return ancestor
+
+
 @dataclass(frozen=True, slots=True)
 class _ProtectedMasks:
     normalized: bytes
     original: bytes
+
+
+@dataclass(frozen=True, slots=True)
+class _AlphanumericBoundaries:
+    starts: bytes
+    ends: bytes
 
 
 @dataclass(frozen=True, slots=True)
@@ -65,6 +106,8 @@ class _MixedProjection:
     source_indexes: tuple[int, ...]
     whitespace_prefix: tuple[int, ...]
     separator_prefix: tuple[int, ...]
+    source_boundaries: _AlphanumericBoundaries
+    previous_end_boundary: tuple[int, ...]
 
 
 @dataclass(order=True, slots=True)
@@ -101,10 +144,27 @@ def _build_allowed_whitespace_gap_mask(
     return mask
 
 
-def _has_alphanumeric_boundaries(text: str, start: int, end: int) -> bool:
-    return (start == 0 or not text[start - 1].isalnum()) and (
-        end == len(text) or not text[end].isalnum()
-    )
+def _build_alphanumeric_boundaries(text: str) -> _AlphanumericBoundaries:
+    """Build cluster-aware token-boundary masks in linear time."""
+
+    starts = bytearray(len(text) + 1)
+    starts[0] = 1
+    previous_base_is_alphanumeric = False
+    for boundary, character in enumerate(text, start=1):
+        if not _is_unicode_cluster_extension(character):
+            previous_base_is_alphanumeric = character.isalnum()
+        starts[boundary] = not previous_base_is_alphanumeric
+
+    ends = bytearray(len(text) + 1)
+    ends[-1] = 1
+    next_base_is_alphanumeric = False
+    for boundary in range(len(text) - 1, -1, -1):
+        character = text[boundary]
+        if not _is_unicode_cluster_extension(character):
+            next_base_is_alphanumeric = character.isalnum()
+        ends[boundary] = not next_base_is_alphanumeric
+
+    return _AlphanumericBoundaries(starts=bytes(starts), ends=bytes(ends))
 
 
 def _build_term_trie(terms: tuple[str, ...]) -> _TermTrieNode:
@@ -252,6 +312,7 @@ def _build_mixed_projection(
     separator_prefix = [0]
     pending_whitespace = False
     pending_separator = False
+    source_boundaries = _build_alphanumeric_boundaries(normalized.text)
 
     for index in range(len(normalized.text)):
         character = normalized.text[index]
@@ -272,6 +333,13 @@ def _build_mixed_projection(
         pending_whitespace = False
         pending_separator = False
 
+    previous_end_boundary = [0]
+    latest_end_boundary = 0
+    for projected_end, source_index in enumerate(source_indexes, start=1):
+        if source_boundaries.ends[source_index + 1]:
+            latest_end_boundary = projected_end
+        previous_end_boundary.append(latest_end_boundary)
+
     return _MixedProjection(
         normalized=NormalizedText(
             text="".join(characters),
@@ -281,6 +349,8 @@ def _build_mixed_projection(
         source_indexes=tuple(source_indexes),
         whitespace_prefix=tuple(whitespace_prefix),
         separator_prefix=tuple(separator_prefix),
+        source_boundaries=source_boundaries,
+        previous_end_boundary=tuple(previous_end_boundary),
     )
 
 
@@ -308,7 +378,7 @@ def _has_mixed_start_boundary(
     """Return whether a projected candidate starts at a source-view boundary."""
 
     source_start = projection.source_indexes[candidate.start]
-    return source_start == 0 or not projection.source.text[source_start - 1].isalnum()
+    return bool(projection.source_boundaries.starts[source_start])
 
 
 def _has_mixed_end_boundary(
@@ -318,34 +388,44 @@ def _has_mixed_end_boundary(
     """Return whether a projected candidate ends at a source-view boundary."""
 
     source_end = projection.source_indexes[candidate.end - 1] + 1
-    return (
-        source_end == len(projection.source.text)
-        or not projection.source.text[source_end].isalnum()
-    )
+    return bool(projection.source_boundaries.ends[source_end])
 
 
 def _next_mixed_occurrence(
     candidate: _NormalizedCandidate,
-    automaton: _TermAutomaton,
+    navigator: _FallbackNavigator,
     projection: _MixedProjection,
 ) -> _NormalizedCandidate | None:
-    """Return the next shorter mixed candidate without rescanning the input."""
+    """Return the next shorter mixed candidate without a linear fallback scan."""
 
     if not _has_mixed_start_boundary(candidate, projection):
         return None
-    next_candidate = _next_shorter_occurrence(candidate, automaton)
-    while next_candidate is not None:
+
+    maximum_end = candidate.end - 1
+    while maximum_end > candidate.start:
+        boundary_end = projection.previous_end_boundary[maximum_end]
+        if boundary_end <= candidate.start:
+            return None
+        maximum_length = boundary_end - candidate.start
+        term = navigator.longest_not_longer_than(candidate.term, maximum_length)
+        if term is None:
+            return None
+        next_candidate = _NormalizedCandidate(
+            term=term,
+            start=candidate.start,
+            end=candidate.start + len(term),
+        )
         if not _uses_mixed_gaps(next_candidate, projection):
             return None
         if _has_mixed_end_boundary(next_candidate, projection):
             return next_candidate
-        next_candidate = _next_shorter_occurrence(next_candidate, automaton)
+        maximum_end = next_candidate.end - 1
     return None
 
 
 def _first_mixed_occurrence(
     candidate: _NormalizedCandidate,
-    automaton: _TermAutomaton,
+    navigator: _FallbackNavigator,
     projection: _MixedProjection,
 ) -> _NormalizedCandidate | None:
     """Return the longest valid mixed candidate in one start's fallback chain."""
@@ -357,13 +437,14 @@ def _first_mixed_occurrence(
         return None
     if _has_mixed_end_boundary(candidate, projection):
         return candidate
-    return _next_mixed_occurrence(candidate, automaton, projection)
+    return _next_mixed_occurrence(candidate, navigator, projection)
 
 
 def _find_longest_whitespace_gap_occurrence(
     normalized: NormalizedText,
     root: _TermTrieNode,
     allowed_gap_mask: bytearray,
+    boundaries: _AlphanumericBoundaries,
     start: int,
     *,
     shorter_than: int | None = None,
@@ -398,7 +479,8 @@ def _find_longest_whitespace_gap_occurrence(
         if (
             node.term is not None
             and used_gap
-            and _has_alphanumeric_boundaries(normalized.text, start, cursor)
+            and boundaries.starts[start]
+            and boundaries.ends[cursor]
         ):
             longest_term = node.term
             longest_end = cursor
@@ -756,12 +838,14 @@ class ExactMatcher:
             normalized,
             max_whitespace_gap,
         )
+        boundaries = _build_alphanumeric_boundaries(normalized.text)
 
         for start in range(len(normalized.text)):
             normalized_candidate = _find_longest_whitespace_gap_occurrence(
                 normalized,
                 self._whitespace_trie,
                 allowed_gap_mask,
+                boundaries,
                 start,
             )
             if normalized_candidate is not None:
@@ -802,6 +886,7 @@ class ExactMatcher:
                 normalized,
                 self._whitespace_trie,
                 allowed_gap_mask,
+                boundaries,
                 mapped_candidate.normalized.start,
                 shorter_than=mapped_candidate.length,
             )
@@ -833,6 +918,7 @@ class ExactMatcher:
         )
         selected: list[_MappedCandidate] = []
         candidates: list[_PrioritizedCandidate] = []
+        navigator = _FallbackNavigator(self._mixed_automaton)
 
         for normalized_candidate in _iter_longest_occurrences(
             projection.normalized.text,
@@ -840,7 +926,7 @@ class ExactMatcher:
         ):
             mixed_candidate = _first_mixed_occurrence(
                 normalized_candidate,
-                self._mixed_automaton,
+                navigator,
                 projection,
             )
             if mixed_candidate is not None:
@@ -879,7 +965,7 @@ class ExactMatcher:
 
             next_candidate = _next_mixed_occurrence(
                 mapped_candidate.normalized,
-                self._mixed_automaton,
+                navigator,
                 projection,
             )
             if next_candidate is not None:

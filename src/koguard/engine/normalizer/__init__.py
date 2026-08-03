@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass
-from unicodedata import combining, decomposition, normalize
+from unicodedata import category, combining, decomposition, normalize
 
 from koguard.config import NormalizationForm
 
@@ -32,6 +32,12 @@ def _is_variation_selector(character: str) -> bool:
     return 0xFE00 <= codepoint <= 0xFE0F or 0xE0100 <= codepoint <= 0xE01EF
 
 
+def _is_unicode_cluster_extension(character: str) -> bool:
+    """Return whether one code point extends the preceding grapheme base."""
+
+    return category(character).startswith("M") or _is_variation_selector(character)
+
+
 def _is_stable_character(character: str) -> bool:
     """Return whether one character is unchanged by NFC and NFKC."""
 
@@ -42,8 +48,7 @@ def _is_stable_character(character: str) -> bool:
 def _has_cluster_extension(text: str, start: int) -> bool:
     if start + 1 >= len(text):
         return False
-    next_character = text[start + 1]
-    return combining(next_character) != 0 or _is_variation_selector(next_character)
+    return _is_unicode_cluster_extension(text[start + 1])
 
 
 def _cluster_end(text: str, start: int) -> int:
@@ -60,10 +65,7 @@ def _cluster_end(text: str, start: int) -> int:
         return end
 
     end = start + 1
-    while end < len(text):
-        character = text[end]
-        if combining(character) == 0 and not _is_variation_selector(character):
-            break
+    while end < len(text) and _is_unicode_cluster_extension(text[end]):
         end += 1
     return end
 
