@@ -341,7 +341,12 @@ def _build_mixed_projection(
             continue
 
         characters.append(character)
-        source_spans.append(normalized.source_spans[index])
+        source_start, source_end = normalized.source_spans[index]
+        if character.isalnum():
+            cluster_end = source_boundaries.extension_ends[index + 1]
+            if cluster_end > index + 1:
+                source_end = normalized.source_spans[cluster_end - 1][1]
+        source_spans.append((source_start, source_end))
         source_indexes.append(index)
         whitespace_prefix.append(whitespace_prefix[-1] + int(pending_whitespace))
         separator_prefix.append(separator_prefix[-1] + int(pending_separator))
