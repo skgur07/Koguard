@@ -42,7 +42,7 @@
 
 - 환경: Windows 10, CPython 3.11.9
 - 설정: warmup 10회, 측정 100회
-- corpus: 11 cases
+- corpus: 15 cases
 - 결과: `benchmarks/results/windows-python311.json`
 
 이 수치는 동일 환경 회귀 비교용이며 장비가 다른 CI의 절대 합격 기준은 아니다. cold start는
@@ -145,3 +145,34 @@
 | 12 | opt-in matcher index를 포함한 profile이 기본 profile보다 많은 retained memory를 기록한다 | `test_retained_memory_includes_opt_in_matcher_indexes` | integration | PASS |
 | 13 | corpus가 1,000개 사전의 공백 profile workload를 포함한다 | `test_benchmark_corpus_covers_required_phase_two_scenarios` | unit | PASS |
 | 14 | tracing을 시작한 뒤 fresh Engine을 만들어 retained allocation을 포착한다 | `test_retained_memory_starts_tracing_before_fresh_engine_creation` | integration | PASS |
+
+## Retained memory allocator 상태 격리
+
+후속 리뷰에서 retained memory 측정이 앞서 실행한 입력 크기에 따라 달라지는 것을 확인했다.
+측정 대상 Engine이 같아도 CPython allocator와 free list에 남은 이전 workload의 상태가
+`tracemalloc` 현재값에 섞여 기준선 비교를 왜곡했다.
+
+### RED
+
+- 동일한 기본 Engine을 짧은 입력과 최대 입력 뒤에 각각 생성하는 회귀 테스트를 추가했다.
+- 결과: 짧은 입력 뒤 `5,852 bytes`, 최대 입력 뒤 `7,668 bytes`로 달라져 의도대로 실패했다.
+- 기존 기준선도 `default/standard/2` Engine이 case에 따라 `5,724 bytes`와 `7,668 bytes`를
+  기록하고 있어 일관성 검사가 실패했다.
+- 체크포인트: `a903f7c test: benchmark retained memory 격리 계약 추가`
+
+### GREEN
+
+- retained memory tracing 직전에 full GC를 실행해 이전 workload의 allocator/free-list 상태를
+  정리한다. GC 자체 allocation은 tracing 시작 전에 끝나며 latency 표본에도 포함되지 않는다.
+- 기준선이 CPython 3.11.9·Windows·warmup 10회·측정 100회인지 검증하고, 같은 Engine 정의의
+  retained memory가 모든 case에서 같은지도 검증한다.
+- 기준선을 재생성한 결과 `default/standard/2`는 모두 `8,580 bytes`,
+  `whitespace-gap/standard/2`는 모두 `11,428 bytes`를 기록했다.
+- 체크포인트: `c42a568 fix: benchmark retained memory 측정 격리`
+
+### 추가 Test specification
+
+| # | 보장 동작 | 테스트 | 유형 | 결과 |
+| --- | --- | --- | --- | --- |
+| 15 | 같은 Engine의 retained memory는 앞선 `check()` workload와 무관하다 | `test_retained_memory_is_invariant_to_prior_check_workload` | integration | PASS |
+| 16 | Windows 기준선의 런타임·측정 설정과 Engine별 retained memory가 일관된다 | `test_windows_baseline_matches_ordered_complete_corpus_cases` | integration | PASS |

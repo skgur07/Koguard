@@ -37,7 +37,8 @@
 - 제거하지 않은 원본 정규화 위치에 cluster-aware 양끝 경계 mask를 선형으로 만들므로
   `시 * 발표`, `도시 * 발`, 결합 문자로 인접 글자를 가린 부분 토큰을 거부하면서 보호·겹침
   때문에 짧은 후보로 돌아가는 동작은 유지한다.
-- projection의 source span으로 `matched_text`, `start`, `end`를 원문에 매핑한다.
+- projection의 source span과 trailing cluster extension 끝 위치로 `matched_text`, `start`, `end`를
+  원문의 완전한 grapheme 범위에 매핑한다.
 - Mixed 전용 reversed Aho-Corasick 인덱스를 엔진 생성 시 한 번 만들고, 시작점마다 최장 후보
   하나만 heap에 넣는다. 보호되거나 겹친 후보는 automaton fallback chain에서만 줄인다.
 - 기능이 꺼져 있으면 Mixed 인덱스를 만들지 않고 런타임 경로도 실행하지 않는다.
@@ -49,9 +50,9 @@ Windows, CPython 3.11.9에서 고정 benchmark corpus를 warmup 10회 후 100회
 
 | 입력 | p50 | p95 | peak allocation | Engine retained allocation |
 | --- | ---: | ---: | ---: | ---: |
-| `시 * 발` | 0.0630 ms | 0.0682 ms | 2,336 bytes | 8,332 bytes |
-| `시 * 발표` | 0.0599 ms | 0.1227 ms | 1,887 bytes | 8,332 bytes |
-| 깊은 공통 접두사 256개와 Mixed 최대 입력 4,096자 | 19.1608 ms | 21.3293 ms | 815,394 bytes | 304,392 bytes |
+| `시 * 발` | 0.0672 ms | 0.0743 ms | 2,464 bytes | 11,428 bytes |
+| `시 * 발표` | 0.0626 ms | 0.0683 ms | 2,035 bytes | 11,428 bytes |
+| 깊은 공통 접두사 256개와 Mixed 최대 입력 4,096자 | 19.1928 ms | 21.4537 ms | 1,011,570 bytes | 319,736 bytes |
 
 최대 입력 테스트는 정규화 입력 문자 접근을 길이의 두 배 이하로 제한하고, 최초 후보
 materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매치 수가 다르면 성능 결과를
@@ -95,6 +96,12 @@ materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매
 - 보존 검증: fallback 기준 구현과 4,492개 무작위 후보 비교가 일치했고, 사전어가 없는 중간
   경계를 건너 짧은 유효 term을 찾는 사례도 고정했다.
 - 체크포인트: `609e151`, `cb9be8b` (RED), `011522c` (GREEN)
+- P2 원문 span RED: gap 매치 직후의 Unicode Mark 또는 variation selector를 토큰 경계에는
+  포함하면서도 반환 `matched_text`와 `[start, end)`에서는 잘라 완전하지 않은 grapheme span을
+  만들었다.
+- P2 원문 span GREEN: 정규화 경계마다 trailing cluster extension의 원문 끝을 선형으로
+  기록하고 Mixed와 Whitespace 후보 매핑이 함께 사용한다.
+- 체크포인트: `cdde97f` (RED), `93d27dd` (GREEN)
 
 ## 최종 검증
 
@@ -102,7 +109,7 @@ materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매
 - Ruff format check: 프로젝트 소스·테스트·benchmark 22개 파일 PASS
 - Ruff lint: PASS
 - mypy strict: 22 source files PASS
-- pytest: `191 passed`, branch coverage `95.42%`
+- pytest: `202 passed`, branch coverage `95.49%`
 - benchmark: schema 3의 15개 case, warmup 10회·측정 100회 PASS
 - build: sdist와 wheel 생성 PASS
 
@@ -124,6 +131,7 @@ materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매
 | 12 | 많은 시작점 뒤의 영숫자 suffix에서도 fallback 계산량을 제한한다 | `test_mixed_gap_matcher_bounds_fallbacks_before_alphanumeric_suffix` | unit |
 | 13 | Unicode cluster extension이 가린 좌·우 영숫자 경계를 거부한다 | `test_mixed_gap_matching_rejects_cluster_extended_partial_tokens` | integration |
 | 14 | 사전어가 없는 중간 경계를 건너 가장 긴 유효 fallback을 찾는다 | `test_mixed_gap_matching_falls_back_across_nonterminal_boundary` | integration |
+| 15 | gap 매치 뒤의 cluster extension까지 완전한 원문 span으로 반환한다 | `test_gap_matching_preserves_trailing_cluster_extension_in_original_span` | integration |
 
 ## 알려진 제한
 
