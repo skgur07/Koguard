@@ -428,35 +428,53 @@ def test_mixed_gap_matching_rejects_invalid_gaps_and_partial_tokens(
 
 
 @pytest.mark.parametrize(
-    "text",
-    [
-        "도\u0301시 * 발",
-        "도\ufe0f시 * 발",
-        "시 * 발\u0301표",
-        "시 * 발\ufe0f표",
-    ],
+    "extension",
+    ["\u0301", "\u034f", "\u20dd", "\ufe0f", "\U000e0100"],
 )
-def test_mixed_gap_matching_rejects_cluster_extended_partial_tokens(text: str) -> None:
+@pytest.mark.parametrize("text_template", ["도{}시 * 발", "시 * 발{}표"])
+def test_mixed_gap_matching_rejects_cluster_extended_partial_tokens(
+    extension: str,
+    text_template: str,
+) -> None:
     config = EngineConfig(
         whitespace_gap_matching=True,
         obfuscation_separators=frozenset({"*"}),
     )
     engine = make_engine(blacklist=["시발"], config=config)
 
-    assert engine.check(text).detected is False
+    assert engine.check(text_template.format(extension)).detected is False
 
 
-@pytest.mark.parametrize("text", ["!\u0301시 * 발", "시 * 발\u0301!"])
-def test_mixed_gap_matching_accepts_cluster_extensions_next_to_punctuation(text: str) -> None:
+@pytest.mark.parametrize("extension", ["\u0301", "\u034f", "\ufe0f"])
+@pytest.mark.parametrize("text_template", ["!{}시 * 발", "시 * 발{}!"])
+def test_mixed_gap_matching_accepts_cluster_extensions_next_to_punctuation(
+    extension: str,
+    text_template: str,
+) -> None:
     config = EngineConfig(
         whitespace_gap_matching=True,
         obfuscation_separators=frozenset({"*"}),
     )
     engine = make_engine(blacklist=["시발"], config=config)
 
-    result = engine.check(text)
+    result = engine.check(text_template.format(extension))
 
     assert [(match.term, match.method) for match in result.matches] == [("시발", MatchMethod.MIXED)]
+
+
+@pytest.mark.parametrize(
+    "extension",
+    ["\u0301", "\u034f", "\u20dd", "\ufe0f", "\U000e0100"],
+)
+@pytest.mark.parametrize("text_template", ["도{}시 발", "시 발{}표"])
+def test_whitespace_gap_matching_rejects_cluster_extended_partial_tokens(
+    extension: str,
+    text_template: str,
+) -> None:
+    config = EngineConfig(whitespace_gap_matching=True)
+    engine = make_engine(blacklist=["시발"], config=config)
+
+    assert engine.check(text_template.format(extension)).detected is False
 
 
 def test_mixed_gap_matching_does_not_expand_whitelist_obfuscation() -> None:
