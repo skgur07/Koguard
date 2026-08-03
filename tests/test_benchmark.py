@@ -148,6 +148,31 @@ def test_retained_memory_includes_opt_in_matcher_indexes() -> None:
     assert retained_by_profile["whitespace-gap"] > retained_by_profile["default"]
 
 
+def test_retained_memory_is_invariant_to_prior_check_workload() -> None:
+    short_case = BenchmarkCase(
+        name="unit-retained-short",
+        category="dictionary-scale",
+        text="정상 문장",
+        dictionary_size=2,
+        expected_matches=0,
+    )
+    maximum_case = replace(
+        short_case,
+        name="unit-retained-maximum",
+        text="가" * EngineConfig().max_input_length,
+    )
+
+    report = run_benchmarks(
+        (short_case, maximum_case),
+        iterations=100,
+        warmups=10,
+    )
+
+    assert report.results[0].engine_retained_memory_bytes == (
+        report.results[1].engine_retained_memory_bytes
+    )
+
+
 def test_retained_memory_starts_tracing_before_fresh_engine_creation(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -267,7 +292,23 @@ def test_windows_baseline_matches_ordered_complete_corpus_cases() -> None:
     payload = json.loads(BASELINE_PATH.read_text(encoding="utf-8"))
 
     assert payload["schema_version"] == 3
+    assert payload["environment"]["python_version"] == "3.11.9"
+    assert payload["environment"]["implementation"] == "CPython"
+    assert payload["environment"]["platform"].startswith("Windows-")
+    assert payload["configuration"] == {"iterations": 100, "warmups": 10}
     assert [result["case_fingerprint"] for result in payload["results"]] == [
         benchmark_case_fingerprint(case) for case in cases
     ]
     assert all(result["engine_retained_memory_bytes"] > 0 for result in payload["results"])
+
+    retained_by_engine: dict[tuple[str, str, int], int] = {}
+    for result in payload["results"]:
+        engine_key = (
+            result["engine_profile"],
+            result["dictionary_profile"],
+            result["dictionary_size"],
+        )
+        retained_memory_bytes = result["engine_retained_memory_bytes"]
+        assert retained_by_engine.setdefault(engine_key, retained_memory_bytes) == (
+            retained_memory_bytes
+        )
