@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import gc
 import json
 import math
 import os
@@ -230,8 +231,11 @@ def _validate_result(case: BenchmarkCase, match_count: int) -> None:
 
 
 def _measure_engine_retained_memory(case: BenchmarkCase) -> int:
-    """Return Python allocations retained by a freshly constructed engine."""
+    """Return isolated Python allocations retained by a fresh engine."""
 
+    # CPython's full collection also clears several built-in free lists. Run it before
+    # tracing so earlier benchmark workloads cannot change the retained-memory result.
+    gc.collect()
     tracemalloc.start()
     try:
         engine = KoguardEngine(
