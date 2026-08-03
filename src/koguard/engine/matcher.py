@@ -97,6 +97,7 @@ class _ProtectedMasks:
 class _AlphanumericBoundaries:
     starts: bytes
     ends: bytes
+    extension_ends: tuple[int, ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -108,6 +109,7 @@ class _MixedProjection:
     separator_prefix: tuple[int, ...]
     source_boundaries: _AlphanumericBoundaries
     previous_end_boundary: tuple[int, ...]
+    extension_ends: tuple[int, ...]
 
 
 @dataclass(order=True, slots=True)
@@ -149,22 +151,35 @@ def _build_alphanumeric_boundaries(text: str) -> _AlphanumericBoundaries:
 
     starts = bytearray(len(text) + 1)
     starts[0] = 1
+    cluster_extensions = bytearray(len(text))
+    alphanumeric = bytearray(len(text))
     previous_base_is_alphanumeric = False
     for boundary, character in enumerate(text, start=1):
-        if not _is_unicode_cluster_extension(character):
+        is_extension = _is_unicode_cluster_extension(character)
+        cluster_extensions[boundary - 1] = is_extension
+        if not is_extension:
             previous_base_is_alphanumeric = character.isalnum()
+            alphanumeric[boundary - 1] = previous_base_is_alphanumeric
         starts[boundary] = not previous_base_is_alphanumeric
 
     ends = bytearray(len(text) + 1)
     ends[-1] = 1
     next_base_is_alphanumeric = False
     for boundary in range(len(text) - 1, -1, -1):
-        character = text[boundary]
-        if not _is_unicode_cluster_extension(character):
-            next_base_is_alphanumeric = character.isalnum()
+        if not cluster_extensions[boundary]:
+            next_base_is_alphanumeric = bool(alphanumeric[boundary])
         ends[boundary] = not next_base_is_alphanumeric
 
-    return _AlphanumericBoundaries(starts=bytes(starts), ends=bytes(ends))
+    extension_ends = list(range(len(text) + 1))
+    for boundary in range(len(text) - 1, -1, -1):
+        if cluster_extensions[boundary]:
+            extension_ends[boundary] = extension_ends[boundary + 1]
+
+    return _AlphanumericBoundaries(
+        starts=bytes(starts),
+        ends=bytes(ends),
+        extension_ends=tuple(extension_ends),
+    )
 
 
 def _build_term_trie(terms: tuple[str, ...]) -> _TermTrieNode:
@@ -340,9 +355,10 @@ def _build_mixed_projection(
             latest_end_boundary = projected_end
         previous_end_boundary.append(latest_end_boundary)
 
+    projected_text = "".join(characters)
     return _MixedProjection(
         normalized=NormalizedText(
-            text="".join(characters),
+            text=projected_text,
             source_spans=tuple(source_spans),
         ),
         source=normalized,
@@ -351,6 +367,7 @@ def _build_mixed_projection(
         separator_prefix=tuple(separator_prefix),
         source_boundaries=source_boundaries,
         previous_end_boundary=tuple(previous_end_boundary),
+        extension_ends=_build_alphanumeric_boundaries(projected_text).extension_ends,
     )
 
 
@@ -493,10 +510,13 @@ def _find_longest_whitespace_gap_occurrence(
 def _map_candidate(
     candidate: _NormalizedCandidate,
     normalized: NormalizedText,
+    *,
+    extension_ends: tuple[int, ...] | None = None,
 ) -> _MappedCandidate:
+    normalized_end = candidate.end if extension_ends is None else extension_ends[candidate.end]
     original_start, original_end = normalized.original_span(
         candidate.start,
-        candidate.end,
+        normalized_end,
     )
     return _MappedCandidate(
         normalized=candidate,
@@ -851,7 +871,13 @@ class ExactMatcher:
             if normalized_candidate is not None:
                 heappush(
                     candidates,
-                    _prioritize(_map_candidate(normalized_candidate, normalized)),
+                    _prioritize(
+                        _map_candidate(
+                            normalized_candidate,
+                            normalized,
+                            extension_ends=boundaries.extension_ends,
+                        )
+                    ),
                 )
 
         while candidates:
@@ -893,7 +919,13 @@ class ExactMatcher:
             if next_candidate is not None:
                 heappush(
                     candidates,
-                    _prioritize(_map_candidate(next_candidate, normalized)),
+                    _prioritize(
+                        _map_candidate(
+                            next_candidate,
+                            normalized,
+                            extension_ends=boundaries.extension_ends,
+                        )
+                    ),
                 )
 
         return _build_matches(original_text, selected, MatchMethod.WHITESPACE)
@@ -932,7 +964,13 @@ class ExactMatcher:
             if mixed_candidate is not None:
                 heappush(
                     candidates,
-                    _prioritize(_map_candidate(mixed_candidate, projection.normalized)),
+                    _prioritize(
+                        _map_candidate(
+                            mixed_candidate,
+                            projection.normalized,
+                            extension_ends=projection.extension_ends,
+                        )
+                    ),
                 )
 
         while candidates:
@@ -971,7 +1009,13 @@ class ExactMatcher:
             if next_candidate is not None:
                 heappush(
                     candidates,
-                    _prioritize(_map_candidate(next_candidate, projection.normalized)),
+                    _prioritize(
+                        _map_candidate(
+                            next_candidate,
+                            projection.normalized,
+                            extension_ends=projection.extension_ends,
+                        )
+                    ),
                 )
 
         return _build_matches(original_text, selected, MatchMethod.MIXED)
