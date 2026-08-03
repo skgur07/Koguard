@@ -12,6 +12,8 @@
 - ASCII 공백·탭에는 기존 `max_whitespace_gap`을 적용한다.
 - 특수문자는 기존 `obfuscation_separators`에 포함된 문자만 제거한다.
 - 후보 안에서 공백·탭과 구분자를 모두 사용한 경우에만 `MatchMethod.MIXED`로 반환한다.
+- Unicode Mark와 variation selector는 독립 토큰 경계가 아니라 인접 grapheme의 확장으로
+  처리한다.
 - 매칭 우선순위는 Exact, Repeated, Separator, Whitespace, Mixed 순서다.
 - Mixed 형태의 Whitelist를 자동 생성하지 않고 기존 view에서 실제로 겹치는 원문 구간만
   보호한다.
@@ -32,8 +34,9 @@
 
 - 정규화 입력을 선형으로 한 번 projection해 허용된 공백·탭과 구분자를 제거한다.
 - 각 projection 경계에 공백과 구분자 사용 누적값을 기록해 후보 판정을 상수 시간에 수행한다.
-- 제거하지 않은 원본 정규화 위치로 양끝 토큰 경계를 판정하므로 `시 * 발표`와 `도시 * 발`은
-  거부하면서 보호·겹침 때문에 짧은 후보로 돌아가는 동작은 유지한다.
+- 제거하지 않은 원본 정규화 위치에 cluster-aware 양끝 경계 mask를 선형으로 만들므로
+  `시 * 발표`, `도시 * 발`, 결합 문자로 인접 글자를 가린 부분 토큰을 거부하면서 보호·겹침
+  때문에 짧은 후보로 돌아가는 동작은 유지한다.
 - projection의 source span으로 `matched_text`, `start`, `end`를 원문에 매핑한다.
 - Mixed 전용 reversed Aho-Corasick 인덱스를 엔진 생성 시 한 번 만들고, 시작점마다 최장 후보
   하나만 heap에 넣는다. 보호되거나 겹친 후보는 automaton fallback chain에서만 줄인다.
@@ -44,11 +47,11 @@
 
 Windows, CPython 3.11.9에서 고정 benchmark corpus를 warmup 10회 후 100회 측정했다.
 
-| 입력 | p50 | p95 | peak allocation |
-| --- | ---: | ---: | ---: |
-| `시 * 발` | 0.0499 ms | 0.0758 ms | 2,082 bytes |
-| `시 * 발표` | 0.0428 ms | 0.0515 ms | 1,471 bytes |
-| 깊은 공통 접두사 256개와 Mixed 최대 입력 4,096자 | 15.1055 ms | 20.0955 ms | 777,214 bytes |
+| 입력 | p50 | p95 | peak allocation | Engine retained allocation |
+| --- | ---: | ---: | ---: | ---: |
+| `시 * 발` | 0.0630 ms | 0.0682 ms | 2,336 bytes | 8,332 bytes |
+| `시 * 발표` | 0.0599 ms | 0.1227 ms | 1,887 bytes | 8,332 bytes |
+| 깊은 공통 접두사 256개와 Mixed 최대 입력 4,096자 | 19.1608 ms | 21.3293 ms | 815,394 bytes | 304,392 bytes |
 
 최대 입력 테스트는 정규화 입력 문자 접근을 길이의 두 배 이하로 제한하고, 최초 후보
 materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매치 수가 다르면 성능 결과를
@@ -74,14 +77,33 @@ materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매
 - 성능 GREEN 체크포인트: `38ce433 fix: 불가능한 혼합 fallback 조기 중단`
 - 최종 독립 재리뷰와 27,199개 무작위 oracle 비교에서 추가 finding이나 결과 불일치가 없었다.
 
+## P1/P2 후속 리뷰 수정
+
+- P1 RED: gap이 반복된 앞부분 뒤에 긴 영숫자 suffix가 이어지면, 많은 시작점이 같은 깊은
+  fallback chain을 끝 경계까지 각각 순회했다. 1,024자 회귀 fixture에서
+  `_next_shorter_occurrence`를 12,096회 호출했다.
+- P1 GREEN: projected 끝 경계의 predecessor와 검사 1회 동안만 유지되는 lazy binary-lift
+  navigator를 결합했다. fallback 조상과 실제 끝 경계의 교집합으로 바로 이동하며 Engine의
+  상주 jump table이나 공유 mutable cache는 추가하지 않았다. 같은 fixture의 순차 fallback
+  호출은 0회이고, 4,096자 진단 fixture도 358,800회에서 0회로 줄었다.
+- P2 RED: Unicode Mark 또는 variation selector가 실제 인접 영숫자를 가리면 이를 구두점처럼
+  해석해 `도́시 * 발`, `시 * 발́표` 같은 부분 토큰을 잘못 탐지했다.
+- P2 GREEN: Unicode category `M`과 variation selector를 cluster extension으로 통합하고,
+  시작·끝 경계 mask를 선형으로 계산해 Mixed와 Whitespace 경로가 함께 재사용한다.
+- P2 테스트 안정화: wall-clock 합격 조건을 제거하고 `_map_candidate` 호출 수가 입력 길이를
+  넘지 않는 결정적 구조 계약으로 교체했다. 실제 시간은 benchmark에서만 관찰한다.
+- 보존 검증: fallback 기준 구현과 4,492개 무작위 후보 비교가 일치했고, 사전어가 없는 중간
+  경계를 건너 짧은 유효 term을 찾는 사례도 고정했다.
+- 체크포인트: `609e151`, `cb9be8b` (RED), `011522c` (GREEN)
+
 ## 최종 검증
 
 - `uv sync --all-extras --dev`: PASS
 - Ruff format check: 프로젝트 소스·테스트·benchmark 22개 파일 PASS
 - Ruff lint: PASS
 - mypy strict: 22 source files PASS
-- pytest: `161 passed`, branch coverage `95.81%`
-- benchmark: 14개 case, warmup 10회·측정 100회 PASS
+- pytest: `191 passed`, branch coverage `95.42%`
+- benchmark: schema 3의 15개 case, warmup 10회·측정 100회 PASS
 - build: sdist와 wheel 생성 PASS
 
 ## Test specification
@@ -94,11 +116,14 @@ materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매
 | 4 | 부분 영숫자 토큰, 미설정 구분자, 줄바꿈, 간격 초과를 거부한다 | `test_mixed_gap_matching_rejects_invalid_gaps_and_partial_tokens` | integration |
 | 5 | Whitelist 형태를 확장하지 않고 실제 겹치는 구간만 보호한다 | `test_exact_whitelist_span_protects_mixed_gap_match` | integration |
 | 6 | 보호·겹침 뒤에도 가능한 짧은 후보를 결정적으로 보존한다 | `test_mixed_gap_matching_keeps_shorter_candidate_after_longer_overlap` | integration |
-| 7 | 최대 입력과 깊은 공통 접두사에서 후보와 시간 예산을 지킨다 | `test_mixed_gap_matching_bounds_deep_shared_prefix_work` | integration |
+| 7 | 최대 입력과 깊은 공통 접두사에서 후보 materialization 상한을 지킨다 | `test_mixed_gap_matching_bounds_deep_shared_prefix_work` | integration |
 | 8 | projection은 최대 입력을 제한된 횟수만 읽는다 | `test_mixed_gap_matcher_reads_maximum_input_a_bounded_number_of_times` | unit |
 | 9 | 경계가 없는 최장 후보 대신 짧은 유효 후보로 내려간다 | `test_mixed_gap_matching_falls_back_when_longest_candidate_has_no_token_boundary` | integration |
 | 10 | 상위 Exact가 긴 Mixed 후보를 제거해도 뒤쪽 비중첩 후보를 보존한다 | `test_exact_priority_does_not_hide_non_overlapping_mixed_fallback` | integration |
 | 11 | 혼합 gap이 없는 shared-prefix 시작점의 불가능한 fallback을 제한한다 | `test_mixed_gap_matcher_skips_impossible_shared_prefix_fallbacks` | unit |
+| 12 | 많은 시작점 뒤의 영숫자 suffix에서도 fallback 계산량을 제한한다 | `test_mixed_gap_matcher_bounds_fallbacks_before_alphanumeric_suffix` | unit |
+| 13 | Unicode cluster extension이 가린 좌·우 영숫자 경계를 거부한다 | `test_mixed_gap_matching_rejects_cluster_extended_partial_tokens` | integration |
+| 14 | 사전어가 없는 중간 경계를 건너 가장 긴 유효 fallback을 찾는다 | `test_mixed_gap_matching_falls_back_across_nonterminal_boundary` | integration |
 
 ## 알려진 제한
 

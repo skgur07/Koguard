@@ -12,7 +12,8 @@ Repeated, Separator 및 Whitelist 동작을 유지해야 한다.
 - `max_whitespace_gap`은 각 글자 사이에서 허용할 최대 공백 문자 수이며 기본값은 3이다.
 - ASCII 공백과 탭만 허용하고 줄바꿈과 다른 Unicode 공백은 허용하지 않는다.
 - 사전 단어 자체에 공백이 있는 항목은 기존 Exact Match가 처리한다.
-- 공백을 사용한 후보의 양끝이 영숫자 토큰 중간이면 후보를 버린다.
+- 공백을 사용한 후보의 양끝이 영숫자 토큰 중간이면 후보를 버린다. Unicode Mark와 variation
+  selector는 인접 grapheme의 확장으로 보고 그 너머의 실제 base 문자를 경계 판정에 사용한다.
 - Whitelist는 공백 변형을 별도로 확장하지 않고 입력에 exact로 겹치는 정규화 구간만 보호한다.
 - 이 문서에서 구현한 매칭 우선순위는 Exact, Repeated, Separator, Whitespace 순서다.
   이후 Mixed 매칭이 마지막 단계로 추가되었다.
@@ -32,6 +33,8 @@ Repeated, Separator 및 Whitelist 동작을 유지해야 한다.
   사이의 공백 구간만 제한적으로 허용한다.
 - 정규화 단계가 보존한 source span으로 원문의 공백 종류와 길이를 검증한다.
 - 입력의 공백 허용 여부는 mask로 한 번만 계산하고 Trie의 각 경로에서 재사용한다.
+- cluster-aware 시작·끝 경계도 선형 mask로 한 번 계산해 후보마다 Unicode extension run을
+  다시 순회하지 않는다.
 - 시작점마다 최장 후보 하나만 heap에 보관한다. 겹침으로 최장 후보를 쓸 수 없을 때만 다음
   짧은 후보를 지연 탐색해 기존 longest-first 결과를 유지한다.
 - 기존 Whitelist 마스크와 비중첩 선택 로직을 공백 후보에도 동일하게 적용한다.
@@ -67,7 +70,8 @@ term별 스캔에서 약 1,916.623 ms가 걸렸으나 Trie 스캔으로 바꾼 �
 - RED 성능: 깊은 공통 접두사 256개와 최대 입력에서 `2,060.431 ms`
 - GREEN 성능: 전체 후보 materialization을 지연 heap 선택으로 교체해 5회 측정
   `222.879~233.565 ms`
-- 성능 회귀 예산: 일반 실행 500 ms, coverage tracer 실행 2,500 ms
+- 성능 회귀 계약: wall-clock 임계값 대신 `_map_candidate` 호출 수가 최대 입력 길이를 넘지
+  않도록 고정하고, 실제 지연 시간은 benchmark에서 관찰
 - Whitelist 정책: `시발 자동차`가 `시 발 자동차`를 보호하지 않는 동작을 사용자 결정에 따라
   회귀 테스트로 고정
 - RED 체크포인트: `5670950 test: 리뷰 결함 재현과 공백 정책 고정`
@@ -95,6 +99,7 @@ term별 스캔에서 약 1,916.623 ms가 걸렸으나 Trie 스캔으로 바꾼 �
 | 8 | 긴 후보가 겹치거나 보호되어도 가능한 짧은 후보를 보존한다 | `test_whitespace_gap_matcher_keeps_shorter_candidate_after_longer_overlap` | unit | PASS |
 | 9 | 깊은 공통 접두사에서도 최대 입력 계산 예산을 지킨다 | `test_whitespace_gap_matching_bounds_deep_shared_prefix_work` | integration | PASS |
 | 10 | Whitelist의 공백 형태를 자동 확장하지 않는다 | `test_whitespace_gap_matching_does_not_expand_whitelist_spacing` | integration | PASS |
+| 11 | Unicode cluster extension이 가린 좌·우 영숫자 경계를 거부한다 | `test_whitespace_gap_matching_rejects_cluster_extended_partial_tokens` | integration | PASS |
 
 ## 알려진 제한
 
