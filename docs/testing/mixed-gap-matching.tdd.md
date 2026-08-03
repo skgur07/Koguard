@@ -50,9 +50,9 @@ Windows, CPython 3.11.9에서 고정 benchmark corpus를 warmup 10회 후 100회
 
 | 입력 | p50 | p95 | peak allocation | Engine retained allocation |
 | --- | ---: | ---: | ---: | ---: |
-| `시 * 발` | 0.0672 ms | 0.0743 ms | 2,464 bytes | 11,428 bytes |
-| `시 * 발표` | 0.0626 ms | 0.0683 ms | 2,035 bytes | 11,428 bytes |
-| 깊은 공통 접두사 256개와 Mixed 최대 입력 4,096자 | 19.1928 ms | 21.4537 ms | 1,011,570 bytes | 319,736 bytes |
+| `시 * 발` | 0.0666 ms | 0.0724 ms | 2,464 bytes | 11,428 bytes |
+| `시 * 발표` | 0.0630 ms | 0.0638 ms | 2,035 bytes | 11,428 bytes |
+| 깊은 공통 접두사 256개와 Mixed 최대 입력 4,096자 | 19.3597 ms | 21.9210 ms | 1,061,378 bytes | 319,736 bytes |
 
 최대 입력 테스트는 정규화 입력 문자 접근을 길이의 두 배 이하로 제한하고, 최초 후보
 materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매치 수가 다르면 성능 결과를
@@ -102,6 +102,12 @@ materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매
 - P2 원문 span GREEN: 정규화 경계마다 trailing cluster extension의 원문 끝을 선형으로
   기록하고 Mixed와 Whitespace 후보 매핑이 함께 사용한다.
 - 체크포인트: `cdde97f` (RED), `93d27dd` (GREEN)
+- P2 사용자 separator RED: cluster extension 자체를 separator로 설정하면 Mixed projection이
+  이를 제거해 projected view의 extension 끝만으로는 원문 grapheme span을 복구하지 못했다.
+- P2 사용자 separator GREEN: projection에 남는 영숫자 문자의 source span 끝을 source view의
+  trailing cluster extension 끝까지 넓혀, 제거된 Mark와 variation selector도 반환·점유 span에
+  포함한다.
+- 체크포인트: `07415b6` (RED), `26303a5` (GREEN)
 
 ## 최종 검증
 
@@ -109,7 +115,7 @@ materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매
 - Ruff format check: 프로젝트 소스·테스트·benchmark 22개 파일 PASS
 - Ruff lint: PASS
 - mypy strict: 22 source files PASS
-- pytest: `202 passed`, branch coverage `95.49%`
+- pytest: `207 passed`, branch coverage `95.52%`
 - benchmark: schema 3의 15개 case, warmup 10회·측정 100회 PASS
 - build: sdist와 wheel 생성 PASS
 
@@ -132,6 +138,7 @@ materialization도 입력 길이 이하로 고정한다. benchmark의 기대 매
 | 13 | Unicode cluster extension이 가린 좌·우 영숫자 경계를 거부한다 | `test_mixed_gap_matching_rejects_cluster_extended_partial_tokens` | integration |
 | 14 | 사전어가 없는 중간 경계를 건너 가장 긴 유효 fallback을 찾는다 | `test_mixed_gap_matching_falls_back_across_nonterminal_boundary` | integration |
 | 15 | gap 매치 뒤의 cluster extension까지 완전한 원문 span으로 반환한다 | `test_gap_matching_preserves_trailing_cluster_extension_in_original_span` | integration |
+| 16 | separator로 제거한 trailing cluster extension도 원문 span에 보존한다 | `test_mixed_gap_matching_preserves_trailing_cluster_extension_configured_as_separator` | integration |
 
 ## 알려진 제한
 
