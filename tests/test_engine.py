@@ -495,6 +495,27 @@ def test_gap_matching_preserves_trailing_cluster_extension_in_original_span(
     "extension",
     ["\u0301", "\u034f", "\u20dd", "\ufe0f", "\U000e0100"],
 )
+def test_mixed_gap_matching_preserves_trailing_cluster_extension_configured_as_separator(
+    extension: str,
+) -> None:
+    config = EngineConfig(
+        whitespace_gap_matching=True,
+        obfuscation_separators=frozenset({"*", extension}),
+    )
+    engine = make_engine(blacklist=["시발"], config=config)
+    text = f"시 * 발{extension}!"
+
+    result = engine.check(text)
+
+    assert [
+        (match.matched_text, match.start, match.end, match.method) for match in result.matches
+    ] == [(text[:-1], 0, len(text) - 1, MatchMethod.MIXED)]
+
+
+@pytest.mark.parametrize(
+    "extension",
+    ["\u0301", "\u034f", "\u20dd", "\ufe0f", "\U000e0100"],
+)
 @pytest.mark.parametrize("text_template", ["도{}시 발", "시 발{}표"])
 def test_whitespace_gap_matching_rejects_cluster_extended_partial_tokens(
     extension: str,
