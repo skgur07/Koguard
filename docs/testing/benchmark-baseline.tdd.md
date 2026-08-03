@@ -107,3 +107,41 @@
 | --- | --- | --- | --- | --- |
 | 9 | fingerprint가 모든 workload 필드 변경을 구분한다 | `test_benchmark_case_fingerprint_covers_complete_workload_definition` | unit | PASS |
 | 10 | report가 사전 profile과 fingerprint를 기록한다 | `test_run_benchmarks_records_latency_throughput_memory_and_environment` | integration | PASS |
+
+## Engine retained memory 측정 보강
+
+리뷰에서 기존 `peak_memory_bytes`가 이미 생성된 Engine의 `check()` allocation만 측정해,
+공백 매칭을 활성화할 때 추가되는 matcher index의 보유 메모리를 기준선에 남기지 못함을
+확인했다.
+
+### RED
+
+- 테스트: `tests/test_benchmark.py`
+- 명령: `.venv\Scripts\python.exe -m pytest tests\test_benchmark.py -q --no-cov`
+- 결과: `BenchmarkResult.engine_retained_memory_bytes`와 schema 3이 구현되지 않았고, 1,000개
+  사전의 공백 profile corpus case가 없어 의도대로 실패
+
+### GREEN
+
+- tracing 시작 후 새 Engine과 사전을 생성하고 생성 직후의 current Python allocation을
+  `engine_retained_memory_bytes`로 기록한다.
+- 기존 `peak_memory_bytes`는 생성된 Engine에서 한 번 실행한 `check()`의 peak allocation이라는
+  의미를 유지한다.
+- 1,000개 표준 사전과 `whitespace-gap` profile에서 `시 * 발`을 검사하는 corpus case를 추가해
+  혼합 matcher index의 retained memory가 기준선에 포함되도록 했다.
+- 두 지표 모두 `tracemalloc`이 관찰하는 Python allocation이며 프로세스 RSS나 native
+  allocation은 포함하지 않는다.
+- targeted GREEN 명령:
+  `.venv\Scripts\python.exe -m pytest tests\test_benchmark.py -q --no-cov -k "not windows_baseline"`
+- targeted GREEN 결과: `10 passed, 1 deselected` (Windows 기준선 JSON 재생성 전)
+- 기준선 재측정: CPython 3.11.9, warmup 10회·측정 100회, schema 3의 15개 case
+- 기준선 재측정 후 전체 benchmark 테스트: `11 passed`
+
+### 추가 Test specification
+
+| # | 보장 동작 | 테스트 | 유형 | 결과 |
+| --- | --- | --- | --- | --- |
+| 11 | report가 새 Engine 생성 직후의 retained Python allocation을 기록한다 | `test_run_benchmarks_records_latency_throughput_memory_and_environment` | integration | PASS |
+| 12 | opt-in matcher index를 포함한 profile이 기본 profile보다 많은 retained memory를 기록한다 | `test_retained_memory_includes_opt_in_matcher_indexes` | integration | PASS |
+| 13 | corpus가 1,000개 사전의 공백 profile workload를 포함한다 | `test_benchmark_corpus_covers_required_phase_two_scenarios` | unit | PASS |
+| 14 | tracing을 시작한 뒤 fresh Engine을 만들어 retained allocation을 포착한다 | `test_retained_memory_starts_tracing_before_fresh_engine_creation` | integration | PASS |

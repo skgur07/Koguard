@@ -5,6 +5,7 @@ from dataclasses import replace
 from pathlib import Path
 
 import pytest
+from benchmarks import engine_benchmark as benchmark_module
 from benchmarks.engine_benchmark import (
     BenchmarkCase,
     BenchmarkError,
@@ -52,7 +53,11 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         for case in cases
     )
     assert any(
-        case.engine_profile == "whitespace-gap" and case.dictionary_size >= 1_000 for case in cases
+        case.category == "dictionary-scale"
+        and case.engine_profile == "whitespace-gap"
+        and case.dictionary_size >= 1_000
+        and case.expected_matches == 1
+        for case in cases
     )
 
 
@@ -143,6 +148,32 @@ def test_retained_memory_includes_opt_in_matcher_indexes() -> None:
     assert retained_by_profile["whitespace-gap"] > retained_by_profile["default"]
 
 
+def test_retained_memory_starts_tracing_before_fresh_engine_creation(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    retained_allocation_size = 200_000
+
+    class RetainedMemoryEngine:
+        def __init__(self, **_: object) -> None:
+            self.retained = bytearray(retained_allocation_size)
+
+        def check(self, _text: str) -> object:
+            return type("Result", (), {"matches": ()})()
+
+    monkeypatch.setattr(benchmark_module, "KoguardEngine", RetainedMemoryEngine)
+    case = BenchmarkCase(
+        name="unit-retained-allocation",
+        category="dictionary-scale",
+        text="정상 문장",
+        dictionary_size=2,
+        expected_matches=0,
+    )
+
+    report = run_benchmarks((case,), iterations=1, warmups=0)
+
+    assert report.results[0].engine_retained_memory_bytes >= retained_allocation_size
+
+
 def test_run_benchmarks_applies_whitespace_gap_engine_profile() -> None:
     case = BenchmarkCase(
         name="unit-whitespace-gap",
@@ -228,6 +259,7 @@ def test_benchmark_cli_writes_machine_readable_report(tmp_path: Path) -> None:
     assert payload["results"][0]["engine_profile"] == "default"
     assert payload["results"][0]["dictionary_profile"] == "standard"
     assert len(payload["results"][0]["case_fingerprint"]) == 64
+    assert payload["results"][0]["engine_retained_memory_bytes"] > 0
 
 
 def test_windows_baseline_matches_ordered_complete_corpus_cases() -> None:
@@ -238,3 +270,4 @@ def test_windows_baseline_matches_ordered_complete_corpus_cases() -> None:
     assert [result["case_fingerprint"] for result in payload["results"]] == [
         benchmark_case_fingerprint(case) for case in cases
     ]
+    assert all(result["engine_retained_memory_bytes"] > 0 for result in payload["results"])

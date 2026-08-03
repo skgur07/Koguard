@@ -34,6 +34,7 @@ uv run python -m benchmarks.engine_benchmark
 - 공백 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 혼합 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 100개와 1,000개 합성 사전
+- 1,000개 사전에서 혼합 매칭 index를 활성화한 `시 * 발` 입력
 
 각 case에는 `expected_matches`가 있다. 탐지 결과가 기대값과 다르면 성능 수치를 저장하지 않고
 실패하므로 정확도 회귀를 성능 향상으로 오인하지 않는다.
@@ -50,14 +51,20 @@ uv run python -m benchmarks.engine_benchmark
 - `throughput_per_second`: 측정 반복의 누적 처리 시간에서 계산한 초당 호출 수
 - `cold_start_ms`: 사전 생성, Engine 생성, 첫 `check()`까지 한 번 측정한 시간
 - `peak_memory_bytes`: 생성된 Engine의 `check()` 한 번에서 `tracemalloc`로 측정한 peak allocation
+- `engine_retained_memory_bytes`: tracing 시작 후 새 Engine을 생성하고 즉시 측정한 현재 Python
+  allocation. 사전과 opt-in matcher index처럼 Engine이 보유한 Python 객체를 포함한다.
 
 수치는 OS 스케줄링과 전원 상태의 영향을 받는다. 다른 장비의 절대 수치를 합격 기준으로
-사용하지 않고, 동일 장비·Python 버전·corpus에서 변경 전후를 비교한다.
+사용하지 않고, 동일 장비·Python 버전·corpus에서 변경 전후를 비교한다. 두 memory 지표는
+Python allocator를 관찰하는 `tracemalloc` 기준이며 프로세스 RSS나 native allocation은 포함하지
+않는다.
 
 ## 기준 결과
 
 `results/windows-python311.json`은 Windows와 CPython 3.11.9에서 100회 측정한 최초 기준선이다.
 새 결과를 검토할 때는 환경 메타데이터, 정확도 기대값, p50/p95, peak memory를 함께 비교한다.
 report schema 2부터 각 결과에 `engine_profile`, `dictionary_profile`, `case_fingerprint`를
-기록한다. fingerprint는 이름, category, 확장된 전체 입력, 사전 크기와 profile, 엔진 profile,
-정확도 기대값을 포함하므로 corpus가 바뀐 뒤 이전 기준선을 실수로 사용하는 것을 막는다.
+기록한다. schema 3부터 `engine_retained_memory_bytes`를 추가해 Engine 생성 전에 tracing을
+시작하고 생성 직후 남아 있는 Python allocation을 기록한다. fingerprint는 이름, category,
+확장된 전체 입력, 사전 크기와 profile, 엔진 profile, 정확도 기대값을 포함하므로 corpus가
+바뀐 뒤 이전 기준선을 실수로 사용하는 것을 막는다.

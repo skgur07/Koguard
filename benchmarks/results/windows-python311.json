@@ -1,6 +1,6 @@
 {
-  "schema_version": 2,
-  "measured_at": "2026-07-31T04:46:59.349576+00:00",
+  "schema_version": 3,
+  "measured_at": "2026-08-03T07:39:47.794842+00:00",
   "environment": {
     "python_version": "3.11.9",
     "implementation": "CPython",
@@ -21,11 +21,12 @@
       "input_length": 15,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 0.0262,
-      "p95_ms": 0.1573,
-      "throughput_per_second": 19446.92932985881,
-      "cold_start_ms": 0.3744,
-      "peak_memory_bytes": 1308
+      "p50_ms": 0.0253,
+      "p95_ms": 0.0284,
+      "throughput_per_second": 38601.09627113412,
+      "cold_start_ms": 0.165,
+      "peak_memory_bytes": 1308,
+      "engine_retained_memory_bytes": 5724
     },
     {
       "name": "short-whitelist-and-match",
@@ -36,11 +37,12 @@
       "input_length": 14,
       "dictionary_size": 2,
       "expected_matches": 1,
-      "p50_ms": 0.044,
-      "p95_ms": 0.0706,
-      "throughput_per_second": 20691.938420791263,
-      "cold_start_ms": 0.1986,
-      "peak_memory_bytes": 1879
+      "p50_ms": 0.0436,
+      "p95_ms": 0.0532,
+      "throughput_per_second": 21748.11335116678,
+      "cold_start_ms": 0.1478,
+      "peak_memory_bytes": 1879,
+      "engine_retained_memory_bytes": 5724
     },
     {
       "name": "short-separator-obfuscation",
@@ -51,11 +53,12 @@
       "input_length": 11,
       "dictionary_size": 2,
       "expected_matches": 1,
-      "p50_ms": 0.0471,
-      "p95_ms": 0.3803,
-      "throughput_per_second": 1637.9801738879753,
-      "cold_start_ms": 0.3777,
-      "peak_memory_bytes": 2078
+      "p50_ms": 0.0436,
+      "p95_ms": 0.0454,
+      "throughput_per_second": 22786.82921271505,
+      "cold_start_ms": 0.1299,
+      "peak_memory_bytes": 2078,
+      "engine_retained_memory_bytes": 5724
     },
     {
       "name": "short-whitespace-gap",
@@ -66,11 +69,12 @@
       "input_length": 3,
       "dictionary_size": 2,
       "expected_matches": 1,
-      "p50_ms": 0.035,
-      "p95_ms": 0.1152,
-      "throughput_per_second": 19562.198008568248,
-      "cold_start_ms": 0.3328,
-      "peak_memory_bytes": 1728
+      "p50_ms": 0.0385,
+      "p95_ms": 0.0458,
+      "throughput_per_second": 22709.20858408084,
+      "cold_start_ms": 0.1518,
+      "peak_memory_bytes": 1850,
+      "engine_retained_memory_bytes": 8332
     },
     {
       "name": "short-whitespace-boundary",
@@ -81,11 +85,12 @@
       "input_length": 4,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 0.0219,
-      "p95_ms": 0.0293,
-      "throughput_per_second": 42437.61670344596,
-      "cold_start_ms": 0.1374,
-      "peak_memory_bytes": 1256
+      "p50_ms": 0.0276,
+      "p95_ms": 0.0318,
+      "throughput_per_second": 35464.76575522219,
+      "cold_start_ms": 0.1264,
+      "peak_memory_bytes": 1256,
+      "engine_retained_memory_bytes": 8332
     },
     {
       "name": "short-mixed-gap",
@@ -96,11 +101,12 @@
       "input_length": 5,
       "dictionary_size": 2,
       "expected_matches": 1,
-      "p50_ms": 0.0499,
-      "p95_ms": 0.0758,
-      "throughput_per_second": 17853.31714632578,
-      "cold_start_ms": 0.1907,
-      "peak_memory_bytes": 2082
+      "p50_ms": 0.063,
+      "p95_ms": 0.0682,
+      "throughput_per_second": 15648.962473787982,
+      "cold_start_ms": 0.1746,
+      "peak_memory_bytes": 2336,
+      "engine_retained_memory_bytes": 8332
     },
     {
       "name": "short-mixed-boundary",
@@ -111,11 +117,12 @@
       "input_length": 6,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 0.0428,
-      "p95_ms": 0.0515,
-      "throughput_per_second": 22689.113763216414,
-      "cold_start_ms": 0.1544,
-      "peak_memory_bytes": 1471
+      "p50_ms": 0.0599,
+      "p95_ms": 0.1227,
+      "throughput_per_second": 14444.396296456793,
+      "cold_start_ms": 0.1476,
+      "peak_memory_bytes": 1887,
+      "engine_retained_memory_bytes": 8332
     },
     {
       "name": "clean-1kb",
@@ -126,11 +133,12 @@
       "input_length": 1024,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 1.2039,
-      "p95_ms": 1.7565,
-      "throughput_per_second": 757.6015849025156,
-      "cold_start_ms": 1.4121,
-      "peak_memory_bytes": 155098
+      "p50_ms": 1.1538,
+      "p95_ms": 1.3994,
+      "throughput_per_second": 842.9308029674538,
+      "cold_start_ms": 1.3305,
+      "peak_memory_bytes": 155098,
+      "engine_retained_memory_bytes": 5724
     },
     {
       "name": "clean-maximum-input",
@@ -141,11 +149,12 @@
       "input_length": 4096,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 4.5998,
-      "p95_ms": 5.0926,
-      "throughput_per_second": 213.1634392300878,
-      "cold_start_ms": 5.615,
-      "peak_memory_bytes": 781770
+      "p50_ms": 4.749,
+      "p95_ms": 5.1398,
+      "throughput_per_second": 207.3502770303376,
+      "cold_start_ms": 5.635,
+      "peak_memory_bytes": 781770,
+      "engine_retained_memory_bytes": 7668
     },
     {
       "name": "overlapping-prefix-512",
@@ -156,11 +165,12 @@
       "input_length": 512,
       "dictionary_size": 8,
       "expected_matches": 64,
-      "p50_ms": 3.77,
-      "p95_ms": 8.3008,
-      "throughput_per_second": 208.1350413449853,
-      "cold_start_ms": 5.2035,
-      "peak_memory_bytes": 143182
+      "p50_ms": 3.3248,
+      "p95_ms": 3.8242,
+      "throughput_per_second": 290.7641951806998,
+      "cold_start_ms": 3.4558,
+      "peak_memory_bytes": 143182,
+      "engine_retained_memory_bytes": 9962
     },
     {
       "name": "deep-whitespace-prefix-maximum",
@@ -171,11 +181,12 @@
       "input_length": 4096,
       "dictionary_size": 256,
       "expected_matches": 8,
-      "p50_ms": 232.0586,
-      "p95_ms": 250.7116,
-      "throughput_per_second": 4.251583870174452,
-      "cold_start_ms": 269.8481,
-      "peak_memory_bytes": 906723
+      "p50_ms": 144.5304,
+      "p95_ms": 148.5727,
+      "throughput_per_second": 6.875005929692613,
+      "cold_start_ms": 171.545,
+      "peak_memory_bytes": 915031,
+      "engine_retained_memory_bytes": 304496
     },
     {
       "name": "deep-mixed-prefix-maximum",
@@ -186,11 +197,12 @@
       "input_length": 4096,
       "dictionary_size": 256,
       "expected_matches": 4,
-      "p50_ms": 15.1055,
-      "p95_ms": 20.0955,
-      "throughput_per_second": 62.298852579733165,
-      "cold_start_ms": 40.5794,
-      "peak_memory_bytes": 777214
+      "p50_ms": 19.1608,
+      "p95_ms": 21.3293,
+      "throughput_per_second": 51.53126706007009,
+      "cold_start_ms": 46.4165,
+      "peak_memory_bytes": 815394,
+      "engine_retained_memory_bytes": 304392
     },
     {
       "name": "dictionary-100",
@@ -201,11 +213,12 @@
       "input_length": 13,
       "dictionary_size": 100,
       "expected_matches": 0,
-      "p50_ms": 0.0227,
-      "p95_ms": 0.064,
-      "throughput_per_second": 30678.61087249972,
-      "cold_start_ms": 2.3149,
-      "peak_memory_bytes": 1304
+      "p50_ms": 0.0224,
+      "p95_ms": 0.0227,
+      "throughput_per_second": 44521.61524420108,
+      "cold_start_ms": 2.1853,
+      "peak_memory_bytes": 1304,
+      "engine_retained_memory_bytes": 369700
     },
     {
       "name": "dictionary-1000",
@@ -216,11 +229,28 @@
       "input_length": 13,
       "dictionary_size": 1000,
       "expected_matches": 0,
-      "p50_ms": 0.0223,
-      "p95_ms": 0.0488,
-      "throughput_per_second": 35033.6322869955,
-      "cold_start_ms": 27.1933,
-      "peak_memory_bytes": 1304
+      "p50_ms": 0.0226,
+      "p95_ms": 0.0232,
+      "throughput_per_second": 43971.506463811456,
+      "cold_start_ms": 24.0856,
+      "peak_memory_bytes": 1304,
+      "engine_retained_memory_bytes": 3365852
+    },
+    {
+      "name": "mixed-dictionary-1000",
+      "category": "dictionary-scale",
+      "engine_profile": "whitespace-gap",
+      "dictionary_profile": "standard",
+      "case_fingerprint": "c3ffb9b0f960fd1ff0d1ea0e393e14aefc4eba992c8051410e59ad38968790cf",
+      "input_length": 5,
+      "dictionary_size": 1000,
+      "expected_matches": 1,
+      "p50_ms": 0.0621,
+      "p95_ms": 0.0713,
+      "throughput_per_second": 15585.306173339777,
+      "cold_start_ms": 39.887,
+      "peak_memory_bytes": 2336,
+      "engine_retained_memory_bytes": 6624792
     }
   ]
 }

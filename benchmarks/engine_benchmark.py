@@ -80,6 +80,7 @@ class BenchmarkResult:
     throughput_per_second: float
     cold_start_ms: float
     peak_memory_bytes: int
+    engine_retained_memory_bytes: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -228,6 +229,22 @@ def _validate_result(case: BenchmarkCase, match_count: int) -> None:
         )
 
 
+def _measure_engine_retained_memory(case: BenchmarkCase) -> int:
+    """Return Python allocations retained by a freshly constructed engine."""
+
+    tracemalloc.start()
+    try:
+        engine = KoguardEngine(
+            config=_config_for(case),
+            dictionary=_dictionary_for(case),
+        )
+        retained_memory_bytes, _ = tracemalloc.get_traced_memory()
+        del engine
+    finally:
+        tracemalloc.stop()
+    return retained_memory_bytes
+
+
 def _measure_case(
     case: BenchmarkCase,
     *,
@@ -260,6 +277,7 @@ def _measure_case(
     finally:
         tracemalloc.stop()
     _validate_result(case, len(memory_result.matches))
+    engine_retained_memory_bytes = _measure_engine_retained_memory(case)
 
     total_seconds = sum(samples_ms) / 1_000
     return BenchmarkResult(
@@ -276,6 +294,7 @@ def _measure_case(
         throughput_per_second=iterations / total_seconds,
         cold_start_ms=cold_start_ms,
         peak_memory_bytes=peak_memory_bytes,
+        engine_retained_memory_bytes=engine_retained_memory_bytes,
     )
 
 
@@ -306,7 +325,7 @@ def run_benchmarks(
 
     results = tuple(_measure_case(case, iterations=iterations, warmups=warmups) for case in cases)
     return BenchmarkReport(
-        schema_version=2,
+        schema_version=3,
         measured_at=datetime.now(UTC).isoformat(),
         environment=_environment(),
         iterations=iterations,
