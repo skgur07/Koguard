@@ -51,6 +51,9 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         and len(case.text) == EngineConfig().max_input_length
         for case in cases
     )
+    assert any(
+        case.engine_profile == "whitespace-gap" and case.dictionary_size >= 1_000 for case in cases
+    )
 
 
 def test_percentile_uses_nearest_rank() -> None:
@@ -111,6 +114,33 @@ def test_run_benchmarks_records_latency_throughput_memory_and_environment() -> N
     assert result.throughput_per_second > 0
     assert result.cold_start_ms > 0
     assert result.peak_memory_bytes > 0
+    assert result.engine_retained_memory_bytes > 0
+
+
+def test_retained_memory_includes_opt_in_matcher_indexes() -> None:
+    default_case = BenchmarkCase(
+        name="unit-default-indexes",
+        category="dictionary-scale",
+        text="정상 문장",
+        dictionary_size=100,
+        expected_matches=0,
+    )
+    whitespace_case = replace(
+        default_case,
+        name="unit-whitespace-indexes",
+        engine_profile="whitespace-gap",
+    )
+
+    report = run_benchmarks(
+        (default_case, whitespace_case),
+        iterations=1,
+        warmups=0,
+    )
+    retained_by_profile = {
+        result.engine_profile: result.engine_retained_memory_bytes for result in report.results
+    }
+
+    assert retained_by_profile["whitespace-gap"] > retained_by_profile["default"]
 
 
 def test_run_benchmarks_applies_whitespace_gap_engine_profile() -> None:
@@ -192,7 +222,7 @@ def test_benchmark_cli_writes_machine_readable_report(tmp_path: Path) -> None:
 
     payload = json.loads(output_path.read_text(encoding="utf-8"))
     assert exit_code == 0
-    assert payload["schema_version"] == 2
+    assert payload["schema_version"] == 3
     assert payload["configuration"] == {"iterations": 2, "warmups": 0}
     assert payload["results"][0]["name"] == "cli-clean"
     assert payload["results"][0]["engine_profile"] == "default"
@@ -204,7 +234,7 @@ def test_windows_baseline_matches_ordered_complete_corpus_cases() -> None:
     cases = load_cases(CORPUS_PATH)
     payload = json.loads(BASELINE_PATH.read_text(encoding="utf-8"))
 
-    assert payload["schema_version"] == 2
+    assert payload["schema_version"] == 3
     assert [result["case_fingerprint"] for result in payload["results"]] == [
         benchmark_case_fingerprint(case) for case in cases
     ]

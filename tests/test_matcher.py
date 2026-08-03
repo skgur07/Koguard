@@ -318,3 +318,26 @@ def test_mixed_gap_matcher_skips_impossible_shared_prefix_fallbacks() -> None:
     assert len(text) == 4_096
     assert matches == ()
     assert next_shorter.call_count <= len(text)
+
+
+def test_mixed_gap_matcher_bounds_fallbacks_before_alphanumeric_suffix() -> None:
+    text = ("a * " * 128) + ("a" * 512)
+    matcher = make_matcher(
+        blacklist=["a" * length for length in range(2, 160)],
+    )
+
+    with patch.object(
+        matcher_module,
+        "_next_shorter_occurrence",
+        wraps=matcher_module._next_shorter_occurrence,
+    ) as next_shorter:
+        matches = matcher.find_with_mixed_gaps(
+            text,
+            normalize_text(text, "NFKC"),
+            max_whitespace_gap=1,
+            separators=frozenset({"*"}),
+        )
+
+    assert len(text) == 1_024
+    assert [(len(match.term), match.start, match.end) for match in matches] == [(128, 0, 509)]
+    assert next_shorter.call_count <= len(text)
