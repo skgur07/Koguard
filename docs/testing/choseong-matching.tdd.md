@@ -67,7 +67,15 @@ Windows CPython 3.11.9, warmup 10회 후 100회 측정:
 
 ## Coverage와 알려진 제한
 
-- 전체 품질 게이트 결과는 최종 검증 후 이 문서에 추가한다.
+- 사용자 편집 중인 `badwords.txt`를 건드리지 않기 위해 commit `1c99723`의 깨끗한 detached
+  worktree에서 전체 게이트를 실행했다.
+  - `uv sync --all-extras --dev`: PASS
+  - `uv run ruff format --check .`: 22 files PASS
+  - `uv run ruff check .`: PASS
+  - `uv run mypy`: 22 source files PASS
+  - `uv run pytest`: 232 passed, total coverage 95.91%
+  - `uv build`: sdist와 wheel PASS
+  - 잠금 의존성 `pip-audit`: 알려진 취약점 없음(Koguard 자체는 PyPI 미등록으로 audit 제외)
 - 초성 사이 공백·구분자, 한글 자판 변환, 유사 철자·발음은 지원하지 않는다.
 - 작은 수동 corpus의 precision/recall 1.0은 실제 서비스 정확도를 의미하지 않는다.
 - 사용자가 로컬에서 편집한 외부 `slang.csv` 기반 목록은 원본 저장소가 해당 파일의 라이선스를
