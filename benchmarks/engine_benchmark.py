@@ -22,7 +22,12 @@ from koguard import EngineConfig, KoguardDictionary, KoguardEngine
 
 DEFAULT_CORPUS_PATH = Path(__file__).with_name("corpus.json")
 DEFAULT_OUTPUT_PATH = Path(__file__).with_name("results") / "latest.json"
-_ENGINE_PROFILES = frozenset({"default", "whitespace-gap"})
+_ENGINE_PROFILES = frozenset({"choseong", "default", "whitespace-gap"})
+_HANGUL_SYLLABLE_BASE = 0xAC00
+_HANGUL_SYLLABLES_PER_LEADING = 588
+_LEADING_SYLLABLE_DIGITS = tuple(
+    chr(_HANGUL_SYLLABLE_BASE + index * _HANGUL_SYLLABLES_PER_LEADING) for index in range(19)
+)
 
 
 class BenchmarkError(ValueError):
@@ -197,11 +202,27 @@ def load_cases(path: Path) -> tuple[BenchmarkCase, ...]:
     return cases
 
 
+def _choseong_scale_term(index: int) -> str:
+    """Return an all-Hangul term with a unique choseong suffix."""
+
+    digits: list[str] = []
+    value = index
+    while True:
+        digits.append(_LEADING_SYLLABLE_DIGITS[value % len(_LEADING_SYLLABLE_DIGITS)])
+        value //= len(_LEADING_SYLLABLE_DIGITS)
+        if value == 0:
+            break
+    return "합성" + "".join(reversed(digits))
+
+
 def _dictionary_for(case: BenchmarkCase) -> KoguardDictionary:
     if case.dictionary_profile == "overlapping-prefix":
         blacklist = ["a" * size for size in range(1, case.dictionary_size + 1)]
     elif case.dictionary_profile == "deep-whitespace-prefix":
         blacklist = ["a" * size for size in range(2, case.dictionary_size + 2)]
+    elif case.dictionary_profile == "choseong-scale":
+        blacklist = ["병신", "시발"]
+        blacklist.extend(_choseong_scale_term(index) for index in range(case.dictionary_size - 2))
     elif case.dictionary_profile == "standard":
         blacklist = ["병신", "시발"]
         blacklist.extend(f"합성금칙어{index:06d}" for index in range(case.dictionary_size - 2))
@@ -220,6 +241,8 @@ def _config_for(case: BenchmarkCase) -> EngineConfig:
         return EngineConfig()
     if case.engine_profile == "whitespace-gap":
         return EngineConfig(whitespace_gap_matching=True)
+    if case.engine_profile == "choseong":
+        return EngineConfig(choseong_matching=True)
     raise BenchmarkError(f"unknown engine profile: {case.engine_profile}")
 
 

@@ -15,8 +15,9 @@ Repeated, Separator 및 Whitelist 동작을 유지해야 한다.
 - 공백을 사용한 후보의 양끝이 영숫자 토큰 중간이면 후보를 버린다. Unicode Mark와 variation
   selector는 인접 grapheme의 확장으로 보고 그 너머의 실제 base 문자를 경계 판정에 사용한다.
 - Whitelist는 공백 변형을 별도로 확장하지 않고 입력에 exact로 겹치는 정규화 구간만 보호한다.
-- 이 문서에서 구현한 매칭 우선순위는 Exact, Repeated, Separator, Whitespace 순서다.
-  이후 Mixed 매칭이 마지막 단계로 추가되었다.
+- 이 문서에서 구현한 매칭 우선순위는 Exact, Repeated, Separator, Whitespace 순서였다.
+  이후 Choseong과 Mixed가 추가된 현재 순서는 Exact, Repeated, Separator, Whitespace,
+  Choseong, Mixed다.
 - 공백 매치는 `MatchMethod.WHITESPACE`로 구분한다.
 
 ## RED

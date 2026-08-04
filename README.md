@@ -2,7 +2,8 @@
 
 한국어 욕설·비속어 탐지를 위한 경량 Python 라이브러리입니다.
 
-현재 v0.1에서는 기본 사전 기반 Exact Match와 구간 단위 Whitelist 처리를 제공합니다.
+현재 v0.1에서는 기본 사전 기반 Exact Match, 반복·구분자 우회 view, opt-in 공백·혼합·초성
+매칭과 구간 단위 Whitelist 처리를 제공합니다.
 
 ## 사용법
 
@@ -67,6 +68,33 @@ engine = KoguardEngine(config=config)
 Whitespace와 Mixed 매칭에서는 Whitelist의 우회 형태를 별도로 확장하지 않습니다. 예를 들어
 Whitelist에 `시발 자동차`가 있어도 입력 `시 발 자동차`와 `시 * 발 자동차`의 욕설 구간은
 탐지합니다. Whitelist는 입력에 실제로 겹치는 기존 정규화 view의 구간만 보호합니다.
+
+초성 표현 탐지도 오탐과 추가 인덱스 비용을 피하기 위해 명시적으로 활성화합니다.
+
+```python
+from koguard import EngineConfig, KoguardDictionary, KoguardEngine
+
+config = EngineConfig(choseong_matching=True)
+dictionary = KoguardDictionary.from_sources(
+    blacklist=["시발", "씨밤", "개새끼"],
+    include_defaults=False,
+)
+engine = KoguardEngine(config=config, dictionary=dictionary)
+
+assert engine.check("ㅅㅂ").matched_word == "시발"
+assert engine.check("ㅆㅂ").matched_word == "씨밤"
+assert engine.check("ㄱㅅㄲ").matched_word == "개새끼"
+```
+
+초성 index는 두 글자 이상의 완성형 한글 blacklist 항목에서만 파생합니다. 입력에서는
+`ㅅㅂ`처럼 연속된 호환 자모 또는 동등한 현대 초성 자모 토큰만 비교하고, `수박` 같은 일반
+한글 문장을 초성으로 변환하지 않습니다. 또한 `ㄱㅅㅂ`, `ㅅㅂㄹ`, `3ㅅㅂ`처럼 더 긴 영숫자
+토큰의 일부는 버립니다. 공백·구분자로 나뉜 `ㅅ ㅂ`, `ㅅ*ㅂ`은 현재 초성 단계의 범위가
+아닙니다.
+
+여러 blacklist 항목이 같은 초성으로 충돌하면 길이 내림차순·사전순으로 정렬된 첫 항목을
+결과의 canonical `term`으로 사용합니다. 특정 초성을 허용하려면 Whitelist에 `ㅅㅂ`처럼
+초성 자체를 명시해야 합니다. 탐지 결과의 `method`는 `MatchMethod.CHOSEONG`입니다.
 
 ## 개발 환경
 

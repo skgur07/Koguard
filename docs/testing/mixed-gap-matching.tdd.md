@@ -14,7 +14,9 @@
 - 후보 안에서 공백·탭과 구분자를 모두 사용한 경우에만 `MatchMethod.MIXED`로 반환한다.
 - Unicode Mark와 variation selector는 독립 토큰 경계가 아니라 인접 grapheme의 확장으로
   처리한다.
-- 매칭 우선순위는 Exact, Repeated, Separator, Whitespace, Mixed 순서다.
+- 이 기능 구현 당시 매칭 우선순위는 Exact, Repeated, Separator, Whitespace, Mixed 순서였다.
+  후속 초성 기능이 추가된 현재 순서는 Exact, Repeated, Separator, Whitespace, Choseong,
+  Mixed다.
 - Mixed 형태의 Whitelist를 자동 생성하지 않고 기존 view에서 실제로 겹치는 원문 구간만
   보호한다.
 - 반복 축약과 Mixed view의 조합은 이번 범위에 포함하지 않는다.

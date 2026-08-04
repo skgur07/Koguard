@@ -19,6 +19,7 @@ class EngineConfig:
     obfuscation_separators: frozenset[str] = frozenset("!@#$%^&*_-+=~.·,")
     whitespace_gap_matching: bool = False
     max_whitespace_gap: int = 3
+    choseong_matching: bool = False
 
     def __post_init__(self) -> None:
         if type(self.max_input_length) is not int or self.max_input_length <= 0:
@@ -33,6 +34,8 @@ class EngineConfig:
             raise ConfigurationError("whitespace_gap_matching must be a boolean")
         if type(self.max_whitespace_gap) is not int or self.max_whitespace_gap <= 0:
             raise ConfigurationError("max_whitespace_gap must be a positive integer")
+        if type(self.choseong_matching) is not bool:
+            raise ConfigurationError("choseong_matching must be a boolean")
         if not isinstance(self.obfuscation_separators, frozenset):
             raise ConfigurationError(
                 "obfuscation_separators must be a frozenset of single "

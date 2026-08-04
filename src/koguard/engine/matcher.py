@@ -7,8 +7,17 @@ from heapq import heappop, heappush
 from types import MappingProxyType
 
 from koguard.engine.dictionary import KoguardDictionary
-from koguard.engine.normalizer import NormalizedText, _is_unicode_cluster_extension
+from koguard.engine.normalizer import (
+    NormalizedText,
+    _is_unicode_cluster_extension,
+    normalize_text,
+)
 from koguard.models import Match, MatchMethod
+
+_HANGUL_SYLLABLE_BASE = 0xAC00
+_HANGUL_SYLLABLE_LAST = 0xD7A3
+_HANGUL_SYLLABLES_PER_LEADING = 588
+_COMPATIBILITY_CHOSEONG = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
 
 
 @dataclass(frozen=True, slots=True)
@@ -306,6 +315,30 @@ def _build_mixed_automaton(terms: tuple[str, ...]) -> _TermAutomaton:
     return _build_term_automaton(eligible_terms)
 
 
+def _build_choseong_aliases(dictionary: KoguardDictionary) -> Mapping[str, str]:
+    """Map normalized initial sequences to deterministic dictionary terms."""
+
+    aliases: dict[str, str] = {}
+    for term in dictionary.ordered_blacklist:
+        if len(term) < 2 or any(
+            not _HANGUL_SYLLABLE_BASE <= ord(character) <= _HANGUL_SYLLABLE_LAST
+            for character in term
+        ):
+            continue
+        compatibility_initials = "".join(
+            _COMPATIBILITY_CHOSEONG[
+                (ord(character) - _HANGUL_SYLLABLE_BASE) // _HANGUL_SYLLABLES_PER_LEADING
+            ]
+            for character in term
+        )
+        normalized_initials = normalize_text(
+            compatibility_initials,
+            dictionary.unicode_form,
+        ).text
+        aliases.setdefault(normalized_initials, term)
+    return MappingProxyType(aliases)
+
+
 def _build_mixed_projection(
     original_text: str,
     normalized: NormalizedText,
@@ -598,10 +631,16 @@ def _build_matches(
     original_text: str,
     selected: list[_MappedCandidate],
     method: MatchMethod,
+    *,
+    term_aliases: Mapping[str, str] | None = None,
 ) -> tuple[Match, ...]:
     return tuple(
         Match(
-            term=mapped_candidate.normalized.term,
+            term=(
+                mapped_candidate.normalized.term
+                if term_aliases is None
+                else term_aliases[mapped_candidate.normalized.term]
+            ),
             matched_text=original_text[
                 mapped_candidate.original_start : mapped_candidate.original_end
             ],
@@ -619,6 +658,80 @@ def _build_matches(
             ),
         )
     )
+
+
+class ChoseongMatcher:
+    """Find standalone compatibility-choseong abbreviations of Hangul terms."""
+
+    __slots__ = ("_automaton", "_term_aliases")
+
+    def __init__(self, dictionary: KoguardDictionary) -> None:
+        self._term_aliases = _build_choseong_aliases(dictionary)
+        ordered_initials = tuple(
+            sorted(self._term_aliases, key=lambda initials: (-len(initials), initials))
+        )
+        self._automaton = _build_term_automaton(ordered_initials)
+
+    def find(
+        self,
+        original_text: str,
+        normalized: NormalizedText,
+        *,
+        protected_masks: _ProtectedMasks,
+        protected_original: bytes,
+    ) -> tuple[Match, ...]:
+        """Return non-overlapping initial sequences at full token boundaries."""
+
+        if not self._term_aliases:
+            return ()
+
+        boundaries = _build_alphanumeric_boundaries(normalized.text)
+        selected_normalized = bytearray(len(normalized.text))
+        selected_original = bytearray(len(original_text))
+        selected: list[_MappedCandidate] = []
+        candidates: list[_PrioritizedCandidate] = []
+
+        for normalized_candidate in _iter_longest_occurrences(
+            normalized.text,
+            self._automaton,
+        ):
+            if not (
+                boundaries.starts[normalized_candidate.start]
+                and boundaries.ends[normalized_candidate.end]
+            ):
+                continue
+            heappush(
+                candidates,
+                _prioritize(
+                    _map_candidate(
+                        normalized_candidate,
+                        normalized,
+                        extension_ends=boundaries.extension_ends,
+                    )
+                ),
+            )
+
+        while candidates:
+            mapped_candidate = heappop(candidates).candidate
+            if _is_occupied(
+                mapped_candidate,
+                protected_masks.normalized,
+                protected_original,
+            ) or _is_occupied(
+                mapped_candidate,
+                selected_normalized,
+                selected_original,
+            ):
+                continue
+            selected.append(mapped_candidate)
+            _occupy(mapped_candidate, selected_normalized, selected_original)
+
+        return _build_matches(
+            original_text,
+            selected,
+            MatchMethod.CHOSEONG,
+            term_aliases=self._term_aliases,
+        )
 
 
 class ExactMatcher:

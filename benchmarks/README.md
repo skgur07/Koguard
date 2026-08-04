@@ -31,10 +31,12 @@ uv run python -m benchmarks.engine_benchmark
 - 공통 접두사 후보가 대량 생성되는 512자 적대적 입력
 - 공백 매칭을 활성화한 `시 발` 탐지와 `시 발표` 경계 오탐 방지
 - 공백과 설정 구분자를 함께 사용한 `시 * 발` 탐지와 `시 * 발표` 경계 오탐 방지
+- opt-in 초성 `ㅅㅂ` 탐지와 일반 한글 `수박` 미탐지
 - 공백 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 혼합 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 100개와 1,000개 합성 사전
 - 1,000개 사전에서 혼합 매칭 index를 활성화한 `시 * 발` 입력
+- 1,000개 완성형 한글 사전에서 초성 index를 활성화한 `ㅅㅂ` 입력
 
 각 case에는 `expected_matches`가 있다. 탐지 결과가 기대값과 다르면 성능 수치를 저장하지 않고
 실패하므로 정확도 회귀를 성능 향상으로 오인하지 않는다.
@@ -42,8 +44,10 @@ uv run python -m benchmarks.engine_benchmark
 `engine_profile`은 case마다 사용할 엔진 설정을 지정한다. 생략하거나 `default`이면 기본 설정을
 사용하고, `whitespace-gap`이면 `EngineConfig(whitespace_gap_matching=True)`를 사용한다.
 이 profile은 공백 전용 매칭과 혼합 공백·구분자 매칭을 함께 활성화한다.
+`choseong`이면 `EngineConfig(choseong_matching=True)`를 사용한다.
 `dictionary_profile`은 합성 사전 형태를 지정하며 `standard`, `overlapping-prefix`,
-`deep-whitespace-prefix`를 지원한다. 알 수 없는 profile은 측정을 시작하기 전에 실패한다.
+`deep-whitespace-prefix`, `choseong-scale`을 지원한다. `choseong-scale`은 서로 다른 초성
+suffix를 갖는 완성형 한글 term을 만든다. 알 수 없는 profile은 측정을 시작하기 전에 실패한다.
 
 ## 지표
 
