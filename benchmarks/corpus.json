@@ -54,6 +54,22 @@
       "expected_matches": 0
     },
     {
+      "name": "short-choseong",
+      "category": "choseong",
+      "text": "ㅅㅂ",
+      "dictionary_size": 2,
+      "engine_profile": "choseong",
+      "expected_matches": 1
+    },
+    {
+      "name": "short-choseong-normal-hangul",
+      "category": "choseong",
+      "text": "수박",
+      "dictionary_size": 2,
+      "engine_profile": "choseong",
+      "expected_matches": 0
+    },
+    {
       "name": "clean-1kb",
       "category": "one-kilobyte",
       "text_pattern": "가나다라마바사아자차카타파하",
@@ -118,6 +134,15 @@
       "text": "시 * 발",
       "dictionary_size": 1000,
       "engine_profile": "whitespace-gap",
+      "expected_matches": 1
+    },
+    {
+      "name": "choseong-dictionary-1000",
+      "category": "dictionary-scale",
+      "text": "ㅅㅂ",
+      "dictionary_size": 1000,
+      "dictionary_profile": "choseong-scale",
+      "engine_profile": "choseong",
       "expected_matches": 1
     }
   ]
