@@ -665,6 +665,129 @@ def test_mixed_gap_matching_bounds_deep_shared_prefix_work() -> None:
     assert map_candidate.call_count <= len(text)
 
 
+def test_choseong_matching_is_opt_in() -> None:
+    result = make_engine(blacklist=["시발"]).check("ㅅㅂ")
+
+    assert result.detected is False
+
+
+@pytest.mark.parametrize(
+    ("term", "text"),
+    [
+        ("시발", "ㅅㅂ"),
+        ("씨발", "ㅆㅂ"),
+        ("개새끼", "ㄱㅅㄲ"),
+        ("씨밤", "ㅆㅂ"),
+    ],
+)
+def test_choseong_matching_detects_standalone_initials_with_original_span(
+    term: str,
+    text: str,
+) -> None:
+    engine = make_engine(
+        blacklist=[term],
+        config=EngineConfig(choseong_matching=True),
+    )
+
+    result = engine.check(f"이건 {text}!")
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == term
+    assert result.matches[0].matched_text == text
+    assert result.matches[0].start == 3
+    assert result.matches[0].end == 3 + len(text)
+    assert result.matches[0].method is MatchMethod.CHOSEONG
+    assert result.matches[0].score == 1.0
+
+
+def test_choseong_matching_does_not_convert_normal_hangul_text() -> None:
+    engine = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(choseong_matching=True),
+    )
+
+    result = engine.check("수박")
+
+    assert result.detected is False
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "ㄱㅅㅂ",
+        "ㅅㅂㄹ",
+        "3ㅅㅂ",
+        "ㅅㅂ3",
+        "가ㅅㅂ",
+        "ㅅㅂ가",
+    ],
+)
+def test_choseong_matching_rejects_partial_alphanumeric_tokens(text: str) -> None:
+    engine = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(choseong_matching=True),
+    )
+
+    assert engine.check(text).detected is False
+
+
+def test_choseong_matching_honors_explicit_initials_whitelist() -> None:
+    engine = make_engine(
+        blacklist=["시발"],
+        whitelist=["ㅅㅂ"],
+        config=EngineConfig(choseong_matching=True),
+    )
+
+    result = engine.check("ㅅㅂ")
+
+    assert result.detected is False
+
+
+@pytest.mark.parametrize(
+    ("blacklist", "text"),
+    [
+        (["좆"], "ㅈ"),
+        (["시발2"], "ㅅㅂ"),
+        (["bad"], "ㅂㄷ"),
+    ],
+)
+def test_choseong_matching_only_derives_multi_syllable_hangul_terms(
+    blacklist: list[str],
+    text: str,
+) -> None:
+    engine = make_engine(
+        blacklist=blacklist,
+        config=EngineConfig(choseong_matching=True),
+    )
+
+    assert engine.check(text).detected is False
+
+
+def test_choseong_matching_resolves_collisions_deterministically() -> None:
+    config = EngineConfig(choseong_matching=True)
+    first = make_engine(blacklist=["시발", "수박"], config=config)
+    second = make_engine(blacklist=["수박", "시발"], config=config)
+
+    first_result = first.check("ㅅㅂ")
+    second_result = second.check("ㅅㅂ")
+
+    assert first_result.detected is True
+    assert first_result.matched_word == second_result.matched_word
+
+
+def test_choseong_matching_supports_nfc_configuration() -> None:
+    engine = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(unicode_form="NFC", choseong_matching=True),
+    )
+
+    result = engine.check("ㅅㅂ")
+
+    assert result.detected is True
+    assert result.matched_word == "시발"
+    assert result.matches[0].matched_text == "ㅅㅂ"
+
+
 def test_whitespace_gap_matching_bounds_deep_shared_prefix_work() -> None:
     config = EngineConfig(whitespace_gap_matching=True)
     engine = make_engine(

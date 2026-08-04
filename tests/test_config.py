@@ -16,6 +16,7 @@ def test_engine_config_defaults() -> None:
     assert "*" in config.obfuscation_separators
     assert config.whitespace_gap_matching is False
     assert config.max_whitespace_gap == 3
+    assert config.choseong_matching is False
 
 
 def test_engine_config_preserves_obfuscation_separator_positional_argument() -> None:
@@ -51,6 +52,12 @@ def test_engine_config_rejects_invalid_repeat_reduction_threshold(
 def test_engine_config_rejects_invalid_whitespace_gap_matching(enabled: object) -> None:
     with pytest.raises(ConfigurationError, match="whitespace_gap_matching"):
         EngineConfig(whitespace_gap_matching=cast(bool, enabled))
+
+
+@pytest.mark.parametrize("enabled", [1, "yes", None])
+def test_engine_config_rejects_invalid_choseong_matching(enabled: object) -> None:
+    with pytest.raises(ConfigurationError, match="choseong_matching"):
+        EngineConfig(choseong_matching=cast(bool, enabled))
 
 
 @pytest.mark.parametrize("gap", [0, -1, True, 1.5])
