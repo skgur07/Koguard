@@ -13,6 +13,7 @@ class MatchMethod(StrEnum):
     SEPARATOR = "separator"
     WHITESPACE = "whitespace"
     MIXED = "mixed"
+    CHOSEONG = "choseong"
     TRIE = "trie"
     LEVENSHTEIN = "levenshtein"
     EMBEDDING = "embedding"

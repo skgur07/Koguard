@@ -4,7 +4,7 @@ from time import perf_counter_ns
 
 from koguard.config import EngineConfig
 from koguard.engine.dictionary import KoguardDictionary
-from koguard.engine.matcher import ExactMatcher, _ProtectedMasks
+from koguard.engine.matcher import ChoseongMatcher, ExactMatcher, _ProtectedMasks
 from koguard.engine.normalizer import (
     build_repeated_view,
     build_separator_view,
@@ -76,7 +76,7 @@ def _build_match_original_mask(
 class KoguardEngine:
     """Synchronous, thread-safe profanity detection engine."""
 
-    __slots__ = ("_config", "_dictionary", "_exact_matcher")
+    __slots__ = ("_choseong_matcher", "_config", "_dictionary", "_exact_matcher")
 
     def __init__(
         self,
@@ -95,6 +95,9 @@ class KoguardEngine:
         self._exact_matcher = ExactMatcher(
             resolved_dictionary,
             whitespace_gap_matching=resolved_config.whitespace_gap_matching,
+        )
+        self._choseong_matcher = (
+            ChoseongMatcher(resolved_dictionary) if resolved_config.choseong_matching else None
         )
 
     @property
@@ -180,6 +183,14 @@ class KoguardEngine:
                 protected_masks=normalized_protected,
                 protected_original=protected_original,
             )
+        choseong_matches: tuple[Match, ...] = ()
+        if self._choseong_matcher is not None:
+            choseong_matches = self._choseong_matcher.find(
+                text,
+                normalized,
+                protected_masks=normalized_protected,
+                protected_original=protected_original,
+            )
 
         matches = _merge_view_matches(
             len(text),
@@ -187,6 +198,7 @@ class KoguardEngine:
             repeated_matches,
             separator_matches,
             whitespace_matches,
+            choseong_matches,
             protected_original_masks=(protected_original,),
         )
         if self._config.whitespace_gap_matching:
