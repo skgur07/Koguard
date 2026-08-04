@@ -1,0 +1,52 @@
+[
+  {
+    "id": "standalone-siot-bieup",
+    "text": "ㅅㅂ",
+    "expected_terms": ["시발"]
+  },
+  {
+    "id": "double-siot-bieup",
+    "text": "ㅆㅂ",
+    "expected_terms": ["씨발"]
+  },
+  {
+    "id": "three-initials-with-punctuation",
+    "text": "이건 ㄱㅅㄲ!",
+    "expected_terms": ["개새끼"]
+  },
+  {
+    "id": "multiple-standalone-initials",
+    "text": "ㅅㅂ, 그리고 ㅂㅅ",
+    "expected_terms": ["시발", "병신"]
+  },
+  {
+    "id": "normal-hangul-same-initials",
+    "text": "수박",
+    "expected_terms": []
+  },
+  {
+    "id": "prefixed-initial-token",
+    "text": "ㄱㅅㅂ",
+    "expected_terms": []
+  },
+  {
+    "id": "suffixed-initial-token",
+    "text": "ㅅㅂㄹ",
+    "expected_terms": []
+  },
+  {
+    "id": "digit-prefixed-initial-token",
+    "text": "3ㅅㅂ",
+    "expected_terms": []
+  },
+  {
+    "id": "digit-suffixed-initial-token",
+    "text": "ㅅㅂ3",
+    "expected_terms": []
+  },
+  {
+    "id": "whitespace-separated-initials",
+    "text": "ㅅ ㅂ",
+    "expected_terms": []
+  }
+]
