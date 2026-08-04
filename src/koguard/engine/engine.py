@@ -95,6 +95,7 @@ class KoguardEngine:
         self._exact_matcher = ExactMatcher(
             resolved_dictionary,
             whitespace_gap_matching=resolved_config.whitespace_gap_matching,
+            mixed_gap_matching=resolved_config.mixed_gap_matching,
         )
         self._choseong_matcher = (
             ChoseongMatcher(resolved_dictionary) if resolved_config.choseong_matching else None
@@ -122,13 +123,21 @@ class KoguardEngine:
 
         started_at = perf_counter_ns()
         normalized = normalize_text(text, self._config.unicode_form)
-        repeated = build_repeated_view(
-            normalized,
-            threshold=self._config.repeat_reduction_threshold,
+        repeated = (
+            build_repeated_view(
+                normalized,
+                threshold=self._config.repeat_reduction_threshold,
+            )
+            if self._config.repeated_matching
+            else normalized
         )
-        separated = build_separator_view(
-            normalized,
-            separators=self._config.obfuscation_separators,
+        separated = (
+            build_separator_view(
+                normalized,
+                separators=self._config.obfuscation_separators,
+            )
+            if self._config.separator_matching
+            else normalized
         )
 
         normalized_protected = self._exact_matcher.build_protected_masks(text, normalized)
@@ -150,14 +159,16 @@ class KoguardEngine:
             separated_protected,
         )
 
-        exact_matches = self._exact_matcher.find(
-            text,
-            normalized,
-            protected_masks=normalized_protected,
-            protected_original=protected_original,
-        )
+        exact_matches: tuple[Match, ...] = ()
+        if self._config.exact_matching:
+            exact_matches = self._exact_matcher.find(
+                text,
+                normalized,
+                protected_masks=normalized_protected,
+                protected_original=protected_original,
+            )
         repeated_matches: tuple[Match, ...] = ()
-        if repeated != normalized:
+        if self._config.repeated_matching and repeated != normalized:
             repeated_matches = self._exact_matcher.find(
                 text,
                 repeated,
@@ -166,7 +177,7 @@ class KoguardEngine:
                 protected_original=protected_original,
             )
         separator_matches: tuple[Match, ...] = ()
-        if separated != normalized:
+        if self._config.separator_matching and separated != normalized:
             separator_matches = self._exact_matcher.find(
                 text,
                 separated,
@@ -201,7 +212,7 @@ class KoguardEngine:
             choseong_matches,
             protected_original_masks=(protected_original,),
         )
-        if self._config.whitespace_gap_matching:
+        if self._config.mixed_gap_matching:
             mixed_matches = self._exact_matcher.find_with_mixed_gaps(
                 text,
                 normalized,

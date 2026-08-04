@@ -749,6 +749,7 @@ class ExactMatcher:
         dictionary: KoguardDictionary,
         *,
         whitespace_gap_matching: bool = True,
+        mixed_gap_matching: bool = True,
     ) -> None:
         blacklist = dictionary.ordered_blacklist
         self._exact_automaton = _build_term_automaton(blacklist)
@@ -756,9 +757,7 @@ class ExactMatcher:
         self._whitespace_trie = (
             _build_whitespace_trie(blacklist) if whitespace_gap_matching else None
         )
-        self._mixed_automaton = (
-            _build_mixed_automaton(blacklist) if whitespace_gap_matching else None
-        )
+        self._mixed_automaton = _build_mixed_automaton(blacklist) if mixed_gap_matching else None
 
     def find(
         self,

@@ -22,7 +22,7 @@ from koguard import EngineConfig, KoguardDictionary, KoguardEngine
 
 DEFAULT_CORPUS_PATH = Path(__file__).with_name("corpus.json")
 DEFAULT_OUTPUT_PATH = Path(__file__).with_name("results") / "latest.json"
-_ENGINE_PROFILES = frozenset({"choseong", "default", "whitespace-gap"})
+_ENGINE_PROFILES = frozenset({"choseong", "default", "minimal", "whitespace-gap"})
 _HANGUL_SYLLABLE_BASE = 0xAC00
 _HANGUL_SYLLABLES_PER_LEADING = 588
 _LEADING_SYLLABLE_DIGITS = tuple(
@@ -239,10 +239,30 @@ def _dictionary_for(case: BenchmarkCase) -> KoguardDictionary:
 def _config_for(case: BenchmarkCase) -> EngineConfig:
     if case.engine_profile == "default":
         return EngineConfig()
+    if case.engine_profile == "minimal":
+        return EngineConfig(
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=False,
+            mixed_gap_matching=False,
+            choseong_matching=False,
+        )
     if case.engine_profile == "whitespace-gap":
-        return EngineConfig(whitespace_gap_matching=True)
+        return EngineConfig(
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=True,
+            mixed_gap_matching=True,
+            choseong_matching=False,
+        )
     if case.engine_profile == "choseong":
-        return EngineConfig(choseong_matching=True)
+        return EngineConfig(
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=False,
+            mixed_gap_matching=False,
+            choseong_matching=True,
+        )
     raise BenchmarkError(f"unknown engine profile: {case.engine_profile}")
 
 

@@ -1,6 +1,6 @@
 """Tests for immutable engine configuration."""
 
-from dataclasses import replace
+from collections.abc import Callable
 from typing import cast
 
 import pytest
@@ -74,8 +74,10 @@ def test_engine_config_rejects_invalid_matching_flag(
     field_name: str,
     enabled: object,
 ) -> None:
+    config_factory = cast(Callable[..., EngineConfig], EngineConfig)
+
     with pytest.raises(ConfigurationError, match=field_name):
-        replace(EngineConfig(), **{field_name: enabled})
+        config_factory(**{field_name: enabled})
 
 
 @pytest.mark.parametrize("gap", [0, -1, True, 1.5])
