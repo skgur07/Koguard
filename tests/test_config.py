@@ -1,5 +1,6 @@
 """Tests for immutable engine configuration."""
 
+from dataclasses import replace
 from typing import cast
 
 import pytest
@@ -14,17 +15,26 @@ def test_engine_config_defaults() -> None:
     assert config.unicode_form == "NFKC"
     assert config.repeat_reduction_threshold == 2
     assert "*" in config.obfuscation_separators
-    assert config.whitespace_gap_matching is False
+    assert config.whitespace_gap_matching is True
     assert config.max_whitespace_gap == 3
-    assert config.choseong_matching is False
+    assert config.choseong_matching is True
+    assert config.exact_matching is True
+    assert config.repeated_matching is True
+    assert config.separator_matching is True
+    assert config.mixed_gap_matching is True
 
 
 def test_engine_config_preserves_obfuscation_separator_positional_argument() -> None:
     config = EngineConfig(4096, "NFKC", 2, frozenset({"*"}))
 
     assert config.obfuscation_separators == frozenset({"*"})
-    assert config.whitespace_gap_matching is False
+    assert config.whitespace_gap_matching is True
     assert config.max_whitespace_gap == 3
+    assert config.choseong_matching is True
+    assert config.exact_matching is True
+    assert config.repeated_matching is True
+    assert config.separator_matching is True
+    assert config.mixed_gap_matching is True
 
 
 @pytest.mark.parametrize("value", [0, -1, False, 1.5])
@@ -48,16 +58,24 @@ def test_engine_config_rejects_invalid_repeat_reduction_threshold(
         EngineConfig(repeat_reduction_threshold=threshold)
 
 
+@pytest.mark.parametrize(
+    "field_name",
+    [
+        "exact_matching",
+        "repeated_matching",
+        "separator_matching",
+        "whitespace_gap_matching",
+        "mixed_gap_matching",
+        "choseong_matching",
+    ],
+)
 @pytest.mark.parametrize("enabled", [1, "yes", None])
-def test_engine_config_rejects_invalid_whitespace_gap_matching(enabled: object) -> None:
-    with pytest.raises(ConfigurationError, match="whitespace_gap_matching"):
-        EngineConfig(whitespace_gap_matching=cast(bool, enabled))
-
-
-@pytest.mark.parametrize("enabled", [1, "yes", None])
-def test_engine_config_rejects_invalid_choseong_matching(enabled: object) -> None:
-    with pytest.raises(ConfigurationError, match="choseong_matching"):
-        EngineConfig(choseong_matching=cast(bool, enabled))
+def test_engine_config_rejects_invalid_matching_flag(
+    field_name: str,
+    enabled: object,
+) -> None:
+    with pytest.raises(ConfigurationError, match=field_name):
+        replace(EngineConfig(), **{field_name: enabled})
 
 
 @pytest.mark.parametrize("gap", [0, -1, True, 1.5])

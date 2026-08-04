@@ -8,6 +8,14 @@
       "expected_matches": 0
     },
     {
+      "name": "short-minimal-clean",
+      "category": "short-chat",
+      "text": "오늘 저녁에 같이 게임할래?",
+      "dictionary_size": 2,
+      "engine_profile": "minimal",
+      "expected_matches": 0
+    },
+    {
       "name": "short-whitelist-and-match",
       "category": "short-chat",
       "text": "시발점에서 병신을 발견했다",

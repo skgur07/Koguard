@@ -50,6 +50,15 @@ def test_default_engine_detects_exact_term_with_original_span() -> None:
     assert result.elapsed_ms >= 0.0
 
 
+def test_exact_matching_can_be_disabled() -> None:
+    engine = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(exact_matching=False),
+    )
+
+    assert engine.check("시발").detected is False
+
+
 def test_default_engine_returns_clean_result() -> None:
     result = KoguardEngine().check("정상 문장입니다")
 
@@ -152,6 +161,15 @@ def test_repeated_vowel_extension_is_detected_with_original_span() -> None:
     assert (result.matches[0].start, result.matches[0].end) == (2, 6)
 
 
+def test_repeated_matching_can_be_disabled() -> None:
+    engine = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(repeated_matching=False),
+    )
+
+    assert engine.check("시이이발").detected is False
+
+
 def test_exact_match_keeps_priority_over_repeated_view() -> None:
     result = KoguardEngine().check("시발")
 
@@ -184,6 +202,15 @@ def test_special_character_obfuscation_is_detected_with_original_span() -> None:
     assert result.matches[0].matched_text == "시*!발"
     assert result.matches[0].method is MatchMethod.SEPARATOR
     assert (result.matches[0].start, result.matches[0].end) == (2, 6)
+
+
+def test_separator_matching_can_be_disabled() -> None:
+    engine = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(separator_matching=False),
+    )
+
+    assert engine.check("시*!발").detected is False
 
 
 def test_exact_match_keeps_priority_over_separator_view() -> None:
@@ -291,10 +318,15 @@ def test_compatibility_separator_setting_matches_normalized_input() -> None:
     assert result.matches[0].method is MatchMethod.SEPARATOR
 
 
-def test_whitespace_gap_matching_is_opt_in() -> None:
-    engine = make_engine(blacklist=["시발"])
+def test_whitespace_gap_matching_is_enabled_by_default_and_can_be_disabled() -> None:
+    enabled_engine = make_engine(blacklist=["시발"])
+    disabled_engine = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(whitespace_gap_matching=False),
+    )
 
-    assert engine.check("시 발").detected is False
+    assert enabled_engine.check("시 발").detected is True
+    assert disabled_engine.check("시 발").detected is False
 
 
 def test_whitespace_gap_matching_detects_term_with_original_span() -> None:
@@ -392,10 +424,30 @@ def test_mixed_gap_matching_detects_whitespace_and_configured_separators(
     assert result.matches[0].method is MatchMethod.MIXED
 
 
-def test_mixed_gap_matching_is_opt_in() -> None:
-    engine = make_engine(blacklist=["시발"])
+def test_mixed_gap_matching_is_enabled_by_default_and_can_be_disabled() -> None:
+    enabled_engine = make_engine(blacklist=["시발"])
+    disabled_engine = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(mixed_gap_matching=False),
+    )
 
-    assert engine.check("시 * 발").detected is False
+    assert enabled_engine.check("시 * 발").detected is True
+    assert disabled_engine.check("시 * 발").detected is False
+
+
+def test_mixed_gap_matching_is_independent_from_whitespace_gap_matching() -> None:
+    mixed_only_engine = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(whitespace_gap_matching=False),
+    )
+    whitespace_only_engine = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(mixed_gap_matching=False),
+    )
+
+    assert mixed_only_engine.check("시 * 발").detected is True
+    assert whitespace_only_engine.check("시 발").detected is True
+    assert whitespace_only_engine.check("시 * 발").detected is False
 
 
 @pytest.mark.parametrize(
@@ -665,10 +717,15 @@ def test_mixed_gap_matching_bounds_deep_shared_prefix_work() -> None:
     assert map_candidate.call_count <= len(text)
 
 
-def test_choseong_matching_is_opt_in() -> None:
-    result = make_engine(blacklist=["시발"]).check("ㅅㅂ")
+def test_choseong_matching_is_enabled_by_default_and_can_be_disabled() -> None:
+    enabled_result = make_engine(blacklist=["시발"]).check("ㅅㅂ")
+    disabled_result = make_engine(
+        blacklist=["시발"],
+        config=EngineConfig(choseong_matching=False),
+    ).check("ㅅㅂ")
 
-    assert result.detected is False
+    assert enabled_result.detected is True
+    assert disabled_result.detected is False
 
 
 @pytest.mark.parametrize(
