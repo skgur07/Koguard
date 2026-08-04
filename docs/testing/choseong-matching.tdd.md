@@ -1,5 +1,8 @@
 # 초성 매칭 TDD 증거
 
+> 후속 변경: 이 문서는 기능을 처음 추가했을 당시의 opt-in 근거를 보존한다. 현재 기본값과
+> 비활성화 계약은 [`default-enabled-matchers.tdd.md`](default-enabled-matchers.tdd.md)를 따른다.
+
 ## Source plan과 사용자 여정
 
 별도 plan 파일 없이 이번 TDD 실행에서 요구사항을 확정했다.

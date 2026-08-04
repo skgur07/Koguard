@@ -2,8 +2,9 @@
 
 한국어 욕설·비속어 탐지를 위한 경량 Python 라이브러리입니다.
 
-현재 v0.1에서는 기본 사전 기반 Exact Match, 반복·구분자 우회 view, opt-in 공백·혼합·초성
-매칭과 구간 단위 Whitelist 처리를 제공합니다.
+현재 v0.1에서는 기본 사전 기반 Exact Match, 반복·구분자 우회 view, 공백·혼합·초성 매칭과
+구간 단위 Whitelist 처리를 제공합니다. 모든 탐지 단계는 기본으로 활성화되며 단계별로 끌 수
+있습니다.
 
 ## 사용법
 
@@ -30,6 +31,35 @@ dictionary = KoguardDictionary.from_sources(
 engine = KoguardEngine(dictionary=dictionary)
 ```
 
+### 탐지 단계 설정
+
+모든 탐지 플래그는 기본값이 `True`이고 정확한 `bool` 값만 허용합니다.
+
+| 설정 | 탐지 단계 | 기본값 |
+| --- | --- | --- |
+| `exact_matching` | 정규화된 사전어 Exact Match | `True` |
+| `repeated_matching` | `시이이발` 같은 반복 모음 축약 view | `True` |
+| `separator_matching` | `시*!발` 같은 설정 구분자 제거 view | `True` |
+| `whitespace_gap_matching` | `시 발` 같은 공백·탭 간격 매칭 | `True` |
+| `mixed_gap_matching` | `시 * 발` 같은 공백·구분자 혼합 매칭 | `True` |
+| `choseong_matching` | `ㅅㅂ` 같은 독립 초성 토큰 매칭 | `True` |
+
+각 단계는 독립적으로 `False`로 끌 수 있습니다. 다음 설정은 Exact Match만 남깁니다.
+
+```python
+from koguard import EngineConfig, KoguardEngine
+
+config = EngineConfig(
+    exact_matching=True,
+    repeated_matching=False,
+    separator_matching=False,
+    whitespace_gap_matching=False,
+    mixed_gap_matching=False,
+    choseong_matching=False,
+)
+engine = KoguardEngine(config=config)
+```
+
 기본 사전은 직접 선별한 Exact Match 표현을 포함하며 기본 Whitelist는 비어 있습니다.
 따라서 `시발점`, `병신년`처럼 금칙어를 포함한 복합어도 기본 정책에서는 탐지합니다.
 서비스 문맥에서 허용할 표현은 `whitelist` 또는 `whitelist_path`로 명시적으로 주입해야 합니다.
@@ -43,19 +73,21 @@ engine = KoguardEngine(dictionary=dictionary)
 문자 집합은 `EngineConfig.obfuscation_separators`로 제한할 수 있고, 공백이나 영숫자는
 구분자로 설정할 수 없습니다.
 
-공백 삽입 우회 탐지는 오탐을 줄이기 위해 명시적으로 활성화합니다.
+공백 삽입과 공백·구분자 혼합 우회 탐지는 기본으로 활성화됩니다. 필요하면 서로 독립적으로
+끌 수 있습니다.
 
 ```python
 from koguard import EngineConfig, KoguardEngine
 
 config = EngineConfig(
-    whitespace_gap_matching=True,
+    whitespace_gap_matching=False,
+    mixed_gap_matching=False,
     max_whitespace_gap=3,
 )
 engine = KoguardEngine(config=config)
 ```
 
-이 설정은 사전 단어의 글자 사이에 들어간 짧은 공백과 탭을 허용하며, 공백과 설정된
+기본 설정은 사전 단어의 글자 사이에 들어간 짧은 공백과 탭을 허용하며, 공백과 설정된
 `obfuscation_separators`를 함께 섞은 `시 * 발`도 탐지합니다. 각 공백 구간은
 `max_whitespace_gap` 이하이어야 하며 줄바꿈은 허용하지 않습니다. 또한 매치 양끝이 영숫자
 토큰 중간이면 후보를 버리므로 `시 발`, `시 * 발`, `개 새끼`는 탐지하지만 `시 발표`,
@@ -69,17 +101,17 @@ Whitespace와 Mixed 매칭에서는 Whitelist의 우회 형태를 별도로 확�
 Whitelist에 `시발 자동차`가 있어도 입력 `시 발 자동차`와 `시 * 발 자동차`의 욕설 구간은
 탐지합니다. Whitelist는 입력에 실제로 겹치는 기존 정규화 view의 구간만 보호합니다.
 
-초성 표현 탐지도 오탐과 추가 인덱스 비용을 피하기 위해 명시적으로 활성화합니다.
+초성 표현 탐지도 기본으로 활성화됩니다. 초성 인덱스의 오탐 가능성이나 추가 메모리 비용을
+피하려면 `EngineConfig(choseong_matching=False)`로 끌 수 있습니다.
 
 ```python
-from koguard import EngineConfig, KoguardDictionary, KoguardEngine
+from koguard import KoguardDictionary, KoguardEngine
 
-config = EngineConfig(choseong_matching=True)
 dictionary = KoguardDictionary.from_sources(
     blacklist=["시발", "씨밤", "개새끼"],
     include_defaults=False,
 )
-engine = KoguardEngine(config=config, dictionary=dictionary)
+engine = KoguardEngine(dictionary=dictionary)
 
 assert engine.check("ㅅㅂ").matched_word == "시발"
 assert engine.check("ㅆㅂ").matched_word == "씨밤"

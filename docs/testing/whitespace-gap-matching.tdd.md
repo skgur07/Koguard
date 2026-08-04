@@ -1,5 +1,8 @@
 # 공백 간격 매칭 TDD 증거
 
+> 후속 변경: 이 문서는 기능을 처음 추가했을 당시의 opt-in 근거를 보존한다. 현재 기본값과
+> 비활성화 계약은 [`default-enabled-matchers.tdd.md`](default-enabled-matchers.tdd.md)를 따른다.
+
 ## 사용자 시나리오
 
 사전의 욕설 글자 사이에 짧은 공백이나 탭을 삽입한 우회 표현을 탐지하되, 정상 단어의 일부를

@@ -31,7 +31,7 @@ uv run python -m benchmarks.engine_benchmark
 - 공통 접두사 후보가 대량 생성되는 512자 적대적 입력
 - 공백 매칭을 활성화한 `시 발` 탐지와 `시 발표` 경계 오탐 방지
 - 공백과 설정 구분자를 함께 사용한 `시 * 발` 탐지와 `시 * 발표` 경계 오탐 방지
-- opt-in 초성 `ㅅㅂ` 탐지와 일반 한글 `수박` 미탐지
+- 초성 `ㅅㅂ` 탐지와 일반 한글 `수박` 미탐지
 - 공백 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 혼합 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 100개와 1,000개 합성 사전
@@ -41,10 +41,11 @@ uv run python -m benchmarks.engine_benchmark
 각 case에는 `expected_matches`가 있다. 탐지 결과가 기대값과 다르면 성능 수치를 저장하지 않고
 실패하므로 정확도 회귀를 성능 향상으로 오인하지 않는다.
 
-`engine_profile`은 case마다 사용할 엔진 설정을 지정한다. 생략하거나 `default`이면 기본 설정을
-사용하고, `whitespace-gap`이면 `EngineConfig(whitespace_gap_matching=True)`를 사용한다.
-이 profile은 공백 전용 매칭과 혼합 공백·구분자 매칭을 함께 활성화한다.
-`choseong`이면 `EngineConfig(choseong_matching=True)`를 사용한다.
+`engine_profile`은 case마다 사용할 엔진 설정을 지정한다. 생략하거나 `default`이면 모든 탐지
+단계가 활성화된 기본 설정을 사용한다. `minimal`은 Exact Match만 활성화한다.
+`whitespace-gap`은 Exact Match와 공백·혼합 매칭만 활성화하고, `choseong`은 Exact Match와
+초성 매칭만 활성화한다. 이렇게 격리된 profile을 사용해 각 추가 index의 정확도와 retained
+memory를 비교한다.
 `dictionary_profile`은 합성 사전 형태를 지정하며 `standard`, `overlapping-prefix`,
 `deep-whitespace-prefix`, `choseong-scale`을 지원한다. `choseong-scale`은 서로 다른 초성
 suffix를 갖는 완성형 한글 term을 만든다. 알 수 없는 profile은 측정을 시작하기 전에 실패한다.
@@ -56,7 +57,7 @@ suffix를 갖는 완성형 한글 term을 만든다. 알 수 없는 profile은 �
 - `cold_start_ms`: 사전 생성, Engine 생성, 첫 `check()`까지 한 번 측정한 시간
 - `peak_memory_bytes`: 생성된 Engine의 `check()` 한 번에서 `tracemalloc`로 측정한 peak allocation
 - `engine_retained_memory_bytes`: 이전 workload의 allocator/free-list 상태를 full GC로 정리한 뒤
-  tracing을 시작하고, 새 Engine을 생성해 즉시 측정한 현재 Python allocation. 사전과 opt-in
+  tracing을 시작하고, 새 Engine을 생성해 즉시 측정한 현재 Python allocation. 사전과 활성화된
   matcher index처럼 Engine이 보유한 Python 객체를 포함한다.
 
 수치는 OS 스케줄링과 전원 상태의 영향을 받는다. 다른 장비의 절대 수치를 합격 기준으로

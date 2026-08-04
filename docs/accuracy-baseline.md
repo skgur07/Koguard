@@ -2,7 +2,7 @@
 
 측정일: 2026-07-28
 
-대상: Koguard Exact Match + 반복 모음/특수문자 view + opt-in 공백·혼합·초성 매칭 +
+대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성 매칭 +
 사용자 주입 Whitelist
 
 환경: CPython 3.11.9
@@ -32,7 +32,8 @@ Whitelist 표현의 재분류, 확장된 기본 금칙어를 포함한다. 기�
 측정일: 2026-08-04
 
 `tests/corpus/choseong_cases.json`의 직접 작성한 10개 문장과 기대 탐지 occurrence 5개를
-`EngineConfig(choseong_matching=True)`로 검증했다. 독립 초성 토큰, 쌍자음, 다중 매치,
+기본값과 같은 `EngineConfig(choseong_matching=True)`로 검증했다. 독립 초성 토큰, 쌍자음,
+다중 매치,
 일반 한글 동일 초성, 앞뒤 자모·숫자 결합, 공백 분리 사례를 포함한다.
 
 - False Positive: 0
