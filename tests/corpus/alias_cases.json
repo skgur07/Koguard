@@ -1,0 +1,47 @@
+[
+  {
+    "id": "jotgat-token-prefix",
+    "text": "ㅈ같네",
+    "expected_terms": ["좆같다"]
+  },
+  {
+    "id": "jotdwaet-token-prefix",
+    "text": "ㅈ됐네",
+    "expected_terms": ["좆되다"]
+  },
+  {
+    "id": "compound-bieup-sios",
+    "text": "ㅄ",
+    "expected_terms": ["병신"]
+  },
+  {
+    "id": "jieuj-ssangkiyeok",
+    "text": "ㅈㄲ",
+    "expected_terms": ["좆"]
+  },
+  {
+    "id": "combined-exact-token",
+    "text": "ㅅㅄㄲ",
+    "expected_terms": ["시발새끼"]
+  },
+  {
+    "id": "time-presentation",
+    "text": "3시 발표",
+    "expected_terms": []
+  },
+  {
+    "id": "presentation-boundary",
+    "text": "시 발표",
+    "expected_terms": []
+  },
+  {
+    "id": "watermelon",
+    "text": "수박",
+    "expected_terms": []
+  },
+  {
+    "id": "spaced-shape",
+    "text": "ㅈ 같은 모양",
+    "expected_terms": []
+  }
+]

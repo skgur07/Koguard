@@ -22,6 +22,7 @@ def test_engine_config_defaults() -> None:
     assert config.repeated_matching is True
     assert config.separator_matching is True
     assert config.mixed_gap_matching is True
+    assert config.alias_matching is True
 
 
 def test_engine_config_preserves_obfuscation_separator_positional_argument() -> None:
@@ -35,6 +36,7 @@ def test_engine_config_preserves_obfuscation_separator_positional_argument() -> 
     assert config.repeated_matching is True
     assert config.separator_matching is True
     assert config.mixed_gap_matching is True
+    assert config.alias_matching is True
 
 
 @pytest.mark.parametrize("value", [0, -1, False, 1.5])
@@ -67,6 +69,7 @@ def test_engine_config_rejects_invalid_repeat_reduction_threshold(
         "whitespace_gap_matching",
         "mixed_gap_matching",
         "choseong_matching",
+        "alias_matching",
     ],
 )
 @pytest.mark.parametrize("enabled", [1, "yes", None])

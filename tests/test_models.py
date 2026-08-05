@@ -4,7 +4,7 @@ from typing import cast
 
 import pytest
 
-from koguard import CheckResult, Match, MatchMethod
+from koguard import AliasMode, AliasRule, CheckResult, Match, MatchMethod
 
 
 def make_match() -> Match:
@@ -24,6 +24,29 @@ def test_mixed_match_method_has_stable_public_value() -> None:
 
 def test_choseong_match_method_has_stable_public_value() -> None:
     assert MatchMethod.CHOSEONG.value == "choseong"
+
+
+def test_alias_public_models_have_stable_values() -> None:
+    rule = AliasRule(alias="ㅄ", term="병신", mode=AliasMode.EXACT_TOKEN)
+
+    assert MatchMethod.ALIAS.value == "alias"
+    assert AliasMode.EXACT_TOKEN.value == "exact_token"
+    assert AliasMode.TOKEN_PREFIX.value == "token_prefix"
+    assert rule.alias == "ㅄ"
+    assert rule.term == "병신"
+
+
+@pytest.mark.parametrize(("field", "value"), [("alias", ""), ("term", "")])
+def test_alias_rule_rejects_empty_text_fields(field: str, value: str) -> None:
+    values = {"alias": "ㅄ", "term": "병신"}
+    values[field] = value
+
+    with pytest.raises(ValueError, match=field):
+        AliasRule(
+            alias=values["alias"],
+            term=values["term"],
+            mode=AliasMode.EXACT_TOKEN,
+        )
 
 
 def test_detected_result_exposes_first_match_compatibility_properties() -> None:
