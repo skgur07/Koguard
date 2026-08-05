@@ -33,3 +33,17 @@ Alias 규칙으로 탐지한다. 원문 span, Whitelist 구간 보호, 토큰 �
 규칙 후보 조사에는 `Tanat05/korean-profanity-resources`를 참고한다. 저장소가 자체
 `slang.csv`의 라이선스를 `확인 필요`로 표시하므로 전체 데이터는 복사하거나 포함하지 않는다.
 이번 규칙은 사용자가 제시한 실제 누락과 최소 회귀 사례만 Koguard 정책으로 수동 선정한다.
+
+## GREEN
+
+- `AliasMode`, 불변 `AliasRule`, `MatchMethod.ALIAS`, 기본 `alias_matching=True` 설정을
+  추가했다.
+- 기본 및 사용자 TSV Alias를 Unicode form에 맞게 정규화하고, canonical term이 blacklist에
+  없거나 규칙이 충돌하면 `DictionaryError`로 거부한다.
+- `AliasMatcher`는 정규화 view를 선형 검색하고 `exact_token`/`token_prefix` 경계를 적용한 뒤
+  기존 source span과 Whitelist 보호 mask를 재사용한다.
+- 핵심 설정·모델·사전·엔진·corpus 계약 101개가 통과했다.
+- alias-only 벤치마크 profile에서 3자 양성 입력과 4,096자 정상 입력을 100회 측정하고 정확도
+  기대값 및 retained memory를 기준선에 기록했다.
+- 깨끗한 커밋 worktree의 첫 전체 검증에서 285개 테스트와 branch coverage 95.36%가
+  통과했다. 벤치마크 회귀 계약 및 문서 추가 후 최종 전체 결과는 완료 보고에 기록한다.

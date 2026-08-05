@@ -2,9 +2,9 @@
 
 한국어 욕설·비속어 탐지를 위한 경량 Python 라이브러리입니다.
 
-현재 v0.1에서는 기본 사전 기반 Exact Match, 반복·구분자 우회 view, 공백·혼합·초성 매칭과
-구간 단위 Whitelist 처리를 제공합니다. 모든 탐지 단계는 기본으로 활성화되며 단계별로 끌 수
-있습니다.
+현재 v0.1에서는 기본 사전 기반 Exact Match, 반복·구분자 우회 view, 공백·혼합·초성·명시적
+Alias 매칭과 구간 단위 Whitelist 처리를 제공합니다. 모든 탐지 단계는 기본으로 활성화되며
+단계별로 끌 수 있습니다.
 
 ## 사용법
 
@@ -43,6 +43,7 @@ engine = KoguardEngine(dictionary=dictionary)
 | `whitespace_gap_matching` | `시 발` 같은 공백·탭 간격 매칭 | `True` |
 | `mixed_gap_matching` | `시 * 발` 같은 공백·구분자 혼합 매칭 | `True` |
 | `choseong_matching` | `ㅅㅂ` 같은 독립 초성 토큰 매칭 | `True` |
+| `alias_matching` | `ㅈ같네`, `ㅄ` 같은 명시적 축약 규칙 매칭 | `True` |
 
 각 단계는 독립적으로 `False`로 끌 수 있습니다. 다음 설정은 Exact Match만 남깁니다.
 
@@ -56,6 +57,7 @@ config = EngineConfig(
     whitespace_gap_matching=False,
     mixed_gap_matching=False,
     choseong_matching=False,
+    alias_matching=False,
 )
 engine = KoguardEngine(config=config)
 ```
@@ -127,6 +129,42 @@ assert engine.check("ㄱㅅㄲ").matched_word == "개새끼"
 여러 blacklist 항목이 같은 초성으로 충돌하면 길이 내림차순·사전순으로 정렬된 첫 항목을
 결과의 canonical `term`으로 사용합니다. 특정 초성을 허용하려면 Whitelist에 `ㅅㅂ`처럼
 초성 자체를 명시해야 합니다. 탐지 결과의 `method`는 `MatchMethod.CHOSEONG`입니다.
+
+명시적 Alias 탐지도 기본으로 활성화됩니다. 모든 자모 조합을 추측하거나 공백을 전역
+제거하지 않고, 구조화된 규칙에 등록된 표현만 비교합니다.
+
+| 기본 Alias | canonical `term` | 경계 모드 |
+| --- | --- | --- |
+| `ㅈ같` | `좆같다` | `token_prefix` |
+| `ㅈ됐` | `좆되다` | `token_prefix` |
+| `ㅄ` | `병신` | `exact_token` |
+| `ㅈㄲ` | `좆` | `exact_token` |
+| `ㅅㅄㄲ` | `시발새끼` | `exact_token` |
+
+`token_prefix`는 토큰 시작에서 일치하고 뒤에 한글 음절 접미부만 이어질 때 허용하므로
+`ㅈ같네`와 `ㅈ됐네`를 탐지하지만 `aㅈ같네`, `ㅈ같1`, `ㅈ같네abc`는 버립니다.
+`exact_token`은 Alias 전체가 독립 영숫자 토큰이어야 하므로 `ㅄ`은 탐지하지만 `ㅄ1`,
+`ㅈㄲㅋ`, `ㅅㅄㄲ네`는 탐지하지 않습니다. `ㅈ 같은 모양`처럼 규칙 내부에 공백이 들어간
+표현도 결합하지 않습니다. 결과의 `method`는 `MatchMethod.ALIAS`입니다.
+
+사용자 Alias는 canonical term을 같은 blacklist에 명시한 뒤 추가할 수 있습니다.
+
+```python
+from koguard import AliasMode, AliasRule, KoguardDictionary, KoguardEngine
+
+dictionary = KoguardDictionary.from_sources(
+    blacklist=["병신"],
+    aliases=[AliasRule("ㅄ", "병신", AliasMode.EXACT_TOKEN)],
+    include_defaults=False,
+)
+engine = KoguardEngine(dictionary=dictionary)
+```
+
+TSV 파일은 `alias<TAB>term<TAB>mode` 형식으로 `alias_path`에 전달할 수 있습니다. 입력과
+Whitelist는 같은 Unicode form으로 정규화되며, Alias 결과도 원문의 `matched_text`와
+`[start, end)` span을 보존합니다. 기본 규칙의 조사 출처와 데이터 포함 경계는
+[`src/koguard/data/NOTICE.md`](src/koguard/data/NOTICE.md)에 기록합니다. 필요하면
+`EngineConfig(alias_matching=False)`로 이 단계만 끌 수 있습니다.
 
 ## 개발 환경
 

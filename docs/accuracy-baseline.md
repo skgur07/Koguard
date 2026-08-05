@@ -2,8 +2,8 @@
 
 측정일: 2026-07-28
 
-대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성 매칭 +
-사용자 주입 Whitelist
+대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성·Alias
+매칭 + 사용자 주입 Whitelist
 
 환경: CPython 3.11.9
 
@@ -43,3 +43,19 @@ Whitelist 표현의 재분류, 확장된 기본 금칙어를 포함한다. 기�
 
 이 수치는 작은 수동 회귀 corpus 안에서의 결과다. 실제 채팅 분포의 축약어·이름·도메인
 용어가 충분히 포함되지 않았으므로 서비스 정확도를 대표하지 않는다.
+
+## 명시적 Alias 매칭 추가 기준선
+
+측정일: 2026-08-05
+
+`tests/corpus/alias_cases.json`의 직접 선정한 9개 문장과 기대 탐지 occurrence 5개를 기본
+`EngineConfig(alias_matching=True)`로 검증했다. `ㅈ같네`, `ㅈ됐네`, 겹받침·복합 자모 Alias와
+`3시 발표`, `시 발표`, `수박`, 공백 분리 표현을 포함한다.
+
+- False Positive: 0
+- False Negative: 0
+- Precision: 1.0
+- Recall: 1.0
+
+이 수치는 다섯 개의 명시적 규칙만 검증한다. 등록하지 않은 신조어와 자모 변형을 일반화하지
+않으며 실제 서비스 정확도를 대표하지 않는다.
