@@ -5,6 +5,34 @@ from enum import StrEnum
 from math import isfinite
 
 
+class AliasMode(StrEnum):
+    """Token-boundary policy for an explicit profanity alias."""
+
+    EXACT_TOKEN = "exact_token"
+    TOKEN_PREFIX = "token_prefix"
+
+
+@dataclass(frozen=True, slots=True)
+class AliasRule:
+    """One normalized alias-to-blacklist mapping."""
+
+    alias: str
+    term: str
+    mode: AliasMode
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.alias, str):
+            raise TypeError("alias must be a string")
+        if not self.alias:
+            raise ValueError("alias must not be empty")
+        if not isinstance(self.term, str):
+            raise TypeError("term must be a string")
+        if not self.term:
+            raise ValueError("term must not be empty")
+        if not isinstance(self.mode, AliasMode):
+            raise TypeError("mode must be an AliasMode")
+
+
 class MatchMethod(StrEnum):
     """Method responsible for a profanity match."""
 
@@ -14,6 +42,7 @@ class MatchMethod(StrEnum):
     WHITESPACE = "whitespace"
     MIXED = "mixed"
     CHOSEONG = "choseong"
+    ALIAS = "alias"
     TRIE = "trie"
     LEVENSHTEIN = "levenshtein"
     EMBEDDING = "embedding"

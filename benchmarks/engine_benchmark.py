@@ -18,11 +18,11 @@ from pathlib import Path
 from time import perf_counter_ns
 from typing import Any
 
-from koguard import EngineConfig, KoguardDictionary, KoguardEngine
+from koguard import AliasMode, AliasRule, EngineConfig, KoguardDictionary, KoguardEngine
 
 DEFAULT_CORPUS_PATH = Path(__file__).with_name("corpus.json")
 DEFAULT_OUTPUT_PATH = Path(__file__).with_name("results") / "latest.json"
-_ENGINE_PROFILES = frozenset({"choseong", "default", "whitespace-gap"})
+_ENGINE_PROFILES = frozenset({"alias", "choseong", "default", "minimal", "whitespace-gap"})
 _HANGUL_SYLLABLE_BASE = 0xAC00
 _HANGUL_SYLLABLES_PER_LEADING = 588
 _LEADING_SYLLABLE_DIGITS = tuple(
@@ -216,6 +216,7 @@ def _choseong_scale_term(index: int) -> str:
 
 
 def _dictionary_for(case: BenchmarkCase) -> KoguardDictionary:
+    aliases: tuple[AliasRule, ...] = ()
     if case.dictionary_profile == "overlapping-prefix":
         blacklist = ["a" * size for size in range(1, case.dictionary_size + 1)]
     elif case.dictionary_profile == "deep-whitespace-prefix":
@@ -223,6 +224,10 @@ def _dictionary_for(case: BenchmarkCase) -> KoguardDictionary:
     elif case.dictionary_profile == "choseong-scale":
         blacklist = ["병신", "시발"]
         blacklist.extend(_choseong_scale_term(index) for index in range(case.dictionary_size - 2))
+    elif case.dictionary_profile == "alias":
+        blacklist = ["좆같다", "병신"]
+        blacklist.extend(f"합성금칙어{index:06d}" for index in range(case.dictionary_size - 2))
+        aliases = (AliasRule("ㅈ같", "좆같다", AliasMode.TOKEN_PREFIX),)
     elif case.dictionary_profile == "standard":
         blacklist = ["병신", "시발"]
         blacklist.extend(f"합성금칙어{index:06d}" for index in range(case.dictionary_size - 2))
@@ -232,6 +237,7 @@ def _dictionary_for(case: BenchmarkCase) -> KoguardDictionary:
     return KoguardDictionary.from_sources(
         blacklist=blacklist,
         whitelist=["병신년", "시발점"],
+        aliases=aliases,
         include_defaults=False,
     )
 
@@ -239,10 +245,43 @@ def _dictionary_for(case: BenchmarkCase) -> KoguardDictionary:
 def _config_for(case: BenchmarkCase) -> EngineConfig:
     if case.engine_profile == "default":
         return EngineConfig()
+    if case.engine_profile == "minimal":
+        return EngineConfig(
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=False,
+            mixed_gap_matching=False,
+            choseong_matching=False,
+            alias_matching=False,
+        )
     if case.engine_profile == "whitespace-gap":
-        return EngineConfig(whitespace_gap_matching=True)
+        return EngineConfig(
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=True,
+            mixed_gap_matching=True,
+            choseong_matching=False,
+            alias_matching=False,
+        )
     if case.engine_profile == "choseong":
-        return EngineConfig(choseong_matching=True)
+        return EngineConfig(
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=False,
+            mixed_gap_matching=False,
+            choseong_matching=True,
+            alias_matching=False,
+        )
+    if case.engine_profile == "alias":
+        return EngineConfig(
+            exact_matching=False,
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=False,
+            mixed_gap_matching=False,
+            choseong_matching=False,
+            alias_matching=True,
+        )
     raise BenchmarkError(f"unknown engine profile: {case.engine_profile}")
 
 

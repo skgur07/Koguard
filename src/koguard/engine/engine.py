@@ -4,7 +4,7 @@ from time import perf_counter_ns
 
 from koguard.config import EngineConfig
 from koguard.engine.dictionary import KoguardDictionary
-from koguard.engine.matcher import ChoseongMatcher, ExactMatcher, _ProtectedMasks
+from koguard.engine.matcher import AliasMatcher, ChoseongMatcher, ExactMatcher, _ProtectedMasks
 from koguard.engine.normalizer import (
     build_repeated_view,
     build_separator_view,
@@ -76,7 +76,13 @@ def _build_match_original_mask(
 class KoguardEngine:
     """Synchronous, thread-safe profanity detection engine."""
 
-    __slots__ = ("_choseong_matcher", "_config", "_dictionary", "_exact_matcher")
+    __slots__ = (
+        "_alias_matcher",
+        "_choseong_matcher",
+        "_config",
+        "_dictionary",
+        "_exact_matcher",
+    )
 
     def __init__(
         self,
@@ -95,9 +101,13 @@ class KoguardEngine:
         self._exact_matcher = ExactMatcher(
             resolved_dictionary,
             whitespace_gap_matching=resolved_config.whitespace_gap_matching,
+            mixed_gap_matching=resolved_config.mixed_gap_matching,
         )
         self._choseong_matcher = (
             ChoseongMatcher(resolved_dictionary) if resolved_config.choseong_matching else None
+        )
+        self._alias_matcher = (
+            AliasMatcher(resolved_dictionary) if resolved_config.alias_matching else None
         )
 
     @property
@@ -113,7 +123,7 @@ class KoguardEngine:
         return self._dictionary
 
     def check(self, text: str) -> CheckResult:
-        """Check one input string and return every non-whitelisted exact match."""
+        """Check one input string and return every non-whitelisted profanity match."""
 
         if not isinstance(text, str):
             raise TypeError("text must be a string")
@@ -122,13 +132,21 @@ class KoguardEngine:
 
         started_at = perf_counter_ns()
         normalized = normalize_text(text, self._config.unicode_form)
-        repeated = build_repeated_view(
-            normalized,
-            threshold=self._config.repeat_reduction_threshold,
+        repeated = (
+            build_repeated_view(
+                normalized,
+                threshold=self._config.repeat_reduction_threshold,
+            )
+            if self._config.repeated_matching
+            else normalized
         )
-        separated = build_separator_view(
-            normalized,
-            separators=self._config.obfuscation_separators,
+        separated = (
+            build_separator_view(
+                normalized,
+                separators=self._config.obfuscation_separators,
+            )
+            if self._config.separator_matching
+            else normalized
         )
 
         normalized_protected = self._exact_matcher.build_protected_masks(text, normalized)
@@ -150,14 +168,16 @@ class KoguardEngine:
             separated_protected,
         )
 
-        exact_matches = self._exact_matcher.find(
-            text,
-            normalized,
-            protected_masks=normalized_protected,
-            protected_original=protected_original,
-        )
+        exact_matches: tuple[Match, ...] = ()
+        if self._config.exact_matching:
+            exact_matches = self._exact_matcher.find(
+                text,
+                normalized,
+                protected_masks=normalized_protected,
+                protected_original=protected_original,
+            )
         repeated_matches: tuple[Match, ...] = ()
-        if repeated != normalized:
+        if self._config.repeated_matching and repeated != normalized:
             repeated_matches = self._exact_matcher.find(
                 text,
                 repeated,
@@ -166,7 +186,7 @@ class KoguardEngine:
                 protected_original=protected_original,
             )
         separator_matches: tuple[Match, ...] = ()
-        if separated != normalized:
+        if self._config.separator_matching and separated != normalized:
             separator_matches = self._exact_matcher.find(
                 text,
                 separated,
@@ -184,6 +204,14 @@ class KoguardEngine:
                 protected_original=protected_original,
             )
         choseong_matches: tuple[Match, ...] = ()
+        alias_matches: tuple[Match, ...] = ()
+        if self._alias_matcher is not None:
+            alias_matches = self._alias_matcher.find(
+                text,
+                normalized,
+                protected_masks=normalized_protected,
+                protected_original=protected_original,
+            )
         if self._choseong_matcher is not None:
             choseong_matches = self._choseong_matcher.find(
                 text,
@@ -198,10 +226,11 @@ class KoguardEngine:
             repeated_matches,
             separator_matches,
             whitespace_matches,
+            alias_matches,
             choseong_matches,
             protected_original_masks=(protected_original,),
         )
-        if self._config.whitespace_gap_matching:
+        if self._config.mixed_gap_matching:
             mixed_matches = self._exact_matcher.find_with_mixed_gaps(
                 text,
                 normalized,

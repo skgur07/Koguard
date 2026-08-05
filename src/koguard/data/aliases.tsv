@@ -1,0 +1,7 @@
+# alias<TAB>canonical blacklist term<TAB>mode
+# Manually selected Koguard rules; see NOTICE.md for the research reference.
+ㅈ같	좆같다	token_prefix
+ㅈ됐	좆되다	token_prefix
+ㅄ	병신	exact_token
+ㅈㄲ	좆	exact_token
+ㅅㅄㄲ	시발새끼	exact_token

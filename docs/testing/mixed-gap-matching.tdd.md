@@ -1,5 +1,9 @@
 # 혼합 공백·구분자 매칭 TDD 증거
 
+> 후속 변경: 이 문서는 기능을 처음 추가했을 당시의 opt-in 근거를 보존한다. 현재 기본값과
+> 독립 `mixed_gap_matching` 계약은
+> [`default-enabled-matchers.tdd.md`](default-enabled-matchers.tdd.md)를 따른다.
+
 ## 사용자 시나리오
 
 `시발`을 `시 * 발`처럼 공백·탭과 설정된 특수문자를 함께 삽입해도 탐지해야 한다. 기존

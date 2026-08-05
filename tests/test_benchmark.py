@@ -35,12 +35,15 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         "whitespace-gap",
         "mixed-gap",
         "choseong",
+        "alias",
     }
     assert max(len(case.text) for case in cases) == EngineConfig().max_input_length
     assert {case.engine_profile for case in cases} >= {
         "default",
+        "minimal",
         "whitespace-gap",
         "choseong",
+        "alias",
     }
     assert any(
         case.engine_profile == "whitespace-gap"
@@ -59,6 +62,13 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         and case.engine_profile == "whitespace-gap"
         and case.dictionary_size >= 1_000
         and case.expected_matches == 1
+        for case in cases
+    )
+    assert any(
+        case.category == "alias"
+        and case.engine_profile == "alias"
+        and case.dictionary_profile == "alias"
+        and len(case.text) == EngineConfig().max_input_length
         for case in cases
     )
 
@@ -124,22 +134,23 @@ def test_run_benchmarks_records_latency_throughput_memory_and_environment() -> N
     assert result.engine_retained_memory_bytes > 0
 
 
-def test_retained_memory_includes_opt_in_matcher_indexes() -> None:
-    default_case = BenchmarkCase(
-        name="unit-default-indexes",
+def test_retained_memory_includes_whitespace_matcher_indexes() -> None:
+    minimal_case = BenchmarkCase(
+        name="unit-minimal-indexes",
         category="dictionary-scale",
         text="정상 문장",
         dictionary_size=100,
         expected_matches=0,
+        engine_profile="minimal",
     )
     whitespace_case = replace(
-        default_case,
+        minimal_case,
         name="unit-whitespace-indexes",
         engine_profile="whitespace-gap",
     )
 
     report = run_benchmarks(
-        (default_case, whitespace_case),
+        (minimal_case, whitespace_case),
         iterations=1,
         warmups=0,
     )
@@ -147,26 +158,27 @@ def test_retained_memory_includes_opt_in_matcher_indexes() -> None:
         result.engine_profile: result.engine_retained_memory_bytes for result in report.results
     }
 
-    assert retained_by_profile["whitespace-gap"] > retained_by_profile["default"]
+    assert retained_by_profile["whitespace-gap"] > retained_by_profile["minimal"]
 
 
-def test_retained_memory_includes_opt_in_choseong_index() -> None:
-    default_case = BenchmarkCase(
-        name="unit-default-choseong-scale",
+def test_retained_memory_includes_choseong_index() -> None:
+    minimal_case = BenchmarkCase(
+        name="unit-minimal-choseong-scale",
         category="dictionary-scale",
         text="정상 문장",
         dictionary_size=100,
         expected_matches=0,
         dictionary_profile="choseong-scale",
+        engine_profile="minimal",
     )
     choseong_case = replace(
-        default_case,
+        minimal_case,
         name="unit-choseong-index",
         engine_profile="choseong",
     )
 
     report = run_benchmarks(
-        (default_case, choseong_case),
+        (minimal_case, choseong_case),
         iterations=1,
         warmups=0,
     )
@@ -174,7 +186,67 @@ def test_retained_memory_includes_opt_in_choseong_index() -> None:
         result.engine_profile: result.engine_retained_memory_bytes for result in report.results
     }
 
-    assert retained_by_profile["choseong"] > retained_by_profile["default"]
+    assert retained_by_profile["choseong"] > retained_by_profile["minimal"]
+
+
+def test_retained_memory_includes_alias_index() -> None:
+    minimal_case = BenchmarkCase(
+        name="unit-minimal-alias-index",
+        category="dictionary-scale",
+        text="정상 문장",
+        dictionary_size=2,
+        expected_matches=0,
+        dictionary_profile="alias",
+        engine_profile="minimal",
+    )
+    alias_case = replace(
+        minimal_case,
+        name="unit-alias-index",
+        engine_profile="alias",
+    )
+
+    report = run_benchmarks(
+        (minimal_case, alias_case),
+        iterations=1,
+        warmups=0,
+    )
+    retained_by_profile = {
+        result.engine_profile: result.engine_retained_memory_bytes for result in report.results
+    }
+
+    assert retained_by_profile["alias"] > retained_by_profile["minimal"]
+
+
+def test_run_benchmarks_applies_minimal_engine_profile() -> None:
+    case = BenchmarkCase(
+        name="unit-minimal-exact",
+        category="short-chat",
+        text="병신",
+        dictionary_size=2,
+        expected_matches=1,
+        engine_profile="minimal",
+    )
+
+    report = run_benchmarks((case,), iterations=2, warmups=0)
+
+    assert report.results[0].engine_profile == "minimal"
+    assert report.results[0].expected_matches == 1
+
+
+def test_run_benchmarks_minimal_profile_disables_alias_matching() -> None:
+    case = BenchmarkCase(
+        name="unit-minimal-alias-disabled",
+        category="alias",
+        text="ㅈ같네",
+        dictionary_size=2,
+        expected_matches=0,
+        dictionary_profile="alias",
+        engine_profile="minimal",
+    )
+
+    report = run_benchmarks((case,), iterations=2, warmups=0)
+
+    assert report.results[0].expected_matches == 0
 
 
 def test_retained_memory_is_invariant_to_prior_check_workload() -> None:
@@ -257,6 +329,23 @@ def test_run_benchmarks_applies_choseong_engine_profile() -> None:
     report = run_benchmarks((case,), iterations=2, warmups=0)
 
     assert report.results[0].engine_profile == "choseong"
+    assert report.results[0].expected_matches == 1
+
+
+def test_run_benchmarks_applies_alias_engine_profile() -> None:
+    case = BenchmarkCase(
+        name="unit-alias",
+        category="alias",
+        text="ㅈ같네",
+        dictionary_size=2,
+        expected_matches=1,
+        dictionary_profile="alias",
+        engine_profile="alias",
+    )
+
+    report = run_benchmarks((case,), iterations=2, warmups=0)
+
+    assert report.results[0].engine_profile == "alias"
     assert report.results[0].expected_matches == 1
 
 

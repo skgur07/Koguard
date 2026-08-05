@@ -1,5 +1,10 @@
 # Benchmark baseline TDD 증거
 
+> 후속 변경: 이 문서는 최초 profile과 기준선의 TDD 근거를 보존한다. 모든 탐지 단계가 기본
+> 활성화된 현재 profile 계약은
+> [`default-enabled-matchers.tdd.md`](default-enabled-matchers.tdd.md)와
+> [`../../benchmarks/README.md`](../../benchmarks/README.md)를 따른다.
+
 ## Source plan
 
 - [Phase 2 — v0.2 Normalizer + Exact Index + Benchmark](../implementation-plan.md)

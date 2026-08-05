@@ -17,9 +17,14 @@ class EngineConfig:
     unicode_form: NormalizationForm = "NFKC"
     repeat_reduction_threshold: int = 2
     obfuscation_separators: frozenset[str] = frozenset("!@#$%^&*_-+=~.·,")
-    whitespace_gap_matching: bool = False
+    whitespace_gap_matching: bool = True
     max_whitespace_gap: int = 3
-    choseong_matching: bool = False
+    choseong_matching: bool = True
+    exact_matching: bool = True
+    repeated_matching: bool = True
+    separator_matching: bool = True
+    mixed_gap_matching: bool = True
+    alias_matching: bool = True
 
     def __post_init__(self) -> None:
         if type(self.max_input_length) is not int or self.max_input_length <= 0:
@@ -30,12 +35,19 @@ class EngineConfig:
             raise ConfigurationError(
                 "repeat_reduction_threshold must be an integer greater than or equal to 2"
             )
-        if type(self.whitespace_gap_matching) is not bool:
-            raise ConfigurationError("whitespace_gap_matching must be a boolean")
+        for field_name in (
+            "exact_matching",
+            "repeated_matching",
+            "separator_matching",
+            "whitespace_gap_matching",
+            "mixed_gap_matching",
+            "choseong_matching",
+            "alias_matching",
+        ):
+            if type(getattr(self, field_name)) is not bool:
+                raise ConfigurationError(f"{field_name} must be a boolean")
         if type(self.max_whitespace_gap) is not int or self.max_whitespace_gap <= 0:
             raise ConfigurationError("max_whitespace_gap must be a positive integer")
-        if type(self.choseong_matching) is not bool:
-            raise ConfigurationError("choseong_matching must be a boolean")
         if not isinstance(self.obfuscation_separators, frozenset):
             raise ConfigurationError(
                 "obfuscation_separators must be a frozenset of single "

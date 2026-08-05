@@ -5,7 +5,7 @@ from typing import cast
 
 import pytest
 
-from koguard import DictionaryError, KoguardDictionary
+from koguard import AliasMode, AliasRule, DictionaryError, KoguardDictionary
 
 
 def test_default_dictionary_loads_bundled_terms() -> None:
@@ -57,6 +57,64 @@ def test_dictionary_loads_utf8_files(tmp_path: Path) -> None:
 
     assert dictionary.ordered_blacklist == ("긴금칙어", "금칙어")
     assert dictionary.ordered_whitelist == ("정상 표현",)
+
+
+def test_dictionary_loads_normalized_alias_rules_from_utf8_file(tmp_path: Path) -> None:
+    alias_path = tmp_path / "aliases.tsv"
+    alias_path.write_text(
+        "# alias\tterm\tmode\nㅄ\t병신\texact_token\nㅈ같\t좆같다\ttoken_prefix\n",
+        encoding="utf-8",
+    )
+
+    dictionary = KoguardDictionary.from_sources(
+        blacklist=["병신", "좆같다"],
+        alias_path=alias_path,
+        include_defaults=False,
+    )
+
+    assert dictionary.ordered_aliases == (
+        AliasRule(alias="ᄌ같", term="좆같다", mode=AliasMode.TOKEN_PREFIX),
+        AliasRule(alias="ᄡ", term="병신", mode=AliasMode.EXACT_TOKEN),
+    )
+
+
+def test_dictionary_normalizes_aliases_passed_to_direct_constructor() -> None:
+    dictionary = KoguardDictionary(
+        blacklist=frozenset({"병신"}),
+        whitelist=frozenset(),
+        unicode_form="NFKC",
+        aliases=(AliasRule("ㅄ", "병신", AliasMode.EXACT_TOKEN),),
+    )
+
+    assert dictionary.aliases == (AliasRule("ᄡ", "병신", AliasMode.EXACT_TOKEN),)
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
+        "ㅄ\t병신",
+        "ㅄ\t병신\tunknown",
+        "ㅄ\t병신\texact_token\textra",
+    ],
+)
+def test_dictionary_rejects_malformed_alias_files(tmp_path: Path, line: str) -> None:
+    alias_path = tmp_path / "aliases.tsv"
+    alias_path.write_text(f"{line}\n", encoding="utf-8")
+
+    with pytest.raises(DictionaryError, match="alias"):
+        KoguardDictionary.from_sources(
+            blacklist=["병신"],
+            alias_path=alias_path,
+            include_defaults=False,
+        )
+
+
+def test_dictionary_rejects_alias_without_blacklisted_canonical_term() -> None:
+    with pytest.raises(DictionaryError, match="blacklist"):
+        KoguardDictionary.from_sources(
+            aliases=[AliasRule("ㅄ", "병신", AliasMode.EXACT_TOKEN)],
+            include_defaults=False,
+        )
 
 
 def test_dictionary_rejects_non_string_entries() -> None:
