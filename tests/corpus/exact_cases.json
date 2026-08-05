@@ -45,6 +45,26 @@
     "expected_terms": ["좆같다", "지랄", "꺼져"]
   },
   {
+    "id": "mit_korcen_general_expansion",
+    "text": "개자식이라고 욕했다",
+    "expected_terms": ["개자식"]
+  },
+  {
+    "id": "mit_korcen_minor_expansion",
+    "text": "그만하고 뒤져라고 말했다",
+    "expected_terms": ["뒤져"]
+  },
+  {
+    "id": "mit_korcen_parent_expansion",
+    "text": "느그애미라고 모욕했다",
+    "expected_terms": ["느그애미"]
+  },
+  {
+    "id": "mit_korcen_belittle_expansion",
+    "text": "빡대가리라는 표현",
+    "expected_terms": ["빡대가리"]
+  },
+  {
     "id": "repeated_vowel_extension",
     "text": "그 표현은 시이이발이라고 쓰였다",
     "expected_terms": ["시발"]
