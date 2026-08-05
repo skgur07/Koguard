@@ -59,3 +59,20 @@ Whitelist 표현의 재분류, 확장된 기본 금칙어를 포함한다. 기�
 
 이 수치는 다섯 개의 명시적 규칙만 검증한다. 등록하지 않은 신조어와 자모 변형을 일반화하지
 않으며 실제 서비스 정확도를 대표하지 않는다.
+
+## MIT Korcen 기본 사전 확장 기준선
+
+측정일: 2026-08-05
+
+MIT 라이선스 Korcen의 고정 revision에서 명시적 표현을 소량 선별한 뒤
+`tests/corpus/exact_cases.json`을 20개 문장과 기대 탐지 occurrence 21개로 확장했다.
+`GENERAL`, `MINOR`, `PARENT`, `BELITTLE` 계열의 대표 표현과 기존 정상 문장 회귀를 함께
+검증한다.
+
+- False Positive: 0
+- False Negative: 0
+- Precision: 1.0
+- Recall: 1.0
+
+이 수치는 작은 수동 회귀 corpus에만 적용된다. 라이선스가 확인되지 않은 외부 `slang.csv`는
+포함하지 않았고, 실제 채팅 분포의 문맥·신조어·표기 변형을 대표하지 않는다.
