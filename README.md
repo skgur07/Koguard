@@ -3,8 +3,8 @@
 한국어 욕설·비속어 탐지를 위한 경량 Python 라이브러리입니다.
 
 현재 v0.1에서는 기본 사전 기반 Exact Match, 반복·구분자 우회 view, 공백·혼합·초성·명시적
-Alias 매칭과 구간 단위 Whitelist 처리를 제공합니다. 모든 탐지 단계는 기본으로 활성화되며
-단계별로 끌 수 있습니다.
+Alias 매칭, 영문 두벌식 자판·호환 자모 조합과 구간 단위 Whitelist 처리를 제공합니다. 모든
+탐지 단계는 기본으로 활성화되며 단계별로 끌 수 있습니다.
 
 ## 사용법
 
@@ -44,6 +44,8 @@ engine = KoguardEngine(dictionary=dictionary)
 | `mixed_gap_matching` | `시 * 발` 같은 공백·구분자 혼합 매칭 | `True` |
 | `choseong_matching` | `ㅅㅂ` 같은 독립 초성 토큰 매칭 | `True` |
 | `alias_matching` | `ㅈ같네`, `ㅄ` 같은 명시적 축약 규칙 매칭 | `True` |
+| `keyboard_matching` | `tlqkf` 같은 영문 두벌식 자판 입력 조합 | `True` |
+| `jamo_composition_matching` | `ㅅㅣㅂㅏㄹ` 같은 호환 자모 입력 조합 | `True` |
 
 각 단계는 독립적으로 `False`로 끌 수 있습니다. 다음 설정은 Exact Match만 남깁니다.
 
@@ -58,6 +60,8 @@ config = EngineConfig(
     mixed_gap_matching=False,
     choseong_matching=False,
     alias_matching=False,
+    keyboard_matching=False,
+    jamo_composition_matching=False,
 )
 engine = KoguardEngine(config=config)
 ```
@@ -165,6 +169,32 @@ Whitelist는 같은 Unicode form으로 정규화되며, Alias 결과도 원문�
 `[start, end)` span을 보존합니다. 기본 규칙의 조사 출처와 데이터 포함 경계는
 [`src/koguard/data/NOTICE.md`](src/koguard/data/NOTICE.md)에 기록합니다. 필요하면
 `EngineConfig(alias_matching=False)`로 이 단계만 끌 수 있습니다.
+
+영문 두벌식 자판 입력과 호환 자모 입력은 동일한 현대 한글 조합기를 사용하는 별도 view로
+처리합니다. `tlqkf`는 영문 키를 `ㅅㅣㅂㅏㄹ`로 치환한 뒤 `시발`로 조합하고,
+`ㅅㅣㅂㅏㄹ`은 치환 없이 바로 `시발`로 조합합니다. 두 view 모두 원문 자체를 바꾸지 않으므로
+`normalized_text`는 기본 Unicode 정규화 결과를 유지하며, 매치의 `matched_text`와 span은
+각각 원래 `tlqkf` 또는 `ㅅㅣㅂㅏㄹ` 전체를 가리킵니다.
+
+```python
+from koguard import EngineConfig, KoguardEngine, MatchMethod
+
+engine = KoguardEngine()
+assert engine.check("tlqkf").method is MatchMethod.KEYBOARD
+assert engine.check("ㅅㅣㅂㅏㄹ").method is MatchMethod.JAMO
+
+disabled = KoguardEngine(
+    config=EngineConfig(
+        keyboard_matching=False,
+        jamo_composition_matching=False,
+    )
+)
+```
+
+변환 view에서도 Whitelist를 다시 계산하므로 Whitelist에 `시발점`을 넣으면 `tlqkfwja`와
+`ㅅㅣㅂㅏㄹㅈㅓㅁ`도 보호됩니다. 반면 서로 다른 입력 구간을 임의로 합치지 않기 때문에
+`ㅅㅣ ㅂㅏㄹ`은 이 단계에서 조합하지 않습니다. 두벌식 view는 ASCII 영문 키 연속 구간만
+변환하며, 세벌식이나 로마자 표기법은 현재 지원하지 않습니다.
 
 ## 개발 환경
 

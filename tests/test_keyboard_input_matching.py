@@ -49,9 +49,7 @@ def test_keyboard_matching_can_be_disabled_independently() -> None:
 
 
 def test_jamo_composition_matching_can_be_disabled_independently() -> None:
-    result = make_engine(config=EngineConfig(jamo_composition_matching=False)).check(
-        "ㅅㅣㅂㅏㄹ"
-    )
+    result = make_engine(config=EngineConfig(jamo_composition_matching=False)).check("ㅅㅣㅂㅏㄹ")
 
     assert result.detected is False
 

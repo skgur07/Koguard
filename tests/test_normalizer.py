@@ -181,6 +181,14 @@ def test_dubeolsik_view_moves_intervocalic_consonant_to_next_syllable() -> None:
     assert view.source_spans == ((0, 2), (2, 4))
 
 
+def test_dubeolsik_view_supports_unshifted_uppercase_and_shifted_jamo() -> None:
+    unshifted_uppercase = build_dubeolsik_view(normalize_text("tlqkF", "NFKC"))
+    shifted = build_dubeolsik_view(normalize_text("Tlqkf", "NFKC"))
+
+    assert unshifted_uppercase.text == "시발"
+    assert shifted.text == "씨발"
+
+
 def test_jamo_composition_view_composes_compatibility_jamo_and_preserves_spans() -> None:
     view = build_jamo_composition_view("ㅅㅣㅂㅏㄹ!", "NFKC")
 
@@ -189,13 +197,19 @@ def test_jamo_composition_view_composes_compatibility_jamo_and_preserves_spans()
     assert view.original_span(0, 2) == (0, 5)
 
 
+def test_jamo_composition_view_reuses_base_view_without_compatibility_jamo() -> None:
+    normalized = normalize_text("정상 문장", "NFKC")
+
+    assert build_jamo_composition_view("정상 문장", "NFKC", normalized=normalized) is normalized
+
+
 def test_composition_views_support_compound_vowels_and_finals() -> None:
     keyboard = build_dubeolsik_view(normalize_text("rhkt", "NFKC"))
     jamo = build_jamo_composition_view("ㄱㅘㅅ", "NFKC")
 
-    assert keyboard.text == "곳"
+    assert keyboard.text == "괏"
     assert keyboard.source_spans == ((0, 4),)
-    assert jamo.text == "곳"
+    assert jamo.text == "괏"
     assert jamo.source_spans == ((0, 3),)
 
 
