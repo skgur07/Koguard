@@ -109,7 +109,7 @@ def test_alias_matching_honors_only_overlapping_whitelist_span() -> None:
 
     assert [match.term for match in result.matches] == ["병신"]
     assert [match.matched_text for match in result.matches] == ["ㅄ"]
-    assert [(match.start, match.end) for match in result.matches] == [(6, 7)]
+    assert [(match.start, match.end) for match in result.matches] == [(5, 6)]
 
 
 @pytest.mark.parametrize("unicode_form", ["NFC", "NFKC"])

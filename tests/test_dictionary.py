@@ -78,6 +78,17 @@ def test_dictionary_loads_normalized_alias_rules_from_utf8_file(tmp_path: Path) 
     )
 
 
+def test_dictionary_normalizes_aliases_passed_to_direct_constructor() -> None:
+    dictionary = KoguardDictionary(
+        blacklist=frozenset({"병신"}),
+        whitelist=frozenset(),
+        unicode_form="NFKC",
+        aliases=(AliasRule("ㅄ", "병신", AliasMode.EXACT_TOKEN),),
+    )
+
+    assert dictionary.aliases == (AliasRule("ᄡ", "병신", AliasMode.EXACT_TOKEN),)
+
+
 @pytest.mark.parametrize(
     "line",
     [

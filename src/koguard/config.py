@@ -24,6 +24,7 @@ class EngineConfig:
     repeated_matching: bool = True
     separator_matching: bool = True
     mixed_gap_matching: bool = True
+    alias_matching: bool = True
 
     def __post_init__(self) -> None:
         if type(self.max_input_length) is not int or self.max_input_length <= 0:
@@ -41,6 +42,7 @@ class EngineConfig:
             "whitespace_gap_matching",
             "mixed_gap_matching",
             "choseong_matching",
+            "alias_matching",
         ):
             if type(getattr(self, field_name)) is not bool:
                 raise ConfigurationError(f"{field_name} must be a boolean")

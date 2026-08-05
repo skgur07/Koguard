@@ -10,7 +10,7 @@ from koguard.exceptions import (
     InputTooLongError,
     KoguardError,
 )
-from koguard.models import CheckResult, Match, MatchMethod
+from koguard.models import AliasMode, AliasRule, CheckResult, Match, MatchMethod
 
 try:
     __version__ = version("koguard")
@@ -19,6 +19,8 @@ except PackageNotFoundError:  # pragma: no cover - source tree without installat
 
 __all__ = [
     "CheckResult",
+    "AliasMode",
+    "AliasRule",
     "ConfigurationError",
     "DictionaryError",
     "EngineConfig",

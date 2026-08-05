@@ -4,7 +4,7 @@ from time import perf_counter_ns
 
 from koguard.config import EngineConfig
 from koguard.engine.dictionary import KoguardDictionary
-from koguard.engine.matcher import ChoseongMatcher, ExactMatcher, _ProtectedMasks
+from koguard.engine.matcher import AliasMatcher, ChoseongMatcher, ExactMatcher, _ProtectedMasks
 from koguard.engine.normalizer import (
     build_repeated_view,
     build_separator_view,
@@ -76,7 +76,13 @@ def _build_match_original_mask(
 class KoguardEngine:
     """Synchronous, thread-safe profanity detection engine."""
 
-    __slots__ = ("_choseong_matcher", "_config", "_dictionary", "_exact_matcher")
+    __slots__ = (
+        "_alias_matcher",
+        "_choseong_matcher",
+        "_config",
+        "_dictionary",
+        "_exact_matcher",
+    )
 
     def __init__(
         self,
@@ -100,6 +106,9 @@ class KoguardEngine:
         self._choseong_matcher = (
             ChoseongMatcher(resolved_dictionary) if resolved_config.choseong_matching else None
         )
+        self._alias_matcher = (
+            AliasMatcher(resolved_dictionary) if resolved_config.alias_matching else None
+        )
 
     @property
     def config(self) -> EngineConfig:
@@ -114,7 +123,7 @@ class KoguardEngine:
         return self._dictionary
 
     def check(self, text: str) -> CheckResult:
-        """Check one input string and return every non-whitelisted exact match."""
+        """Check one input string and return every non-whitelisted profanity match."""
 
         if not isinstance(text, str):
             raise TypeError("text must be a string")
@@ -195,6 +204,14 @@ class KoguardEngine:
                 protected_original=protected_original,
             )
         choseong_matches: tuple[Match, ...] = ()
+        alias_matches: tuple[Match, ...] = ()
+        if self._alias_matcher is not None:
+            alias_matches = self._alias_matcher.find(
+                text,
+                normalized,
+                protected_masks=normalized_protected,
+                protected_original=protected_original,
+            )
         if self._choseong_matcher is not None:
             choseong_matches = self._choseong_matcher.find(
                 text,
@@ -209,6 +226,7 @@ class KoguardEngine:
             repeated_matches,
             separator_matches,
             whitespace_matches,
+            alias_matches,
             choseong_matches,
             protected_original_masks=(protected_original,),
         )

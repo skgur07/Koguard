@@ -12,7 +12,7 @@ from koguard.engine.normalizer import (
     _is_unicode_cluster_extension,
     normalize_text,
 )
-from koguard.models import Match, MatchMethod
+from koguard.models import AliasMode, Match, MatchMethod
 
 _HANGUL_SYLLABLE_BASE = 0xAC00
 _HANGUL_SYLLABLE_LAST = 0xD7A3
@@ -339,6 +339,44 @@ def _build_choseong_aliases(dictionary: KoguardDictionary) -> Mapping[str, str]:
     return MappingProxyType(aliases)
 
 
+def _build_hangul_suffix_mask(text: str) -> bytes:
+    """Mark starts whose remaining alphanumeric token is only Hangul syllables."""
+
+    valid = bytearray(len(text) + 1)
+    valid[-1] = 1
+    for index in range(len(text) - 1, -1, -1):
+        character = text[index]
+        if _is_unicode_cluster_extension(character):
+            valid[index] = valid[index + 1]
+        elif not character.isalnum():
+            valid[index] = 1
+        elif _HANGUL_SYLLABLE_BASE <= ord(character) <= _HANGUL_SYLLABLE_LAST:
+            valid[index] = valid[index + 1]
+    return bytes(valid)
+
+
+def _has_alias_boundary(
+    candidate: _NormalizedCandidate,
+    text: str,
+    boundaries: _AlphanumericBoundaries,
+    hangul_suffixes: bytes,
+    modes: Mapping[str, AliasMode],
+) -> bool:
+    if not boundaries.starts[candidate.start]:
+        return False
+
+    resolved_end = boundaries.extension_ends[candidate.end]
+    if modes[candidate.term] is AliasMode.EXACT_TOKEN:
+        return bool(boundaries.ends[resolved_end])
+    if boundaries.ends[resolved_end]:
+        return True
+    return bool(
+        resolved_end < len(text)
+        and _HANGUL_SYLLABLE_BASE <= ord(text[resolved_end]) <= _HANGUL_SYLLABLE_LAST
+        and hangul_suffixes[resolved_end]
+    )
+
+
 def _build_mixed_projection(
     original_text: str,
     normalized: NormalizedText,
@@ -658,6 +696,88 @@ def _build_matches(
             ),
         )
     )
+
+
+class AliasMatcher:
+    """Find explicit aliases using rule-specific token boundaries."""
+
+    __slots__ = ("_automaton", "_modes", "_term_aliases")
+
+    def __init__(self, dictionary: KoguardDictionary) -> None:
+        aliases = dictionary.ordered_aliases
+        self._term_aliases = MappingProxyType({rule.alias: rule.term for rule in aliases})
+        self._modes = MappingProxyType({rule.alias: rule.mode for rule in aliases})
+        self._automaton = _build_term_automaton(tuple(rule.alias for rule in aliases))
+
+    def find(
+        self,
+        original_text: str,
+        normalized: NormalizedText,
+        *,
+        protected_masks: _ProtectedMasks,
+        protected_original: bytes,
+    ) -> tuple[Match, ...]:
+        """Return non-overlapping alias matches mapped to original spans."""
+
+        if not self._term_aliases:
+            return ()
+
+        boundaries = _build_alphanumeric_boundaries(normalized.text)
+        hangul_suffixes = _build_hangul_suffix_mask(normalized.text)
+        selected_normalized = bytearray(len(normalized.text))
+        selected_original = bytearray(len(original_text))
+        selected: list[_MappedCandidate] = []
+        candidates: list[_PrioritizedCandidate] = []
+
+        for longest_candidate in _iter_longest_occurrences(
+            normalized.text,
+            self._automaton,
+        ):
+            normalized_candidate: _NormalizedCandidate | None = longest_candidate
+            while normalized_candidate is not None and not _has_alias_boundary(
+                normalized_candidate,
+                normalized.text,
+                boundaries,
+                hangul_suffixes,
+                self._modes,
+            ):
+                normalized_candidate = _next_shorter_occurrence(
+                    normalized_candidate,
+                    self._automaton,
+                )
+            if normalized_candidate is not None:
+                heappush(
+                    candidates,
+                    _prioritize(
+                        _map_candidate(
+                            normalized_candidate,
+                            normalized,
+                            extension_ends=boundaries.extension_ends,
+                        )
+                    ),
+                )
+
+        while candidates:
+            mapped_candidate = heappop(candidates).candidate
+            if _is_occupied(
+                mapped_candidate,
+                protected_masks.normalized,
+                protected_original,
+            ) or _is_occupied(
+                mapped_candidate,
+                selected_normalized,
+                selected_original,
+            ):
+                continue
+            selected.append(mapped_candidate)
+            _occupy(mapped_candidate, selected_normalized, selected_original)
+
+        return _build_matches(
+            original_text,
+            selected,
+            MatchMethod.ALIAS,
+            term_aliases=self._term_aliases,
+        )
 
 
 class ChoseongMatcher:
