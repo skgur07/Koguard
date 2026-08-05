@@ -78,6 +78,15 @@
       "expected_matches": 0
     },
     {
+      "name": "short-alias",
+      "category": "alias",
+      "text": "ㅈ같네",
+      "dictionary_size": 2,
+      "dictionary_profile": "alias",
+      "engine_profile": "alias",
+      "expected_matches": 1
+    },
+    {
       "name": "clean-1kb",
       "category": "one-kilobyte",
       "text_pattern": "가나다라마바사아자차카타파하",
@@ -91,6 +100,16 @@
       "text_pattern": "가나다라마바사아자차카타파하",
       "length": 4096,
       "dictionary_size": 2,
+      "expected_matches": 0
+    },
+    {
+      "name": "alias-clean-maximum-input",
+      "category": "alias",
+      "text_pattern": "가",
+      "length": 4096,
+      "dictionary_size": 2,
+      "dictionary_profile": "alias",
+      "engine_profile": "alias",
       "expected_matches": 0
     },
     {
