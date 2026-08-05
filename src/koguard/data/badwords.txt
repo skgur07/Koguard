@@ -1,4 +1,4 @@
-# Manually curated default exact-match fixture
+# Koguard manually curated default exact-match terms
 병신
 시발
 씨발
@@ -29,3 +29,32 @@
 양아치
 꼴통
 똘아이
+
+# Explicit terms selected from the MIT-licensed Tanat05/korcen patterns.
+# See NOTICE.md and KORCEN-MIT.txt for source and license details.
+개걸레
+개시키
+개십새
+개자식
+개잡년
+개좃
+개지랄
+걔잡년
+닭쳐
+뒈져
+뒈질
+뒤져
+뒤질
+디져라
+디진다
+디질래
+돌아이
+빡대가리
+창녀
+창년
+느그애미
+느그애비
+느그엄마
+니애미
+니애비
+니엄마

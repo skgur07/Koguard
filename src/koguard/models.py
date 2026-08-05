@@ -43,6 +43,8 @@ class MatchMethod(StrEnum):
     MIXED = "mixed"
     CHOSEONG = "choseong"
     ALIAS = "alias"
+    KEYBOARD = "keyboard"
+    JAMO = "jamo"
     TRIE = "trie"
     LEVENSHTEIN = "levenshtein"
     EMBEDDING = "embedding"

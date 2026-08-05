@@ -253,6 +253,8 @@ def _config_for(case: BenchmarkCase) -> EngineConfig:
             mixed_gap_matching=False,
             choseong_matching=False,
             alias_matching=False,
+            keyboard_matching=False,
+            jamo_composition_matching=False,
         )
     if case.engine_profile == "whitespace-gap":
         return EngineConfig(
@@ -262,6 +264,8 @@ def _config_for(case: BenchmarkCase) -> EngineConfig:
             mixed_gap_matching=True,
             choseong_matching=False,
             alias_matching=False,
+            keyboard_matching=False,
+            jamo_composition_matching=False,
         )
     if case.engine_profile == "choseong":
         return EngineConfig(
@@ -271,6 +275,8 @@ def _config_for(case: BenchmarkCase) -> EngineConfig:
             mixed_gap_matching=False,
             choseong_matching=True,
             alias_matching=False,
+            keyboard_matching=False,
+            jamo_composition_matching=False,
         )
     if case.engine_profile == "alias":
         return EngineConfig(
@@ -281,6 +287,8 @@ def _config_for(case: BenchmarkCase) -> EngineConfig:
             mixed_gap_matching=False,
             choseong_matching=False,
             alias_matching=True,
+            keyboard_matching=False,
+            jamo_composition_matching=False,
         )
     raise BenchmarkError(f"unknown engine profile: {case.engine_profile}")
 

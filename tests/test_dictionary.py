@@ -20,10 +20,25 @@ def test_default_dictionary_loads_bundled_terms() -> None:
         "지랄",
         "염병",
         "꺼져",
+        "개자식",
+        "뒤져",
+        "느그애미",
+        "빡대가리",
     } <= dictionary.blacklist
-    assert len(dictionary.blacklist) >= 30
+    assert len(dictionary.blacklist) >= 50
     assert "병신년" not in dictionary.whitelist
     assert "시발점" not in dictionary.whitelist
+
+
+def test_packaged_korcen_terms_include_pinned_mit_notice() -> None:
+    data_directory = Path("src/koguard/data")
+    notice = (data_directory / "NOTICE.md").read_text(encoding="utf-8")
+    license_text = (data_directory / "KORCEN-MIT.txt").read_text(encoding="utf-8")
+
+    assert "https://github.com/Tanat05/korcen" in notice
+    assert "eecd9763dbdccce3dc96ddb578ef0b6396058fa9" in notice
+    assert "MIT License" in license_text
+    assert "Copyright (c) 2026 Tanat" in license_text
 
 
 def test_dictionary_normalizes_deduplicates_and_skips_comments() -> None:

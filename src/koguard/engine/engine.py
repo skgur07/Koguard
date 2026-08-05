@@ -6,6 +6,8 @@ from koguard.config import EngineConfig
 from koguard.engine.dictionary import KoguardDictionary
 from koguard.engine.matcher import AliasMatcher, ChoseongMatcher, ExactMatcher, _ProtectedMasks
 from koguard.engine.normalizer import (
+    build_dubeolsik_view,
+    build_jamo_composition_view,
     build_repeated_view,
     build_separator_view,
     normalize_text,
@@ -132,6 +134,18 @@ class KoguardEngine:
 
         started_at = perf_counter_ns()
         normalized = normalize_text(text, self._config.unicode_form)
+        keyboard = (
+            build_dubeolsik_view(normalized) if self._config.keyboard_matching else normalized
+        )
+        jamo_composed = (
+            build_jamo_composition_view(
+                text,
+                self._config.unicode_form,
+                normalized=normalized,
+            )
+            if self._config.jamo_composition_matching
+            else normalized
+        )
         repeated = (
             build_repeated_view(
                 normalized,
@@ -161,11 +175,23 @@ class KoguardEngine:
             separated_protected = repeated_protected
         else:
             separated_protected = self._exact_matcher.build_protected_masks(text, separated)
+        keyboard_protected = (
+            normalized_protected
+            if keyboard == normalized
+            else self._exact_matcher.build_protected_masks(text, keyboard)
+        )
+        jamo_composed_protected = (
+            normalized_protected
+            if jamo_composed == normalized
+            else self._exact_matcher.build_protected_masks(text, jamo_composed)
+        )
         protected_original = _union_original_masks(
             len(text),
             normalized_protected,
             repeated_protected,
             separated_protected,
+            keyboard_protected,
+            jamo_composed_protected,
         )
 
         exact_matches: tuple[Match, ...] = ()
@@ -203,6 +229,24 @@ class KoguardEngine:
                 protected_masks=normalized_protected,
                 protected_original=protected_original,
             )
+        keyboard_matches: tuple[Match, ...] = ()
+        if self._config.keyboard_matching and keyboard != normalized:
+            keyboard_matches = self._exact_matcher.find(
+                text,
+                keyboard,
+                method=MatchMethod.KEYBOARD,
+                protected_masks=keyboard_protected,
+                protected_original=protected_original,
+            )
+        jamo_matches: tuple[Match, ...] = ()
+        if self._config.jamo_composition_matching and jamo_composed != normalized:
+            jamo_matches = self._exact_matcher.find(
+                text,
+                jamo_composed,
+                method=MatchMethod.JAMO,
+                protected_masks=jamo_composed_protected,
+                protected_original=protected_original,
+            )
         choseong_matches: tuple[Match, ...] = ()
         alias_matches: tuple[Match, ...] = ()
         if self._alias_matcher is not None:
@@ -226,6 +270,8 @@ class KoguardEngine:
             repeated_matches,
             separator_matches,
             whitespace_matches,
+            keyboard_matches,
+            jamo_matches,
             alias_matches,
             choseong_matches,
             protected_original_masks=(protected_original,),

@@ -15,6 +15,71 @@ _HANGUL_TRAILING_BASE = 0x11A7
 _HANGUL_VOWEL_COUNT = 21
 _HANGUL_TRAILING_COUNT = 28
 _HANGUL_N_COUNT = _HANGUL_VOWEL_COUNT * _HANGUL_TRAILING_COUNT
+_MODERN_ONSETS = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
+_MODERN_VOWELS = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ"
+_MODERN_FINALS = "ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ"
+_COMPOUND_VOWELS = {
+    ("ㅗ", "ㅏ"): "ㅘ",
+    ("ㅗ", "ㅐ"): "ㅙ",
+    ("ㅗ", "ㅣ"): "ㅚ",
+    ("ㅜ", "ㅓ"): "ㅝ",
+    ("ㅜ", "ㅔ"): "ㅞ",
+    ("ㅜ", "ㅣ"): "ㅟ",
+    ("ㅡ", "ㅣ"): "ㅢ",
+}
+_COMPOUND_FINALS = {
+    ("ㄱ", "ㅅ"): "ㄳ",
+    ("ㄴ", "ㅈ"): "ㄵ",
+    ("ㄴ", "ㅎ"): "ㄶ",
+    ("ㄹ", "ㄱ"): "ㄺ",
+    ("ㄹ", "ㅁ"): "ㄻ",
+    ("ㄹ", "ㅂ"): "ㄼ",
+    ("ㄹ", "ㅅ"): "ㄽ",
+    ("ㄹ", "ㅌ"): "ㄾ",
+    ("ㄹ", "ㅍ"): "ㄿ",
+    ("ㄹ", "ㅎ"): "ㅀ",
+    ("ㅂ", "ㅅ"): "ㅄ",
+}
+_DUBEOLSIK_UNSHIFTED = {
+    "q": "ㅂ",
+    "w": "ㅈ",
+    "e": "ㄷ",
+    "r": "ㄱ",
+    "t": "ㅅ",
+    "y": "ㅛ",
+    "u": "ㅕ",
+    "i": "ㅑ",
+    "o": "ㅐ",
+    "p": "ㅔ",
+    "a": "ㅁ",
+    "s": "ㄴ",
+    "d": "ㅇ",
+    "f": "ㄹ",
+    "g": "ㅎ",
+    "h": "ㅗ",
+    "j": "ㅓ",
+    "k": "ㅏ",
+    "l": "ㅣ",
+    "z": "ㅋ",
+    "x": "ㅌ",
+    "c": "ㅊ",
+    "v": "ㅍ",
+    "b": "ㅠ",
+    "n": "ㅜ",
+    "m": "ㅡ",
+}
+_DUBEOLSIK_JAMO = {
+    **_DUBEOLSIK_UNSHIFTED,
+    **{key.upper(): value for key, value in _DUBEOLSIK_UNSHIFTED.items()},
+    "Q": "ㅃ",
+    "W": "ㅉ",
+    "E": "ㄸ",
+    "R": "ㄲ",
+    "T": "ㅆ",
+    "O": "ㅒ",
+    "P": "ㅖ",
+}
+_MODERN_COMPATIBILITY_JAMO = frozenset(_MODERN_ONSETS + _MODERN_VOWELS + _MODERN_FINALS)
 
 
 def _is_jamo(character: str) -> bool:
@@ -252,6 +317,140 @@ def normalize_text(text: str, unicode_form: NormalizationForm) -> NormalizedText
         text="".join(normalized_parts),
         source_spans=tuple(source_spans),
     )
+
+
+def _compose_jamo_units(
+    units: list[tuple[str, tuple[int, int]]],
+) -> tuple[list[str], list[tuple[int, int]]]:
+    """Compose modern compatibility-jamo keystrokes into Hangul syllables."""
+
+    characters: list[str] = []
+    source_spans: list[tuple[int, int]] = []
+    index = 0
+    while index < len(units):
+        onset, onset_span = units[index]
+        if (
+            onset not in _MODERN_ONSETS
+            or index + 1 >= len(units)
+            or units[index + 1][0] not in _MODERN_VOWELS
+        ):
+            characters.append(onset)
+            source_spans.append(onset_span)
+            index += 1
+            continue
+
+        vowel = units[index + 1][0]
+        end = index + 2
+        if end < len(units):
+            compound_vowel = _COMPOUND_VOWELS.get((vowel, units[end][0]))
+            if compound_vowel is not None:
+                vowel = compound_vowel
+                end += 1
+
+        final = ""
+        if end < len(units) and units[end][0] in _MODERN_FINALS:
+            first_final = units[end][0]
+            followed_by_vowel = end + 1 < len(units) and units[end + 1][0] in _MODERN_VOWELS
+            if not followed_by_vowel:
+                final = first_final
+                end += 1
+                if end < len(units):
+                    compound_final = _COMPOUND_FINALS.get((final, units[end][0]))
+                    second_followed_by_vowel = (
+                        end + 1 < len(units) and units[end + 1][0] in _MODERN_VOWELS
+                    )
+                    if compound_final is not None and not second_followed_by_vowel:
+                        final = compound_final
+                        end += 1
+
+        onset_index = _MODERN_ONSETS.index(onset)
+        vowel_index = _MODERN_VOWELS.index(vowel)
+        final_index = 0 if not final else _MODERN_FINALS.index(final) + 1
+        characters.append(
+            chr(
+                _HANGUL_SYLLABLE_BASE
+                + (onset_index * _HANGUL_VOWEL_COUNT + vowel_index) * _HANGUL_TRAILING_COUNT
+                + final_index
+            )
+        )
+        final_span = units[end - 1][1]
+        source_spans.append((onset_span[0], final_span[1]))
+        index = end
+
+    return characters, source_spans
+
+
+def build_dubeolsik_view(normalized: NormalizedText) -> NormalizedText:
+    """Map ASCII Dubeolsik keystroke runs to composed Hangul with source spans."""
+
+    if not any(character in _DUBEOLSIK_JAMO for character in normalized.text):
+        return normalized
+
+    characters: list[str] = []
+    source_spans: list[tuple[int, int]] = []
+    index = 0
+    while index < len(normalized.text):
+        if normalized.text[index] not in _DUBEOLSIK_JAMO:
+            characters.append(normalized.text[index])
+            source_spans.append(normalized.source_spans[index])
+            index += 1
+            continue
+
+        end = index + 1
+        while end < len(normalized.text) and normalized.text[end] in _DUBEOLSIK_JAMO:
+            end += 1
+        composed, composed_spans = _compose_jamo_units(
+            [
+                (_DUBEOLSIK_JAMO[normalized.text[cursor]], normalized.source_spans[cursor])
+                for cursor in range(index, end)
+            ]
+        )
+        characters.extend(composed)
+        source_spans.extend(composed_spans)
+        index = end
+
+    return NormalizedText(text="".join(characters), source_spans=tuple(source_spans))
+
+
+def build_jamo_composition_view(
+    text: str,
+    unicode_form: NormalizationForm,
+    *,
+    normalized: NormalizedText | None = None,
+) -> NormalizedText:
+    """Compose raw modern compatibility-jamo runs without changing the base view."""
+
+    base = normalized or normalize_text(text, unicode_form)
+    if _MODERN_COMPATIBILITY_JAMO.isdisjoint(text):
+        return base
+
+    characters: list[str] = []
+    source_spans: list[tuple[int, int]] = []
+    index = 0
+    while index < len(text):
+        if text[index] in _MODERN_COMPATIBILITY_JAMO:
+            end = index + 1
+            while end < len(text) and text[end] in _MODERN_COMPATIBILITY_JAMO:
+                end += 1
+            composed, composed_spans = _compose_jamo_units(
+                [(text[cursor], (cursor, cursor + 1)) for cursor in range(index, end)]
+            )
+            characters.extend(composed)
+            source_spans.extend(composed_spans)
+            index = end
+            continue
+
+        end = index + 1
+        while end < len(text) and text[end] not in _MODERN_COMPATIBILITY_JAMO:
+            end += 1
+        normalized_chunk = normalize_text(text[index:end], unicode_form)
+        characters.extend(normalized_chunk.text)
+        source_spans.extend(
+            (start + index, stop + index) for start, stop in normalized_chunk.source_spans
+        )
+        index = end
+
+    return NormalizedText(text="".join(characters), source_spans=tuple(source_spans))
 
 
 def _hangul_vowel_index(character: str) -> int | None:
