@@ -30,6 +30,8 @@ def test_alias_public_models_have_stable_values() -> None:
     rule = AliasRule(alias="ㅄ", term="병신", mode=AliasMode.EXACT_TOKEN)
 
     assert MatchMethod.ALIAS.value == "alias"
+    assert MatchMethod.KEYBOARD.value == "keyboard"
+    assert MatchMethod.JAMO.value == "jamo"
     assert AliasMode.EXACT_TOKEN.value == "exact_token"
     assert AliasMode.TOKEN_PREFIX.value == "token_prefix"
     assert rule.alias == "ㅄ"

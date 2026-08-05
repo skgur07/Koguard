@@ -10,6 +10,8 @@ import koguard.engine.normalizer as normalizer_module
 from koguard.config import NormalizationForm
 from koguard.engine.normalizer import (
     NormalizedText,
+    build_dubeolsik_view,
+    build_jamo_composition_view,
     build_repeated_view,
     build_separator_view,
     normalize_text,
@@ -162,6 +164,39 @@ def test_separator_view_keeps_boundaries_whitespace_and_unconfigured_symbols(tex
     normalized = normalize_text(text, "NFKC")
 
     assert build_separator_view(normalized, separators=frozenset({"*"})) == normalized
+
+
+def test_dubeolsik_view_composes_ascii_keystrokes_and_preserves_spans() -> None:
+    view = build_dubeolsik_view(normalize_text("tlqkf!", "NFKC"))
+
+    assert view.text == "시발!"
+    assert view.source_spans == ((0, 2), (2, 5), (5, 6))
+    assert view.original_span(0, 2) == (0, 5)
+
+
+def test_dubeolsik_view_moves_intervocalic_consonant_to_next_syllable() -> None:
+    view = build_dubeolsik_view(normalize_text("rksk", "NFKC"))
+
+    assert view.text == "가나"
+    assert view.source_spans == ((0, 2), (2, 4))
+
+
+def test_jamo_composition_view_composes_compatibility_jamo_and_preserves_spans() -> None:
+    view = build_jamo_composition_view("ㅅㅣㅂㅏㄹ!", "NFKC")
+
+    assert view.text == "시발!"
+    assert view.source_spans == ((0, 2), (2, 5), (5, 6))
+    assert view.original_span(0, 2) == (0, 5)
+
+
+def test_composition_views_support_compound_vowels_and_finals() -> None:
+    keyboard = build_dubeolsik_view(normalize_text("rhkt", "NFKC"))
+    jamo = build_jamo_composition_view("ㄱㅘㅅ", "NFKC")
+
+    assert keyboard.text == "곳"
+    assert keyboard.source_spans == ((0, 4),)
+    assert jamo.text == "곳"
+    assert jamo.source_spans == ((0, 3),)
 
 
 def test_normalized_text_rejects_mismatched_mapping() -> None:
