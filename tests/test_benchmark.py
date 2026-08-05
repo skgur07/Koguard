@@ -5,7 +5,6 @@ from dataclasses import replace
 from pathlib import Path
 
 import pytest
-
 from benchmarks import engine_benchmark as benchmark_module
 from benchmarks.engine_benchmark import (
     BenchmarkCase,
@@ -16,6 +15,7 @@ from benchmarks.engine_benchmark import (
     percentile,
     run_benchmarks,
 )
+
 from koguard import EngineConfig
 
 CORPUS_PATH = Path("benchmarks/corpus.json")
