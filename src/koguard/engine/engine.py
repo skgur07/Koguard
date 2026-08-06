@@ -152,15 +152,22 @@ class KoguardEngine:
         segmented_keyboard = keyboard
         segmented_jamo = jamo_composed
         segmented_choseong = normalized
-        if self._config.segmented_input_matching:
-            if self._config.keyboard_matching:
+        has_segmented_source = keyboard is not normalized or jamo_composed is not normalized
+        if self._config.segmented_input_matching and has_segmented_source:
+            has_segmented_gap = " " in normalized.text or not (
+                self._config.obfuscation_separators.isdisjoint(normalized.text)
+            )
+        else:
+            has_segmented_gap = False
+        if has_segmented_gap:
+            if self._config.keyboard_matching and keyboard is not normalized:
                 segmented_keyboard = build_segmented_dubeolsik_view(
                     text,
                     normalized,
                     separators=self._config.obfuscation_separators,
                     max_whitespace_gap=self._config.max_whitespace_gap,
                 )
-            if self._config.jamo_composition_matching:
+            if self._config.jamo_composition_matching and jamo_composed is not normalized:
                 segmented_jamo = build_segmented_jamo_composition_view(
                     text,
                     self._config.unicode_form,
@@ -229,6 +236,15 @@ class KoguardEngine:
             if segmented_choseong == normalized
             else self._exact_matcher.build_protected_masks(text, segmented_choseong)
         )
+        segmented_protected_masks = tuple(
+            protected
+            for view_changed, protected in (
+                (segmented_keyboard != keyboard, segmented_keyboard_protected),
+                (segmented_jamo != jamo_composed, segmented_jamo_protected),
+                (segmented_choseong != normalized, segmented_choseong_protected),
+            )
+            if view_changed
+        )
         protected_original = _union_original_masks(
             len(text),
             normalized_protected,
@@ -236,9 +252,7 @@ class KoguardEngine:
             separated_protected,
             keyboard_protected,
             jamo_composed_protected,
-            segmented_keyboard_protected,
-            segmented_jamo_protected,
-            segmented_choseong_protected,
+            *segmented_protected_masks,
         )
 
         exact_matches: tuple[Match, ...] = ()

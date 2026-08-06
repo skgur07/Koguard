@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "measured_at": "2026-08-05T05:47:14.777159+00:00",
+  "measured_at": "2026-08-06T03:43:07.762282+00:00",
   "environment": {
     "python_version": "3.11.9",
     "implementation": "CPython",
@@ -21,12 +21,12 @@
       "input_length": 15,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 0.0622,
-      "p95_ms": 0.0665,
-      "throughput_per_second": 15933.969629853884,
-      "cold_start_ms": 0.3826,
+      "p50_ms": 0.0705,
+      "p95_ms": 0.0725,
+      "throughput_per_second": 14124.094292453501,
+      "cold_start_ms": 0.3673,
       "peak_memory_bytes": 1402,
-      "engine_retained_memory_bytes": 14672
+      "engine_retained_memory_bytes": 14696
     },
     {
       "name": "short-minimal-clean",
@@ -37,12 +37,12 @@
       "input_length": 15,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 0.0218,
-      "p95_ms": 0.0225,
-      "throughput_per_second": 45628.76437306074,
-      "cold_start_ms": 0.1008,
+      "p50_ms": 0.0255,
+      "p95_ms": 0.0334,
+      "throughput_per_second": 36111.51235013721,
+      "cold_start_ms": 0.1138,
       "peak_memory_bytes": 1308,
-      "engine_retained_memory_bytes": 8820
+      "engine_retained_memory_bytes": 8868
     },
     {
       "name": "short-whitelist-and-match",
@@ -53,12 +53,12 @@
       "input_length": 14,
       "dictionary_size": 2,
       "expected_matches": 1,
-      "p50_ms": 0.0844,
-      "p95_ms": 0.0899,
-      "throughput_per_second": 11728.829462819613,
-      "cold_start_ms": 0.2676,
+      "p50_ms": 0.0916,
+      "p95_ms": 0.094,
+      "throughput_per_second": 10853.285289457113,
+      "cold_start_ms": 0.3262,
       "peak_memory_bytes": 1807,
-      "engine_retained_memory_bytes": 14672
+      "engine_retained_memory_bytes": 14696
     },
     {
       "name": "short-separator-obfuscation",
@@ -69,12 +69,12 @@
       "input_length": 11,
       "dictionary_size": 2,
       "expected_matches": 1,
-      "p50_ms": 0.111,
-      "p95_ms": 0.1183,
-      "throughput_per_second": 8897.984606486634,
-      "cold_start_ms": 0.2925,
+      "p50_ms": 0.1186,
+      "p95_ms": 0.1304,
+      "throughput_per_second": 8174.075103402052,
+      "cold_start_ms": 0.3225,
       "peak_memory_bytes": 3306,
-      "engine_retained_memory_bytes": 14672
+      "engine_retained_memory_bytes": 14696
     },
     {
       "name": "short-whitespace-gap",
@@ -85,12 +85,12 @@
       "input_length": 3,
       "dictionary_size": 2,
       "expected_matches": 1,
-      "p50_ms": 0.0366,
-      "p95_ms": 0.0372,
-      "throughput_per_second": 27255.38293813028,
-      "cold_start_ms": 0.1318,
+      "p50_ms": 0.0403,
+      "p95_ms": 0.0413,
+      "throughput_per_second": 24740.83970409955,
+      "cold_start_ms": 0.1514,
       "peak_memory_bytes": 1962,
-      "engine_retained_memory_bytes": 11668
+      "engine_retained_memory_bytes": 11716
     },
     {
       "name": "short-whitespace-boundary",
@@ -101,12 +101,12 @@
       "input_length": 4,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 0.0258,
-      "p95_ms": 0.0266,
-      "throughput_per_second": 38477.81753818923,
-      "cold_start_ms": 0.1197,
+      "p50_ms": 0.0295,
+      "p95_ms": 0.0303,
+      "throughput_per_second": 33699.534946417734,
+      "cold_start_ms": 0.1255,
       "peak_memory_bytes": 1292,
-      "engine_retained_memory_bytes": 11668
+      "engine_retained_memory_bytes": 11716
     },
     {
       "name": "short-mixed-gap",
@@ -117,12 +117,12 @@
       "input_length": 5,
       "dictionary_size": 2,
       "expected_matches": 1,
-      "p50_ms": 0.0614,
-      "p95_ms": 0.062,
-      "throughput_per_second": 16251.970551429358,
-      "cold_start_ms": 0.169,
+      "p50_ms": 0.0655,
+      "p95_ms": 0.0672,
+      "throughput_per_second": 15216.299700238891,
+      "cold_start_ms": 0.1871,
       "peak_memory_bytes": 2380,
-      "engine_retained_memory_bytes": 11668
+      "engine_retained_memory_bytes": 11716
     },
     {
       "name": "short-mixed-boundary",
@@ -133,12 +133,12 @@
       "input_length": 6,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 0.058,
-      "p95_ms": 0.062,
-      "throughput_per_second": 16998.130205677386,
-      "cold_start_ms": 0.1536,
+      "p50_ms": 0.0613,
+      "p95_ms": 0.0674,
+      "throughput_per_second": 15889.409708429337,
+      "cold_start_ms": 0.168,
       "peak_memory_bytes": 1929,
-      "engine_retained_memory_bytes": 11668
+      "engine_retained_memory_bytes": 11716
     },
     {
       "name": "short-choseong",
@@ -149,12 +149,12 @@
       "input_length": 2,
       "dictionary_size": 2,
       "expected_matches": 1,
-      "p50_ms": 0.0425,
-      "p95_ms": 0.0447,
-      "throughput_per_second": 23320.895522388062,
-      "cold_start_ms": 0.1907,
+      "p50_ms": 0.0461,
+      "p95_ms": 0.0521,
+      "throughput_per_second": 20919.626793858,
+      "cold_start_ms": 0.1944,
       "peak_memory_bytes": 1949,
-      "engine_retained_memory_bytes": 11472
+      "engine_retained_memory_bytes": 11520
     },
     {
       "name": "short-choseong-normal-hangul",
@@ -165,12 +165,12 @@
       "input_length": 2,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 0.016,
-      "p95_ms": 0.0167,
-      "throughput_per_second": 61988.5940986858,
-      "cold_start_ms": 0.1458,
+      "p50_ms": 0.0189,
+      "p95_ms": 0.0201,
+      "throughput_per_second": 52468.649981636016,
+      "cold_start_ms": 0.1527,
       "peak_memory_bytes": 1157,
-      "engine_retained_memory_bytes": 11472
+      "engine_retained_memory_bytes": 11520
     },
     {
       "name": "short-alias",
@@ -181,12 +181,60 @@
       "input_length": 3,
       "dictionary_size": 2,
       "expected_matches": 1,
-      "p50_ms": 0.0427,
-      "p95_ms": 0.0442,
-      "throughput_per_second": 23279.09304653489,
-      "cold_start_ms": 0.2044,
+      "p50_ms": 0.0463,
+      "p95_ms": 0.0507,
+      "throughput_per_second": 21215.65715498037,
+      "cold_start_ms": 0.2159,
       "peak_memory_bytes": 2057,
-      "engine_retained_memory_bytes": 11360
+      "engine_retained_memory_bytes": 11288
+    },
+    {
+      "name": "short-segmented-choseong",
+      "category": "segmented-input",
+      "engine_profile": "segmented-input",
+      "dictionary_profile": "standard",
+      "case_fingerprint": "7f15ebfe7add2bbcffd67a0ff12993ebab40ce12316a3d5b7925134e83e0d158",
+      "input_length": 5,
+      "dictionary_size": 2,
+      "expected_matches": 1,
+      "p50_ms": 0.0959,
+      "p95_ms": 0.1063,
+      "throughput_per_second": 10249.262053132172,
+      "cold_start_ms": 0.2472,
+      "peak_memory_bytes": 2853,
+      "engine_retained_memory_bytes": 11408
+    },
+    {
+      "name": "short-segmented-jamo",
+      "category": "segmented-input",
+      "engine_profile": "segmented-input",
+      "dictionary_profile": "standard",
+      "case_fingerprint": "c14ac69c7a1b753c8c52eb30bc8f2c83ac5a80956db1a68ecdefaa6b26fad3b4",
+      "input_length": 6,
+      "dictionary_size": 2,
+      "expected_matches": 1,
+      "p50_ms": 0.0976,
+      "p95_ms": 0.1067,
+      "throughput_per_second": 10114.291493880852,
+      "cold_start_ms": 0.2361,
+      "peak_memory_bytes": 2482,
+      "engine_retained_memory_bytes": 11408
+    },
+    {
+      "name": "short-segmented-keyboard",
+      "category": "segmented-input",
+      "engine_profile": "segmented-input",
+      "dictionary_profile": "standard",
+      "case_fingerprint": "e7c53f21a7ff73c4eb7a3aa9facc672984b777c83ffccdf98065e7dac33d6e55",
+      "input_length": 8,
+      "dictionary_size": 2,
+      "expected_matches": 1,
+      "p50_ms": 0.0745,
+      "p95_ms": 0.0874,
+      "throughput_per_second": 13064.38127090301,
+      "cold_start_ms": 0.2296,
+      "peak_memory_bytes": 3005,
+      "engine_retained_memory_bytes": 11408
     },
     {
       "name": "clean-1kb",
@@ -197,12 +245,12 @@
       "input_length": 1024,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 1.8586,
-      "p95_ms": 2.0037,
-      "throughput_per_second": 534.0724896590214,
-      "cold_start_ms": 2.1633,
+      "p50_ms": 1.9988,
+      "p95_ms": 2.3481,
+      "throughput_per_second": 481.6333922210426,
+      "cold_start_ms": 2.3325,
       "peak_memory_bytes": 155098,
-      "engine_retained_memory_bytes": 14672
+      "engine_retained_memory_bytes": 14696
     },
     {
       "name": "clean-maximum-input",
@@ -213,12 +261,12 @@
       "input_length": 4096,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 7.4725,
-      "p95_ms": 7.7757,
-      "throughput_per_second": 133.00629744916534,
-      "cold_start_ms": 8.0085,
+      "p50_ms": 8.4626,
+      "p95_ms": 8.9081,
+      "throughput_per_second": 117.79228978787967,
+      "cold_start_ms": 8.9165,
       "peak_memory_bytes": 781770,
-      "engine_retained_memory_bytes": 14672
+      "engine_retained_memory_bytes": 14696
     },
     {
       "name": "alias-clean-maximum-input",
@@ -229,12 +277,28 @@
       "input_length": 4096,
       "dictionary_size": 2,
       "expected_matches": 0,
-      "p50_ms": 8.369,
-      "p95_ms": 8.569,
-      "throughput_per_second": 119.77264277857199,
-      "cold_start_ms": 8.8089,
+      "p50_ms": 8.6095,
+      "p95_ms": 8.9371,
+      "throughput_per_second": 115.54257986707522,
+      "cold_start_ms": 8.9993,
       "peak_memory_bytes": 781770,
-      "engine_retained_memory_bytes": 11360
+      "engine_retained_memory_bytes": 11288
+    },
+    {
+      "name": "segmented-clean-maximum-input",
+      "category": "segmented-input",
+      "engine_profile": "segmented-input",
+      "dictionary_profile": "standard",
+      "case_fingerprint": "9d6c2d9e8dc364a12fd4537fdb3e513f44260cd19f261407a3476c7c50b5d00a",
+      "input_length": 4096,
+      "dictionary_size": 2,
+      "expected_matches": 0,
+      "p50_ms": 13.0091,
+      "p95_ms": 13.396,
+      "throughput_per_second": 76.84340804203156,
+      "cold_start_ms": 13.5703,
+      "peak_memory_bytes": 906777,
+      "engine_retained_memory_bytes": 11408
     },
     {
       "name": "overlapping-prefix-512",
@@ -245,12 +309,12 @@
       "input_length": 512,
       "dictionary_size": 8,
       "expected_matches": 64,
-      "p50_ms": 3.3393,
-      "p95_ms": 3.496,
-      "throughput_per_second": 296.9740129920191,
-      "cold_start_ms": 3.6277,
-      "peak_memory_bytes": 143182,
-      "engine_retained_memory_bytes": 17394
+      "p50_ms": 3.7116,
+      "p95_ms": 4.1036,
+      "throughput_per_second": 262.393914140513,
+      "cold_start_ms": 4.0088,
+      "peak_memory_bytes": 149602,
+      "engine_retained_memory_bytes": 17418
     },
     {
       "name": "deep-whitespace-prefix-maximum",
@@ -261,12 +325,12 @@
       "input_length": 4096,
       "dictionary_size": 256,
       "expected_matches": 8,
-      "p50_ms": 143.5834,
-      "p95_ms": 147.1468,
-      "throughput_per_second": 6.960578533774878,
-      "cold_start_ms": 166.921,
-      "peak_memory_bytes": 1070735,
-      "engine_retained_memory_bytes": 319760
+      "p50_ms": 143.5453,
+      "p95_ms": 145.9811,
+      "throughput_per_second": 6.956429938451526,
+      "cold_start_ms": 169.0138,
+      "peak_memory_bytes": 1070903,
+      "engine_retained_memory_bytes": 319784
     },
     {
       "name": "deep-mixed-prefix-maximum",
@@ -277,12 +341,12 @@
       "input_length": 4096,
       "dictionary_size": 256,
       "expected_matches": 4,
-      "p50_ms": 18.0204,
-      "p95_ms": 18.5799,
-      "throughput_per_second": 55.49936245107385,
-      "cold_start_ms": 40.6987,
+      "p50_ms": 18.3219,
+      "p95_ms": 18.8862,
+      "throughput_per_second": 54.29188773870923,
+      "cold_start_ms": 42.877,
       "peak_memory_bytes": 1024377,
-      "engine_retained_memory_bytes": 319760
+      "engine_retained_memory_bytes": 319784
     },
     {
       "name": "dictionary-100",
@@ -293,12 +357,12 @@
       "input_length": 13,
       "dictionary_size": 100,
       "expected_matches": 0,
-      "p50_ms": 0.0573,
-      "p95_ms": 0.0592,
-      "throughput_per_second": 17342.74466277032,
-      "cold_start_ms": 4.0803,
+      "p50_ms": 0.0631,
+      "p95_ms": 0.0664,
+      "throughput_per_second": 15793.796196853875,
+      "cold_start_ms": 4.1633,
       "peak_memory_bytes": 1382,
-      "engine_retained_memory_bytes": 734700
+      "engine_retained_memory_bytes": 734724
     },
     {
       "name": "dictionary-1000",
@@ -309,12 +373,12 @@
       "input_length": 13,
       "dictionary_size": 1000,
       "expected_matches": 0,
-      "p50_ms": 0.0578,
-      "p95_ms": 0.0591,
-      "throughput_per_second": 17211.4077210375,
-      "cold_start_ms": 39.6018,
+      "p50_ms": 0.0641,
+      "p95_ms": 0.0702,
+      "throughput_per_second": 15324.965901950864,
+      "cold_start_ms": 40.1825,
       "peak_memory_bytes": 1382,
-      "engine_retained_memory_bytes": 6684212
+      "engine_retained_memory_bytes": 6684236
     },
     {
       "name": "mixed-dictionary-1000",
@@ -325,12 +389,12 @@
       "input_length": 5,
       "dictionary_size": 1000,
       "expected_matches": 1,
-      "p50_ms": 0.0621,
-      "p95_ms": 0.0639,
-      "throughput_per_second": 16031.29308410017,
-      "cold_start_ms": 41.4872,
+      "p50_ms": 0.0648,
+      "p95_ms": 0.0658,
+      "throughput_per_second": 15258.323415423112,
+      "cold_start_ms": 40.2146,
       "peak_memory_bytes": 2380,
-      "engine_retained_memory_bytes": 6681312
+      "engine_retained_memory_bytes": 6681360
     },
     {
       "name": "choseong-dictionary-1000",
@@ -341,12 +405,12 @@
       "input_length": 2,
       "dictionary_size": 1000,
       "expected_matches": 1,
-      "p50_ms": 0.0424,
-      "p95_ms": 0.0433,
-      "throughput_per_second": 23493.480559144824,
-      "cold_start_ms": 38.4834,
+      "p50_ms": 0.0455,
+      "p95_ms": 0.0547,
+      "throughput_per_second": 21485.508024837243,
+      "cold_start_ms": 38.2923,
       "peak_memory_bytes": 1949,
-      "engine_retained_memory_bytes": 2621688
+      "engine_retained_memory_bytes": 2621736
     }
   ]
 }

@@ -73,6 +73,12 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         and len(case.text) == EngineConfig().max_input_length
         for case in cases
     )
+    assert any(
+        case.category == "segmented-input"
+        and case.engine_profile == "segmented-input"
+        and len(case.text) == EngineConfig().max_input_length
+        for case in cases
+    )
 
 
 def test_percentile_uses_nearest_rank() -> None:

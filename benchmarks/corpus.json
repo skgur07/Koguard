@@ -137,6 +137,15 @@
       "expected_matches": 0
     },
     {
+      "name": "segmented-clean-maximum-input",
+      "category": "segmented-input",
+      "text_pattern": "dkssud * gktpdy ",
+      "length": 4096,
+      "dictionary_size": 2,
+      "engine_profile": "segmented-input",
+      "expected_matches": 0
+    },
+    {
       "name": "overlapping-prefix-512",
       "category": "adversarial",
       "text_pattern": "a",
