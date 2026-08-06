@@ -80,6 +80,7 @@ _DUBEOLSIK_JAMO = {
     "P": "ㅖ",
 }
 _MODERN_COMPATIBILITY_JAMO = frozenset(_MODERN_ONSETS + _MODERN_VOWELS + _MODERN_FINALS)
+_NORMALIZED_MODERN_ONSETS = frozenset(normalize("NFKC", onset) for onset in _MODERN_ONSETS)
 
 
 def _is_jamo(character: str) -> bool:
@@ -319,6 +320,105 @@ def normalize_text(text: str, unicode_form: NormalizationForm) -> NormalizedText
     )
 
 
+def _is_allowed_segmented_gap_character(
+    original_text: str,
+    normalized: NormalizedText,
+    index: int,
+    *,
+    separators: frozenset[str],
+    max_whitespace_gap: int,
+) -> bool:
+    character = normalized.text[index]
+    if character in separators:
+        return True
+    if character != " ":
+        return False
+    source_start, source_end = normalized.source_spans[index]
+    source_gap = original_text[source_start:source_end]
+    return len(source_gap) <= max_whitespace_gap and all(
+        source_character in {" ", "\t"} for source_character in source_gap
+    )
+
+
+def _build_segmented_normalized_view(
+    original_text: str,
+    normalized: NormalizedText,
+    *,
+    eligible_characters: frozenset[str],
+    separators: frozenset[str],
+    max_whitespace_gap: int,
+) -> NormalizedText:
+    """Remove bounded gaps only when both neighboring characters are eligible."""
+
+    if type(max_whitespace_gap) is not int or max_whitespace_gap <= 0:
+        raise ValueError("max_whitespace_gap must be a positive integer")
+    if eligible_characters.isdisjoint(normalized.text):
+        return normalized
+
+    characters: list[str] = []
+    source_spans: list[tuple[int, int]] = []
+    changed = False
+    index = 0
+    while index < len(normalized.text):
+        character = normalized.text[index]
+        characters.append(character)
+        source_spans.append(normalized.source_spans[index])
+
+        if character not in eligible_characters:
+            index += 1
+            continue
+
+        gap_end = index + 1
+        while gap_end < len(normalized.text) and _is_allowed_segmented_gap_character(
+            original_text,
+            normalized,
+            gap_end,
+            separators=separators,
+            max_whitespace_gap=max_whitespace_gap,
+        ):
+            gap_end += 1
+        if gap_end > index + 1 and (
+            gap_end < len(normalized.text) and normalized.text[gap_end] in eligible_characters
+        ):
+            changed = True
+            index = gap_end
+            continue
+        index += 1
+
+    if not changed:
+        return normalized
+    return NormalizedText(text="".join(characters), source_spans=tuple(source_spans))
+
+
+def _raw_segmented_gap_end(
+    text: str,
+    start: int,
+    unicode_form: NormalizationForm,
+    *,
+    separators: frozenset[str],
+    max_whitespace_gap: int,
+) -> int:
+    """Return the end of one raw bounded gap, or its start when invalid."""
+
+    index = start
+    while index < len(text):
+        character = text[index]
+        if character in {" ", "\t"}:
+            whitespace_end = index + 1
+            while whitespace_end < len(text) and text[whitespace_end] in {" ", "\t"}:
+                whitespace_end += 1
+            if whitespace_end - index > max_whitespace_gap:
+                return start
+            index = whitespace_end
+            continue
+        normalized_character = normalize(unicode_form, character)
+        if len(normalized_character) == 1 and normalized_character in separators:
+            index += 1
+            continue
+        break
+    return index if index > start else start
+
+
 def _compose_jamo_units(
     units: list[tuple[str, tuple[int, int]]],
 ) -> tuple[list[str], list[tuple[int, int]]]:
@@ -412,29 +512,42 @@ def build_dubeolsik_view(normalized: NormalizedText) -> NormalizedText:
     return NormalizedText(text="".join(characters), source_spans=tuple(source_spans))
 
 
-def build_jamo_composition_view(
+def _build_jamo_composition_view(
     text: str,
     unicode_form: NormalizationForm,
     *,
-    normalized: NormalizedText | None = None,
+    separators: frozenset[str] | None,
+    max_whitespace_gap: int | None,
 ) -> NormalizedText:
-    """Compose raw modern compatibility-jamo runs without changing the base view."""
-
-    base = normalized or normalize_text(text, unicode_form)
-    if _MODERN_COMPATIBILITY_JAMO.isdisjoint(text):
-        return base
-
     characters: list[str] = []
     source_spans: list[tuple[int, int]] = []
     index = 0
     while index < len(text):
         if text[index] in _MODERN_COMPATIBILITY_JAMO:
-            end = index + 1
+            units: list[tuple[str, tuple[int, int]]] = []
+            end = index
             while end < len(text) and text[end] in _MODERN_COMPATIBILITY_JAMO:
-                end += 1
-            composed, composed_spans = _compose_jamo_units(
-                [(text[cursor], (cursor, cursor + 1)) for cursor in range(index, end)]
-            )
+                units.append((text[end], (end, end + 1)))
+                next_index = end + 1
+                if next_index < len(text) and text[next_index] in _MODERN_COMPATIBILITY_JAMO:
+                    end = next_index
+                    continue
+                if separators is None or max_whitespace_gap is None:
+                    end = next_index
+                    break
+                gap_end = _raw_segmented_gap_end(
+                    text,
+                    next_index,
+                    unicode_form,
+                    separators=separators,
+                    max_whitespace_gap=max_whitespace_gap,
+                )
+                if gap_end < len(text) and text[gap_end] in _MODERN_COMPATIBILITY_JAMO:
+                    end = gap_end
+                    continue
+                end = next_index
+                break
+            composed, composed_spans = _compose_jamo_units(units)
             characters.extend(composed)
             source_spans.extend(composed_spans)
             index = end
@@ -451,6 +564,85 @@ def build_jamo_composition_view(
         index = end
 
     return NormalizedText(text="".join(characters), source_spans=tuple(source_spans))
+
+
+def build_jamo_composition_view(
+    text: str,
+    unicode_form: NormalizationForm,
+    *,
+    normalized: NormalizedText | None = None,
+) -> NormalizedText:
+    """Compose raw modern compatibility-jamo runs without changing the base view."""
+
+    base = normalized or normalize_text(text, unicode_form)
+    if _MODERN_COMPATIBILITY_JAMO.isdisjoint(text):
+        return base
+    return _build_jamo_composition_view(
+        text,
+        unicode_form,
+        separators=None,
+        max_whitespace_gap=None,
+    )
+
+
+def build_segmented_choseong_view(
+    text: str,
+    normalized: NormalizedText,
+    *,
+    separators: frozenset[str],
+    max_whitespace_gap: int,
+) -> NormalizedText:
+    """Join bounded gaps only between normalized modern Hangul initials."""
+
+    return _build_segmented_normalized_view(
+        text,
+        normalized,
+        eligible_characters=_NORMALIZED_MODERN_ONSETS,
+        separators=separators,
+        max_whitespace_gap=max_whitespace_gap,
+    )
+
+
+def build_segmented_dubeolsik_view(
+    text: str,
+    normalized: NormalizedText,
+    *,
+    separators: frozenset[str],
+    max_whitespace_gap: int,
+) -> NormalizedText:
+    """Compose Dubeolsik runs after joining only bounded keyboard-input gaps."""
+
+    segmented = _build_segmented_normalized_view(
+        text,
+        normalized,
+        eligible_characters=frozenset(_DUBEOLSIK_JAMO),
+        separators=separators,
+        max_whitespace_gap=max_whitespace_gap,
+    )
+    return build_dubeolsik_view(segmented)
+
+
+def build_segmented_jamo_composition_view(
+    text: str,
+    unicode_form: NormalizationForm,
+    *,
+    normalized: NormalizedText | None = None,
+    separators: frozenset[str],
+    max_whitespace_gap: int,
+) -> NormalizedText:
+    """Compose compatibility-jamo runs across bounded spaces and separators."""
+
+    if type(max_whitespace_gap) is not int or max_whitespace_gap <= 0:
+        raise ValueError("max_whitespace_gap must be a positive integer")
+    base = normalized or normalize_text(text, unicode_form)
+    if _MODERN_COMPATIBILITY_JAMO.isdisjoint(text):
+        return base
+    return _build_jamo_composition_view(
+        text,
+        unicode_form,
+        separators=separators,
+        max_whitespace_gap=max_whitespace_gap,
+    )
 
 
 def _hangul_vowel_index(character: str) -> int | None:

@@ -67,6 +67,6 @@ def test_composed_input_views_honor_transformed_whitelist(text: str) -> None:
     assert result.detected is False
 
 
-@pytest.mark.parametrize("text", ["hello", "3tlq", "ㅅㅣ ㅂㅏㄹ"])
-def test_composed_input_views_do_not_join_unrelated_or_separated_input(text: str) -> None:
+@pytest.mark.parametrize("text", ["hello", "3tlq"])
+def test_composed_input_views_do_not_join_unrelated_input(text: str) -> None:
     assert make_engine().check(text).detected is False

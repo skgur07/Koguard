@@ -214,13 +214,9 @@ def test_composition_views_support_compound_vowels_and_finals() -> None:
 
 
 def test_segmented_choseong_view_joins_only_bounded_initial_gaps() -> None:
-    builder = cast(
-        Callable[..., NormalizedText],
-        getattr(normalizer_module, "build_segmented_choseong_view"),
-    )
     source = "ㅅ * ㅂ"
 
-    view = builder(
+    view = normalizer_module.build_segmented_choseong_view(
         source,
         normalize_text(source, "NFKC"),
         separators=frozenset({"*"}),
@@ -232,13 +228,9 @@ def test_segmented_choseong_view_joins_only_bounded_initial_gaps() -> None:
 
 
 def test_segmented_keyboard_view_composes_across_bounded_input_gaps() -> None:
-    builder = cast(
-        Callable[..., NormalizedText],
-        getattr(normalizer_module, "build_segmented_dubeolsik_view"),
-    )
     source = "tl * qkf"
 
-    view = builder(
+    view = normalizer_module.build_segmented_dubeolsik_view(
         source,
         normalize_text(source, "NFKC"),
         separators=frozenset({"*"}),
@@ -250,13 +242,9 @@ def test_segmented_keyboard_view_composes_across_bounded_input_gaps() -> None:
 
 
 def test_segmented_jamo_view_composes_across_bounded_input_gaps() -> None:
-    builder = cast(
-        Callable[..., NormalizedText],
-        getattr(normalizer_module, "build_segmented_jamo_composition_view"),
-    )
     source = "ㅅㅣ ㅂㅏㄹ"
 
-    view = builder(
+    view = normalizer_module.build_segmented_jamo_composition_view(
         source,
         "NFKC",
         normalized=normalize_text(source, "NFKC"),
