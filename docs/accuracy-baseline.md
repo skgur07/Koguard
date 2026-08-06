@@ -76,3 +76,20 @@ MIT 라이선스 Korcen의 고정 revision에서 명시적 표현을 소량 선�
 
 이 수치는 작은 수동 회귀 corpus에만 적용된다. 라이선스가 확인되지 않은 외부 `slang.csv`는
 포함하지 않았고, 실제 채팅 분포의 문맥·신조어·표기 변형을 대표하지 않는다.
+
+## 분리 초성·자모·자판 조합 기준선
+
+측정일: 2026-08-06
+
+`tests/corpus/segmented_input_cases.json`의 직접 작성한 9개 문장과 기대 탐지 occurrence 5개를
+기본 `EngineConfig(segmented_input_matching=True)`로 검증했다. 공백·구분자로 나뉜 초성,
+호환 자모, 영문 두벌식 입력과 `시 발표`, 부분 초성 토큰, 설정되지 않은 구분자, 줄바꿈
+오탐 방지 사례를 포함한다.
+
+- False Positive: 0
+- False Negative: 0
+- Precision: 1.0
+- Recall: 1.0
+
+이 수치는 작은 수동 회귀 corpus에만 적용된다. 정상 영문 문장과 실제 채팅의 초성 표현을 더
+확대해 조합 우회로 인한 오탐 예산을 지속해서 검증해야 한다.

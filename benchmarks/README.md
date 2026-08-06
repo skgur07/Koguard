@@ -33,6 +33,7 @@ uv run python -m benchmarks.engine_benchmark
 - 공백과 설정 구분자를 함께 사용한 `시 * 발` 탐지와 `시 * 발표` 경계 오탐 방지
 - 초성 `ㅅㅂ` 탐지와 일반 한글 `수박` 미탐지
 - 명시적 Alias `ㅈ같네` 탐지와 Alias-only 4,096자 정상 입력
+- 분리 초성·자모·영문 자판 탐지와 조합-input-only 4,096자 정상 입력
 - 공백 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 혼합 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 100개와 1,000개 합성 사전
@@ -45,8 +46,9 @@ uv run python -m benchmarks.engine_benchmark
 `engine_profile`은 case마다 사용할 엔진 설정을 지정한다. 생략하거나 `default`이면 모든 탐지
 단계가 활성화된 기본 설정을 사용한다. `minimal`은 Exact Match만 활성화한다.
 `whitespace-gap`은 Exact Match와 공백·혼합 매칭만 활성화하고, `choseong`은 Exact Match와
-초성 매칭만 활성화한다. `alias`는 명시적 Alias만 활성화한다. 이렇게 격리된 profile을 사용해
-각 추가 index의 정확도와 retained memory를 비교한다.
+초성 매칭만 활성화한다. `alias`는 명시적 Alias만 활성화하고, `segmented-input`은 초성·호환
+자모·영문 자판과 제한된 조합 우회만 활성화한다. 이렇게 격리된 profile을 사용해 각 추가
+index와 projection의 정확도, 지연 시간, retained memory를 비교한다.
 `dictionary_profile`은 합성 사전 형태를 지정하며 `standard`, `overlapping-prefix`,
 `deep-whitespace-prefix`, `choseong-scale`, `alias`를 지원한다. `choseong-scale`은 서로 다른
 초성 suffix를 갖는 완성형 한글 term을 만들고, `alias`는 한 개의 `token_prefix` 규칙을
