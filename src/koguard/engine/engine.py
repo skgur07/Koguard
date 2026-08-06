@@ -13,6 +13,7 @@ from koguard.engine.normalizer import (
     build_segmented_dubeolsik_view,
     build_segmented_jamo_composition_view,
     build_separator_view,
+    has_compatibility_choseong_input,
     normalize_text,
 )
 from koguard.exceptions import ConfigurationError, InputTooLongError
@@ -152,7 +153,11 @@ class KoguardEngine:
         segmented_keyboard = keyboard
         segmented_jamo = jamo_composed
         segmented_choseong = normalized
-        has_segmented_source = keyboard is not normalized or jamo_composed is not normalized
+        has_segmented_source = (
+            keyboard is not normalized
+            or jamo_composed is not normalized
+            or (self._config.choseong_matching and has_compatibility_choseong_input(text))
+        )
         if self._config.segmented_input_matching and has_segmented_source:
             has_segmented_gap = " " in normalized.text or not (
                 self._config.obfuscation_separators.isdisjoint(normalized.text)

@@ -18,6 +18,7 @@ _HANGUL_N_COUNT = _HANGUL_VOWEL_COUNT * _HANGUL_TRAILING_COUNT
 _MODERN_ONSETS = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
 _MODERN_VOWELS = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ"
 _MODERN_FINALS = "ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ"
+_COMPATIBILITY_ONSET_INPUT = re.compile(f"[{_MODERN_ONSETS}]")
 _COMPOUND_VOWELS = {
     ("ㅗ", "ㅏ"): "ㅘ",
     ("ㅗ", "ㅐ"): "ㅙ",
@@ -91,6 +92,12 @@ def _is_jamo(character: str) -> bool:
         or 0xA960 <= codepoint <= 0xA97F
         or 0xD7B0 <= codepoint <= 0xD7FF
     )
+
+
+def has_compatibility_choseong_input(text: str) -> bool:
+    """Return whether raw input contains a modern compatibility onset."""
+
+    return _COMPATIBILITY_ONSET_INPUT.search(text) is not None
 
 
 def _is_variation_selector(character: str) -> bool:
