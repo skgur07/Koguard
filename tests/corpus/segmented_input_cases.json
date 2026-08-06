@@ -1,0 +1,47 @@
+[
+  {
+    "id": "spaced-choseong",
+    "text": "ㅅ ㅂ",
+    "expected_terms": ["시발"]
+  },
+  {
+    "id": "separator-choseong",
+    "text": "ㅅ*ㅂ",
+    "expected_terms": ["시발"]
+  },
+  {
+    "id": "mixed-choseong",
+    "text": "ㅅ * ㅂ",
+    "expected_terms": ["시발"]
+  },
+  {
+    "id": "spaced-jamo",
+    "text": "ㅅㅣ ㅂㅏㄹ",
+    "expected_terms": ["시발"]
+  },
+  {
+    "id": "mixed-keyboard",
+    "text": "tl * qkf",
+    "expected_terms": ["시발"]
+  },
+  {
+    "id": "normal-boundary-sentence",
+    "text": "시 발표",
+    "expected_terms": []
+  },
+  {
+    "id": "partial-choseong-token",
+    "text": "ㅅ ㅂㄹ",
+    "expected_terms": []
+  },
+  {
+    "id": "unconfigured-separator",
+    "text": "ㅅ/ㅂ",
+    "expected_terms": []
+  },
+  {
+    "id": "newline-gap",
+    "text": "tl\nqkf",
+    "expected_terms": []
+  }
+]
