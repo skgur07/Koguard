@@ -64,6 +64,19 @@ def test_segmented_input_respects_base_matcher_flags(text: str, config: EngineCo
     assert make_engine(config=config).check(text).detected is False
 
 
+def test_segmented_choseong_does_not_require_jamo_composition_matching() -> None:
+    config = EngineConfig(
+        choseong_matching=True,
+        jamo_composition_matching=False,
+        segmented_input_matching=True,
+    )
+
+    result = make_engine(config=config).check("ㅅ ㅂ")
+
+    assert result.detected is True
+    assert result.method is MatchMethod.CHOSEONG
+
+
 @pytest.mark.parametrize(
     "text",
     ["시 발표", "3시 발표", "ㅅ 발표", "aㅅ ㅂ", "ㅅ ㅂ1", "ㅅ ㅂㄹ", "tl * abc"],
