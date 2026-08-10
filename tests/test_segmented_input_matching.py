@@ -2,7 +2,13 @@
 
 import pytest
 
-from koguard import EngineConfig, KoguardDictionary, KoguardEngine, MatchMethod
+from koguard import (
+    EngineConfig,
+    KoguardDictionary,
+    KoguardEngine,
+    MatchMethod,
+    NormalizationForm,
+)
 
 
 def make_engine(
@@ -75,6 +81,20 @@ def test_segmented_choseong_does_not_require_jamo_composition_matching() -> None
 
     assert result.detected is True
     assert result.method is MatchMethod.CHOSEONG
+
+
+@pytest.mark.parametrize("unicode_form", ["NFC", "NFKC"])
+def test_segmented_choseong_supports_configured_unicode_form(
+    unicode_form: NormalizationForm,
+) -> None:
+    config = EngineConfig(unicode_form=unicode_form)
+
+    result = make_engine(config=config).check("ㅅ ㅂ")
+
+    assert result.detected is True
+    assert result.method is MatchMethod.CHOSEONG
+    assert result.matches[0].matched_text == "ㅅ ㅂ"
+    assert (result.matches[0].start, result.matches[0].end) == (0, 3)
 
 
 @pytest.mark.parametrize(

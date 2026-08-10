@@ -81,7 +81,9 @@ _DUBEOLSIK_JAMO = {
     "P": "ㅖ",
 }
 _MODERN_COMPATIBILITY_JAMO = frozenset(_MODERN_ONSETS + _MODERN_VOWELS + _MODERN_FINALS)
-_NORMALIZED_MODERN_ONSETS = frozenset(normalize("NFKC", onset) for onset in _MODERN_ONSETS)
+_SEGMENTED_CHOSEONG_CHARACTERS = frozenset(_MODERN_ONSETS).union(
+    normalize("NFKC", onset) for onset in _MODERN_ONSETS
+)
 
 
 def _is_jamo(character: str) -> bool:
@@ -604,7 +606,7 @@ def build_segmented_choseong_view(
     return _build_segmented_normalized_view(
         text,
         normalized,
-        eligible_characters=_NORMALIZED_MODERN_ONSETS,
+        eligible_characters=_SEGMENTED_CHOSEONG_CHARACTERS,
         separators=separators,
         max_whitespace_gap=max_whitespace_gap,
     )
