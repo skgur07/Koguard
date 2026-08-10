@@ -47,6 +47,6 @@
   {
     "id": "whitespace-separated-initials",
     "text": "ㅅ ㅂ",
-    "expected_terms": []
+    "expected_terms": ["시발"]
   }
 ]

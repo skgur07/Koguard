@@ -87,6 +87,30 @@
       "expected_matches": 1
     },
     {
+      "name": "short-segmented-choseong",
+      "category": "segmented-input",
+      "text": "ㅅ * ㅂ",
+      "dictionary_size": 2,
+      "engine_profile": "segmented-input",
+      "expected_matches": 1
+    },
+    {
+      "name": "short-segmented-jamo",
+      "category": "segmented-input",
+      "text": "ㅅㅣ ㅂㅏㄹ",
+      "dictionary_size": 2,
+      "engine_profile": "segmented-input",
+      "expected_matches": 1
+    },
+    {
+      "name": "short-segmented-keyboard",
+      "category": "segmented-input",
+      "text": "tl * qkf",
+      "dictionary_size": 2,
+      "engine_profile": "segmented-input",
+      "expected_matches": 1
+    },
+    {
       "name": "clean-1kb",
       "category": "one-kilobyte",
       "text_pattern": "가나다라마바사아자차카타파하",
@@ -110,6 +134,15 @@
       "dictionary_size": 2,
       "dictionary_profile": "alias",
       "engine_profile": "alias",
+      "expected_matches": 0
+    },
+    {
+      "name": "segmented-clean-maximum-input",
+      "category": "segmented-input",
+      "text_pattern": "dkssud * gktpdy ",
+      "length": 4096,
+      "dictionary_size": 2,
+      "engine_profile": "segmented-input",
       "expected_matches": 0
     },
     {

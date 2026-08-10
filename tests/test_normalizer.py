@@ -213,6 +213,49 @@ def test_composition_views_support_compound_vowels_and_finals() -> None:
     assert jamo.source_spans == ((0, 3),)
 
 
+def test_segmented_choseong_view_joins_only_bounded_initial_gaps() -> None:
+    source = "ㅅ * ㅂ"
+
+    view = normalizer_module.build_segmented_choseong_view(
+        source,
+        normalize_text(source, "NFKC"),
+        separators=frozenset({"*"}),
+        max_whitespace_gap=3,
+    )
+
+    assert view.text == normalize_text("ㅅㅂ", "NFKC").text
+    assert view.original_span(0, len(view.text)) == (0, len(source))
+
+
+def test_segmented_keyboard_view_composes_across_bounded_input_gaps() -> None:
+    source = "tl * qkf"
+
+    view = normalizer_module.build_segmented_dubeolsik_view(
+        source,
+        normalize_text(source, "NFKC"),
+        separators=frozenset({"*"}),
+        max_whitespace_gap=3,
+    )
+
+    assert view.text == "시발"
+    assert view.original_span(0, len(view.text)) == (0, len(source))
+
+
+def test_segmented_jamo_view_composes_across_bounded_input_gaps() -> None:
+    source = "ㅅㅣ ㅂㅏㄹ"
+
+    view = normalizer_module.build_segmented_jamo_composition_view(
+        source,
+        "NFKC",
+        normalized=normalize_text(source, "NFKC"),
+        separators=frozenset({"*"}),
+        max_whitespace_gap=3,
+    )
+
+    assert view.text == "시발"
+    assert view.original_span(0, len(view.text)) == (0, len(source))
+
+
 def test_normalized_text_rejects_mismatched_mapping() -> None:
     with pytest.raises(ValueError, match="same length"):
         NormalizedText(text="ab", source_spans=((0, 1),))

@@ -27,6 +27,7 @@ class EngineConfig:
     alias_matching: bool = True
     keyboard_matching: bool = True
     jamo_composition_matching: bool = True
+    segmented_input_matching: bool = True
 
     def __post_init__(self) -> None:
         if type(self.max_input_length) is not int or self.max_input_length <= 0:
@@ -47,6 +48,7 @@ class EngineConfig:
             "alias_matching",
             "keyboard_matching",
             "jamo_composition_matching",
+            "segmented_input_matching",
         ):
             if type(getattr(self, field_name)) is not bool:
                 raise ConfigurationError(f"{field_name} must be a boolean")

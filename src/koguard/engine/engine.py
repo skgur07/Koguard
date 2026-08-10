@@ -9,7 +9,11 @@ from koguard.engine.normalizer import (
     build_dubeolsik_view,
     build_jamo_composition_view,
     build_repeated_view,
+    build_segmented_choseong_view,
+    build_segmented_dubeolsik_view,
+    build_segmented_jamo_composition_view,
     build_separator_view,
+    has_compatibility_choseong_input,
     normalize_text,
 )
 from koguard.exceptions import ConfigurationError, InputTooLongError
@@ -146,6 +150,43 @@ class KoguardEngine:
             if self._config.jamo_composition_matching
             else normalized
         )
+        segmented_keyboard = keyboard
+        segmented_jamo = jamo_composed
+        segmented_choseong = normalized
+        has_segmented_source = (
+            keyboard is not normalized
+            or jamo_composed is not normalized
+            or (self._config.choseong_matching and has_compatibility_choseong_input(text))
+        )
+        if self._config.segmented_input_matching and has_segmented_source:
+            has_segmented_gap = " " in normalized.text or not (
+                self._config.obfuscation_separators.isdisjoint(normalized.text)
+            )
+        else:
+            has_segmented_gap = False
+        if has_segmented_gap:
+            if self._config.keyboard_matching and keyboard is not normalized:
+                segmented_keyboard = build_segmented_dubeolsik_view(
+                    text,
+                    normalized,
+                    separators=self._config.obfuscation_separators,
+                    max_whitespace_gap=self._config.max_whitespace_gap,
+                )
+            if self._config.jamo_composition_matching and jamo_composed is not normalized:
+                segmented_jamo = build_segmented_jamo_composition_view(
+                    text,
+                    self._config.unicode_form,
+                    normalized=normalized,
+                    separators=self._config.obfuscation_separators,
+                    max_whitespace_gap=self._config.max_whitespace_gap,
+                )
+            if self._config.choseong_matching:
+                segmented_choseong = build_segmented_choseong_view(
+                    text,
+                    normalized,
+                    separators=self._config.obfuscation_separators,
+                    max_whitespace_gap=self._config.max_whitespace_gap,
+                )
         repeated = (
             build_repeated_view(
                 normalized,
@@ -185,6 +226,30 @@ class KoguardEngine:
             if jamo_composed == normalized
             else self._exact_matcher.build_protected_masks(text, jamo_composed)
         )
+        segmented_keyboard_protected = (
+            keyboard_protected
+            if segmented_keyboard == keyboard
+            else self._exact_matcher.build_protected_masks(text, segmented_keyboard)
+        )
+        segmented_jamo_protected = (
+            jamo_composed_protected
+            if segmented_jamo == jamo_composed
+            else self._exact_matcher.build_protected_masks(text, segmented_jamo)
+        )
+        segmented_choseong_protected = (
+            normalized_protected
+            if segmented_choseong == normalized
+            else self._exact_matcher.build_protected_masks(text, segmented_choseong)
+        )
+        segmented_protected_masks = tuple(
+            protected
+            for view_changed, protected in (
+                (segmented_keyboard != keyboard, segmented_keyboard_protected),
+                (segmented_jamo != jamo_composed, segmented_jamo_protected),
+                (segmented_choseong != normalized, segmented_choseong_protected),
+            )
+            if view_changed
+        )
         protected_original = _union_original_masks(
             len(text),
             normalized_protected,
@@ -192,6 +257,7 @@ class KoguardEngine:
             separated_protected,
             keyboard_protected,
             jamo_composed_protected,
+            *segmented_protected_masks,
         )
 
         exact_matches: tuple[Match, ...] = ()
@@ -247,6 +313,24 @@ class KoguardEngine:
                 protected_masks=jamo_composed_protected,
                 protected_original=protected_original,
             )
+        segmented_keyboard_matches: tuple[Match, ...] = ()
+        if self._config.segmented_input_matching and segmented_keyboard != keyboard:
+            segmented_keyboard_matches = self._exact_matcher.find(
+                text,
+                segmented_keyboard,
+                method=MatchMethod.KEYBOARD,
+                protected_masks=segmented_keyboard_protected,
+                protected_original=protected_original,
+            )
+        segmented_jamo_matches: tuple[Match, ...] = ()
+        if self._config.segmented_input_matching and segmented_jamo != jamo_composed:
+            segmented_jamo_matches = self._exact_matcher.find(
+                text,
+                segmented_jamo,
+                method=MatchMethod.JAMO,
+                protected_masks=segmented_jamo_protected,
+                protected_original=protected_original,
+            )
         choseong_matches: tuple[Match, ...] = ()
         alias_matches: tuple[Match, ...] = ()
         if self._alias_matcher is not None:
@@ -263,6 +347,18 @@ class KoguardEngine:
                 protected_masks=normalized_protected,
                 protected_original=protected_original,
             )
+        segmented_choseong_matches: tuple[Match, ...] = ()
+        if (
+            self._config.segmented_input_matching
+            and self._choseong_matcher is not None
+            and segmented_choseong != normalized
+        ):
+            segmented_choseong_matches = self._choseong_matcher.find(
+                text,
+                segmented_choseong,
+                protected_masks=segmented_choseong_protected,
+                protected_original=protected_original,
+            )
 
         matches = _merge_view_matches(
             len(text),
@@ -272,8 +368,11 @@ class KoguardEngine:
             whitespace_matches,
             keyboard_matches,
             jamo_matches,
+            segmented_keyboard_matches,
+            segmented_jamo_matches,
             alias_matches,
             choseong_matches,
+            segmented_choseong_matches,
             protected_original_masks=(protected_original,),
         )
         if self._config.mixed_gap_matching:

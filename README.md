@@ -46,6 +46,7 @@ engine = KoguardEngine(dictionary=dictionary)
 | `alias_matching` | `ㅈ같네`, `ㅄ` 같은 명시적 축약 규칙 매칭 | `True` |
 | `keyboard_matching` | `tlqkf` 같은 영문 두벌식 자판 입력 조합 | `True` |
 | `jamo_composition_matching` | `ㅅㅣㅂㅏㄹ` 같은 호환 자모 입력 조합 | `True` |
+| `segmented_input_matching` | `ㅅ * ㅂ`, `ㅅㅣ ㅂㅏㄹ`, `tl * qkf` 같은 제한된 조합 우회 | `True` |
 
 각 단계는 독립적으로 `False`로 끌 수 있습니다. 다음 설정은 Exact Match만 남깁니다.
 
@@ -62,6 +63,7 @@ config = EngineConfig(
     alias_matching=False,
     keyboard_matching=False,
     jamo_composition_matching=False,
+    segmented_input_matching=False,
 )
 engine = KoguardEngine(config=config)
 ```
@@ -129,8 +131,9 @@ assert engine.check("ㄱㅅㄲ").matched_word == "개새끼"
 초성 index는 두 글자 이상의 완성형 한글 blacklist 항목에서만 파생합니다. 입력에서는
 `ㅅㅂ`처럼 연속된 호환 자모 또는 동등한 현대 초성 자모 토큰만 비교하고, `수박` 같은 일반
 한글 문장을 초성으로 변환하지 않습니다. 또한 `ㄱㅅㅂ`, `ㅅㅂㄹ`, `3ㅅㅂ`처럼 더 긴 영숫자
-토큰의 일부는 버립니다. 공백·구분자로 나뉜 `ㅅ ㅂ`, `ㅅ*ㅂ`은 현재 초성 단계의 범위가
-아닙니다.
+토큰의 일부는 버립니다. `segmented_input_matching=True`이면 호환 초성 사이의 제한된 공백과
+설정 구분자를 추가 view에서 제거하므로 `ㅅ ㅂ`, `ㅅ*ㅂ`, `ㅅ * ㅂ`도 탐지합니다. 공백을
+전역 제거하지 않으므로 `시 발표`, `ㅅ 발표`, `ㅅ ㅂㄹ`은 결합하지 않습니다.
 
 여러 blacklist 항목이 같은 초성으로 충돌하면 길이 내림차순·사전순으로 정렬된 첫 항목을
 결과의 canonical `term`으로 사용합니다. 특정 초성을 허용하려면 Whitelist에 `ㅅㅂ`처럼
@@ -189,14 +192,21 @@ disabled = KoguardEngine(
     config=EngineConfig(
         keyboard_matching=False,
         jamo_composition_matching=False,
+        segmented_input_matching=False,
     )
 )
 ```
 
 변환 view에서도 Whitelist를 다시 계산하므로 Whitelist에 `시발점`을 넣으면 `tlqkfwja`와
-`ㅅㅣㅂㅏㄹㅈㅓㅁ`도 보호됩니다. 반면 서로 다른 입력 구간을 임의로 합치지 않기 때문에
-`ㅅㅣ ㅂㅏㄹ`은 이 단계에서 조합하지 않습니다. 두벌식 view는 ASCII 영문 키 연속 구간만
-변환하며, 세벌식이나 로마자 표기법은 현재 지원하지 않습니다.
+`ㅅㅣㅂㅏㄹㅈㅓㅁ`뿐 아니라 `tl * qkfwja`, `ㅅㅣ * ㅂㅏㄹㅈㅓㅁ`도 보호됩니다.
+
+조합 우회 view는 같은 입력 체계의 문자 양쪽에 있는 공백·탭과 설정된
+`obfuscation_separators`만 제거합니다. 각 연속 공백은 `max_whitespace_gap` 이하여야 하고
+줄바꿈과 설정되지 않은 구분자는 허용하지 않습니다. `segmented_input_matching=False`로 세
+조합 우회를 함께 끌 수 있으며, `choseong_matching`, `keyboard_matching`,
+`jamo_composition_matching`을 끄면 해당 입력 체계의 조합 우회도 함께 꺼집니다. 결과 method는
+각각 기존 `CHOSEONG`, `KEYBOARD`, `JAMO`를 사용하고 원문 span에는 제거된 구간이 포함됩니다.
+세벌식이나 일반 로마자 표기법은 현재 지원하지 않습니다.
 
 ## 개발 환경
 

@@ -36,6 +36,7 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         "mixed-gap",
         "choseong",
         "alias",
+        "segmented-input",
     }
     assert max(len(case.text) for case in cases) == EngineConfig().max_input_length
     assert {case.engine_profile for case in cases} >= {
@@ -44,6 +45,7 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         "whitespace-gap",
         "choseong",
         "alias",
+        "segmented-input",
     }
     assert any(
         case.engine_profile == "whitespace-gap"
@@ -68,6 +70,12 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         case.category == "alias"
         and case.engine_profile == "alias"
         and case.dictionary_profile == "alias"
+        and len(case.text) == EngineConfig().max_input_length
+        for case in cases
+    )
+    assert any(
+        case.category == "segmented-input"
+        and case.engine_profile == "segmented-input"
         and len(case.text) == EngineConfig().max_input_length
         for case in cases
     )
@@ -247,6 +255,37 @@ def test_run_benchmarks_minimal_profile_disables_alias_matching() -> None:
     report = run_benchmarks((case,), iterations=2, warmups=0)
 
     assert report.results[0].expected_matches == 0
+
+
+def test_run_benchmarks_minimal_profile_disables_segmented_input_matching() -> None:
+    case = BenchmarkCase(
+        name="unit-minimal-segmented-disabled",
+        category="segmented-input",
+        text="tl * qkf",
+        dictionary_size=2,
+        expected_matches=0,
+        engine_profile="minimal",
+    )
+
+    report = run_benchmarks((case,), iterations=2, warmups=0)
+
+    assert report.results[0].expected_matches == 0
+
+
+def test_run_benchmarks_applies_segmented_input_engine_profile() -> None:
+    case = BenchmarkCase(
+        name="unit-segmented-keyboard",
+        category="segmented-input",
+        text="tl * qkf",
+        dictionary_size=2,
+        expected_matches=1,
+        engine_profile="segmented-input",
+    )
+
+    report = run_benchmarks((case,), iterations=2, warmups=0)
+
+    assert report.results[0].engine_profile == "segmented-input"
+    assert report.results[0].expected_matches == 1
 
 
 def test_retained_memory_is_invariant_to_prior_check_workload() -> None:
