@@ -12,6 +12,7 @@ _WHITESPACE_GAP_CORPUS_PATH = Path(__file__).parent / "corpus" / "whitespace_gap
 _CHOSEONG_CORPUS_PATH = Path(__file__).parent / "corpus" / "choseong_cases.json"
 _ALIAS_CORPUS_PATH = Path(__file__).parent / "corpus" / "alias_cases.json"
 _SEGMENTED_INPUT_CORPUS_PATH = Path(__file__).parent / "corpus" / "segmented_input_cases.json"
+_FUZZY_CORPUS_PATH = Path(__file__).parent / "corpus" / "fuzzy_cases.json"
 
 
 class ExactCase(TypedDict):
@@ -138,6 +139,34 @@ def test_segmented_input_corpus_has_no_false_positives_or_false_negatives() -> N
     false_negatives = 0
 
     for case in _load_cases(_SEGMENTED_INPUT_CORPUS_PATH):
+        result = engine.check(case["text"])
+        actual = Counter(match.term for match in result.matches)
+        expected = Counter(case["expected_terms"])
+
+        true_positives += sum((actual & expected).values())
+        false_positives += sum((actual - expected).values())
+        false_negatives += sum((expected - actual).values())
+
+        assert list(match.term for match in result.matches) == case["expected_terms"], case["id"]
+
+    precision = true_positives / (true_positives + false_positives)
+    recall = true_positives / (true_positives + false_negatives)
+
+    assert precision == 1.0
+    assert recall == 1.0
+
+
+def test_fuzzy_corpus_has_no_false_positives_or_false_negatives() -> None:
+    dictionary = KoguardDictionary.from_sources(
+        blacklist=["개새끼", "돌아이", "빡대가리"],
+        include_defaults=False,
+    )
+    engine = KoguardEngine(dictionary=dictionary)
+    true_positives = 0
+    false_positives = 0
+    false_negatives = 0
+
+    for case in _load_cases(_FUZZY_CORPUS_PATH):
         result = engine.check(case["text"])
         actual = Counter(match.term for match in result.matches)
         expected = Counter(case["expected_terms"])

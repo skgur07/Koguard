@@ -12,6 +12,7 @@ from koguard.engine.normalizer import (
     _is_unicode_cluster_extension,
     normalize_text,
 )
+from koguard.exceptions import ConfigurationError, FuzzyOperationLimitError
 from koguard.models import AliasMode, Match, MatchMethod
 
 _HANGUL_SYLLABLE_BASE = 0xAC00
@@ -125,6 +126,37 @@ class _MixedProjection:
 class _PrioritizedCandidate:
     priority: tuple[int, int, str, int, int]
     candidate: _MappedCandidate = field(compare=False)
+
+
+@dataclass(frozen=True, slots=True)
+class _ScoredMappedCandidate:
+    candidate: _MappedCandidate
+    distance: int
+
+    @property
+    def score(self) -> float:
+        compared_length = max(
+            self.candidate.length,
+            self.candidate.normalized.end - self.candidate.normalized.start,
+        )
+        return 1.0 - self.distance / compared_length
+
+
+@dataclass(order=True, slots=True)
+class _PrioritizedScoredCandidate:
+    priority: tuple[int, int, int, int, str, int, int]
+    scored: _ScoredMappedCandidate = field(compare=False)
+
+
+@dataclass(slots=True)
+class _FuzzyOperationBudget:
+    max_operations: int
+    used_operations: int = 0
+
+    def consume(self, operations: int = 1) -> None:
+        if self.used_operations + operations > self.max_operations:
+            raise FuzzyOperationLimitError(self.max_operations)
+        self.used_operations += operations
 
 
 def _is_allowed_whitespace_gap(
@@ -696,6 +728,271 @@ def _build_matches(
             ),
         )
     )
+
+
+def _deletion_signatures(value: str, max_deletions: int) -> tuple[str, ...]:
+    """Return deterministic signatures formed by up to ``max_deletions`` deletions."""
+
+    seen = {value}
+    frontier: tuple[str, ...] = (value,)
+    for _ in range(max_deletions):
+        next_frontier: set[str] = set()
+        for candidate in frontier:
+            for index in range(len(candidate)):
+                signature = candidate[:index] + candidate[index + 1 :]
+                if signature not in seen:
+                    seen.add(signature)
+                    next_frontier.add(signature)
+        frontier = tuple(sorted(next_frontier))
+        if not frontier:
+            break
+    return tuple(sorted(seen, key=lambda signature: (-len(signature), signature)))
+
+
+def _query_deletion_signatures(
+    value: str,
+    max_deletions: int,
+    budget: _FuzzyOperationBudget,
+) -> tuple[str, ...]:
+    """Return query signatures while charging every generated deletion."""
+
+    seen = {value}
+    frontier: tuple[str, ...] = (value,)
+    for _ in range(max_deletions):
+        next_frontier: set[str] = set()
+        for candidate in frontier:
+            for index in range(len(candidate)):
+                budget.consume()
+                signature = candidate[:index] + candidate[index + 1 :]
+                if signature not in seen:
+                    seen.add(signature)
+                    next_frontier.add(signature)
+        frontier = tuple(sorted(next_frontier))
+        if not frontier:
+            break
+    return tuple(sorted(seen, key=lambda signature: (-len(signature), signature)))
+
+
+def _bounded_levenshtein_distance(
+    left: str,
+    right: str,
+    max_distance: int,
+    budget: _FuzzyOperationBudget,
+) -> int:
+    """Return the edit distance, or ``max_distance + 1`` after bounded pruning."""
+
+    if abs(len(left) - len(right)) > max_distance:
+        return max_distance + 1
+    if left == right:
+        return 0
+
+    previous = list(range(len(right) + 1))
+    for left_index, left_character in enumerate(left, start=1):
+        current = [max_distance + 1] * (len(right) + 1)
+        current[0] = left_index
+        band_start = max(1, left_index - max_distance)
+        band_end = min(len(right), left_index + max_distance)
+        row_minimum = current[0]
+        for right_index in range(band_start, band_end + 1):
+            budget.consume()
+            substitution_cost = left_character != right[right_index - 1]
+            current[right_index] = min(
+                previous[right_index] + 1,
+                current[right_index - 1] + 1,
+                previous[right_index - 1] + substitution_cost,
+            )
+            row_minimum = min(row_minimum, current[right_index])
+        if row_minimum > max_distance:
+            return max_distance + 1
+        previous = current
+    return previous[-1]
+
+
+def _prioritize_scored(candidate: _ScoredMappedCandidate) -> _PrioritizedScoredCandidate:
+    mapped = candidate.candidate
+    matched_length = mapped.normalized.end - mapped.normalized.start
+    return _PrioritizedScoredCandidate(
+        priority=(
+            -mapped.length,
+            candidate.distance,
+            -matched_length,
+            mapped.original_start,
+            mapped.normalized.term,
+            mapped.normalized.start,
+            mapped.original_end,
+        ),
+        scored=candidate,
+    )
+
+
+class FuzzyMatcher:
+    """Find bounded Levenshtein candidates through a deletion-signature index."""
+
+    __slots__ = (
+        "_deletion_index",
+        "_max_distance",
+        "_max_operations",
+        "_min_score",
+        "_query_lengths",
+    )
+
+    def __init__(
+        self,
+        dictionary: KoguardDictionary,
+        *,
+        min_term_length: int,
+        max_term_length: int,
+        max_distance: int,
+        min_score: float,
+        max_operations: int,
+        max_index_entries: int,
+    ) -> None:
+        terms = tuple(
+            term
+            for term in dictionary.ordered_blacklist
+            if min_term_length <= len(term) <= max_term_length and term.isalnum()
+        )
+        deletion_index: dict[str, list[str]] = {}
+        index_entries = 0
+        for term in terms:
+            for signature in _deletion_signatures(term, max_distance):
+                index_entries += 1
+                if index_entries > max_index_entries:
+                    raise ConfigurationError(
+                        "fuzzy index exceeds fuzzy_max_index_entries; disable fuzzy matching, "
+                        "raise the limit, or narrow the fuzzy term-length range"
+                    )
+                deletion_index.setdefault(signature, []).append(term)
+
+        self._deletion_index = MappingProxyType(
+            {
+                signature: tuple(sorted(indexed_terms, key=lambda term: (-len(term), term)))
+                for signature, indexed_terms in deletion_index.items()
+            }
+        )
+        self._max_distance = max_distance
+        self._min_score = min_score
+        self._max_operations = max_operations
+        term_lengths = {len(term) for term in terms}
+        self._query_lengths = tuple(
+            sorted(
+                {
+                    query_length
+                    for term_length in term_lengths
+                    for query_length in range(
+                        max(1, term_length - max_distance),
+                        term_length + max_distance + 1,
+                    )
+                },
+                reverse=True,
+            )
+        )
+
+    def find(
+        self,
+        original_text: str,
+        normalized: NormalizedText,
+        *,
+        protected_masks: _ProtectedMasks,
+        protected_original: bytes,
+        occupied_original: bytes,
+    ) -> tuple[Match, ...]:
+        """Return non-overlapping approximate matches or raise on work-budget exhaustion."""
+
+        if not self._deletion_index or not normalized.text:
+            return ()
+
+        budget = _FuzzyOperationBudget(self._max_operations)
+        candidates_by_key: dict[tuple[str, int, int], _ScoredMappedCandidate] = {}
+        text = normalized.text
+        boundaries = _build_alphanumeric_boundaries(text)
+        run_end = 0
+        for start, character in enumerate(text):
+            if not character.isalnum() or not boundaries.starts[start]:
+                continue
+            if run_end <= start:
+                run_end = start + 1
+                while run_end < len(text) and text[run_end].isalnum():
+                    budget.consume()
+                    run_end += 1
+
+            for query_length in self._query_lengths:
+                end = start + query_length
+                if end > run_end or not boundaries.ends[end]:
+                    continue
+                budget.consume()
+                query = text[start:end]
+                possible_terms: set[str] = set()
+                for signature in _query_deletion_signatures(
+                    query,
+                    self._max_distance,
+                    budget,
+                ):
+                    budget.consume()
+                    indexed_terms = self._deletion_index.get(signature, ())
+                    budget.consume(len(indexed_terms))
+                    possible_terms.update(indexed_terms)
+
+                for term in sorted(possible_terms, key=lambda item: (-len(item), item)):
+                    if term == query or abs(len(term) - len(query)) > self._max_distance:
+                        continue
+                    distance = _bounded_levenshtein_distance(
+                        term,
+                        query,
+                        self._max_distance,
+                        budget,
+                    )
+                    if not 1 <= distance <= self._max_distance:
+                        continue
+                    score = 1.0 - distance / max(len(term), len(query))
+                    if score < self._min_score:
+                        continue
+                    mapped = _map_candidate(
+                        _NormalizedCandidate(term=term, start=start, end=end),
+                        normalized,
+                    )
+                    scored = _ScoredMappedCandidate(mapped, distance)
+                    key = (term, mapped.original_start, mapped.original_end)
+                    existing = candidates_by_key.get(key)
+                    if existing is None or distance < existing.distance:
+                        candidates_by_key[key] = scored
+
+        selected_normalized = bytearray(len(text))
+        selected_original = bytearray(occupied_original)
+        selected: list[_ScoredMappedCandidate] = []
+        prioritized = [_prioritize_scored(candidate) for candidate in candidates_by_key.values()]
+        while prioritized:
+            scored = heappop(prioritized).scored
+            mapped = scored.candidate
+            if _is_occupied(
+                mapped,
+                protected_masks.normalized,
+                protected_original,
+            ) or _is_occupied(mapped, selected_normalized, selected_original):
+                continue
+            selected.append(scored)
+            _occupy(mapped, selected_normalized, selected_original)
+
+        return tuple(
+            Match(
+                term=scored.candidate.normalized.term,
+                matched_text=original_text[
+                    scored.candidate.original_start : scored.candidate.original_end
+                ],
+                start=scored.candidate.original_start,
+                end=scored.candidate.original_end,
+                method=MatchMethod.LEVENSHTEIN,
+                score=scored.score,
+            )
+            for scored in sorted(
+                selected,
+                key=lambda item: (
+                    item.candidate.original_start,
+                    item.candidate.original_end,
+                    item.candidate.normalized.term,
+                ),
+            )
+        )
 
 
 class AliasMatcher:

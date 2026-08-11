@@ -34,6 +34,7 @@ uv run python -m benchmarks.engine_benchmark
 - 초성 `ㅅㅂ` 탐지와 일반 한글 `수박` 미탐지
 - 명시적 Alias `ㅈ같네` 탐지와 Alias-only 4,096자 정상 입력
 - 분리 초성·자모·영문 자판 탐지와 조합-input-only 4,096자 정상 입력
+- Fuzzy 치환 탐지, 토큰 경계 오탐 방지와 1,000개 사전의 4,096자 정상 입력
 - 공백 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 혼합 매칭과 256개 공통 접두사를 결합한 최대 길이 적대적 입력
 - 100개와 1,000개 합성 사전
@@ -49,10 +50,13 @@ uv run python -m benchmarks.engine_benchmark
 초성 매칭만 활성화한다. `alias`는 명시적 Alias만 활성화하고, `segmented-input`은 초성·호환
 자모·영문 자판과 제한된 조합 우회만 활성화한다. 이렇게 격리된 profile을 사용해 각 추가
 index와 projection의 정확도, 지연 시간, retained memory를 비교한다.
+`fuzzy`는 Exact를 포함한 다른 단계를 끄고 deletion-signature 후보 index와 제한된
+Levenshtein 비교만 활성화한다.
 `dictionary_profile`은 합성 사전 형태를 지정하며 `standard`, `overlapping-prefix`,
-`deep-whitespace-prefix`, `choseong-scale`, `alias`를 지원한다. `choseong-scale`은 서로 다른
+`deep-whitespace-prefix`, `choseong-scale`, `alias`, `fuzzy-scale`을 지원한다. `choseong-scale`은 서로 다른
 초성 suffix를 갖는 완성형 한글 term을 만들고, `alias`는 한 개의 `token_prefix` 규칙을
-구성한다. 알 수 없는 profile은 측정을 시작하기 전에 실패한다.
+구성한다. `fuzzy-scale`은 두 개의 실제 길이 term과 합성 term으로 삭제 서명 index 규모를
+고정한다. 알 수 없는 profile은 측정을 시작하기 전에 실패한다.
 
 ## 지표
 

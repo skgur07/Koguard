@@ -3,8 +3,8 @@
 한국어 욕설·비속어 탐지를 위한 경량 Python 라이브러리입니다.
 
 현재 v0.1에서는 기본 사전 기반 Exact Match, 반복·구분자 우회 view, 공백·혼합·초성·명시적
-Alias 매칭, 영문 두벌식 자판·호환 자모 조합과 구간 단위 Whitelist 처리를 제공합니다. 모든
-탐지 단계는 기본으로 활성화되며 단계별로 끌 수 있습니다.
+Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy Match와 구간 단위 Whitelist
+처리를 제공합니다. 모든 탐지 단계는 기본으로 활성화되며 단계별로 끌 수 있습니다.
 
 ## 사용법
 
@@ -47,6 +47,7 @@ engine = KoguardEngine(dictionary=dictionary)
 | `keyboard_matching` | `tlqkf` 같은 영문 두벌식 자판 입력 조합 | `True` |
 | `jamo_composition_matching` | `ㅅㅣㅂㅏㄹ` 같은 호환 자모 입력 조합 | `True` |
 | `segmented_input_matching` | `ㅅ * ㅂ`, `ㅅㅣ ㅂㅏㄹ`, `tl * qkf` 같은 제한된 조합 우회 | `True` |
+| `fuzzy_matching` | 독립 토큰의 제한된 Levenshtein 오타 탐지 | `True` |
 
 각 단계는 독립적으로 `False`로 끌 수 있습니다. 다음 설정은 Exact Match만 남깁니다.
 
@@ -64,6 +65,7 @@ config = EngineConfig(
     keyboard_matching=False,
     jamo_composition_matching=False,
     segmented_input_matching=False,
+    fuzzy_matching=False,
 )
 engine = KoguardEngine(config=config)
 ```
@@ -207,6 +209,33 @@ disabled = KoguardEngine(
 `jamo_composition_matching`을 끄면 해당 입력 체계의 조합 우회도 함께 꺼집니다. 결과 method는
 각각 기존 `CHOSEONG`, `KEYBOARD`, `JAMO`를 사용하고 원문 span에는 제거된 구간이 포함됩니다.
 세벌식이나 일반 로마자 표기법은 현재 지원하지 않습니다.
+
+Fuzzy 탐지는 사전어와 편집거리 1인 독립 영숫자 토큰을 기본으로 탐지합니다. 1~2글자
+사전어는 오탐 보호를 위해 Exact Match만 사용하고, 기본적으로 3~32글자 사전어만 Fuzzy
+index에 포함합니다. 예를 들어 `개세끼`, `개끼`, `개새애끼`는 `개새끼`로 탐지하며 결과의
+`method`는 `MatchMethod.LEVENSHTEIN`, `score`는
+`1 - distance / max(len(token), len(term))`입니다.
+
+```python
+from koguard import EngineConfig, KoguardEngine
+
+config = EngineConfig(
+    fuzzy_matching=True,
+    fuzzy_min_term_length=3,
+    fuzzy_max_term_length=32,
+    fuzzy_max_distance=1,
+    fuzzy_min_score=0.0,
+    fuzzy_max_operations=250_000,
+    fuzzy_max_index_entries=100_000,
+)
+engine = KoguardEngine(config=config)
+```
+
+Fuzzy는 모든 Exact·우회 탐지보다 낮은 우선순위로 실행하며 기존 Whitelist와 상위 매치 구간을
+침범하지 않습니다. 정상 복합어 오탐을 제한하기 위해 토큰 일부나 조사·어미가 붙은 오타는
+결합하지 않습니다. 입력별 연산량이 `fuzzy_max_operations`를 넘으면 부분 결과 대신
+`FuzzyOperationLimitError`를 발생시킵니다. 사전 생성 시 삭제 서명 index가
+`fuzzy_max_index_entries`를 넘으면 설정 오류로 거부합니다.
 
 ## 개발 환경
 

@@ -7,6 +7,7 @@ from koguard.engine import KoguardDictionary, KoguardEngine
 from koguard.exceptions import (
     ConfigurationError,
     DictionaryError,
+    FuzzyOperationLimitError,
     InputTooLongError,
     KoguardError,
 )
@@ -24,6 +25,7 @@ __all__ = [
     "ConfigurationError",
     "DictionaryError",
     "EngineConfig",
+    "FuzzyOperationLimitError",
     "InputTooLongError",
     "KoguardDictionary",
     "KoguardEngine",

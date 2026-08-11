@@ -4,7 +4,13 @@ from time import perf_counter_ns
 
 from koguard.config import EngineConfig
 from koguard.engine.dictionary import KoguardDictionary
-from koguard.engine.matcher import AliasMatcher, ChoseongMatcher, ExactMatcher, _ProtectedMasks
+from koguard.engine.matcher import (
+    AliasMatcher,
+    ChoseongMatcher,
+    ExactMatcher,
+    FuzzyMatcher,
+    _ProtectedMasks,
+)
 from koguard.engine.normalizer import (
     build_dubeolsik_view,
     build_jamo_composition_view,
@@ -88,6 +94,7 @@ class KoguardEngine:
         "_config",
         "_dictionary",
         "_exact_matcher",
+        "_fuzzy_matcher",
     )
 
     def __init__(
@@ -114,6 +121,19 @@ class KoguardEngine:
         )
         self._alias_matcher = (
             AliasMatcher(resolved_dictionary) if resolved_config.alias_matching else None
+        )
+        self._fuzzy_matcher = (
+            FuzzyMatcher(
+                resolved_dictionary,
+                min_term_length=resolved_config.fuzzy_min_term_length,
+                max_term_length=resolved_config.fuzzy_max_term_length,
+                max_distance=resolved_config.fuzzy_max_distance,
+                min_score=resolved_config.fuzzy_min_score,
+                max_operations=resolved_config.fuzzy_max_operations,
+                max_index_entries=resolved_config.fuzzy_max_index_entries,
+            )
+            if resolved_config.fuzzy_matching
+            else None
         )
 
     @property
@@ -388,6 +408,20 @@ class KoguardEngine:
                 len(text),
                 matches,
                 mixed_matches,
+                protected_original_masks=(protected_original,),
+            )
+        if self._fuzzy_matcher is not None:
+            fuzzy_matches = self._fuzzy_matcher.find(
+                text,
+                normalized,
+                protected_masks=normalized_protected,
+                protected_original=protected_original,
+                occupied_original=_build_match_original_mask(len(text), matches),
+            )
+            matches = _merge_view_matches(
+                len(text),
+                matches,
+                fuzzy_matches,
                 protected_original_masks=(protected_original,),
             )
         elapsed_ms = (perf_counter_ns() - started_at) / 1_000_000

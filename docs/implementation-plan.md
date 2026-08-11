@@ -234,6 +234,8 @@ Koguard/
 
 ### Phase 2 — v0.2 Normalizer + Exact Index + Benchmark
 
+상태: 완료 (2026-08-10)
+
 작업:
 
 - 반복 문자, 특수문자 우회, 자판, 초성 view를 각각 독립 단계로 구현
@@ -255,6 +257,8 @@ Koguard/
 
 ### Phase 3 — v0.3 Fuzzy Matching
 
+상태: 완료 (2026-08-11)
+
 작업:
 
 - 후보 생성 방식 2개 이상 prototype/benchmark
@@ -267,6 +271,20 @@ Koguard/
 - 오타/변형 corpus recall 개선 확인
 - 정상 문장 false-positive 예산을 넘지 않음
 - 최대 입력에서 시간/메모리 상한을 만족
+
+구현 결과:
+
+- 길이 버킷 전수 비교와 deletion-signature index를 1,000개 합성 사전에서 비교했다. 동일
+  길이의 미탐 probe 100회 기준 중앙값은 각각 18.4393ms와 0.0020ms여서 삭제 서명 index를
+  채택했다.
+- 기본값은 3~32글자 독립 영숫자 토큰, 편집거리 1이며 거리 2와 최소 score까지 명시적으로
+  설정할 수 있다.
+- `fuzzy_max_operations`는 check별 서명 생성·조회, 조회 후보 수와 DP cell 계산을 제한하며
+  초과 시 부분 결과 대신 `FuzzyOperationLimitError`를 발생시킨다.
+- `fuzzy_max_index_entries`는 Engine 생성 시 index 메모리 증가를 제한한다.
+- Fuzzy는 모든 규칙 기반 매치 뒤에 실행하고 기존 Whitelist 및 점유 구간을 존중한다.
+- 12문장 수동 corpus의 FP/FN은 0이며, 1,000개 사전·4,096자 Fuzzy 전용 정상 입력 기준은
+  p50 4.6675ms, p95 5.7893ms다.
 
 ### Phase 4 — v0.4 Adapters
 
@@ -360,8 +378,14 @@ Koguard/
    보완한다. AI 탐지는 기본값을 `False`로 하고, 활성화한 경우에만 모델과 의존성을 lazy
    loading한다. 규칙 기반 단계를 먼저 실행하고 AI는 후순위 fallback으로 사용하며, 추가
    지연 시간과 모델별 정확도·임계값을 문서화한다.
+7. 공개 결과 모델은 불변 `matches: tuple[Match, ...]` 구조를 채택한다. scalar 속성은 첫
+   매치 기반 호환 property로 유지한다.
+8. 초기 기본 사전은 직접 선별 표현과 고정 revision의 MIT Korcen 일부만 포함한다. 라이선스가
+   확인되지 않은 외부 사전은 포함하지 않는다.
+9. 패키지 버전은 전체 공개 품질 게이트를 마칠 때까지 `0.1.0`을 유지하고, 공개 범위를 확정한
+   뒤 한 번에 다음 버전으로 올린다.
 
 남은 결정:
 
-1. v0.1 공개 결과 모델에 다중 `matches` 구조를 채택할지 최종 확정한다. 이 문서는 부분 화이트리스트 처리, 전체 구간 마스킹, matcher별 근거 보존을 위해 채택을 권장한다.
-2. 초기 개발용 기본 사전과 정확도 검증 corpus의 범위를 정한다. 외부 데이터셋의 라이선스 검토와 최종 선정은 PyPI 배포 전에 진행한다.
+1. 실제 서비스 분포를 반영할 외부 정확도 corpus의 범위와 라이선스, false-positive 예산을
+   PyPI 배포 전에 확정한다.

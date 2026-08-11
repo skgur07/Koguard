@@ -2,8 +2,8 @@
 
 측정일: 2026-07-28
 
-대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성·Alias
-매칭 + 사용자 주입 Whitelist
+대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성·Alias·
+Fuzzy 매칭 + 사용자 주입 Whitelist
 
 환경: CPython 3.11.9
 
@@ -93,3 +93,21 @@ MIT 라이선스 Korcen의 고정 revision에서 명시적 표현을 소량 선�
 
 이 수치는 작은 수동 회귀 corpus에만 적용된다. 정상 영문 문장과 실제 채팅의 초성 표현을 더
 확대해 조합 우회로 인한 오탐 예산을 지속해서 검증해야 한다.
+
+## Fuzzy Matching 추가 기준선
+
+측정일: 2026-08-11
+
+`tests/corpus/fuzzy_cases.json`의 직접 작성한 12개 문장과 기대 탐지 occurrence 7개를
+`EngineConfig(fuzzy_matching=True)`와 3개 사전어로 검증했다. 한 글자 치환·삭제·삽입,
+다중 매치, Exact 우선순위와 함께 `새끼손가락`, `돌아오는`, 토큰 내부 삭제형, 구분자 입력,
+정상 문장을 오탐 방지 사례로 포함한다.
+
+- False Positive: 0
+- False Negative: 0
+- Precision: 1.0
+- Recall: 1.0
+
+이 수치는 독립 영숫자 토큰의 작은 수동 corpus에만 적용된다. 조사·어미가 붙은 오타와 실제
+서비스의 정상 단어 분포를 대표하지 않으며, 외부 데이터셋 검토 후 false-positive 예산을 다시
+측정해야 한다.

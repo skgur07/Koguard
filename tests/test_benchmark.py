@@ -37,6 +37,7 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         "choseong",
         "alias",
         "segmented-input",
+        "fuzzy",
     }
     assert max(len(case.text) for case in cases) == EngineConfig().max_input_length
     assert {case.engine_profile for case in cases} >= {
@@ -46,6 +47,7 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
         "choseong",
         "alias",
         "segmented-input",
+        "fuzzy",
     }
     assert any(
         case.engine_profile == "whitespace-gap"
@@ -76,6 +78,17 @@ def test_benchmark_corpus_covers_required_phase_two_scenarios() -> None:
     assert any(
         case.category == "segmented-input"
         and case.engine_profile == "segmented-input"
+        and len(case.text) == EngineConfig().max_input_length
+        for case in cases
+    )
+    assert any(
+        case.category == "fuzzy" and case.engine_profile == "fuzzy" and case.expected_matches == 1
+        for case in cases
+    )
+    assert any(
+        case.category == "fuzzy"
+        and case.engine_profile == "fuzzy"
+        and case.dictionary_profile == "fuzzy-scale"
         and len(case.text) == EngineConfig().max_input_length
         for case in cases
     )
@@ -286,6 +299,47 @@ def test_run_benchmarks_applies_segmented_input_engine_profile() -> None:
 
     assert report.results[0].engine_profile == "segmented-input"
     assert report.results[0].expected_matches == 1
+
+
+def test_run_benchmarks_applies_fuzzy_engine_profile() -> None:
+    case = BenchmarkCase(
+        name="unit-fuzzy-substitution",
+        category="fuzzy",
+        text="개세끼",
+        dictionary_size=2,
+        expected_matches=1,
+        dictionary_profile="fuzzy-scale",
+        engine_profile="fuzzy",
+    )
+
+    report = run_benchmarks((case,), iterations=2, warmups=0)
+
+    assert report.results[0].engine_profile == "fuzzy"
+    assert report.results[0].expected_matches == 1
+
+
+def test_retained_memory_includes_fuzzy_index() -> None:
+    minimal_case = BenchmarkCase(
+        name="unit-minimal-fuzzy-index",
+        category="dictionary-scale",
+        text="정상 문장",
+        dictionary_size=100,
+        expected_matches=0,
+        dictionary_profile="fuzzy-scale",
+        engine_profile="minimal",
+    )
+    fuzzy_case = replace(
+        minimal_case,
+        name="unit-fuzzy-index",
+        engine_profile="fuzzy",
+    )
+
+    report = run_benchmarks((minimal_case, fuzzy_case), iterations=1, warmups=0)
+    retained_by_profile = {
+        result.engine_profile: result.engine_retained_memory_bytes for result in report.results
+    }
+
+    assert retained_by_profile["fuzzy"] > retained_by_profile["minimal"]
 
 
 def test_retained_memory_is_invariant_to_prior_check_workload() -> None:

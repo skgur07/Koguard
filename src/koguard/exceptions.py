@@ -25,3 +25,14 @@ class InputTooLongError(KoguardError, ValueError):
         return (
             f"input length {self.actual_length} exceeds the configured limit of {self.max_length}"
         )
+
+
+class FuzzyOperationLimitError(KoguardError, RuntimeError):
+    """Raised when one fuzzy check would exceed its deterministic work budget."""
+
+    def __init__(self, max_operations: int) -> None:
+        self.max_operations = max_operations
+        super().__init__(max_operations)
+
+    def __str__(self) -> str:
+        return f"fuzzy matching exceeded the configured limit of {self.max_operations} operations"
