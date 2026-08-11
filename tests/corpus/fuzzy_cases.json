@@ -1,0 +1,62 @@
+[
+  {
+    "id": "substitution",
+    "text": "그 표현은 개세끼 라고 적혔다",
+    "expected_terms": ["개새끼"]
+  },
+  {
+    "id": "standalone_deletion",
+    "text": "개끼",
+    "expected_terms": ["개새끼"]
+  },
+  {
+    "id": "insertion",
+    "text": "개새애끼",
+    "expected_terms": ["개새끼"]
+  },
+  {
+    "id": "second_term_substitution",
+    "text": "돌아비 라는 표현",
+    "expected_terms": ["돌아이"]
+  },
+  {
+    "id": "multiple_fuzzy_matches",
+    "text": "개세끼 그리고 돌아비",
+    "expected_terms": ["개새끼", "돌아이"]
+  },
+  {
+    "id": "exact_priority",
+    "text": "개새끼",
+    "expected_terms": ["개새끼"]
+  },
+  {
+    "id": "benign_compound",
+    "text": "새끼손가락을 다쳤다",
+    "expected_terms": []
+  },
+  {
+    "id": "benign_development",
+    "text": "개발 작업을 시작한다",
+    "expected_terms": []
+  },
+  {
+    "id": "benign_returning",
+    "text": "돌아오는 길이다",
+    "expected_terms": []
+  },
+  {
+    "id": "deletion_inside_token",
+    "text": "개끼손가락",
+    "expected_terms": []
+  },
+  {
+    "id": "separator_not_fuzzy",
+    "text": "개-세끼",
+    "expected_terms": []
+  },
+  {
+    "id": "normal_sentence",
+    "text": "오늘 저녁에 같이 게임할래?",
+    "expected_terms": []
+  }
+]

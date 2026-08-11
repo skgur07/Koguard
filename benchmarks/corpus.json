@@ -204,6 +204,34 @@
       "dictionary_profile": "choseong-scale",
       "engine_profile": "choseong",
       "expected_matches": 1
+    },
+    {
+      "name": "short-fuzzy-substitution",
+      "category": "fuzzy",
+      "text": "개세끼",
+      "dictionary_size": 2,
+      "dictionary_profile": "fuzzy-scale",
+      "engine_profile": "fuzzy",
+      "expected_matches": 1
+    },
+    {
+      "name": "short-fuzzy-boundary",
+      "category": "fuzzy",
+      "text": "새끼손가락",
+      "dictionary_size": 2,
+      "dictionary_profile": "fuzzy-scale",
+      "engine_profile": "fuzzy",
+      "expected_matches": 0
+    },
+    {
+      "name": "fuzzy-clean-maximum-input",
+      "category": "fuzzy",
+      "text_pattern": "가나다라마바사아자차카타파하",
+      "length": 4096,
+      "dictionary_size": 1000,
+      "dictionary_profile": "fuzzy-scale",
+      "engine_profile": "fuzzy",
+      "expected_matches": 0
     }
   ]
 }
