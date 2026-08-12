@@ -15,6 +15,7 @@ from evaluation.split_guard import (
     main,
     validate_split_manifest,
 )
+from evaluation.split_manifest_builder import SplitManifestBuildError, build_split_manifest
 
 _PROVISIONAL_CORPUS = Path("evaluation/corpus/provisional-ablation.json")
 
@@ -184,6 +185,99 @@ def test_cli_reports_only_non_sensitive_split_counts(
     assert "regression=20" in captured.out
     assert "leaks=0" in captured.out
     assert captured.err == ""
+
+
+def test_manifest_builder_adds_tuning_ids_without_moving_existing_assignment(
+    tmp_path: Path,
+) -> None:
+    regression_path = _write_json(
+        tmp_path / "regression.json",
+        _corpus("regression-corpus", "stable-regression", "regression", "회귀 문장"),
+    )
+    tuning_path = _write_json(
+        tmp_path / "tuning.json",
+        _corpus("tuning-corpus", "stable-tuning", "tuning", "튜닝 문장"),
+    )
+    base_path = _write_json(
+        tmp_path / "base.json",
+        _manifest([_assignment("regression-corpus", "stable-regression", "regression")]),
+    )
+    output_path = tmp_path / "v2.json"
+
+    manifest = build_split_manifest(
+        base_path,
+        [regression_path, tuning_path],
+        manifest_version=2,
+        change_reason="Add the licensed tuning review intake.",
+        output_path=output_path,
+    )
+
+    assert manifest["manifest_version"] == 2
+    assert manifest["change_reason"] == "Add the licensed tuning review intake."
+    assert manifest["assignments"] == [
+        _assignment("regression-corpus", "stable-regression", "regression"),
+        _assignment("tuning-corpus", "stable-tuning", "tuning"),
+    ]
+    serialized = json.dumps(manifest, ensure_ascii=False)
+    assert "회귀 문장" not in serialized
+    assert "튜닝 문장" not in serialized
+    assert output_path.is_file()
+    summary = validate_split_manifest(
+        output_path,
+        [regression_path, tuning_path],
+        repository_root=tmp_path / "public-repository",
+        previous_manifest_path=base_path,
+    )
+    assert summary.split_counts == (("regression", 1), ("tuning", 1))
+
+
+def test_manifest_builder_rejects_version_reuse_and_existing_case_removal(tmp_path: Path) -> None:
+    regression_path = _write_json(
+        tmp_path / "regression.json",
+        _corpus("regression-corpus", "stable-regression", "regression", "회귀 문장"),
+    )
+    base_path = _write_json(
+        tmp_path / "base.json",
+        _manifest([_assignment("regression-corpus", "stable-regression", "regression")]),
+    )
+    unrelated_path = _write_json(
+        tmp_path / "unrelated.json",
+        _corpus("tuning-corpus", "unrelated-tuning", "tuning", "다른 문장"),
+    )
+
+    with pytest.raises(SplitManifestBuildError, match="manifest_version must exceed"):
+        build_split_manifest(
+            base_path,
+            [regression_path],
+            manifest_version=1,
+            change_reason="Invalid reuse.",
+        )
+    with pytest.raises(SplitManifestBuildError, match="existing assignment is missing"):
+        build_split_manifest(
+            base_path,
+            [unrelated_path],
+            manifest_version=2,
+            change_reason="Accidental removal.",
+        )
+
+
+def test_manifest_builder_rejects_malformed_base_as_contract_error(tmp_path: Path) -> None:
+    corpus_path = _write_json(
+        tmp_path / "regression.json",
+        _corpus("regression-corpus", "stable-regression", "regression", "회귀 문장"),
+    )
+    malformed_path = _write_json(
+        tmp_path / "malformed.json",
+        {"manifest_version": 1, "assignments": []},
+    )
+
+    with pytest.raises(SplitManifestBuildError, match="base manifest violates"):
+        build_split_manifest(
+            malformed_path,
+            [corpus_path],
+            manifest_version=2,
+            change_reason="Should fail cleanly.",
+        )
 
 
 def _manifest(assignments: list[dict[str, str]]) -> dict[str, Any]:

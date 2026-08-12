@@ -175,7 +175,8 @@
               "maximum-input",
               "multiple-matches",
               "whitelist",
-              "adversarial-performance"
+              "adversarial-performance",
+              "unadjudicated-intake"
             ]
           }
         },

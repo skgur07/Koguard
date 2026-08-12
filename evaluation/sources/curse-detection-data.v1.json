@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "source_id": "curse-detection-data",
+  "repository": "https://github.com/2runo/Curse-detection-data",
+  "revision": "ff241621e103b6f220d30de324d0d07987887308",
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/2runo/Curse-detection-data/ff241621e103b6f220d30de324d0d07987887308/dataset.txt",
+    "sha256": "1c3489417e4972dbbbdde19cc47bb8638292891f7f1a443ecbdc2e3c6843545a",
+    "size_bytes": 514417,
+    "line_count": 5825
+  },
+  "license": {
+    "spdx": "MIT",
+    "url": "https://raw.githubusercontent.com/2runo/Curse-detection-data/ff241621e103b6f220d30de324d0d07987887308/LICENSE",
+    "sha256": "5cb5b18cc855e245f8e299b931a1203479a56fd79a752b102d623056ba5d7c2c",
+    "redistribution_allowed": true
+  },
+  "format": {
+    "delimiter": "|",
+    "text_column": 0,
+    "label_column": 1,
+    "allowed_labels": ["0", "1"]
+  },
+  "intake": {
+    "corpus_id": "koguard-curse-review-intake-v1",
+    "split": "tuning",
+    "selection": "stable-sha256-rank-v1",
+    "target_by_source_label": {"0": 500, "1": 2000}
+  }
+}

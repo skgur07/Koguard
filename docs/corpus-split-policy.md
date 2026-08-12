@@ -3,7 +3,9 @@
 이 문서는 PF-004가 고정한 tuning, hidden evaluation, private service corpus의 운영 경계다.
 기계 검증 계약은 `evaluation/split-manifest.schema.json`, 실행 도구는
 `evaluation/split_guard.py`, 현재 공개 assignment는
-`evaluation/splits/corpus-splits.v1.json`에 있다.
+공개 regression의 기본 manifest는 `evaluation/splits/corpus-splits.v1.json`이다. PF-005의
+로컬 review intake ID를 포함한 v2는 비민감 aggregate 근거로 보존하되 원문과 함께 검증할 때만
+명시적으로 선택한다.
 
 ## 역할과 열람 경계
 
@@ -50,8 +52,9 @@ hidden evaluation과 공개 regression/tuning 사이에서 하나라도 겹치�
 - 보호 원문은 접근 로그와 저장 시 암호화를 제공하는 제한된 저장소에 둔다.
 - repository root 아래 `evaluation/hidden`, `evaluation/private`, `evaluation/protected`는
   방어적으로 ignore하며, guard는 경로가 repository 안이면 ignore 여부와 무관하게 실패한다.
-- 공개 sdist에는 schema, guard, 공개 manifest와 재배포 가능한 corpus만 포함한다. wheel에는
-  평가 도구와 corpus를 포함하지 않는다.
+- 공개 sdist에는 schema, guard, 공개 manifest, source pin과 작은 regression corpus만 포함한다.
+  2,500건 tuning review intake 원문은 수동 privacy review 전까지 Git과 sdist에서 제외하고
+  로컬 보호 artifact로만 유지한다. wheel에는 모든 평가 도구와 corpus를 포함하지 않는다.
 - aggregate report도 case ID가 서비스 사용자와 연결될 수 있으면 공개하지 않는다.
 
 ## Private service 개인정보·보존
