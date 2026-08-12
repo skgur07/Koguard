@@ -96,8 +96,9 @@ private 사례는 `source.kind=private`, `redistribution_allowed=false`,
 | `private` | 실제 서비스 분포·drift 확인 | 비식별화, 최소 접근, 별도 보존·삭제 정책 적용 |
 
 hidden evaluation과 private 원문은 이 공개 저장소, PR 첨부, CI 로그와 issue 본문에 올리지 않는다.
-split 간 중복·누출 자동 검사는 PF-004에서 추가하되, 그 전에도 annotation 담당자는 동일 원문과
-단순 변형이 tuning과 evaluation에 동시에 들어가지 않도록 검토한다.
+`evaluation/split_guard.py`는 stable-ID manifest 일치, 공개 자료와 hidden evaluation 사이의
+동일 원문 및 고정 정규화 변형 중복, protected 원문의 저장소 내부 배치를 차단한다. 운영 역할,
+승인과 보존 절차는 [corpus split 정책](corpus-split-policy.md)을 따른다.
 
 ## 7. annotation 절차
 
@@ -116,8 +117,13 @@ split 간 중복·누출 자동 검사는 PF-004에서 추가하되, 그 전에�
 ```powershell
 uv run python -m evaluation.corpus_validator path/to/corpus.json
 uv run python -m evaluation.corpus_validator path/to/corpus-directory
+uv run python -m evaluation.split_guard path/to/manifest.json path/to/corpus-directory `
+  --repository-root .
 ```
 
 여러 경로를 함께 전달하면 파일을 가로지르는 중복 case ID도 검사한다. 성공 시 파일·case·split·
 review 개수만 출력한다. 실패 시 파일과 JSON 위치, 정책 위반만 출력하며 원문이나 canonical
 term은 출력하지 않는다.
+
+split guard는 manifest version, split별 건수와 누출 건수만 출력한다. hidden evaluation을
+포함한 완전 검증은 corpus custodian이 보호 환경에서 실행하고 aggregate 결과만 전달한다.

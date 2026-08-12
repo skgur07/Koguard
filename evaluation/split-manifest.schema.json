@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/split-manifest.schema.json",
+  "title": "Koguard corpus split manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "manifest_version",
+    "change_reason",
+    "normalization_version",
+    "assignments"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "manifest_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+    },
+    "manifest_version": {"type": "integer", "minimum": 1},
+    "change_reason": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "normalization_version": {"const": "nfkc-casefold-strip-pzc-repeat-v1"},
+    "assignments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/assignment"}
+    }
+  },
+  "$defs": {
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_id", "corpus_id", "split"],
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+        },
+        "corpus_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+        },
+        "split": {
+          "enum": ["regression", "tuning", "evaluation", "private"]
+        }
+      }
+    }
+  }
+}

@@ -28,6 +28,7 @@ include = [
     "/benchmarks",
     "/evaluation",
     "/docs/corpus-annotation-guide.md",
+    "/docs/corpus-split-policy.md",
     "/README.md",
 ]
 

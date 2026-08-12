@@ -5,6 +5,35 @@ Korcen에 각각 입력하고, 문장 단위 및 가능한 범위의 occurrence 
 기록한다. 평가 대상 패키지는 코어 런타임 의존성에 추가하지 않으며, 네트워크 접근도
 러너 밖에서만 수행한다.
 
+## PF-004 split guard
+
+`split_guard.py`는 stable case ID manifest와 실제 corpus의 `corpus_id`·split이 일치하는지
+검사한다. 공개 regression/tuning과 hidden evaluation 사이의 동일 원문, NFKC·casefold·
+구두점/공백/format 제거·연속 반복 축약 후 중복을 차단한다. hidden evaluation과 private
+원문이 repository root 아래 있으면 검증에 실패하며 오류와 성공 출력에는 원문을 남기지 않는다.
+
+```powershell
+uv run python -m evaluation.split_guard `
+  evaluation\splits\corpus-splits.v1.json `
+  evaluation\corpus\provisional-ablation.json `
+  --repository-root .
+```
+
+manifest assignment 또는 normalization version을 바꿀 때는 이전 manifest를 보존하고
+`manifest_version`을 증가시킨 뒤 변경 사유를 기록한다.
+
+```powershell
+uv run python -m evaluation.split_guard `
+  C:\protected\corpus-splits.v2.json `
+  evaluation\corpus\tuning-v1.json `
+  C:\protected\hidden-evaluation-v1.json `
+  --previous-manifest evaluation\splits\corpus-splits.v1.json `
+  --repository-root .
+```
+
+hidden/private 접근과 승인 절차는
+[corpus split 정책](../docs/corpus-split-policy.md)을 따른다.
+
 ## PF-003 matcher ablation
 
 `ablation_runner.py`는 Exact+Alias 기준선, matcher별 isolated candidate, Segmented
