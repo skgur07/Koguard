@@ -76,6 +76,19 @@ annotation 방식도 단일 출처에 종속된다. 완화하려면 직접 작�
 보호 경로에서 유지한다. source pin, 생성기, license notice, aggregate report와 stable-ID
 manifest는 sdist에 남아 고정 upstream artifact로 corpus를 재생성·검증할 수 있다.
 
+## 추가 후보: ZIZUN quarantine
+
+`ZIZUN/korean-malicious-comments-dataset` 10,000행을 별도 후보로 고정했다. 이 중 500건을 로컬
+review queue로 만들었지만 기존 Curse 원본과 normalized 기준 2,010건이 겹치므로 PF-005가
+요구하는 독립 출처 확충으로 계산하지 않는다. 25건의 label 누락과 구성 자료별 행 provenance
+부재도 확인했다.
+
+집계 저장소는 MIT를 선언하지만 구성 설명상 5,182건은 CC-BY-SA-4.0 자료에서 파생됐다.
+권리 호환성과 행별 의무를 확인하기 전까지 queue는 Git·배포물에서 제외하고, 모든 case를
+`review`와 `redistribution_allowed=false`로 유지한다. 따라서 현재 gold 수량과 hidden evaluation
+수량은 증가하지 않았다. 자세한 고정 hash, 사용 내역과 최종 검토 체크리스트는
+[외부 평가 자료 사용·권리 감사 대장](source-rights-audit.md)을 따른다.
+
 ## PF-005 종료 전 남은 작업
 
 1. 100건 단위 primary/secondary batch를 생성하고 실제 독립 판정 시작

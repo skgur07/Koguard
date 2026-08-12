@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/quarantine-report.schema.json",
+  "title": "Koguard quarantine intake report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_id",
+    "source_revision",
+    "artifact_sha256",
+    "source_row_count",
+    "source_label_counts",
+    "exact_unique_text_count",
+    "normalized_unique_text_count",
+    "direct_overlap_excluded",
+    "normalized_overlap_excluded",
+    "sensitive_pattern_excluded",
+    "normalized_duplicate_excluded",
+    "conflicting_duplicate_groups",
+    "eligible_source_label_counts",
+    "selected_count",
+    "selected_source_label_counts",
+    "generated_label_counts",
+    "rights_review_status",
+    "redistribution_allowed",
+    "independent_source_ready",
+    "gold_ready",
+    "completion_blockers"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "source_id": {"type": "string"},
+    "source_revision": {"type": "string"},
+    "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_row_count": {"type": "integer", "minimum": 1},
+    "source_label_counts": {"$ref": "#/$defs/sourceCounts"},
+    "exact_unique_text_count": {"type": "integer", "minimum": 1},
+    "normalized_unique_text_count": {"type": "integer", "minimum": 1},
+    "direct_overlap_excluded": {"type": "integer", "minimum": 0},
+    "normalized_overlap_excluded": {"type": "integer", "minimum": 0},
+    "sensitive_pattern_excluded": {"type": "integer", "minimum": 0},
+    "normalized_duplicate_excluded": {"type": "integer", "minimum": 0},
+    "conflicting_duplicate_groups": {"type": "integer", "minimum": 0},
+    "eligible_source_label_counts": {"$ref": "#/$defs/labelCounts"},
+    "selected_count": {"type": "integer", "minimum": 1},
+    "selected_source_label_counts": {"$ref": "#/$defs/labelCounts"},
+    "generated_label_counts": {"$ref": "#/$defs/generatedCounts"},
+    "rights_review_status": {"const": "pending"},
+    "redistribution_allowed": {"const": false},
+    "independent_source_ready": {"const": false},
+    "gold_ready": {"const": false},
+    "completion_blockers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string"}
+    }
+  },
+  "$defs": {
+    "labelCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["0", "1"],
+      "properties": {
+        "0": {"type": "integer", "minimum": 0},
+        "1": {"type": "integer", "minimum": 0}
+      }
+    },
+    "sourceCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["0", "1", "missing"],
+      "properties": {
+        "0": {"type": "integer", "minimum": 0},
+        "1": {"type": "integer", "minimum": 0},
+        "missing": {"type": "integer", "minimum": 0}
+      }
+    },
+    "generatedCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positive", "hard-negative", "review"],
+      "properties": {
+        "positive": {"const": 0},
+        "hard-negative": {"const": 0},
+        "review": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

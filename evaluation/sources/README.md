@@ -27,3 +27,15 @@ source label은 deterministic 층화 선택에만 사용하고 생성 case에는
 
 외부 리소스 목록이나 aggregator의 라이선스 요약만으로 승격하지 않는다. 항상 원 repository의
 LICENSE와 고정 revision을 확인한다.
+
+## Rights-pending candidate: ZIZUN malicious comments
+
+`candidates/zizun-korean-malicious-comments.v1.json`은 공개 corpus 승인 목록이 아니라 로컬 분석용
+quarantine source pin이다. 고정 dataset, upstream이 선언한 MIT 파일, 구성 설명 README와 기존
+Curse exclusion 원본을 모두 hash 검증한 뒤 500건 `review` queue만 생성한다.
+
+집계 저장소의 MIT 선언과 구성 자료 `kocohub/korean-hate-speech`의 CC-BY-SA-4.0을 행별로
+구분할 provenance가 없으므로 `redistribution_allowed=false`다. 선언 LICENSE 사본을
+`licenses/zizun-declared-MIT.txt`에 남긴 것은 선언 사실을 재현하기 위한 것이며 권리 승인을
+뜻하지 않는다. 분석 수치와 최종 검토 항목은
+[외부 평가 자료 사용·권리 감사 대장](../../docs/source-rights-audit.md)에 기록한다.

@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/quarantine-source.schema.json",
+  "title": "Koguard rights-pending quarantine source",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_id",
+    "repository",
+    "revision",
+    "artifacts",
+    "format",
+    "components",
+    "rights_review",
+    "exclusions",
+    "intake"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "source_id": {"$ref": "#/$defs/id"},
+    "repository": {"type": "string", "format": "uri"},
+    "revision": {"type": "string", "minLength": 1, "maxLength": 200},
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset", "license", "provenance"],
+      "properties": {
+        "dataset": {"$ref": "#/$defs/datasetArtifact"},
+        "license": {"$ref": "#/$defs/artifact"},
+        "provenance": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "text_column", "label_column", "allowed_labels"],
+      "properties": {
+        "kind": {"const": "tsv-header"},
+        "text_column": {"const": "content"},
+        "label_column": {"const": "lable"},
+        "allowed_labels": {"const": ["0", "1"]}
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/component"}
+    },
+    "rights_review": {"$ref": "#/$defs/rightsReview"},
+    "exclusions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/exclusion"}
+    },
+    "intake": {"$ref": "#/$defs/intake"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "sha256", "size_bytes"],
+      "properties": {
+        "url": {"type": "string", "format": "uri"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "datasetArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "sha256", "size_bytes", "row_count"],
+      "properties": {
+        "url": {"type": "string", "format": "uri"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "row_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "reference", "declared_license", "stated_row_count"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/id"},
+        "reference": {"type": "string", "format": "uri"},
+        "declared_license": {"type": "string", "minLength": 1, "maxLength": 128},
+        "stated_row_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "rightsReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "redistribution_allowed", "allowed_scope", "blockers"],
+      "properties": {
+        "status": {"const": "pending"},
+        "redistribution_allowed": {"const": false},
+        "allowed_scope": {"const": "local-quarantine-analysis-only"},
+        "blockers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1, "maxLength": 500}
+        }
+      }
+    },
+    "exclusion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "artifact_sha256", "format"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/id"},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "format": {"const": "pipe-last-label"}
+      }
+    },
+    "intake": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["corpus_id", "split", "selection", "target_by_source_label"],
+      "properties": {
+        "corpus_id": {"$ref": "#/$defs/id"},
+        "split": {"const": "tuning"},
+        "selection": {"const": "stable-sha256-rank-v1"},
+        "target_by_source_label": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["0", "1"],
+          "properties": {
+            "0": {"type": "integer", "minimum": 0},
+            "1": {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    }
+  }
+}

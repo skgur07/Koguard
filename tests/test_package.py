@@ -26,5 +26,8 @@ def test_sdist_includes_evaluation_contracts_and_corpus_policies() -> None:
     assert "/docs/corpus-annotation-guide.md" in sdist_includes
     assert "/docs/corpus-split-policy.md" in sdist_includes
     assert "/docs/corpus-intake-status.md" in sdist_includes
+    assert "/docs/source-rights-audit.md" in sdist_includes
+    assert "/docs/testing/quarantine-intake.tdd.md" in sdist_includes
     assert "/evaluation/annotation-work" in sdist_excludes
+    assert "/evaluation/quarantine" in sdist_excludes
     assert "/evaluation/corpus/tuning/curse-review-intake-v1.json" in sdist_excludes

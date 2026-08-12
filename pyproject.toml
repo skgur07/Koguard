@@ -30,10 +30,13 @@ include = [
     "/docs/corpus-annotation-guide.md",
     "/docs/corpus-split-policy.md",
     "/docs/corpus-intake-status.md",
+    "/docs/source-rights-audit.md",
+    "/docs/testing/quarantine-intake.tdd.md",
     "/README.md",
 ]
 exclude = [
     "/evaluation/annotation-work",
+    "/evaluation/quarantine",
     "/evaluation/corpus/tuning/curse-review-intake-v1.json",
 ]
 

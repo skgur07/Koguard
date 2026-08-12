@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "source_id": "zizun-korean-malicious-comments",
+  "source_revision": "50b92f50e89bb594db5c9ecafea8d48c1dd5b943",
+  "artifact_sha256": "8fee1801737cd9d1d3bd38eab7ba6b9ba1d8b91b566f49d980c112dcf778be04",
+  "source_row_count": 10000,
+  "source_label_counts": {
+    "0": 4983,
+    "1": 4992,
+    "missing": 25
+  },
+  "exact_unique_text_count": 9987,
+  "normalized_unique_text_count": 9975,
+  "direct_overlap_excluded": 1402,
+  "normalized_overlap_excluded": 2010,
+  "sensitive_pattern_excluded": 1,
+  "normalized_duplicate_excluded": 12,
+  "conflicting_duplicate_groups": 0,
+  "eligible_source_label_counts": {
+    "0": 2958,
+    "1": 4981
+  },
+  "selected_count": 500,
+  "selected_source_label_counts": {
+    "0": 250,
+    "1": 250
+  },
+  "generated_label_counts": {
+    "positive": 0,
+    "hard-negative": 0,
+    "review": 500
+  },
+  "rights_review_status": "pending",
+  "redistribution_allowed": false,
+  "independent_source_ready": false,
+  "gold_ready": false,
+  "completion_blockers": [
+    "The aggregate repository declares MIT while 5,182 stated rows derive from CC-BY-SA-4.0 material.",
+    "Dataset.csv does not retain per-row component provenance, so license obligations cannot be assigned per case.",
+    "The fixed artifact has 25 missing labels and does not reproduce the README's stated 5,000/5,000 label balance.",
+    "The fixed artifact has substantial direct and normalized overlap with Curse-detection-data."
+  ]
+}

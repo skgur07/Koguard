@@ -18,6 +18,31 @@ span이나 실제 평가 slice를 갖지 않는다. `results/curse-review-intake
 [PF-005 corpus 상태](../docs/corpus-intake-status.md)에 기록한다. 생성 원문은 수동 privacy
 review 전까지 Git과 배포물에 포함하지 않는다.
 
+## PF-005 rights-pending quarantine intake
+
+`quarantine_intake.py`는 권리 검토가 끝나지 않은 복합 출처를 공개 corpus와 분리해 분석한다.
+ZIZUN 고정 artifact 10,000행에서 Curse 원본과의 normalized overlap 2,010건, 민감 패턴 1건,
+정규화 중복 12건을 제외하고 source label별 250건씩 총 500건을 deterministic하게 선택했다.
+
+이 500건은 모두 `review`이며 `redistribution_allowed=false`, `independent_source_ready=false`,
+`gold_ready=false`다. 원문 queue는 `evaluation/quarantine/`에 생성되어 Git과 sdist에서 제외되고,
+source pin과 원문 없는 집계 report만 보존된다. 실행 전에 운영자가 고정 dataset, LICENSE,
+README와 Curse exclusion 원본을 별도로 준비해야 하며 runner는 네트워크에 접근하지 않는다.
+
+```powershell
+uv run python -m evaluation.quarantine_intake `
+  evaluation\sources\candidates\zizun-korean-malicious-comments.v1.json `
+  C:\artifacts\zizun-Dataset-50b92f50.csv `
+  C:\artifacts\zizun-LICENSE-50b92f50.txt `
+  C:\artifacts\zizun-README-50b92f50.md `
+  --exclusion C:\artifacts\curse-detection-data-ff241621.txt `
+  --output evaluation\quarantine\zizun-review-intake-v1.json `
+  --report evaluation\results\zizun-quarantine-intake-v1.report.json
+```
+
+사용 내역과 권리 blocker는
+[외부 평가 자료 사용·권리 감사 대장](../docs/source-rights-audit.md)을 따른다.
+
 ## PF-005 blinded annotation workflow
 
 `annotation_workflow.py`는 tuning `review` case를 stable ID 순서로 최대 500건씩 export하고,
