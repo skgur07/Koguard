@@ -1,9 +1,30 @@
-# Koguard/Korcen 재현 비교 러너
+# Koguard 평가 러너
 
 이 디렉터리의 비교 러너는 PF-001 corpus의 동일한 gold annotation을 Koguard와
 Korcen에 각각 입력하고, 문장 단위 및 가능한 범위의 occurrence 단위 지표를 JSON으로
 기록한다. 평가 대상 패키지는 코어 런타임 의존성에 추가하지 않으며, 네트워크 접근도
 러너 밖에서만 수행한다.
+
+## PF-003 matcher ablation
+
+`ablation_runner.py`는 Exact+Alias 기준선, matcher별 isolated candidate, Segmented
+prerequisite control, 현재 all-enabled를 같은 gold corpus에서 평가한다. matcher마다
+TP·FP·FN, 다른 matcher와의 중복 및 고유 증분, short/max p50·p95와 Engine retained
+memory를 기록한다. 재현성 확인을 위해 Koguard/Python 버전, profile 설정 hash, 원문을
+노출하지 않는 workload 길이·SHA-256도 함께 남긴다.
+
+```powershell
+uv run python -m evaluation.ablation_runner `
+  --corpus evaluation\corpus\provisional-ablation.json `
+  --output evaluation\results\provisional-ablation-windows-python311.json `
+  --iterations 100 `
+  --warmups 10
+```
+
+현재 corpus와 결과는 구현 경로를 검증하는 `provisional-regression`이다. 서비스 정확도나
+balanced profile 포함 여부는 [PF-003 기준선](../docs/matcher-ablation-baseline.md)에 적힌
+한계대로 PF-005 독립 corpus 재측정 전까지 확정하지 않는다. report schema는
+`ablation-report.schema.json` version 1이다.
 
 ## 비교 계약
 
