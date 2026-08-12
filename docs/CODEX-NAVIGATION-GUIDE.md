@@ -16,6 +16,7 @@
 | `tests/` | 공개 계약과 회귀 테스트 |
 | `tests/corpus/` | 정확도 기준 corpus |
 | `docs/corpus-annotation-guide.md` | label, span, 출처, split annotation 정책 |
+| `docs/corpus-split-policy.md` | tuning/hidden/private 접근, 변경 승인과 보존 정책 |
 | `evaluation/README.md` | 고정 artifact 기반 비교 실행법, 리포트 계약과 한계 |
 | `docs/matcher-ablation-baseline.md` | matcher별 provisional 정확도·지연·메모리 근거 |
 | `docs/product-focus-plan.md` | 최초 공개 품질 우선순위, Phase 보류와 재개 조건 |

@@ -11,3 +11,7 @@ htmlcov/
 build/
 dist/
 /test.py
+# Protected corpus raw text must never become a public repository artifact.
+/evaluation/hidden/
+/evaluation/private/
+/evaluation/protected/

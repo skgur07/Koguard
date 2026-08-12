@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "manifest_id": "koguard-corpus-splits",
+  "manifest_version": 1,
+  "change_reason": "PF-004 initial stable split assignment for the checked public corpus.",
+  "normalization_version": "nfkc-casefold-strip-pzc-repeat-v1",
+  "assignments": [
+    {"case_id": "ablation-positive-exact", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-positive-alias", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-positive-repeated", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-positive-separator", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-positive-whitespace", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-positive-mixed", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-positive-keyboard", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-positive-jamo", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-positive-choseong", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-positive-segmented", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-positive-fuzzy", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-negative-normal-chat", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-negative-benign-substring", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-negative-presentation", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-negative-watermelon", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-negative-finger", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-negative-development", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-negative-returning", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-negative-unconfigured-separator", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"},
+    {"case_id": "ablation-negative-newline-keyboard", "corpus_id": "koguard-provisional-ablation-v1", "split": "regression"}
+  ]
+}
