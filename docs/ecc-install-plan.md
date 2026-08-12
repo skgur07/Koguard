@@ -32,11 +32,11 @@ ECC 전체를 복제하지 않고 실제 저장소 근거가 있는 표면만 �
 | ECC 그룹 | 저장소 근거 | 결정 |
 | --- | --- | --- |
 | frontend, browser, E2E | React/Next.js/HTML UI 및 Playwright 설정 없음 | 필요 시 검색 |
-| backend API, database | HTTP API, DB, 캐시 의존성 없음 | adapter 단계에서 재평가 |
+| backend API, database | HTTP API, DB, 캐시 의존성 없음 | Phase 4 재개 조건 충족 후 재평가 |
 | 콘텐츠, 투자, 소셜, 미디어 | 제품 개발 범위와 무관 | 전역 라이브러리로만 유지 |
 | 외부 API 통합 | Claude, X, fal.ai 의존성 없음 | 해당 기능 요청 시 사용 |
-| production audit | 아직 배포 파이프라인 없음 | v1.0 배포 단계에서 승격 검토 |
-| AI eval, regression | 현재 core가 결정적 규칙 엔진 | AI plugin 단계에서 승격 검토 |
+| production audit | core 공개 hardening이 품질 트랙 Q3에 포함됨 | Q3에서 패키징·배포 감사 패턴만 적용 |
+| AI eval, regression | 독립 corpus와 비교 회귀가 품질 트랙 Q0~Q1의 핵심 | 규칙 엔진 평가 패턴만 적용하고 AI 모델 작업은 보류 |
 | browser/MCP extras | 현재 core 작업에 원격 데이터 불필요 | 프로젝트 설정에 활성화하지 않음 |
 
 ## INSTALL PLAN

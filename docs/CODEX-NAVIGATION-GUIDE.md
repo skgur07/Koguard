@@ -14,16 +14,18 @@
 | `src/koguard/data/` | 기본 사전, Whitelist, 출처 고지 |
 | `tests/` | 공개 계약과 회귀 테스트 |
 | `tests/corpus/` | 정확도 기준 corpus |
+| `docs/product-focus-plan.md` | 최초 공개 품질 우선순위, Phase 보류와 재개 조건 |
 | `docs/implementation-plan.md` | 단계별 제품 및 아키텍처 계획 |
 | `docs/accuracy-baseline.md` | 현재 정확도 기준선 |
 
 ## 탐색 순서
 
-1. 요청과 직접 관련된 공개 API 및 테스트를 먼저 찾는다.
-2. `engine.py`에서 실제 호출 경로를 따라 matcher, dictionary, normalizer로 내려간다.
-3. 모델 불변 조건과 예외 계약을 확인한다.
-4. 구현 전 관련 corpus와 Whitelist 사례를 확인한다.
-5. 변경 후 직접 관련 테스트에서 전체 품질 게이트로 범위를 넓힌다.
+1. 제품 우선순위, corpus, 기본 profile 또는 로드맵 변경은 `product-focus-plan.md`를 먼저 읽는다.
+2. 요청과 직접 관련된 공개 API 및 테스트를 찾는다.
+3. `engine.py`에서 실제 호출 경로를 따라 matcher, dictionary, normalizer로 내려간다.
+4. 모델 불변 조건과 예외 계약을 확인한다.
+5. 구현 전 관련 corpus와 Whitelist 사례를 확인한다.
+6. 변경 후 직접 관련 테스트에서 전체 품질 게이트로 범위를 넓힌다.
 
 검색은 `rg`와 `rg --files`를 우선하고, 큰 파일을 처음부터 전부 읽기보다 심볼과 호출 경로를
 기준으로 필요한 범위를 읽는다.
