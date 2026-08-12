@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-provisional-ablation-v1",
+  "cases": [
+    {
+      "id": "ablation-positive-exact",
+      "text": "병신",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 2, "canonical_term": "병신"}],
+      "slices": ["direct"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Exact 기준선 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-positive-alias",
+      "text": "ㅈ같네",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 2, "canonical_term": "좆같다"}],
+      "slices": ["alias"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Alias 기준선 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-positive-repeated",
+      "text": "시이이발",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 4, "canonical_term": "시발"}],
+      "slices": ["repeated"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Repeated matcher 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-positive-separator",
+      "text": "시*!발",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 4, "canonical_term": "시발"}],
+      "slices": ["separator"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Separator matcher 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-positive-whitespace",
+      "text": "시 발",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 3, "canonical_term": "시발"}],
+      "slices": ["whitespace"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Whitespace matcher 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-positive-mixed",
+      "text": "시 * 발",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 5, "canonical_term": "시발"}],
+      "slices": ["mixed-gap"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Mixed matcher 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-positive-keyboard",
+      "text": "tlqkf",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 5, "canonical_term": "시발"}],
+      "slices": ["keyboard"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Keyboard matcher 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-positive-jamo",
+      "text": "ㅅㅣㅂㅏㄹ",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 5, "canonical_term": "시발"}],
+      "slices": ["jamo"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Jamo composition matcher 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-positive-choseong",
+      "text": "ㅅㅂ",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 2, "canonical_term": "시발"}],
+      "slices": ["choseong"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Choseong matcher 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-positive-segmented",
+      "text": "tl * qkf",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 8, "canonical_term": "시발"}],
+      "slices": ["keyboard", "separator", "mixed-gap"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Segmented matcher와 prerequisite 분리 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-positive-fuzzy",
+      "text": "개세끼",
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 3, "canonical_term": "개새끼"}],
+      "slices": ["fuzzy"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Fuzzy matcher 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-negative-normal-chat",
+      "text": "오늘 저녁에 같이 게임할래?",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["game-term"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "일반 채팅 구현 유래 사례"
+    },
+    {
+      "id": "ablation-negative-benign-substring",
+      "text": "시발점은 시작 위치다",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["benign-substring"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "기본 whitelist 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-negative-presentation",
+      "text": "시 발표",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["token-boundary"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "부분 토큰 경계 구현 유래 사례"
+    },
+    {
+      "id": "ablation-negative-watermelon",
+      "text": "수박을 먹었다",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["benign-substring"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "초성 오탐 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-negative-finger",
+      "text": "새끼손가락을 다쳤다",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["benign-substring"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Fuzzy 오탐 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-negative-development",
+      "text": "개발 작업을 시작한다",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["domain-term"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "개발 도메인 구현 유래 사례"
+    },
+    {
+      "id": "ablation-negative-returning",
+      "text": "돌아오는 길이다",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["benign-substring"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "Fuzzy 토큰 내부 오탐 확인용 구현 유래 사례"
+    },
+    {
+      "id": "ablation-negative-unconfigured-separator",
+      "text": "ㅅ/ㅂ",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["choseong", "separator"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "미설정 구분자 구현 유래 사례"
+    },
+    {
+      "id": "ablation-negative-newline-keyboard",
+      "text": "tl\nqkf",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["keyboard", "whitespace"],
+      "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
+      "license": "MIT",
+      "split": "regression",
+      "notes": "줄바꿈 우회 차단 확인용 구현 유래 사례"
+    }
+  ]
+}

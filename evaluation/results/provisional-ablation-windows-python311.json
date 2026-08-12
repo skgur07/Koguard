@@ -1,0 +1,7153 @@
+{
+  "schema_version": 1,
+  "measured_at": "2026-08-12T05:43:54.378003+00:00",
+  "corpus": {
+    "classification": "provisional-regression",
+    "corpus_ids": [
+      "koguard-provisional-ablation-v1"
+    ],
+    "sha256": "0a735367a724d3c11bc868aecf2209c536b2699d8823828be87d100aa01caa0f",
+    "case_count": 20,
+    "positive_count": 11,
+    "hard_negative_count": 9,
+    "excluded_review_count": 0
+  },
+  "environment": {
+    "koguard_version": "0.1.0",
+    "python_version": "3.11.9",
+    "implementation": "CPython",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel"
+  },
+  "configuration": {
+    "iterations": 100,
+    "warmups": 10,
+    "profile_configuration_sha256": "3fcd74ed874c2cafe514b1497c65e07b06421eb2807c09583184b76ad7b7fb93",
+    "workloads": [
+      {
+        "workload_id": "short_chat",
+        "input_length": 15,
+        "sha256": "e40b61e7150bac2daf644dcc8f287f53864d62f9a82f100edde6fcf326f9dde4"
+      },
+      {
+        "workload_id": "maximum_input",
+        "input_length": 4096,
+        "sha256": "8f13cf6f530d53ddba47fc5515034cce5841077fcf0473ea1ae761b923eeceba"
+      }
+    ]
+  },
+  "profiles": [
+    {
+      "profile_id": "exact-alias",
+      "role": "baseline",
+      "matcher": null,
+      "comparison_profile": null,
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": false,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": false,
+        "keyboard_matching": false,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 9,
+          "tn": 8
+        },
+        "precision": 0.6666666666666666,
+        "recall": 0.18181818181818182,
+        "f1": 0.28571428571428575,
+        "accuracy": 0.5
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 9
+        },
+        "precision": 0.6666666666666666,
+        "recall": 0.18181818181818182,
+        "f1": 0.28571428571428575
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0293,
+          "p95_ms": 0.034
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 5.7835,
+          "p95_ms": 10.2824
+        },
+        "engine_retained_memory_bytes": 70514
+      }
+    },
+    {
+      "profile_id": "repeated",
+      "role": "candidate",
+      "matcher": "repeated",
+      "comparison_profile": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": false,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": false,
+        "keyboard_matching": false,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": true,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8,
+          "tn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997,
+        "accuracy": 0.55
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0313,
+          "p95_ms": 0.0427
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 5.7752,
+          "p95_ms": 6.9505
+        },
+        "engine_retained_memory_bytes": 70581
+      }
+    },
+    {
+      "profile_id": "separator",
+      "role": "candidate",
+      "matcher": "separator",
+      "comparison_profile": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": false,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": false,
+        "keyboard_matching": false,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": true,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8,
+          "tn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997,
+        "accuracy": 0.55
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.6666666666666666
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0355,
+          "p95_ms": 0.0672
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 5.6002,
+          "p95_ms": 7.4588
+        },
+        "engine_retained_memory_bytes": 70581
+      }
+    },
+    {
+      "profile_id": "whitespace",
+      "role": "candidate",
+      "matcher": "whitespace",
+      "comparison_profile": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": false,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": false,
+        "keyboard_matching": false,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": true
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8,
+          "tn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997,
+        "accuracy": 0.55
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0427,
+          "p95_ms": 0.0469
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 5.5675,
+          "p95_ms": 6.8776
+        },
+        "engine_retained_memory_bytes": 96353
+      }
+    },
+    {
+      "profile_id": "mixed",
+      "role": "candidate",
+      "matcher": "mixed",
+      "comparison_profile": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": false,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": false,
+        "keyboard_matching": false,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": true,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8,
+          "tn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997,
+        "accuracy": 0.55
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0323,
+          "p95_ms": 0.0592
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 5.8264,
+          "p95_ms": 7.9724
+        },
+        "engine_retained_memory_bytes": 109030
+      }
+    },
+    {
+      "profile_id": "keyboard",
+      "role": "candidate",
+      "matcher": "keyboard",
+      "comparison_profile": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": false,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": false,
+        "keyboard_matching": true,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8,
+          "tn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997,
+        "accuracy": 0.55
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.6666666666666666
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.034,
+          "p95_ms": 0.0362
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 6.0812,
+          "p95_ms": 7.8113
+        },
+        "engine_retained_memory_bytes": 70581
+      }
+    },
+    {
+      "profile_id": "jamo",
+      "role": "candidate",
+      "matcher": "jamo",
+      "comparison_profile": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": false,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": true,
+        "keyboard_matching": false,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8,
+          "tn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997,
+        "accuracy": 0.55
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0316,
+          "p95_ms": 0.0698
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 6.0486,
+          "p95_ms": 8.3782
+        },
+        "engine_retained_memory_bytes": 70581
+      }
+    },
+    {
+      "profile_id": "choseong",
+      "role": "candidate",
+      "matcher": "choseong",
+      "comparison_profile": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": true,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": false,
+        "keyboard_matching": false,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8,
+          "tn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997,
+        "accuracy": 0.55
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0368,
+          "p95_ms": 0.0474
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 8.0828,
+          "p95_ms": 10.9216
+        },
+        "engine_retained_memory_bytes": 108375
+      }
+    },
+    {
+      "profile_id": "segmented-prerequisites",
+      "role": "control",
+      "matcher": null,
+      "comparison_profile": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": true,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": true,
+        "keyboard_matching": true,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 5,
+          "fp": 1,
+          "fn": 6,
+          "tn": 8
+        },
+        "precision": 0.8333333333333334,
+        "recall": 0.45454545454545453,
+        "f1": 0.5882352941176471,
+        "accuracy": 0.65
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 5,
+          "fp": 1,
+          "fn": 6
+        },
+        "precision": 0.8333333333333334,
+        "recall": 0.45454545454545453,
+        "f1": 0.5882352941176471
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.6666666666666666
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0395,
+          "p95_ms": 0.0438
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 7.9719,
+          "p95_ms": 10.5418
+        },
+        "engine_retained_memory_bytes": 108375
+      }
+    },
+    {
+      "profile_id": "segmented",
+      "role": "candidate",
+      "matcher": "segmented",
+      "comparison_profile": "segmented-prerequisites",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": true,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": true,
+        "keyboard_matching": true,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": true,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 6,
+          "fp": 1,
+          "fn": 5,
+          "tn": 8
+        },
+        "precision": 0.8571428571428571,
+        "recall": 0.5454545454545454,
+        "f1": 0.6666666666666665,
+        "accuracy": 0.7
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 6,
+          "fp": 1,
+          "fn": 5
+        },
+        "precision": 0.8571428571428571,
+        "recall": 0.5454545454545454,
+        "f1": 0.6666666666666665
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.6666666666666666
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0404,
+          "p95_ms": 0.0479
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 7.8697,
+          "p95_ms": 12.3776
+        },
+        "engine_retained_memory_bytes": 108375
+      }
+    },
+    {
+      "profile_id": "fuzzy",
+      "role": "candidate",
+      "matcher": "fuzzy",
+      "comparison_profile": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": false,
+        "exact_matching": true,
+        "fuzzy_matching": true,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": false,
+        "keyboard_matching": false,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8,
+          "tn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997,
+        "accuracy": 0.55
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 8
+        },
+        "precision": 0.75,
+        "recall": 0.2727272727272727,
+        "f1": 0.39999999999999997
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.061,
+          "p95_ms": 0.0704
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 7.9508,
+          "p95_ms": 10.1007
+        },
+        "engine_retained_memory_bytes": 90807
+      }
+    },
+    {
+      "profile_id": "all-enabled",
+      "role": "current",
+      "matcher": null,
+      "comparison_profile": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": true,
+        "exact_matching": true,
+        "fuzzy_matching": true,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": true,
+        "keyboard_matching": true,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": true,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": true,
+        "segmented_input_matching": true,
+        "separator_matching": true,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": true
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 11,
+          "fp": 1,
+          "fn": 0,
+          "tn": 8
+        },
+        "precision": 0.9166666666666666,
+        "recall": 1.0,
+        "f1": 0.9565217391304348,
+        "accuracy": 0.95
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 11,
+          "fp": 1,
+          "fn": 0
+        },
+        "precision": 0.9166666666666666,
+        "recall": 1.0,
+        "f1": 0.9565217391304348
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "tn": 3
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null,
+            "accuracy": 0.75
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        }
+      ],
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.1007,
+          "p95_ms": 0.2096
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 10.3318,
+          "p95_ms": 12.6805
+        },
+        "engine_retained_memory_bytes": 199369
+      }
+    }
+  ],
+  "matcher_ablation": [
+    {
+      "matcher": "repeated",
+      "profile_id": "repeated",
+      "comparison_profile": "exact-alias",
+      "contribution": {
+        "added_tp": 1,
+        "added_fp": 0,
+        "removed_tp": 0,
+        "removed_fp": 0,
+        "baseline_overlap": 3,
+        "cross_matcher_overlap": 0,
+        "unique_added": 1,
+        "unique_added_tp": 1,
+        "unique_added_fp": 0,
+        "remaining_fn": 8
+      },
+      "resolved_false_negative_slices": [
+        {
+          "slice": "repeated",
+          "count": 1
+        }
+      ],
+      "new_false_positive_case_ids": [],
+      "cost_delta": {
+        "short_chat_p50_ms": 0.0020000000000000018,
+        "short_chat_p95_ms": 0.0087,
+        "maximum_input_p50_ms": -0.008300000000000196,
+        "maximum_input_p95_ms": -3.331900000000001,
+        "engine_retained_memory_bytes": 67
+      }
+    },
+    {
+      "matcher": "separator",
+      "profile_id": "separator",
+      "comparison_profile": "exact-alias",
+      "contribution": {
+        "added_tp": 1,
+        "added_fp": 0,
+        "removed_tp": 0,
+        "removed_fp": 0,
+        "baseline_overlap": 3,
+        "cross_matcher_overlap": 0,
+        "unique_added": 1,
+        "unique_added_tp": 1,
+        "unique_added_fp": 0,
+        "remaining_fn": 8
+      },
+      "resolved_false_negative_slices": [
+        {
+          "slice": "separator",
+          "count": 1
+        }
+      ],
+      "new_false_positive_case_ids": [],
+      "cost_delta": {
+        "short_chat_p50_ms": 0.006199999999999997,
+        "short_chat_p95_ms": 0.03319999999999999,
+        "maximum_input_p50_ms": -0.18330000000000002,
+        "maximum_input_p95_ms": -2.8236000000000008,
+        "engine_retained_memory_bytes": 67
+      }
+    },
+    {
+      "matcher": "whitespace",
+      "profile_id": "whitespace",
+      "comparison_profile": "exact-alias",
+      "contribution": {
+        "added_tp": 1,
+        "added_fp": 0,
+        "removed_tp": 0,
+        "removed_fp": 0,
+        "baseline_overlap": 3,
+        "cross_matcher_overlap": 0,
+        "unique_added": 1,
+        "unique_added_tp": 1,
+        "unique_added_fp": 0,
+        "remaining_fn": 8
+      },
+      "resolved_false_negative_slices": [
+        {
+          "slice": "whitespace",
+          "count": 1
+        }
+      ],
+      "new_false_positive_case_ids": [],
+      "cost_delta": {
+        "short_chat_p50_ms": 0.013400000000000002,
+        "short_chat_p95_ms": 0.012899999999999995,
+        "maximum_input_p50_ms": -0.2160000000000002,
+        "maximum_input_p95_ms": -3.4048000000000007,
+        "engine_retained_memory_bytes": 25839
+      }
+    },
+    {
+      "matcher": "mixed",
+      "profile_id": "mixed",
+      "comparison_profile": "exact-alias",
+      "contribution": {
+        "added_tp": 1,
+        "added_fp": 0,
+        "removed_tp": 0,
+        "removed_fp": 0,
+        "baseline_overlap": 3,
+        "cross_matcher_overlap": 0,
+        "unique_added": 1,
+        "unique_added_tp": 1,
+        "unique_added_fp": 0,
+        "remaining_fn": 8
+      },
+      "resolved_false_negative_slices": [
+        {
+          "slice": "mixed-gap",
+          "count": 1
+        }
+      ],
+      "new_false_positive_case_ids": [],
+      "cost_delta": {
+        "short_chat_p50_ms": 0.0030000000000000027,
+        "short_chat_p95_ms": 0.0252,
+        "maximum_input_p50_ms": 0.042899999999999494,
+        "maximum_input_p95_ms": -2.3100000000000005,
+        "engine_retained_memory_bytes": 38516
+      }
+    },
+    {
+      "matcher": "keyboard",
+      "profile_id": "keyboard",
+      "comparison_profile": "exact-alias",
+      "contribution": {
+        "added_tp": 1,
+        "added_fp": 0,
+        "removed_tp": 0,
+        "removed_fp": 0,
+        "baseline_overlap": 3,
+        "cross_matcher_overlap": 0,
+        "unique_added": 1,
+        "unique_added_tp": 1,
+        "unique_added_fp": 0,
+        "remaining_fn": 8
+      },
+      "resolved_false_negative_slices": [
+        {
+          "slice": "keyboard",
+          "count": 1
+        }
+      ],
+      "new_false_positive_case_ids": [],
+      "cost_delta": {
+        "short_chat_p50_ms": 0.004700000000000003,
+        "short_chat_p95_ms": 0.0022000000000000006,
+        "maximum_input_p50_ms": 0.29769999999999985,
+        "maximum_input_p95_ms": -2.4711000000000007,
+        "engine_retained_memory_bytes": 67
+      }
+    },
+    {
+      "matcher": "jamo",
+      "profile_id": "jamo",
+      "comparison_profile": "exact-alias",
+      "contribution": {
+        "added_tp": 1,
+        "added_fp": 0,
+        "removed_tp": 0,
+        "removed_fp": 0,
+        "baseline_overlap": 3,
+        "cross_matcher_overlap": 0,
+        "unique_added": 1,
+        "unique_added_tp": 1,
+        "unique_added_fp": 0,
+        "remaining_fn": 8
+      },
+      "resolved_false_negative_slices": [
+        {
+          "slice": "jamo",
+          "count": 1
+        }
+      ],
+      "new_false_positive_case_ids": [],
+      "cost_delta": {
+        "short_chat_p50_ms": 0.0023000000000000034,
+        "short_chat_p95_ms": 0.0358,
+        "maximum_input_p50_ms": 0.26510000000000034,
+        "maximum_input_p95_ms": -1.9042000000000012,
+        "engine_retained_memory_bytes": 67
+      }
+    },
+    {
+      "matcher": "choseong",
+      "profile_id": "choseong",
+      "comparison_profile": "exact-alias",
+      "contribution": {
+        "added_tp": 1,
+        "added_fp": 0,
+        "removed_tp": 0,
+        "removed_fp": 0,
+        "baseline_overlap": 3,
+        "cross_matcher_overlap": 0,
+        "unique_added": 1,
+        "unique_added_tp": 1,
+        "unique_added_fp": 0,
+        "remaining_fn": 8
+      },
+      "resolved_false_negative_slices": [
+        {
+          "slice": "choseong",
+          "count": 1
+        }
+      ],
+      "new_false_positive_case_ids": [],
+      "cost_delta": {
+        "short_chat_p50_ms": 0.0075,
+        "short_chat_p95_ms": 0.013399999999999995,
+        "maximum_input_p50_ms": 2.2993000000000006,
+        "maximum_input_p95_ms": 0.6391999999999989,
+        "engine_retained_memory_bytes": 37861
+      }
+    },
+    {
+      "matcher": "segmented",
+      "profile_id": "segmented",
+      "comparison_profile": "segmented-prerequisites",
+      "contribution": {
+        "added_tp": 1,
+        "added_fp": 0,
+        "removed_tp": 0,
+        "removed_fp": 0,
+        "baseline_overlap": 6,
+        "cross_matcher_overlap": 0,
+        "unique_added": 1,
+        "unique_added_tp": 1,
+        "unique_added_fp": 0,
+        "remaining_fn": 5
+      },
+      "resolved_false_negative_slices": [
+        {
+          "slice": "keyboard",
+          "count": 1
+        },
+        {
+          "slice": "mixed-gap",
+          "count": 1
+        },
+        {
+          "slice": "separator",
+          "count": 1
+        }
+      ],
+      "new_false_positive_case_ids": [],
+      "cost_delta": {
+        "short_chat_p50_ms": 0.000899999999999998,
+        "short_chat_p95_ms": 0.0040999999999999995,
+        "maximum_input_p50_ms": -0.10219999999999985,
+        "maximum_input_p95_ms": 1.835799999999999,
+        "engine_retained_memory_bytes": 0
+      }
+    },
+    {
+      "matcher": "fuzzy",
+      "profile_id": "fuzzy",
+      "comparison_profile": "exact-alias",
+      "contribution": {
+        "added_tp": 1,
+        "added_fp": 0,
+        "removed_tp": 0,
+        "removed_fp": 0,
+        "baseline_overlap": 3,
+        "cross_matcher_overlap": 0,
+        "unique_added": 1,
+        "unique_added_tp": 1,
+        "unique_added_fp": 0,
+        "remaining_fn": 8
+      },
+      "resolved_false_negative_slices": [
+        {
+          "slice": "fuzzy",
+          "count": 1
+        }
+      ],
+      "new_false_positive_case_ids": [],
+      "cost_delta": {
+        "short_chat_p50_ms": 0.0317,
+        "short_chat_p95_ms": 0.0364,
+        "maximum_input_p50_ms": 2.1673,
+        "maximum_input_p95_ms": -0.18170000000000108,
+        "engine_retained_memory_bytes": 20293
+      }
+    }
+  ],
+  "case_results": [
+    {
+      "case_id": "ablation-positive-exact",
+      "label": "positive",
+      "slices": [
+        "direct"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "repeated",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "separator",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "mixed",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "jamo",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "choseong",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "segmented",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-alias",
+      "label": "positive",
+      "slices": [
+        "alias"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "repeated",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "separator",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "mixed",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "jamo",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "choseong",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "segmented",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-repeated",
+      "label": "positive",
+      "slices": [
+        "repeated"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-separator",
+      "label": "positive",
+      "slices": [
+        "separator"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-whitespace",
+      "label": "positive",
+      "slices": [
+        "whitespace"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-mixed",
+      "label": "positive",
+      "slices": [
+        "mixed-gap"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-keyboard",
+      "label": "positive",
+      "slices": [
+        "keyboard"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "segmented",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-jamo",
+      "label": "positive",
+      "slices": [
+        "jamo"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "segmented",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-choseong",
+      "label": "positive",
+      "slices": [
+        "choseong"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "segmented",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-segmented",
+      "label": "positive",
+      "slices": [
+        "keyboard",
+        "separator",
+        "mixed-gap"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-fuzzy",
+      "label": "positive",
+      "slices": [
+        "fuzzy"
+      ],
+      "gold_occurrence_count": 1,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-normal-chat",
+      "label": "hard-negative",
+      "slices": [
+        "game-term"
+      ],
+      "gold_occurrence_count": 0,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-benign-substring",
+      "label": "hard-negative",
+      "slices": [
+        "benign-substring"
+      ],
+      "gold_occurrence_count": 0,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "repeated",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "separator",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "mixed",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "jamo",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "choseong",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "segmented",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": true,
+          "sentence_outcome": "fp",
+          "predicted_occurrence_count": 1
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-presentation",
+      "label": "hard-negative",
+      "slices": [
+        "token-boundary"
+      ],
+      "gold_occurrence_count": 0,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-watermelon",
+      "label": "hard-negative",
+      "slices": [
+        "benign-substring"
+      ],
+      "gold_occurrence_count": 0,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-finger",
+      "label": "hard-negative",
+      "slices": [
+        "benign-substring"
+      ],
+      "gold_occurrence_count": 0,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-development",
+      "label": "hard-negative",
+      "slices": [
+        "domain-term"
+      ],
+      "gold_occurrence_count": 0,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-returning",
+      "label": "hard-negative",
+      "slices": [
+        "benign-substring"
+      ],
+      "gold_occurrence_count": 0,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-unconfigured-separator",
+      "label": "hard-negative",
+      "slices": [
+        "choseong",
+        "separator"
+      ],
+      "gold_occurrence_count": 0,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-newline-keyboard",
+      "label": "hard-negative",
+      "slices": [
+        "keyboard",
+        "whitespace"
+      ],
+      "gold_occurrence_count": 0,
+      "profiles": [
+        {
+          "profile_id": "exact-alias",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "repeated",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "separator",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "whitespace",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "mixed",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "keyboard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "jamo",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "choseong",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented-prerequisites",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "segmented",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "fuzzy",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "profile_id": "all-enabled",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "구현 유래 20건 provisional regression corpus이므로 서비스 정확도를 대표하지 않는다.",
+    "PF-005 독립 500/2,000 corpus에서 동일 runner를 재실행해야 balanced 결정을 확정할 수 있다.",
+    "지연과 메모리는 단일 로컬 프로세스의 탐색적 측정이며 지원 OS별 CI 기준선이 아니다."
+  ]
+}

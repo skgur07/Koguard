@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/ablation-report.schema.json",
+  "title": "Koguard matcher ablation report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "measured_at", "corpus", "environment", "configuration", "profiles", "matcher_ablation", "case_results", "limitations"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "measured_at": {"type": "string", "format": "date-time"},
+    "corpus": {"$ref": "#/$defs/corpus"},
+    "environment": {"$ref": "#/$defs/environment"},
+    "configuration": {"$ref": "#/$defs/configuration"},
+    "profiles": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/profileResult"}},
+    "matcher_ablation": {"type": "array", "items": {"$ref": "#/$defs/matcherResult"}},
+    "case_results": {"type": "array", "items": {"$ref": "#/$defs/caseResult"}},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "corpus_ids", "sha256", "case_count", "positive_count", "hard_negative_count", "excluded_review_count"],
+      "properties": {
+        "classification": {"const": "provisional-regression"},
+        "corpus_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "case_count": {"type": "integer", "minimum": 1},
+        "positive_count": {"type": "integer", "minimum": 0},
+        "hard_negative_count": {"type": "integer", "minimum": 0},
+        "excluded_review_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["koguard_version", "python_version", "implementation", "platform", "processor"],
+      "properties": {
+        "koguard_version": {"type": "string"},
+        "python_version": {"type": "string"},
+        "implementation": {"type": "string"},
+        "platform": {"type": "string"},
+        "processor": {"type": "string"}
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["iterations", "warmups", "profile_configuration_sha256", "workloads"],
+      "properties": {
+        "iterations": {"type": "integer", "minimum": 1},
+        "warmups": {"type": "integer", "minimum": 0},
+        "profile_configuration_sha256": {"$ref": "#/$defs/sha256"},
+        "workloads": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            {"$ref": "#/$defs/shortChatWorkloadDefinition"},
+            {"$ref": "#/$defs/maximumInputWorkloadDefinition"}
+          ],
+          "items": false
+        }
+      }
+    },
+    "shortChatWorkloadDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workload_id", "input_length", "sha256"],
+      "properties": {
+        "workload_id": {"const": "short_chat"},
+        "input_length": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "maximumInputWorkloadDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workload_id", "input_length", "sha256"],
+      "properties": {
+        "workload_id": {"const": "maximum_input"},
+        "input_length": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "sentenceCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tp", "fp", "fn", "tn"],
+      "properties": {
+        "tp": {"type": "integer", "minimum": 0},
+        "fp": {"type": "integer", "minimum": 0},
+        "fn": {"type": "integer", "minimum": 0},
+        "tn": {"type": "integer", "minimum": 0}
+      }
+    },
+    "occurrenceCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tp", "fp", "fn"],
+      "properties": {
+        "tp": {"type": "integer", "minimum": 0},
+        "fp": {"type": "integer", "minimum": 0},
+        "fn": {"type": "integer", "minimum": 0}
+      }
+    },
+    "sentenceMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["counts", "precision", "recall", "f1", "accuracy"],
+      "properties": {
+        "counts": {"$ref": "#/$defs/sentenceCounts"},
+        "precision": {"$ref": "#/$defs/rate"},
+        "recall": {"$ref": "#/$defs/rate"},
+        "f1": {"$ref": "#/$defs/rate"},
+        "accuracy": {"$ref": "#/$defs/rate"}
+      }
+    },
+    "occurrenceMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["counts", "precision", "recall", "f1"],
+      "properties": {
+        "counts": {"$ref": "#/$defs/occurrenceCounts"},
+        "precision": {"$ref": "#/$defs/rate"},
+        "recall": {"$ref": "#/$defs/rate"},
+        "f1": {"$ref": "#/$defs/rate"}
+      }
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": {"type": ["string", "boolean", "integer", "number"]}
+    },
+    "workload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_length", "p50_ms", "p95_ms"],
+      "properties": {
+        "input_length": {"type": "integer", "minimum": 0},
+        "p50_ms": {"type": "number", "exclusiveMinimum": 0},
+        "p95_ms": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["short_chat", "maximum_input", "engine_retained_memory_bytes"],
+      "properties": {
+        "short_chat": {"$ref": "#/$defs/workload"},
+        "maximum_input": {"$ref": "#/$defs/workload"},
+        "engine_retained_memory_bytes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "sliceMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slice", "case_count", "sentence_metrics", "occurrence_metrics"],
+      "properties": {
+        "slice": {"type": "string"},
+        "case_count": {"type": "integer", "minimum": 1},
+        "sentence_metrics": {"$ref": "#/$defs/sentenceMetric"},
+        "occurrence_metrics": {"$ref": "#/$defs/occurrenceMetric"}
+      }
+    },
+    "profileResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "role", "matcher", "comparison_profile", "settings", "sentence_metrics", "occurrence_metrics", "slice_metrics", "performance"],
+      "properties": {
+        "profile_id": {"type": "string"},
+        "role": {"enum": ["baseline", "candidate", "control", "current"]},
+        "matcher": {"type": ["string", "null"]},
+        "comparison_profile": {"type": ["string", "null"]},
+        "settings": {"$ref": "#/$defs/settings"},
+        "sentence_metrics": {"$ref": "#/$defs/sentenceMetric"},
+        "occurrence_metrics": {"$ref": "#/$defs/occurrenceMetric"},
+        "slice_metrics": {"type": "array", "items": {"$ref": "#/$defs/sliceMetric"}},
+        "performance": {"$ref": "#/$defs/performance"}
+      }
+    },
+    "contribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["added_tp", "added_fp", "removed_tp", "removed_fp", "baseline_overlap", "cross_matcher_overlap", "unique_added", "unique_added_tp", "unique_added_fp", "remaining_fn"],
+      "properties": {
+        "added_tp": {"type": "integer", "minimum": 0},
+        "added_fp": {"type": "integer", "minimum": 0},
+        "removed_tp": {"type": "integer", "minimum": 0},
+        "removed_fp": {"type": "integer", "minimum": 0},
+        "baseline_overlap": {"type": "integer", "minimum": 0},
+        "cross_matcher_overlap": {"type": "integer", "minimum": 0},
+        "unique_added": {"type": "integer", "minimum": 0},
+        "unique_added_tp": {"type": "integer", "minimum": 0},
+        "unique_added_fp": {"type": "integer", "minimum": 0},
+        "remaining_fn": {"type": "integer", "minimum": 0}
+      }
+    },
+    "sliceCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slice", "count"],
+      "properties": {
+        "slice": {"type": "string"},
+        "count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "matcherResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["matcher", "profile_id", "comparison_profile", "contribution", "resolved_false_negative_slices", "new_false_positive_case_ids", "cost_delta"],
+      "properties": {
+        "matcher": {"type": "string"},
+        "profile_id": {"type": "string"},
+        "comparison_profile": {"type": "string"},
+        "contribution": {"$ref": "#/$defs/contribution"},
+        "resolved_false_negative_slices": {"type": "array", "items": {"$ref": "#/$defs/sliceCount"}},
+        "new_false_positive_case_ids": {"type": "array", "items": {"type": "string"}},
+        "cost_delta": {"$ref": "#/$defs/costDelta"}
+      }
+    },
+    "costDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["short_chat_p50_ms", "short_chat_p95_ms", "maximum_input_p50_ms", "maximum_input_p95_ms", "engine_retained_memory_bytes"],
+      "properties": {
+        "short_chat_p50_ms": {"type": "number"},
+        "short_chat_p95_ms": {"type": "number"},
+        "maximum_input_p50_ms": {"type": "number"},
+        "maximum_input_p95_ms": {"type": "number"},
+        "engine_retained_memory_bytes": {"type": "integer"}
+      }
+    },
+    "profileCaseResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "detected", "sentence_outcome", "predicted_occurrence_count"],
+      "properties": {
+        "profile_id": {"type": "string"},
+        "detected": {"type": "boolean"},
+        "sentence_outcome": {"enum": ["tp", "fp", "fn", "tn"]},
+        "predicted_occurrence_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "caseResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_id", "label", "slices", "gold_occurrence_count", "profiles"],
+      "properties": {
+        "case_id": {"type": "string"},
+        "label": {"enum": ["positive", "hard-negative"]},
+        "slices": {"type": "array", "items": {"type": "string"}},
+        "gold_occurrence_count": {"type": "integer", "minimum": 0},
+        "profiles": {"type": "array", "items": {"$ref": "#/$defs/profileCaseResult"}}
+      }
+    }
+  }
+}
