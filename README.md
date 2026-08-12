@@ -6,6 +6,11 @@
 Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy Match와 구간 단위 Whitelist
 처리를 제공합니다. 모든 탐지 단계는 기본으로 활성화되며 단계별로 끌 수 있습니다.
 
+> **개발 우선순위:** Adapter·Plugin·AI 구현은 현재 보류했습니다. 최초 공개 `0.1.0` 전까지
+> 탐지 데이터, 독립 평가 corpus, 단순 profile API와 안전한 기본값을 먼저 완성합니다. 현재
+> 코드의 all-enabled 기본값은 아직 유지되며, 변경 계획과 품질 게이트는
+> [제품 집중 계획](docs/product-focus-plan.md)에 기록되어 있습니다.
+
 ## 사용법
 
 ```python
