@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/corpus.schema.json",
+  "title": "Koguard service evaluation corpus",
+  "description": "Versioned annotations for regression, tuning, hidden evaluation, and private service corpora.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "corpus_id", "cases"],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "corpus_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    }
+  },
+  "$defs": {
+    "expectedMatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "canonical_term"],
+      "properties": {
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "canonical_term": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "name",
+        "reference",
+        "revision",
+        "redistribution_allowed"
+      ],
+      "properties": {
+        "kind": {
+          "enum": ["curated", "licensed", "private"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "reference": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "revision": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "redistribution_allowed": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {"const": "licensed"}
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "properties": {
+              "reference": {"type": "string", "minLength": 1},
+              "revision": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {"const": "private"}
+            },
+            "required": ["kind"]
+          },
+          "then": {
+            "properties": {
+              "reference": {"type": "null"},
+              "revision": {"type": "null"},
+              "redistribution_allowed": {"const": false}
+            }
+          }
+        }
+      ]
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text",
+        "label",
+        "expected_matches",
+        "slices",
+        "source",
+        "license",
+        "split",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "label": {
+          "enum": ["positive", "hard-negative", "review"]
+        },
+        "expected_matches": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/expectedMatch"
+          }
+        },
+        "slices": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "direct",
+              "spelling-variant",
+              "phonetic-variant",
+              "abbreviation",
+              "choseong",
+              "alias",
+              "keyboard",
+              "jamo",
+              "repeated",
+              "separator",
+              "whitespace",
+              "mixed-gap",
+              "fuzzy",
+              "suffix",
+              "token-boundary",
+              "benign-substring",
+              "quoted-context",
+              "educational-context",
+              "username",
+              "game-term",
+              "domain-term",
+              "code",
+              "url",
+              "unicode",
+              "empty-input",
+              "maximum-input",
+              "multiple-matches",
+              "whitelist",
+              "adversarial-performance"
+            ]
+          }
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "split": {
+          "enum": ["regression", "tuning", "evaluation", "private"]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "label": {"const": "positive"}
+            },
+            "required": ["label"]
+          },
+          "then": {
+            "properties": {
+              "expected_matches": {"minItems": 1}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "label": {"const": "hard-negative"}
+            },
+            "required": ["label"]
+          },
+          "then": {
+            "properties": {
+              "expected_matches": {"maxItems": 0}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "split": {"const": "regression"}
+            },
+            "required": ["split"]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "properties": {
+                  "kind": {"not": {"const": "private"}},
+                  "redistribution_allowed": {"const": true}
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "split": {"const": "private"}
+            },
+            "required": ["split"]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "properties": {
+                  "kind": {"const": "private"},
+                  "redistribution_allowed": {"const": false}
+                }
+              },
+              "license": {"const": "LicenseRef-Private"}
+            }
+          },
+          "else": {
+            "properties": {
+              "source": {
+                "properties": {
+                  "kind": {"not": {"const": "private"}}
+                }
+              },
+              "license": {"not": {"const": "LicenseRef-Private"}}
+            }
+          }
+        }
+      ]
+    }
+  }
+}

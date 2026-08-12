@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "corpus_id": "public-regression-example",
+  "cases": [
+    {
+      "id": "example-positive-direct",
+      "text": "금칙어라고 썼다",
+      "label": "positive",
+      "expected_matches": [
+        {
+          "start": 0,
+          "end": 3,
+          "canonical_term": "금칙어"
+        }
+      ],
+      "slices": ["direct"],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard PF-001 fixture",
+        "reference": null,
+        "revision": null,
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "regression",
+      "notes": "직접 표현의 span 표기 예시다."
+    },
+    {
+      "id": "example-hard-negative-substring",
+      "text": "시발점은 시작 위치다",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["benign-substring"],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard PF-001 fixture",
+        "reference": null,
+        "revision": null,
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "regression",
+      "notes": "정상 복합어를 탐지하지 않아야 하는 예시다."
+    },
+    {
+      "id": "example-review-context",
+      "text": "맥락 판정이 필요한 표현이다",
+      "label": "review",
+      "expected_matches": [],
+      "slices": ["quoted-context"],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard PF-001 fixture",
+        "reference": null,
+        "revision": null,
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "regression",
+      "notes": "합의 전에는 자동 평가에서 제외한다."
+    }
+  ]
+}
