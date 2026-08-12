@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "corpus_id": "missing-license",
+  "cases": [
+    {
+      "id": "missing-license-case",
+      "text": "정상 문장",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["direct"],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard PF-001 fixture",
+        "reference": null,
+        "revision": null,
+        "redistribution_allowed": true
+      },
+      "split": "regression",
+      "notes": "license가 누락됐다."
+    }
+  ]
+}

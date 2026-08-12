@@ -188,26 +188,40 @@ review_notes
 
 ```json
 {
-  "id": "stable-id",
-  "text": "원문",
-  "expected_matches": [
+  "schema_version": 1,
+  "corpus_id": "stable-corpus-id",
+  "cases": [
     {
-      "start": 0,
-      "end": 3,
-      "canonical_term": "정책상 canonical",
-      "label": "blocked"
+      "id": "stable-case-id",
+      "text": "원문",
+      "label": "positive",
+      "expected_matches": [
+        {
+          "start": 0,
+          "end": 3,
+          "canonical_term": "정책상 canonical"
+        }
+      ],
+      "slices": ["direct", "suffix"],
+      "source": {
+        "kind": "curated",
+        "name": "출처명",
+        "reference": null,
+        "revision": null,
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "판정 근거"
     }
-  ],
-  "slices": ["direct", "suffix"],
-  "source": "curated|licensed|private",
-  "license": "identifier-or-private",
-  "split": "tuning|evaluation",
-  "notes": "판정 근거"
+  ]
 }
 ```
 
-애매한 표현은 억지로 positive/negative에 넣지 않고 `review`로 분리한다. 자동 평가에서는
-`review` 사례를 제외하되 개수와 사유를 함께 보고한다.
+case의 `label`은 `positive`, `hard-negative`, `review` 중 하나다. 애매한 표현은 억지로
+positive/negative에 넣지 않고 `review`로 분리한다. 자동 평가에서는 `review` 사례를 제외하되
+개수와 사유를 함께 보고한다. 전체 필드와 접근 경계는
+[corpus annotation guide](corpus-annotation-guide.md)를 따른다.
 
 ### 6.4 annotation 품질
 

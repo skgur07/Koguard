@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "corpus_id": "unknown-slice",
+  "cases": [
+    {
+      "id": "unknown-slice-case",
+      "text": "정상 문장",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["made-up-slice"],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard PF-001 fixture",
+        "reference": null,
+        "revision": null,
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "regression",
+      "notes": "허용되지 않은 slice다."
+    }
+  ]
+}

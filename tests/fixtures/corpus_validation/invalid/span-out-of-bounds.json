@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "corpus_id": "invalid-span",
+  "cases": [
+    {
+      "id": "invalid-span-case",
+      "text": "노출되면 안 되는 원문",
+      "label": "positive",
+      "expected_matches": [
+        {"start": 0, "end": 99, "canonical_term": "금칙어"}
+      ],
+      "slices": ["direct"],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard PF-001 fixture",
+        "reference": null,
+        "revision": null,
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "regression",
+      "notes": "end가 원문 길이를 넘는다."
+    }
+  ]
+}

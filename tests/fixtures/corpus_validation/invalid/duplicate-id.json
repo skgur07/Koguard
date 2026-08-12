@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "corpus_id": "duplicate-id",
+  "cases": [
+    {
+      "id": "same-id",
+      "text": "첫 문장",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["direct"],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard PF-001 fixture",
+        "reference": null,
+        "revision": null,
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "regression",
+      "notes": "첫 ID다."
+    },
+    {
+      "id": "same-id",
+      "text": "둘째 문장",
+      "label": "hard-negative",
+      "expected_matches": [],
+      "slices": ["direct"],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard PF-001 fixture",
+        "reference": null,
+        "revision": null,
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "regression",
+      "notes": "중복 ID다."
+    }
+  ]
+}
