@@ -12,7 +12,7 @@
 | `src/koguard/engine/matcher.py` | Exact 후보와 Whitelist 구간 처리 |
 | `src/koguard/engine/normalizer/` | 정규화 view와 원문 인덱스 매핑 |
 | `src/koguard/data/` | 기본 사전, Whitelist, 출처 고지 |
-| `evaluation/` | 평가 corpus, validator, 비교 runner와 matcher ablation runner |
+| `evaluation/` | 평가 corpus, validator, blinded annotation, 비교·ablation runner |
 | `tests/` | 공개 계약과 회귀 테스트 |
 | `tests/corpus/` | 정확도 기준 corpus |
 | `docs/corpus-annotation-guide.md` | label, span, 출처, split annotation 정책 |

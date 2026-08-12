@@ -33,6 +33,7 @@ include = [
     "/README.md",
 ]
 exclude = [
+    "/evaluation/annotation-work",
     "/evaluation/corpus/tuning/curse-review-intake-v1.json",
 ]
 

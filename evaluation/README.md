@@ -18,6 +18,46 @@ span이나 실제 평가 slice를 갖지 않는다. `results/curse-review-intake
 [PF-005 corpus 상태](../docs/corpus-intake-status.md)에 기록한다. 생성 원문은 수동 privacy
 review 전까지 Git과 배포물에 포함하지 않는다.
 
+## PF-005 blinded annotation workflow
+
+`annotation_workflow.py`는 tuning `review` case를 stable ID 순서로 최대 500건씩 export하고,
+서로 다른 opaque reviewer ID로 작성한 두 annotation batch를 비교한다. export에는 원문과 빈
+annotation 필드만 있으며 upstream label, Koguard/Korcen prediction, 기존 gold는 포함하지 않는다.
+
+두 검토자가 모두 `privacy_status=approved`로 표시하고 label, exact span, canonical term, slice가
+일치한 case만 승격한다. 불일치, privacy `pending` 또는 `exclude`는 계속 `review`로 남는다.
+batch·merge 결과 원문은 `evaluation/annotation-work/` 또는 저장소 밖의 보호 경로에 두며 이
+디렉터리는 Git과 sdist에서 제외된다. report에는 원문과 canonical term 대신 집계만 저장한다.
+
+```powershell
+uv run python -m evaluation.annotation_workflow export `
+  evaluation\corpus\tuning\curse-review-intake-v1.json `
+  --annotation-set-id pf005-batch-001-primary `
+  --reviewer-id reviewer-a `
+  --offset 0 `
+  --limit 100 `
+  --output evaluation\annotation-work\pf005-batch-001-primary.json
+
+uv run python -m evaluation.annotation_workflow export `
+  evaluation\corpus\tuning\curse-review-intake-v1.json `
+  --annotation-set-id pf005-batch-001-secondary `
+  --reviewer-id reviewer-b `
+  --offset 0 `
+  --limit 100 `
+  --output evaluation\annotation-work\pf005-batch-001-secondary.json
+
+uv run python -m evaluation.annotation_workflow merge `
+  evaluation\corpus\tuning\curse-review-intake-v1.json `
+  evaluation\annotation-work\pf005-batch-001-primary.json `
+  evaluation\annotation-work\pf005-batch-001-secondary.json `
+  --output evaluation\annotation-work\pf005-after-batch-001.json `
+  --report evaluation\annotation-work\pf005-batch-001.report.json
+```
+
+`annotation-batch.schema.json`과 `annotation-report.schema.json`이 공개 작업 계약이다. merge
+report의 `gold_ready=false`는 batch 합의만으로 PF-005 전체 규모, 출처 편향과 hidden evaluation
+조건을 충족했다고 오인하지 않도록 고정한다.
+
 ## PF-004 split guard
 
 `split_guard.py`는 stable case ID manifest와 실제 corpus의 `corpus_id`·split이 일치하는지

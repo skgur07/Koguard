@@ -2,6 +2,7 @@
 
 - 기준일: 2026-08-12
 - 상태: intake 완료, gold annotation 미완료
+- annotation workflow: 구현 완료, 실제 독립 판정 미착수
 - 로컬 tuning review: 2,500건
 - 확정 positive: 0건
 - 확정 hard-negative: 0건
@@ -77,12 +78,13 @@ manifest는 sdist에 남아 고정 upstream artifact로 corpus를 재생성·검
 
 ## PF-005 종료 전 남은 작업
 
-1. 탐지기 예측이나 upstream label을 보지 않는 1차 Koguard-policy 판정
-2. positive의 exact original span과 canonical term annotation
-3. 가능하면 독립 2차 판정과 불일치 합의, 불확실 사례의 review 유지
-4. 핵심 positive slice별 30건, 정상 substring·인용/설명·사용자명/게임 negative 각 100건 확보
-5. 단일 출처 100% 편향 완화
-6. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
-7. 확정 positive 500건·hard-negative 2,000건으로 전체 및 slice별 지표 재생성
+1. 100건 단위 primary/secondary batch를 생성하고 실제 독립 판정 시작
+2. 탐지기 예측이나 upstream label을 보지 않는 1차 Koguard-policy 판정
+3. positive의 exact original span과 canonical term annotation
+4. 독립 2차 판정과 불일치 합의, 불확실 사례의 review 유지
+5. 핵심 positive slice별 30건, 정상 substring·인용/설명·사용자명/게임 negative 각 100건 확보
+6. 단일 출처 100% 편향 완화
+7. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
+8. 확정 positive 500건·hard-negative 2,000건으로 전체 및 slice별 지표 재생성
 
 이 조건 전에는 #7을 완료로 닫거나 2,500건을 실서비스 gold corpus라고 부르지 않는다.

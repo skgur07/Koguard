@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/annotation-report.schema.json",
+  "title": "Koguard annotation merge report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "corpus_id",
+    "source_corpus_sha256",
+    "batch_case_count",
+    "batch_counts",
+    "corpus_counts",
+    "quality_counts",
+    "slice_counts",
+    "gold_ready"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "corpus_id": {"type": "string"},
+    "source_corpus_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "batch_case_count": {"type": "integer", "minimum": 1, "maximum": 500},
+    "batch_counts": {"$ref": "#/$defs/labelCounts"},
+    "corpus_counts": {"$ref": "#/$defs/labelCounts"},
+    "quality_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "double_reviewed",
+        "consensus",
+        "disagreement",
+        "privacy_excluded",
+        "pending_privacy"
+      ],
+      "properties": {
+        "double_reviewed": {"type": "integer", "minimum": 0},
+        "consensus": {"type": "integer", "minimum": 0},
+        "disagreement": {"type": "integer", "minimum": 0},
+        "privacy_excluded": {"type": "integer", "minimum": 0},
+        "pending_privacy": {"type": "integer", "minimum": 0}
+      }
+    },
+    "slice_counts": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 1}
+    },
+    "gold_ready": {"const": false}
+  },
+  "$defs": {
+    "labelCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positive", "hard-negative", "review"],
+      "properties": {
+        "positive": {"type": "integer", "minimum": 0},
+        "hard-negative": {"type": "integer", "minimum": 0},
+        "review": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

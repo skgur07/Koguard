@@ -114,7 +114,48 @@ hidden evaluation과 private 원문은 이 공개 저장소, PR 첨부, CI 로�
 6. 불일치는 `review`로 분리하고 합의 과정과 결과를 notes에 남긴다.
 7. validator를 통과한 뒤에만 corpus version에 포함한다.
 
-## 8. 검증 명령
+## 8. 독립 판정 workflow
+
+`evaluation.annotation_workflow`는 원문 review queue를 stable ID 순서의 batch로 나눈다. 한
+batch는 최대 500건이며 같은 `offset`과 `limit`으로 서로 다른 두 reviewer용 파일을 만든다.
+reviewer ID는 이름이나 이메일 대신 `reviewer-a`처럼 별도 관리되는 opaque ID를 사용한다.
+
+```powershell
+uv run python -m evaluation.annotation_workflow export `
+  evaluation\corpus\tuning\curse-review-intake-v1.json `
+  --annotation-set-id pf005-batch-001-primary `
+  --reviewer-id reviewer-a `
+  --offset 0 --limit 100 `
+  --output evaluation\annotation-work\pf005-batch-001-primary.json
+```
+
+export에는 case ID, 원문, 비어 있는 annotation 필드만 들어간다. upstream label, 탐지기 예측,
+기존 detector 결과는 제공하지 않는다. 검토자는 다음 필드를 작성한다.
+
+- `privacy_status`: 개인정보 검토 전 `pending`, 통과 `approved`, gold 제외 `exclude`
+- `label`: `positive`, `hard-negative`, 불확실하면 `review`
+- `expected_matches`: positive의 원문 code point span과 canonical term
+- `slices`: 확정 사례는 `unadjudicated-intake` 대신 실제 평가 slice
+- `notes`: 탐지 결과가 아닌 사람의 판정 근거
+
+두 batch를 merge하면 reviewer ID가 서로 다른지, 원본 corpus SHA-256과 case 원문이 동일한지
+확인한다. 두 검토자가 모두 privacy를 승인하고 label·span·canonical term·slice에 합의한 사례만
+승격한다. 불일치와 privacy 미승인 사례는 원문을 출력하지 않고 `review`로 유지한다.
+
+```powershell
+uv run python -m evaluation.annotation_workflow merge `
+  evaluation\corpus\tuning\curse-review-intake-v1.json `
+  evaluation\annotation-work\pf005-batch-001-primary.json `
+  evaluation\annotation-work\pf005-batch-001-secondary.json `
+  --output evaluation\annotation-work\pf005-after-batch-001.json `
+  --report evaluation\annotation-work\pf005-batch-001.report.json
+```
+
+`evaluation/annotation-work/`에는 원문과 판정자 작업 내용이 있으므로 Git과 sdist에서 제외한다.
+보호 저장소로 옮길 때도 PF-004 접근·보존 정책을 적용한다. aggregate report만 공개할 때는 stable
+case ID, 원문, canonical term, reviewer ID가 없는지 다시 확인한다.
+
+## 9. 검증 명령
 
 파일 또는 디렉터리를 한 번에 검증할 수 있다.
 
