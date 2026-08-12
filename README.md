@@ -11,6 +11,10 @@ Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy
 > 코드의 all-enabled 기본값은 아직 유지되며, 변경 계획과 품질 게이트는
 > [제품 집중 계획](docs/product-focus-plan.md)에 기록되어 있습니다.
 
+실서비스 corpus는 라이선스가 고정된 2,500건 tuning review intake까지 확보했지만 아직 사람이
+Koguard 정책으로 판정한 gold가 아닙니다. 현재 상태와 완료 전 blocker는
+[PF-005 corpus 상태](docs/corpus-intake-status.md)를 참고하세요.
+
 ## 사용법
 
 ```python

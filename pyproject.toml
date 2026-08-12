@@ -29,7 +29,11 @@ include = [
     "/evaluation",
     "/docs/corpus-annotation-guide.md",
     "/docs/corpus-split-policy.md",
+    "/docs/corpus-intake-status.md",
     "/README.md",
+]
+exclude = [
+    "/evaluation/corpus/tuning/curse-review-intake-v1.json",
 ]
 
 [tool.ruff]

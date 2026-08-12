@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/corpus-intake-report.schema.json",
+  "title": "Koguard corpus intake report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_id",
+    "source_revision",
+    "artifact_sha256",
+    "source_row_count",
+    "source_label_counts",
+    "sensitive_pattern_excluded_count",
+    "eligible_source_label_counts",
+    "selected_count",
+    "selected_source_label_counts",
+    "generated_label_counts",
+    "source_statistics",
+    "slice_counts",
+    "adjudication_quality",
+    "bias_findings",
+    "gold_ready",
+    "completion_blockers"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "source_id": {"type": "string"},
+    "source_revision": {"type": "string"},
+    "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_row_count": {"type": "integer", "minimum": 1},
+    "source_label_counts": {"$ref": "#/$defs/sourceCounts"},
+    "sensitive_pattern_excluded_count": {"type": "integer", "minimum": 0},
+    "eligible_source_label_counts": {"$ref": "#/$defs/sourceCounts"},
+    "selected_count": {"type": "integer", "minimum": 1},
+    "selected_source_label_counts": {"$ref": "#/$defs/sourceCounts"},
+    "generated_label_counts": {"$ref": "#/$defs/generatedCounts"},
+    "source_statistics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/sourceStatistic"}
+    },
+    "slice_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unadjudicated-intake"],
+      "properties": {
+        "unadjudicated-intake": {"type": "integer", "minimum": 1}
+      }
+    },
+    "adjudication_quality": {"$ref": "#/$defs/adjudicationQuality"},
+    "bias_findings": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "gold_ready": {"const": false},
+    "completion_blockers": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "$defs": {
+    "sourceCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["0", "1"],
+      "properties": {
+        "0": {"type": "integer", "minimum": 0},
+        "1": {"type": "integer", "minimum": 0}
+      }
+    },
+    "generatedCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positive", "hard-negative", "review"],
+      "properties": {
+        "positive": {"const": 0},
+        "hard-negative": {"const": 0},
+        "review": {"type": "integer", "minimum": 1}
+      }
+    },
+    "sourceStatistic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "selected_count", "share"],
+      "properties": {
+        "source_id": {"type": "string"},
+        "selected_count": {"type": "integer", "minimum": 1},
+        "share": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "adjudicationQuality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adjudicated", "single_review", "double_review", "disagreement", "pending_review"],
+      "properties": {
+        "adjudicated": {"const": 0},
+        "single_review": {"const": 0},
+        "double_review": {"const": 0},
+        "disagreement": {"const": 0},
+        "pending_review": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

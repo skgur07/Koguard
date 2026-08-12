@@ -15,3 +15,4 @@ dist/
 /evaluation/hidden/
 /evaluation/private/
 /evaluation/protected/
+/evaluation/corpus/tuning/curse-review-intake-v1.json

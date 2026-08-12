@@ -5,6 +5,19 @@ Korcen에 각각 입력하고, 문장 단위 및 가능한 범위의 occurrence 
 기록한다. 평가 대상 패키지는 코어 런타임 의존성에 추가하지 않으며, 네트워크 접근도
 러너 밖에서만 수행한다.
 
+## PF-005 license-pinned review intake
+
+`corpus_intake.py`는 외부 자료를 다운로드하지 않고 `sources/*.json`에 고정한 revision,
+artifact SHA-256, LICENSE SHA-256과 형식을 검증한다. 현재 MIT
+`2runo/Curse-detection-data` 5,825건 중 source label strata `0:500`, `1:2,000`을
+deterministic SHA-256 rank로 선택했다.
+
+upstream label은 Koguard gold가 아니므로 생성된 2,500건은 모두 tuning `review`이며 exact
+span이나 실제 평가 slice를 갖지 않는다. `results/curse-review-intake-v1.report.json`은
+`gold_ready=false`를 고정한다. 현재 상태와 남은 판정 작업은
+[PF-005 corpus 상태](../docs/corpus-intake-status.md)에 기록한다. 생성 원문은 수동 privacy
+review 전까지 Git과 배포물에 포함하지 않는다.
+
 ## PF-004 split guard
 
 `split_guard.py`는 stable case ID manifest와 실제 corpus의 `corpus_id`·split이 일치하는지

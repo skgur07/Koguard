@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/corpus-source.schema.json",
+  "title": "Koguard external corpus source pin",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_id", "repository", "revision", "artifact", "license", "format", "intake"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "source_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
+    "repository": {"type": "string", "format": "uri"},
+    "revision": {"type": "string", "minLength": 1, "maxLength": 200},
+    "artifact": {"$ref": "#/$defs/artifact"},
+    "license": {"$ref": "#/$defs/license"},
+    "format": {"$ref": "#/$defs/format"},
+    "intake": {"$ref": "#/$defs/intake"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "sha256", "size_bytes", "line_count"],
+      "properties": {
+        "url": {"type": "string", "format": "uri"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "line_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spdx", "url", "sha256", "redistribution_allowed"],
+      "properties": {
+        "spdx": {"const": "MIT"},
+        "url": {"type": "string", "format": "uri"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "redistribution_allowed": {"const": true}
+      }
+    },
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delimiter", "text_column", "label_column", "allowed_labels"],
+      "properties": {
+        "delimiter": {"const": "|"},
+        "text_column": {"const": 0},
+        "label_column": {"const": 1},
+        "allowed_labels": {"const": ["0", "1"]}
+      }
+    },
+    "intake": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["corpus_id", "split", "selection", "target_by_source_label"],
+      "properties": {
+        "corpus_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
+        "split": {"const": "tuning"},
+        "selection": {"const": "stable-sha256-rank-v1"},
+        "target_by_source_label": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["0", "1"],
+          "properties": {
+            "0": {"type": "integer", "minimum": 0},
+            "1": {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    }
+  }
+}

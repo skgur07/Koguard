@@ -70,6 +70,10 @@ annotation한다. 기계 검증 계약은 [`evaluation/corpus.schema.json`](../e
 Fuzzy, 조사·경계, 정상 substring, 인용·교육, 사용자명·게임·도메인, Unicode, Whitelist,
 최대 입력과 적대 성능 입력이다.
 
+`unadjudicated-intake`는 외부 자료를 Koguard 정책으로 아직 판정하지 않은 임시 상태다. 다른
+평가 slice와 함께 쓰지 않으며 판정 뒤 실제 slice로 교체한다. 이 slice의 `review` case는
+positive/negative 규모와 정확도 지표에 포함하지 않는다.
+
 ## 5. source와 license
 
 `source.kind`는 다음 중 하나다.
