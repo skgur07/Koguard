@@ -18,6 +18,11 @@
 `Tanat05/korean-profanity-resources` 자체의 단어 목록이나 링크된 제3자 원문은 가져오지 않았다.
 따라서 해당 목록은 데이터 출처가 아니라 discovery reference다.
 
+2026-08-13 PF-007에서는 `2runo/Curse-detection-data`의 독립 판정 첫 100건에서 확인된 상위
+false-negative canonical cluster 7개를 provenance manifest의 `candidate`로 기록했다. source는
+기존 고정 revision과 MIT 검증을 그대로 참조한다. 이 후보들은 tuning 평가만 수행했으며
+`badwords.txt`, wheel 또는 runtime 데이터에는 아직 포함하지 않았다.
+
 ## ZIZUN 고정 근거
 
 - repository: <https://github.com/ZIZUN/korean-malicious-comments-dataset>

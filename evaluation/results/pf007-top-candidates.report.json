@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "inputs": {
+    "corpus_sha256": "6cc0b6743ae052ecf9e0429de9c665cfdc9c5cdb6130a49c36d020bb9386a010",
+    "candidate_manifest_sha256": "34c2e27b755bc47896dc0ab8149f9aae721c71c500b05301628f74f73eb0acd7"
+  },
+  "corpus": {
+    "case_count": 92,
+    "positive_count": 62,
+    "hard_negative_count": 30,
+    "excluded_review_count": 2408
+  },
+  "baseline": {
+    "sentence_counts": {"tp": 37, "fp": 0, "fn": 25, "tn": 30},
+    "occurrence_counts": {"tp": 41, "fp": 13, "fn": 69}
+  },
+  "combined_candidate": {
+    "sentence_counts": {"tp": 47, "fp": 0, "fn": 15, "tn": 30},
+    "occurrence_counts": {"tp": 61, "fp": 12, "fn": 49},
+    "sentence_delta": {"tp": 10, "fp": 0, "fn": -10, "tn": 0},
+    "occurrence_delta": {"tp": 20, "fp": -1, "fn": -20},
+    "positive_case_support": 21,
+    "hard_negative_case_support": 30,
+    "tuning_gate_passed": false
+  },
+  "candidates": [
+    {"candidate_id":"core.literal.pf007.001","positive_case_support":13,"hard_negative_case_support":30,"sentence_tp_delta":6,"sentence_fp_delta":0,"occurrence_tp_delta":12,"occurrence_fp_delta":4,"tuning_gate_passed":true},
+    {"candidate_id":"core.literal.pf007.002","positive_case_support":3,"hard_negative_case_support":30,"sentence_tp_delta":0,"sentence_fp_delta":0,"occurrence_tp_delta":2,"occurrence_fp_delta":-2,"tuning_gate_passed":true},
+    {"candidate_id":"core.literal.pf007.003","positive_case_support":2,"hard_negative_case_support":30,"sentence_tp_delta":2,"sentence_fp_delta":0,"occurrence_tp_delta":2,"occurrence_fp_delta":0,"tuning_gate_passed":true},
+    {"candidate_id":"core.literal.pf007.004","positive_case_support":2,"hard_negative_case_support":30,"sentence_tp_delta":0,"sentence_fp_delta":0,"occurrence_tp_delta":0,"occurrence_fp_delta":0,"tuning_gate_passed":false},
+    {"candidate_id":"core.literal.pf007.005","positive_case_support":1,"hard_negative_case_support":30,"sentence_tp_delta":1,"sentence_fp_delta":0,"occurrence_tp_delta":2,"occurrence_fp_delta":0,"tuning_gate_passed":true},
+    {"candidate_id":"core.literal.pf007.006","positive_case_support":1,"hard_negative_case_support":30,"sentence_tp_delta":1,"sentence_fp_delta":0,"occurrence_tp_delta":1,"occurrence_fp_delta":0,"tuning_gate_passed":true},
+    {"candidate_id":"core.literal.pf007.007","positive_case_support":2,"hard_negative_case_support":30,"sentence_tp_delta":0,"sentence_fp_delta":0,"occurrence_tp_delta":1,"occurrence_fp_delta":1,"tuning_gate_passed":false}
+  ]
+}

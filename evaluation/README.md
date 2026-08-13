@@ -114,6 +114,24 @@ report의 선택적 `adjudication_counts`는 불일치 판정 대상·해결·�
 공개한다. `gold_ready=false`는 batch 합의만으로 PF-005 전체 규모, 출처 편향과 hidden
 evaluation 조건을 충족했다고 오인하지 않도록 고정한다.
 
+## PF-007 false-negative candidate evaluation
+
+`fn_candidate_evaluation.py`는 provenance manifest에서 권리·독립 판정이 승인된 exact literal
+`candidate`만 선택해 현재 packaged 기본 사전과 비교한다. 보호 tuning corpus의 원문·case ID·
+canonical term은 report에 기록하지 않고 candidate ID, 입력 hash, positive/hard-negative support,
+문장 및 exact occurrence 증분만 공개한다.
+
+```powershell
+uv run python -m evaluation.fn_candidate_evaluation `
+  evaluation\annotation-work\pf005-after-batch-001.adjudicated.json `
+  evaluation\dictionary-provenance.v1.json `
+  --output evaluation\annotation-work\pf007-top-candidates.report.json
+```
+
+`tuning_gate_passed`는 hidden evaluation이나 packaged 승격 완료가 아니다. candidate별 positive
+support 1건 이상, hard-negative 2건 이상, occurrence TP 순증가와 sentence FP 무증가를 뜻한다.
+결합 결과와 개별 gate가 모두 통과하고 hidden 평가까지 확인된 후보만 별도 변경에서 승격한다.
+
 ## PF-004 split guard
 
 `split_guard.py`는 stable case ID manifest와 실제 corpus의 `corpus_id`·split이 일치하는지
