@@ -34,19 +34,26 @@ annotation한다. 기계 검증 계약은 [`evaluation/corpus.schema.json`](../e
 
 정책상 차단할 표현이 하나 이상 있는 사례다. `expected_matches`를 최소 하나 작성한다. 탐지기가
 현재 찾지 못하더라도 사람이 정한 정답을 유지하며, 구현 결과에 맞춰 canonical term이나 span을
-바꾸지 않는다.
+바꾸지 않는다. 등록 욕설 또는 승인된 변형이 원문에 있으면 문맥과 무관하게 positive다. 정상
+복합어, 인용·설명, 사용자명, 게임·도메인 문맥도 예외가 아니며 `시발점`의 `시발`도 span으로
+기록한다.
 
 ### hard-negative
 
-표면상 욕설과 비슷하지만 차단하지 않을 정상 문장이다. 정상 복합어, 인용·교육 문맥, 사용자명,
-게임·도메인 용어와 경계 사례가 여기에 해당할 수 있다. `expected_matches`는 반드시 비어 있어야
-한다.
+등록 욕설이나 승인된 변형이 실제로는 없는 정상 문장이다. 철자가 비슷한 다른 표현, term의
+일부분만 우연히 공유하는 문자열, 정책 대상이 아닌 도메인 용어가 여기에 해당한다. 등록 표현을
+포함한 문장을 정상 문맥이라는 이유로 hard-negative로 바꾸지 않는다. `expected_matches`는
+반드시 비어 있어야 한다.
 
 ### review
 
 정책 또는 문맥만으로 합의하지 못한 사례다. 자동 precision·recall 계산에서 제외하고, 독립
 판정자가 합의한 뒤에만 `positive` 또는 `hard-negative`로 바꾼다. review 개수와 사유는 품질
 보고서에 남긴다. 탐지기나 비교 대상의 예측을 review 기본값으로 사용하지 않는다.
+
+현재 corpus의 gold label은 deterministic lexical core를 대상으로 한다. 사전에 없는 암시적
+모욕이나 문맥 추론만으로 판정 가능한 사례는 선택적 AI 후단용 schema가 마련되기 전까지
+`review`로 유지하고 notes에 AI 후보임을 기록한다.
 
 ## 3. span과 canonical term
 
@@ -69,6 +76,9 @@ annotation한다. 기계 검증 계약은 [`evaluation/corpus.schema.json`](../e
 핵심 분류는 직접 표현, 철자·음운 변형, Alias·초성·자모·두벌식, 반복·구분자·공백·혼합,
 Fuzzy, 조사·경계, 정상 substring, 인용·교육, 사용자명·게임·도메인, Unicode, Whitelist,
 최대 입력과 적대 성능 입력이다.
+
+slice는 문맥을 기록할 뿐 label을 뒤집지 않는다. 예를 들어 `benign-substring`이나
+`quoted-context`도 등록 욕설 span이 있으면 positive일 수 있다.
 
 `unadjudicated-intake`는 외부 자료를 Koguard 정책으로 아직 판정하지 않은 임시 상태다. 다른
 평가 slice와 함께 쓰지 않으며 판정 뒤 실제 slice로 교체한다. 이 slice의 `review` case는
@@ -107,7 +117,7 @@ hidden evaluation과 private 원문은 이 공개 저장소, PR 첨부, CI 로�
 ## 7. annotation 절차
 
 1. 출처와 재배포 가능 여부를 먼저 기록한다.
-2. 원문을 읽고 탐지기 예측 없이 `label`을 판정한다.
+2. 원문을 읽고 탐지기 예측 없이, 등록 표현의 문맥 무관 포함 여부로 core `label`을 판정한다.
 3. positive이면 원문 span과 canonical term을 기록한다.
 4. 최소 하나의 slice와 판정 근거 notes를 기록한다.
 5. 공개 또는 최종 evaluation 후보는 가능하면 두 명이 독립 판정한다.
@@ -133,7 +143,8 @@ export에는 case ID, 원문, 비어 있는 annotation 필드만 들어간다. u
 기존 detector 결과는 제공하지 않는다. 검토자는 다음 필드를 작성한다.
 
 - `privacy_status`: 개인정보 검토 전 `pending`, 통과 `approved`, gold 제외 `exclude`
-- `label`: `positive`, `hard-negative`, 불확실하면 `review`
+- `label`: 등록 표현·승인 변형이 문맥과 무관하게 있으면 `positive`, 없으면
+  `hard-negative`, lexicon 포함 여부나 AI-only 의미 판정이 불확실하면 `review`
 - `expected_matches`: positive의 원문 code point span과 canonical term
 - `slices`: 확정 사례는 `unadjudicated-intake` 대신 실제 평가 slice
 - `notes`: 탐지 결과가 아닌 사람의 판정 근거

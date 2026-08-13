@@ -60,6 +60,15 @@ def test_valid_public_regression_fixture_returns_summary() -> None:
     assert summary.split_counts == (("regression", 3),)
 
 
+def test_public_regression_treats_embedded_profanity_as_positive() -> None:
+    corpus = json.loads(_VALID_CORPUS.read_text(encoding="utf-8"))
+    embedded = next(case for case in corpus["cases"] if case["id"] == "example-positive-substring")
+
+    assert embedded["label"] == "positive"
+    assert embedded["expected_matches"] == [{"start": 0, "end": 2, "canonical_term": "시발"}]
+    assert embedded["slices"] == ["benign-substring"]
+
+
 @pytest.mark.parametrize(
     ("fixture_name", "expected_message"),
     [

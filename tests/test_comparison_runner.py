@@ -75,13 +75,13 @@ def test_comparison_records_artifacts_metrics_slices_and_unsupported_occurrences
     assert koguard["artifact"]["version"] == "0.1.0"
     assert koguard["artifact"]["sha256"] == sha256(specs[0].artifact_path.read_bytes()).hexdigest()
     assert koguard["settings"] == {"all_matchers_enabled": True}
-    assert koguard["sentence_metrics"]["counts"] == {"tp": 1, "fp": 0, "fn": 0, "tn": 1}
+    assert koguard["sentence_metrics"]["counts"] == {"tp": 2, "fp": 0, "fn": 0, "tn": 0}
     assert koguard["sentence_metrics"]["precision"] == 1.0
     assert koguard["occurrence_metrics"]["status"] == "available"
-    assert koguard["occurrence_metrics"]["exact"]["counts"] == {"tp": 1, "fp": 0, "fn": 0}
-    assert koguard["occurrence_metrics"]["span"]["counts"] == {"tp": 1, "fp": 0, "fn": 0}
+    assert koguard["occurrence_metrics"]["exact"]["counts"] == {"tp": 2, "fp": 0, "fn": 0}
+    assert koguard["occurrence_metrics"]["span"]["counts"] == {"tp": 2, "fp": 0, "fn": 0}
     assert koguard["occurrence_metrics"]["canonical"]["counts"] == {
-        "tp": 1,
+        "tp": 2,
         "fp": 0,
         "fn": 0,
     }
@@ -90,7 +90,7 @@ def test_comparison_records_artifacts_metrics_slices_and_unsupported_occurrences
     assert korcen["artifact"]["version"] == KORCEN_VERSION
     assert korcen["profile"] == KORCEN_PROFILE
     assert korcen["settings"] == {"foreign": False}
-    assert korcen["sentence_metrics"]["counts"] == {"tp": 0, "fp": 1, "fn": 1, "tn": 0}
+    assert korcen["sentence_metrics"]["counts"] == {"tp": 1, "fp": 0, "fn": 1, "tn": 0}
     assert korcen["occurrence_metrics"] == {
         "status": "unsupported",
         "reason": "detector does not expose occurrence spans or canonical terms",
@@ -100,7 +100,7 @@ def test_comparison_records_artifacts_metrics_slices_and_unsupported_occurrences
     assert direct_slice["case_count"] == 1
     assert direct_slice["sentence_metrics"]["counts"] == {"tp": 1, "fp": 0, "fn": 0, "tn": 0}
     benign_slice = _slice_report(korcen, "benign-substring")
-    assert benign_slice["sentence_metrics"]["counts"] == {"tp": 0, "fp": 1, "fn": 0, "tn": 0}
+    assert benign_slice["sentence_metrics"]["counts"] == {"tp": 1, "fp": 0, "fn": 0, "tn": 0}
 
 
 def test_report_does_not_include_corpus_text_or_expected_terms(tmp_path: Path) -> None:
@@ -117,7 +117,7 @@ def test_report_does_not_include_corpus_text_or_expected_terms(tmp_path: Path) -
     assert "금칙어" not in serialized
     assert {case["case_id"] for case in report["case_results"]} == {
         "example-positive-direct",
-        "example-hard-negative-substring",
+        "example-positive-substring",
     }
 
 
@@ -251,7 +251,7 @@ def _fake_worker(
     case_inputs: Sequence[tuple[str, str]],
 ) -> DetectorRun:
     case_ids = [case_id for case_id, _ in case_inputs]
-    assert case_ids == ["example-positive-direct", "example-hard-negative-substring"]
+    assert case_ids == ["example-positive-direct", "example-positive-substring"]
     runtime = RuntimeMetadata(
         python_version="3.11.9",
         implementation="CPython",
@@ -278,7 +278,11 @@ def _fake_worker(
                     True,
                     (PredictionMatch(0, 3, "금칙어"),),
                 ),
-                Prediction("example-hard-negative-substring", False, ()),
+                Prediction(
+                    "example-positive-substring",
+                    True,
+                    (PredictionMatch(0, 2, "시발"),),
+                ),
             ),
             settings=(("all_matchers_enabled", True),),
         )
@@ -296,7 +300,7 @@ def _fake_worker(
         runtime=runtime,
         predictions=(
             Prediction("example-positive-direct", False, None),
-            Prediction("example-hard-negative-substring", True, None),
+            Prediction("example-positive-substring", True, None),
         ),
         settings=(("foreign", False),),
     )

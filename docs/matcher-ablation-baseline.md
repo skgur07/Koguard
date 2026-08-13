@@ -1,17 +1,17 @@
 # PF-003 matcher ablation provisional 기준선
 
-측정일: 2026-08-12 14:43 KST
+측정일: 2026-08-13 09:56 KST
 
 환경: Koguard 0.1.0, CPython 3.11.9, Windows 10.0.26200, Intel64 Family 6 Model 170
 반복: workload별 100회, warmup 10회
 
 ## 결론
 
-현재 all-enabled는 이 20건의 구현 유래 regression corpus에서 모든 positive를 찾지만,
-`시발점` hard-negative를 Exact 단계부터 탐지한다. 따라서 이 결과만으로 all-enabled를
-`balanced`로 채택할 수 없다. PF-005의 독립 positive 500건·negative 2,000건 corpus에서
-동일 runner를 다시 실행하기 전까지 현재 결과는 도구 검증과 비용의 provisional 기준선으로만
-사용한다.
+문맥 무관 lexical core 정책에 따라 정상 복합어와 명시적 공백·초성·두벌식 우회 5건을
+positive로 재분류했다. 현재 all-enabled는 이 20건의 구현 유래 regression corpus에서
+positive 16건 중 12건을 찾고 4건을 놓쳤으며, 정책 표현이 없는 hard-negative 4건에서는 FP가
+없었다. PF-005의 독립 positive 500건·negative 2,000건 corpus에서 동일 runner를 다시 실행하기
+전까지 현재 결과는 도구 검증과 비용의 provisional 기준선으로만 사용한다.
 
 모든 고급 matcher가 각자 목표로 만든 positive 1건을 추가했고 새 FP는 만들지 않았다. 이는
 matcher가 유용하다는 독립 증거가 아니라 해당 구현 경로를 fixture가 정상적으로 자극한다는
@@ -33,27 +33,27 @@ matcher가 유용하다는 독립 증거가 아니라 해당 구현 경로를 fi
 
 | profile | sentence TP/FP/FN/TN | occurrence TP/FP/FN | short p50/p95 ms | max p50/p95 ms | retained bytes |
 | --- | --- | --- | ---: | ---: | ---: |
-| Exact+Alias | 2/1/9/8 | 2/1/9 | 0.0293/0.0340 | 5.7835/10.2824 | 70,514 |
-| all-enabled | 11/1/0/8 | 11/1/0 | 0.1007/0.2096 | 10.3318/12.6805 | 199,369 |
+| Exact+Alias | 3/0/13/4 | 3/0/13 | 0.0315/0.0359 | 6.4133/7.0212 | 70,514 |
+| all-enabled | 12/0/4/4 | 12/0/4 | 0.1009/0.1144 | 11.3184/12.2350 | 199,302 |
 
 all-enabled는 이 환경에서 임시 성능 예산인 short-chat p95 1ms와 최대 입력 p95 15ms 안에
-들었다. 반면 hard-negative FP rate는 1/9로 임시 0.5% 예산을 크게 넘는다. 표본이 9건뿐이라
-비율 자체를 일반화할 수는 없지만, `시발점` cluster를 PF-005와 PF-012에서 반드시 별도
-평가해야 한다.
+들었다. provisional hard-negative FP는 0/4지만 표본이 너무 작아 비율을 일반화할 수 없다.
+반면 strict 정책상 positive 4건을 놓쳤으므로, 독립 판정 후 동일한 미탐 유형이 확인되면
+사전·구분자·공백·두벌식 경계를 우선 보강해야 한다.
 
 ## matcher별 provisional 기여와 비용
 
 | matcher | added TP/FP | unique TP | overlap | remaining FN | short p95 Δ ms | max p95 Δ ms | retained Δ bytes |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Repeated | 1/0 | 1 | 0 | 8 | +0.0087 | -3.3319 | +67 |
-| Separator | 1/0 | 1 | 0 | 8 | +0.0332 | -2.8236 | +67 |
-| Whitespace | 1/0 | 1 | 0 | 8 | +0.0129 | -3.4048 | +25,839 |
-| Mixed | 1/0 | 1 | 0 | 8 | +0.0252 | -2.3100 | +38,516 |
-| Keyboard | 1/0 | 1 | 0 | 8 | +0.0022 | -2.4711 | +67 |
-| Jamo | 1/0 | 1 | 0 | 8 | +0.0358 | -1.9042 | +67 |
-| Choseong | 1/0 | 1 | 0 | 8 | +0.0134 | +0.6392 | +37,861 |
-| Segmented | 1/0 | 1 | 0 | 5 | +0.0041 | +1.8358 | 0 |
-| Fuzzy | 1/0 | 1 | 0 | 8 | +0.0364 | -0.1817 | +20,293 |
+| Repeated | 1/0 | 1 | 0 | 12 | +0.0078 | -0.2600 | +67 |
+| Separator | 1/0 | 1 | 0 | 12 | +0.0121 | -0.1551 | 0 |
+| Whitespace | 1/0 | 1 | 0 | 12 | +0.0217 | -0.2388 | +25,772 |
+| Mixed | 1/0 | 1 | 0 | 12 | +0.0162 | -0.0539 | +38,583 |
+| Keyboard | 1/0 | 1 | 0 | 12 | +0.0058 | +1.0168 | 0 |
+| Jamo | 1/0 | 1 | 0 | 12 | +0.0267 | -0.1724 | 0 |
+| Choseong | 1/0 | 1 | 0 | 12 | +0.0221 | +2.2714 | +37,861 |
+| Segmented | 1/0 | 1 | 0 | 9 | -0.0136 | -0.0779 | -67 |
+| Fuzzy | 1/0 | 1 | 0 | 12 | +0.1124 | +2.4512 | +20,293 |
 
 Segmented의 delta는 Exact+Alias가 아니라 prerequisite control과 비교한 값이다. 음수 latency
 delta와 67 bytes 수준의 retained 차이는 기능 비활성화가 빨라졌거나 메모리를 더 쓴다는
@@ -70,7 +70,7 @@ uv run python -m evaluation.ablation_runner `
   --warmups 10
 ```
 
-- corpus SHA-256: `0a735367a724d3c11bc868aecf2209c536b2699d8823828be87d100aa01caa0f`
+- corpus semantic SHA-256: `4ad85de87665defd4fdfbe9eca89884a9f1f8fa228fd005c4afc45c862bc2ce7`
 - profile configuration SHA-256:
   `3fcd74ed874c2cafe514b1497c65e07b06421eb2807c09583184b76ad7b7fb93`
 - short-chat workload SHA-256:
@@ -85,5 +85,5 @@ uv run python -m evaluation.ablation_runner `
 1. PF-004에서 tuning과 hidden evaluation을 분리한다.
 2. PF-005에서 독립 corpus를 구축하고 이 runner를 그대로 재실행한다.
 3. PF-008에서 독립 결과를 근거로 strict·balanced·aggressive 후보표를 확정한다.
-4. 현재 공통 FP인 `시발점`은 사전 삭제나 전역 예외가 아니라 실제 문맥 분포와 whitelist
-   정책을 확인한 뒤 PF-012에서 최소 수정한다.
+4. 현재 4개 FN은 독립 primary/secondary 합의에서 같은 유형이 확인된 뒤 사전·구분자·공백·
+   두벌식 규칙의 최소 변경으로 해결한다.

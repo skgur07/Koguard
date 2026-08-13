@@ -1,7 +1,7 @@
 # Koguard 제품 집중 계획
 
 - 결정일: 2026-08-12
-- 상태: 승인된 실행 계획
+- 상태: 승인된 실행 계획, 2026-08-13 core 판정 정책 보완
 - 대상 버전: 최초 공개 `0.1.0` 이전
 
 ## 1. 결정 요약
@@ -23,6 +23,23 @@ Phase 4~6은 삭제하지 않는다. 아래 품질 게이트와 재개 조건을
 이 문서는 계획만 확정한다. 현재 코드의 모든 matcher 기본값은 아직 `True`이며, 프로필 API도
 아직 구현되지 않았다. 해당 동작은 이 계획의 Q2 단계에서 테스트와 함께 변경한다.
 
+### 1.1 Core 판정 정책 보완
+
+Koguard의 deterministic core는 **문맥과 무관한 lexical 차단기**로 정의한다. 등록된 욕설이나
+승인된 변형이 원문 일부에 존재하면 독립 단어, 정상 복합어, 인용·설명, 사용자명 여부와
+관계없이 positive다. 예를 들어 `시발점` 안의 `시발`도 core 차단 대상이다. 문맥을 이유로 core
+탐지를 자동 해제하지 않는다.
+
+`hard-negative`는 등록 표현이 실제로 포함됐지만 문맥이 정상인 사례가 아니다. 등록 표현과
+닮았으나 동일한 표현·승인 변형은 아닌 문자열, 또는 정책 대상 표현이 전혀 없는 문장만 해당한다.
+사용자 주입 Whitelist는 서비스 운영자가 명시적으로 선택하는 override이며 기본 정책의 문맥
+추론으로 간주하지 않는다.
+
+AI는 core를 대체하거나 core 탐지를 취소하는 기본 단계가 아니다. 향후 선택 옵션으로 두어
+사전에 없는 신조어, 암시적 모욕, 복잡한 우회 표현을 추가 검사한다. AI가 실패하거나 비활성화돼도
+core 결과는 유지한다. 이 선택적 AI 후단의 구현은 현재 Phase 4 보류를 해제하지 않으며, core
+recall corpus와 단순 API가 준비된 뒤 별도 품질·비용·개인정보 게이트를 거쳐 진행한다.
+
 ## 2. 제품 포지셔닝
 
 최초 공개 범위는 다음 문장으로 제한한다.
@@ -34,7 +51,7 @@ Phase 4~6은 삭제하지 않는다. 아래 품질 게이트와 재개 조건을
 
 - 동일 입력과 설정에 대한 결정적 다중 매치 및 원문 span
 - 서비스별 사전과 Whitelist를 포함한 명시적 정책 제어
-- 실제 분포에서 측정한 precision, recall, false-positive 예산
+- 엄격 lexical 정책에서 측정한 precision, recall과 규칙 밖 오탐 예산
 - 최대 입력, 메모리와 matcher별 계산량 상한
 
 최초 공개의 핵심 가치가 아닌 항목은 다음과 같다.
@@ -68,14 +85,14 @@ Phase 4~6은 삭제하지 않는다. 아래 품질 게이트와 재개 조건을
 
 1. **데이터보다 matcher를 먼저 늘리지 않는다.** 새 알고리즘은 독립 corpus의 구체적인
    false-negative 묶음을 해결해야 한다.
-2. **사전 크기를 성공 지표로 사용하지 않는다.** 중복 변형 수보다 slice별 recall과 정상
-   문장 false-positive를 우선한다.
+2. **사전 크기를 성공 지표로 사용하지 않는다.** 중복 변형 수보다 slice별 recall과 정책
+   lexicon·승인 변형이 없는 문장의 false-positive를 우선한다.
 3. **평가 자료와 튜닝 자료를 분리한다.** 규칙 작성자가 본 사례만으로 최종 수치를 계산하지
    않는다.
 4. **라이선스가 기능보다 먼저다.** 출처, revision, 허용 범위가 불명확한 데이터는 wheel,
    공개 저장소와 공개 기준선에 포함하지 않는다.
-5. **기본값은 가장 넓은 탐지가 아니다.** 실제 사용자에게 권장할 비용·오탐 균형을 기본으로
-   한다.
+5. **기본값은 문맥 무관 lexical core다.** 등록 term의 substring 탐지를 기본으로 유지하되,
+   고비용 Fuzzy·AI 단계는 독립 corpus에서 추가 recall과 비용이 입증된 선택 옵션으로 둔다.
 6. **상세 결과 API는 유지하고 진입 API만 단순화한다.** `CheckResult`와 원문 span을 버리지
    않고 boolean 사용 사례를 짧게 만든다.
 7. **모든 성능 수치는 정확도와 함께 본다.** 탐지를 끈 결과를 성능 개선으로 인정하지 않는다.
@@ -98,6 +115,9 @@ Phase 4~6은 삭제하지 않는다. 아래 품질 게이트와 재개 조건을
   유사 문자
 - 문맥 형태: 독립 토큰, 조사·어미 결합, 복합어 substring, 인용·설명, 사용자명·게임 용어
 - 위험 형태: 높은 오탐 가능성, 정책 민감 범주, 다의어, 지역·세대 한정 신조어
+
+문맥 형태는 탐지를 허용하거나 해제하기 위한 label 기준이 아니라 결과 분석용 slice다. 등록
+표현이 있으면 인용·설명·복합어에서도 positive로 annotation한다.
 
 ### 5.3 후보 레코드
 
@@ -130,7 +150,8 @@ review_notes
 2. Unicode 정규화 뒤 기존 term·Alias와 중복되는지 확인한다.
 3. canonical term과 가장 좁은 matcher를 정한다. 명시적 Alias로 해결 가능한 표현에 범용
    Fuzzy나 새 normalizer를 추가하지 않는다.
-4. 최소 1개 positive와 2개 hard negative를 작성한다.
+4. 최소 1개 positive와 2개 hard negative를 작성한다. 등록 표현을 포함한 정상 문맥은 positive로
+   두고, hard negative는 철자가 비슷하지만 등록 표현·승인 변형은 아닌 대조군으로 작성한다.
 5. tuning corpus에서 matcher별 증분 precision/recall을 측정한다.
 6. 라이선스와 NOTICE 기록을 검토한다.
 7. 승인된 후보만 packaged data에 반영하고 hidden evaluation set을 다시 실행한다.
@@ -182,6 +203,10 @@ review_notes
 - 빈 입력, 최대 입력, 다중 매치, Whitelist 혼합
 - matcher별 적대적 성능 입력
 
+정상 복합어, 인용·설명, 사용자명·게임 용어도 등록 욕설 substring이 있으면 core positive다.
+해당 slice는 의도된 엄격 차단의 recall을 측정한다. 정책 표현이 없는 유사 문자열만
+hard-negative로 둔다.
+
 ### 6.3 annotation schema
 
 문장 수준 boolean만 저장하지 않는다.
@@ -225,7 +250,8 @@ positive/negative에 넣지 않고 `review`로 분리한다. 자동 평가에서
 
 ### 6.4 annotation 품질
 
-- 정책 가이드에 욕설, 비하, 인용, 정상 substring과 Whitelist의 경계를 예제로 정의한다.
+- 정책 가이드에 욕설, 비하, 인용, 정상 substring의 문맥 무관 차단과 명시적 Whitelist override
+  경계를 예제로 정의한다.
 - 공개 evaluation 후보는 가능하면 두 번 독립 판정하고 불일치를 합의한다.
 - 한 명만 판정한 경우 `single_review`를 기록해 결과 해석에서 구분한다.
 - 입력 원문에 개인정보가 있으면 비식별화하며, 변환 때문에 탐지 의미가 달라진 사례는
@@ -250,7 +276,7 @@ annotation을 사용한다.
 
 - occurrence precision, recall, F1
 - 문장 수준 precision, recall, F1
-- 정상 문장 false-positive rate
+- 정책 lexicon·승인 변형이 없는 문장의 false-positive rate
 - slice별 TP, FP, FN과 전체 건수
 - exact span 일치율과 canonical term 일치율
 - matcher별 증분 TP, FP, FN
@@ -268,7 +294,8 @@ Q1의 첫 비교 가능한 기준선은 최소 다음을 목표로 한다.
 - positive 문장 500개 이상
 - 정상·hard-negative 문장 2,000개 이상
 - 핵심 slice마다 positive 30개 또는 해당 slice의 확보 가능한 전량
-- 정상 substring, 인용·설명, 사용자명·게임 용어는 각각 negative 100개 이상
+- 등록 표현을 포함한 정상 substring·인용·설명·사용자명·게임 용어 positive와, 등록 표현이 없는
+  철자 유사 hard-negative를 각각 충분히 확보
 
 이 수치는 공개 품질의 종착점이 아니라 첫 통계적 비교 단위다. 한 출처나 한 표현 계열이 전체
 positive의 30%를 넘으면 별도 보고하고 편향을 줄인다.
@@ -436,7 +463,8 @@ Koguard가 아직 공개 `0.1.0` 이전이므로 이 전환은 장기 deprecatio
 - 최소 초기 규모의 positive·hard-negative 수집과 annotation
 - 후보 manifest, 라이선스 검토와 build validation 구현
 - false-negative cluster별 사전·Alias 확장
-- 정상 substring, 인용, 게임·도메인 용어 오탐 회귀 확대
+- 등록 표현을 포함한 정상 substring·인용·게임·도메인 문맥의 의도된 차단 회귀와, 등록 표현이
+  없는 철자 유사 오탐 회귀 확대
 
 완료 조건:
 

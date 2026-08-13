@@ -1,5 +1,11 @@
 # 정확도 기준선
 
+> 2026-08-13 정책 보완: 아래 2026-07-28~08-11 수치는 당시 matcher 단위 구현 회귀를
+> 기록한 값이다. 문맥 무관 lexical core 정책에서는 등록 substring과 명시적 공백·초성·두벌식
+> 우회를 정상 문맥이라는 이유로 hard-negative 처리하지 않는다. 최신 provisional 제품 판정은
+> [matcher ablation 기준선](matcher-ablation-baseline.md)을 사용하며, 최종 정확도는 PF-005
+> 독립 판정 완료 후 다시 측정한다.
+
 측정일: 2026-07-28
 
 대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성·Alias·
