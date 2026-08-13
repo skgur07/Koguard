@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-curse-review-intake-v1",
+  "source_corpus_sha256": "c26c942a3d825e1667d2d520d41fcda6f03a4e07d81ad4d8ba84038096125b83",
+  "batch_case_count": 100,
+  "batch_counts": {
+    "positive": 62,
+    "hard-negative": 30,
+    "review": 8
+  },
+  "corpus_counts": {
+    "positive": 62,
+    "hard-negative": 30,
+    "review": 2408
+  },
+  "quality_counts": {
+    "double_reviewed": 100,
+    "consensus": 30,
+    "disagreement": 70,
+    "privacy_excluded": 0,
+    "pending_privacy": 0
+  },
+  "adjudication_counts": {
+    "eligible": 70,
+    "resolved": 68,
+    "unresolved": 2,
+    "privacy_excluded": 0
+  },
+  "slice_counts": {
+    "benign-substring": 11,
+    "choseong": 4,
+    "direct": 49,
+    "domain-term": 15,
+    "educational-context": 1,
+    "jamo": 1,
+    "keyboard": 1,
+    "multiple-matches": 23,
+    "quoted-context": 3,
+    "spelling-variant": 11,
+    "suffix": 29,
+    "unicode": 1,
+    "whitespace": 1
+  },
+  "gold_ready": false
+}

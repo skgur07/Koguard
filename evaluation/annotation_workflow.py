@@ -52,7 +52,7 @@ _MAX_BATCH_SIZE = 500
 
 
 class AnnotationWorkflowError(ValueError):
-    """Raised when a batch cannot be exported or safely merged."""
+    """Raised when an annotation batch cannot be processed safely."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -221,6 +221,131 @@ def merge_annotation_batches(
                 "privacy_excluded",
                 "pending_privacy",
             )
+        },
+        "slice_counts": dict(sorted(slice_counts.items())),
+        "gold_ready": False,
+    }
+    result = AnnotationMergeResult(merged, report)
+    if output_path is not None:
+        _write_json(output_path, merged)
+    if report_path is not None:
+        _write_json(report_path, report)
+    return result
+
+
+def adjudicate_annotation_batches(
+    corpus_path: Path,
+    primary_path: Path,
+    secondary_path: Path,
+    adjudicator_path: Path,
+    *,
+    output_path: Path | None = None,
+    report_path: Path | None = None,
+) -> AnnotationMergeResult:
+    """Resolve two-reviewer disagreements with an independent third annotation."""
+
+    _validate_output_paths(
+        (corpus_path, primary_path, secondary_path, adjudicator_path),
+        output_path=output_path,
+        report_path=report_path,
+    )
+    corpus, corpus_sha256 = _load_corpus(corpus_path)
+    corpus_id = cast(str, corpus["corpus_id"])
+    cases = cast(list[dict[str, Any]], corpus["cases"])
+    source_by_id = {cast(str, case["id"]): case for case in cases}
+    batches = tuple(
+        _load_and_validate_batch(
+            path,
+            corpus_id=corpus_id,
+            corpus_sha256=corpus_sha256,
+            source_by_id=source_by_id,
+        )
+        for path in (primary_path, secondary_path, adjudicator_path)
+    )
+    if len({batch.annotation_set_id for batch in batches}) != len(batches):
+        raise AnnotationWorkflowError("annotation set IDs must be distinct")
+    if len({batch.reviewer_id for batch in batches}) != len(batches):
+        raise AnnotationWorkflowError("reviewer IDs must be distinct")
+
+    annotations_by_batch = tuple(
+        {cast(str, annotation["case_id"]): annotation for annotation in batch.annotations}
+        for batch in batches
+    )
+    primary_by_id, secondary_by_id, adjudicator_by_id = annotations_by_batch
+    if not (set(primary_by_id) == set(secondary_by_id) == set(adjudicator_by_id)):
+        raise AnnotationWorkflowError("annotation batches must contain the same case IDs")
+
+    merged = copy.deepcopy(corpus)
+    merged_cases = cast(list[dict[str, Any]], merged["cases"])
+    merged_by_id = {cast(str, case["id"]): case for case in merged_cases}
+    batch_counts: Counter[str] = Counter()
+    slice_counts: Counter[str] = Counter()
+    quality_counts: Counter[str] = Counter()
+    adjudication_counts: Counter[str] = Counter()
+
+    for case_id in sorted(primary_by_id):
+        first = primary_by_id[case_id]
+        second = secondary_by_id[case_id]
+        adjudicator = adjudicator_by_id[case_id]
+        target = merged_by_id[case_id]
+        first_privacy = cast(str, first["privacy_status"])
+        second_privacy = cast(str, second["privacy_status"])
+
+        if "exclude" in {first_privacy, second_privacy}:
+            quality_counts["privacy_excluded"] += 1
+            _retain_review(target, "Privacy review excluded this case from gold.")
+        elif "pending" in {first_privacy, second_privacy}:
+            quality_counts["pending_privacy"] += 1
+            _retain_review(target, "Privacy review is still pending.")
+        else:
+            quality_counts["double_reviewed"] += 1
+            if _decision_key(first) == _decision_key(second):
+                quality_counts["consensus"] += 1
+                _apply_consensus(target, first, second)
+            else:
+                quality_counts["disagreement"] += 1
+                adjudication_counts["eligible"] += 1
+                adjudicator_privacy = cast(str, adjudicator["privacy_status"])
+                if adjudicator_privacy == "pending":
+                    raise AnnotationWorkflowError(
+                        "adjudication is incomplete for an initial disagreement"
+                    )
+                if adjudicator_privacy == "exclude":
+                    adjudication_counts["privacy_excluded"] += 1
+                    _retain_review(target, "Adjudicator excluded this case from gold.")
+                elif adjudicator["label"] == "review":
+                    adjudication_counts["unresolved"] += 1
+                    _retain_review(target, "Adjudication retained review status.")
+                else:
+                    adjudication_counts["resolved"] += 1
+                    _apply_adjudication(target, adjudicator)
+
+        label = cast(str, target["label"])
+        batch_counts[label] += 1
+        if label != "review":
+            slice_counts.update(cast(list[str], target["slices"]))
+
+    corpus_counts = Counter(cast(str, case["label"]) for case in merged_cases)
+    report: dict[str, Any] = {
+        "schema_version": 1,
+        "corpus_id": corpus_id,
+        "source_corpus_sha256": corpus_sha256,
+        "batch_case_count": len(primary_by_id),
+        "batch_counts": _label_counts(batch_counts),
+        "corpus_counts": _label_counts(corpus_counts),
+        "quality_counts": {
+            name: quality_counts[name]
+            for name in (
+                "double_reviewed",
+                "consensus",
+                "disagreement",
+                "privacy_excluded",
+                "pending_privacy",
+            )
+        },
+        "adjudication_counts": {
+            name: adjudication_counts[name]
+            for name in ("eligible", "resolved", "unresolved", "privacy_excluded")
         },
         "slice_counts": dict(sorted(slice_counts.items())),
         "gold_ready": False,
@@ -439,6 +564,13 @@ def _apply_consensus(
         )
 
 
+def _apply_adjudication(target: dict[str, Any], adjudicator: Mapping[str, Any]) -> None:
+    target["label"] = adjudicator["label"]
+    target["expected_matches"] = copy.deepcopy(adjudicator["expected_matches"])
+    target["slices"] = sorted(cast(list[str], adjudicator["slices"]))
+    target["notes"] = f"Third-reviewer adjudication. {adjudicator['notes']}"
+
+
 def _retain_review(target: dict[str, Any], notes: str) -> None:
     target["label"] = "review"
     target["expected_matches"] = []
@@ -522,11 +654,21 @@ def _parser() -> argparse.ArgumentParser:
     merge_parser.add_argument("secondary", type=Path)
     merge_parser.add_argument("--output", required=True, type=Path)
     merge_parser.add_argument("--report", required=True, type=Path)
+
+    adjudicate_parser = subparsers.add_parser(
+        "adjudicate", help="resolve two-reviewer disagreements with a third review"
+    )
+    adjudicate_parser.add_argument("corpus", type=Path)
+    adjudicate_parser.add_argument("primary", type=Path)
+    adjudicate_parser.add_argument("secondary", type=Path)
+    adjudicate_parser.add_argument("adjudicator", type=Path)
+    adjudicate_parser.add_argument("--output", required=True, type=Path)
+    adjudicate_parser.add_argument("--report", required=True, type=Path)
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Run annotation export or merge without printing corpus content."""
+    """Run annotation export, merge, or adjudication without printing corpus content."""
 
     arguments = _parser().parse_args(argv)
     try:
@@ -543,7 +685,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 f"corpus={batch['corpus_id']}; exported={len(batch['cases'])}; "
                 f"offset={arguments.offset}"
             )
-        else:
+        elif arguments.command == "merge":
             result = merge_annotation_batches(
                 arguments.corpus,
                 arguments.primary,
@@ -557,6 +699,23 @@ def main(argv: Sequence[str] | None = None) -> int:
                 f"batch={result.report['batch_case_count']}; positive={counts['positive']}; "
                 f"hard-negative={counts['hard-negative']}; review={counts['review']}; "
                 f"disagreement={quality['disagreement']}"
+            )
+        else:
+            result = adjudicate_annotation_batches(
+                arguments.corpus,
+                arguments.primary,
+                arguments.secondary,
+                arguments.adjudicator,
+                output_path=arguments.output,
+                report_path=arguments.report,
+            )
+            counts = cast(dict[str, int], result.report["batch_counts"])
+            adjudication = cast(dict[str, int], result.report["adjudication_counts"])
+            print(
+                f"batch={result.report['batch_case_count']}; positive={counts['positive']}; "
+                f"hard-negative={counts['hard-negative']}; review={counts['review']}; "
+                f"adjudicated={adjudication['resolved']}; "
+                f"unresolved={adjudication['unresolved']}"
             )
     except AnnotationWorkflowError as exc:
         print(f"annotation workflow failed: {exc}", file=sys.stderr)

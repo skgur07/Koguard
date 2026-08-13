@@ -13,11 +13,16 @@ from evaluation.annotation_workflow import (
     ANNOTATION_BATCH_SCHEMA_PATH,
     ANNOTATION_REPORT_SCHEMA_PATH,
     AnnotationWorkflowError,
+    adjudicate_annotation_batches,
     export_annotation_batch,
     main,
     merge_annotation_batches,
 )
 from evaluation.corpus_validator import validate_corpus_paths
+
+_PUBLISHED_ADJUDICATION_REPORT_PATH = (
+    Path(__file__).parents[1] / "evaluation" / "results" / "pf005-batch-001-adjudicated.report.json"
+)
 
 
 def test_annotation_schemas_are_versioned_and_closed() -> None:
@@ -32,6 +37,23 @@ def test_annotation_schemas_are_versioned_and_closed() -> None:
     )
     assert report_schema["properties"]["schema_version"]["const"] == 1
     assert report_schema["additionalProperties"] is False
+
+
+def test_published_adjudication_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_ADJUDICATION_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["batch_case_count"] == 100
+    assert sum(report["batch_counts"].values()) == 100
+    assert report["quality_counts"]["double_reviewed"] == 100
+    assert report["adjudication_counts"] == {
+        "eligible": 70,
+        "resolved": 68,
+        "unresolved": 2,
+        "privacy_excluded": 0,
+    }
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
 
 
 def test_export_is_deterministic_blinded_and_review_only(tmp_path: Path) -> None:
@@ -227,6 +249,192 @@ def test_merge_keeps_disagreement_exclusion_and_pending_cases_in_review(tmp_path
     serialized_report = json.dumps(result.report, ensure_ascii=False)
     assert "금칙어 문장" not in serialized_report
     assert "canonical_term" not in serialized_report
+
+
+def test_adjudication_resolves_only_initial_disagreements(tmp_path: Path) -> None:
+    corpus_path = _write_json(tmp_path / "corpus.json", _corpus())
+    primary = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-primary",
+        reviewer_id="reviewer-a",
+        limit=3,
+    )
+    secondary = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-secondary",
+        reviewer_id="reviewer-b",
+        limit=3,
+    )
+    adjudicator = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-adjudicator",
+        reviewer_id="reviewer-c",
+        limit=3,
+    )
+    for batch in (primary, secondary):
+        _approve_positive(batch["cases"][0])
+        _approve_negative(batch["cases"][2])
+    _approve_negative(primary["cases"][1])
+    _approve_positive(secondary["cases"][1])
+    _approve_positive(adjudicator["cases"][1])
+
+    result = adjudicate_annotation_batches(
+        corpus_path,
+        _write_json(tmp_path / "primary.json", primary),
+        _write_json(tmp_path / "secondary.json", secondary),
+        _write_json(tmp_path / "adjudicator.json", adjudicator),
+    )
+
+    merged_cases = {case["id"]: case for case in result.corpus["cases"]}
+    assert merged_cases["review-a"]["label"] == "positive"
+    assert merged_cases["review-b"]["label"] == "positive"
+    assert merged_cases["review-c"]["label"] == "hard-negative"
+    assert result.report["quality_counts"] == {
+        "double_reviewed": 3,
+        "consensus": 2,
+        "disagreement": 1,
+        "privacy_excluded": 0,
+        "pending_privacy": 0,
+    }
+    assert result.report["adjudication_counts"] == {
+        "eligible": 1,
+        "resolved": 1,
+        "unresolved": 0,
+        "privacy_excluded": 0,
+    }
+
+
+def test_adjudication_requires_a_third_reviewer_and_completed_disagreement(
+    tmp_path: Path,
+) -> None:
+    corpus_path = _write_json(tmp_path / "corpus.json", _corpus())
+    primary = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-primary",
+        reviewer_id="reviewer-a",
+        limit=1,
+    )
+    secondary = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-secondary",
+        reviewer_id="reviewer-b",
+        limit=1,
+    )
+    _approve_negative(primary["cases"][0])
+    _approve_positive(secondary["cases"][0])
+    adjudicator = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-adjudicator",
+        reviewer_id="reviewer-a",
+        limit=1,
+    )
+
+    with pytest.raises(AnnotationWorkflowError, match="reviewer IDs must be distinct"):
+        adjudicate_annotation_batches(
+            corpus_path,
+            _write_json(tmp_path / "primary.json", primary),
+            _write_json(tmp_path / "secondary.json", secondary),
+            _write_json(tmp_path / "adjudicator.json", adjudicator),
+        )
+
+    adjudicator["reviewer_id"] = "reviewer-c"
+    with pytest.raises(AnnotationWorkflowError, match="adjudication is incomplete"):
+        adjudicate_annotation_batches(
+            corpus_path,
+            tmp_path / "primary.json",
+            tmp_path / "secondary.json",
+            _write_json(tmp_path / "adjudicator.json", adjudicator),
+        )
+
+
+def test_adjudication_can_explicitly_retain_review(tmp_path: Path) -> None:
+    corpus_path = _write_json(tmp_path / "corpus.json", _corpus())
+    primary = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-primary",
+        reviewer_id="reviewer-a",
+        limit=1,
+    )
+    secondary = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-secondary",
+        reviewer_id="reviewer-b",
+        limit=1,
+    )
+    adjudicator = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-adjudicator",
+        reviewer_id="reviewer-c",
+        limit=1,
+    )
+    _approve_negative(primary["cases"][0])
+    _approve_positive(secondary["cases"][0])
+    adjudicator["cases"][0]["privacy_status"] = "approved"
+
+    result = adjudicate_annotation_batches(
+        corpus_path,
+        _write_json(tmp_path / "primary.json", primary),
+        _write_json(tmp_path / "secondary.json", secondary),
+        _write_json(tmp_path / "adjudicator.json", adjudicator),
+    )
+
+    assert result.report["adjudication_counts"]["resolved"] == 0
+    assert result.report["adjudication_counts"]["unresolved"] == 1
+    assert result.corpus["cases"][1]["label"] == "review"
+
+
+def test_adjudication_cli_prints_aggregate_counts_only(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    corpus = _corpus()
+    secret_text = "민감한 판정 원문"
+    corpus["cases"][1]["text"] = secret_text
+    corpus_path = _write_json(tmp_path / "corpus.json", corpus)
+    primary = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-primary",
+        reviewer_id="reviewer-a",
+        limit=1,
+    )
+    secondary = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-secondary",
+        reviewer_id="reviewer-b",
+        limit=1,
+    )
+    adjudicator = export_annotation_batch(
+        corpus_path,
+        annotation_set_id="batch-adjudicator",
+        reviewer_id="reviewer-c",
+        limit=1,
+    )
+    _approve_negative(primary["cases"][0])
+    _approve_positive(secondary["cases"][0])
+    _approve_positive(adjudicator["cases"][0])
+
+    exit_code = main(
+        [
+            "adjudicate",
+            str(corpus_path),
+            str(_write_json(tmp_path / "primary.json", primary)),
+            str(_write_json(tmp_path / "secondary.json", secondary)),
+            str(_write_json(tmp_path / "adjudicator.json", adjudicator)),
+            "--output",
+            str(tmp_path / "adjudicated.json"),
+            "--report",
+            str(tmp_path / "report.json"),
+        ]
+    )
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert "batch=1" in captured.out
+    assert "adjudicated=1" in captured.out
+    assert "unresolved=0" in captured.out
+    assert secret_text not in captured.out
+    assert "canonical_term" not in captured.out
+    assert captured.err == ""
 
 
 def test_merge_rejects_same_reviewer_and_tampered_text_without_echoing_text(tmp_path: Path) -> None:

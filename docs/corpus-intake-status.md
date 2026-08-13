@@ -1,11 +1,11 @@
 # PF-005 초기 corpus 구축 상태
 
 - 기준일: 2026-08-12
-- 상태: intake 완료, gold annotation 미완료
-- annotation workflow: 구현 완료, 실제 독립 판정 미착수
+- 상태: intake 완료, 첫 100건 독립 판정·제3 판정 완료, 전체 corpus 미완료
+- annotation workflow: 이중 판정·불일치 제3 판정 구현 및 실제 batch 검증 완료
 - 로컬 tuning review: 2,500건
-- 확정 positive: 0건
-- 확정 hard-negative: 0건
+- 확정 positive: 62건
+- 확정 hard-negative: 30건
 - hidden evaluation: 0건
 
 ## 현재 결과
@@ -23,8 +23,8 @@ MIT로 재배포 가능한 `2runo/Curse-detection-data`의 고정 commit과 arti
 | direct/normalized leaks | 0 |
 | 자동 민감 패턴 제외 | 25/5,825 |
 | 재배포 권한 확인 | 2,500/2,500 |
-| Koguard-policy adjudicated | 0/2,500 |
-| exact span annotated | 0/2,500 |
+| Koguard-policy finalized | 92/2,500 |
+| exact span annotated positive | 62건, 110 occurrence |
 
 ## 재현성
 
@@ -110,13 +110,35 @@ review queue로 만들었지만 기존 Curse 원본과 normalized 기준 2,010�
 확정 positive·hard-negative 수와 `gold_ready=false`는 바뀌지 않는다. 2차 독립 판정과 불일치
 합의가 끝난 뒤에만 이 수치를 기준선으로 다시 계산한다.
 
+## 2026-08-13 첫 100건 독립 판정 결과
+
+서로 결과를 보지 않은 두 검토자가 100건을 모두 판정했고, 최초 불일치 70건은 별도의 세 번째
+검토자가 탐지기 결과를 보지 않고 판정했다. 68건은 확정됐고 의미·정책 판단이 더 필요한 2건은
+강제로 확정하지 않았다. 최초 합의 30건 중 `review` 6건을 포함해 최종 batch는 positive 62건,
+hard-negative 30건, review 8건이다. 개인정보 제외·대기 사례는 없다.
+
+현재 all-enabled를 확정 92건에 적용한 결과는 문장 기준 TP 37, FP 0, FN 25, TN 30으로
+precision 100%, recall 59.7%, F1 74.7%다. occurrence 기준은 TP 41, FP 13, FN 69으로
+precision 75.9%, recall 37.3%, F1 50.0%다. occurrence FP는 hard-negative 문장 오탐이 아니라
+positive 문장 안에서 정답 span·canonical과 일치하지 않은 추가 탐지다.
+
+FN 진단상 110개 정답 occurrence 중 51개가 현재 packaged 사전에 canonical을 갖지 않으며,
+29개의 고유 missing canonical cluster로 묶인다. 문장 FN 25건 중 21건은 정답 canonical이 모두
+사전에 없고, 1건은 일부만 있으며, 3건만 모두 등록된 상태다. 고급 matcher의 독립 증분은
+choseong 3 TP뿐이었고 fuzzy는 TP 없이 occurrence FP 2개를 추가했다. 따라서 PF-007의 첫
+우선순위는 matcher 확대가 아니라 빈도 높은 missing canonical term·명시적 Alias 후보 평가다.
+
+공개 집계는 `evaluation/results/pf005-batch-001-adjudicated.report.json`에 저장했다. 보호 원문,
+case ID, canonical term, reviewer ID와 전체 ablation case 결과는 Git·배포물에 넣지 않는다.
+이 결과는 단일 출처의 첫 100건이며 `gold_ready=false`다. PF-005의 500 positive·2,000 negative,
+출처 편향 완화와 hidden evaluation 완료를 의미하지 않는다.
+
 ## PF-005 종료 전 남은 작업
 
-1. 100건 단위 primary/secondary batch를 생성하고 실제 독립 판정 시작
-2. 탐지기 예측이나 upstream label을 보지 않는 1차 Koguard-policy 판정
-3. positive의 exact original span과 canonical term annotation
-4. 독립 2차 판정과 불일치 합의, 불확실 사례의 review 유지
-5. 핵심 positive slice별 30건, 등록 표현을 포함한 정상 substring·인용/설명·사용자명/게임
+1. 다음 100건 primary/secondary batch를 생성해 같은 독립 판정 절차 반복
+2. 첫 batch의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
+   등록 표현·승인 변형이 없는 hard-negative 2건 이상 고정
+3. 핵심 positive slice별 30건, 등록 표현을 포함한 정상 substring·인용/설명·사용자명/게임
    문맥 positive와 등록 표현이 없는 철자 유사 negative 확보
 6. 단일 출처 100% 편향 완화
 7. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
