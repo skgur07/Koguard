@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/fn-candidate-report.schema.json",
+  "title": "Koguard false-negative candidate evaluation report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "inputs", "corpus", "baseline", "combined_candidate", "candidates"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["corpus_sha256", "candidate_manifest_sha256"],
+      "properties": {
+        "corpus_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "candidate_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_count", "positive_count", "hard_negative_count", "excluded_review_count"],
+      "properties": {
+        "case_count": {"type": "integer", "minimum": 1},
+        "positive_count": {"type": "integer", "minimum": 1},
+        "hard_negative_count": {"type": "integer", "minimum": 0},
+        "excluded_review_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "baseline": {"$ref": "#/$defs/metrics"},
+    "combined_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sentence_counts", "occurrence_counts", "sentence_delta", "occurrence_delta", "positive_case_support", "hard_negative_case_support", "tuning_gate_passed"],
+      "properties": {
+        "sentence_counts": {"$ref": "#/$defs/sentenceCounts"},
+        "occurrence_counts": {"$ref": "#/$defs/occurrenceCounts"},
+        "sentence_delta": {"$ref": "#/$defs/sentenceDelta"},
+        "occurrence_delta": {"$ref": "#/$defs/occurrenceDelta"},
+        "positive_case_support": {"type": "integer", "minimum": 0},
+        "hard_negative_case_support": {"type": "integer", "minimum": 0},
+        "tuning_gate_passed": {"type": "boolean"}
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/candidateResult"}
+    }
+  },
+  "$defs": {
+    "sentenceCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tp", "fp", "fn", "tn"],
+      "properties": {
+        "tp": {"type": "integer", "minimum": 0},
+        "fp": {"type": "integer", "minimum": 0},
+        "fn": {"type": "integer", "minimum": 0},
+        "tn": {"type": "integer", "minimum": 0}
+      }
+    },
+    "occurrenceCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tp", "fp", "fn"],
+      "properties": {
+        "tp": {"type": "integer", "minimum": 0},
+        "fp": {"type": "integer", "minimum": 0},
+        "fn": {"type": "integer", "minimum": 0}
+      }
+    },
+    "sentenceDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tp", "fp", "fn", "tn"],
+      "properties": {
+        "tp": {"type": "integer"},
+        "fp": {"type": "integer"},
+        "fn": {"type": "integer"},
+        "tn": {"type": "integer"}
+      }
+    },
+    "occurrenceDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tp", "fp", "fn"],
+      "properties": {
+        "tp": {"type": "integer"},
+        "fp": {"type": "integer"},
+        "fn": {"type": "integer"}
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sentence_counts", "occurrence_counts"],
+      "properties": {
+        "sentence_counts": {"$ref": "#/$defs/sentenceCounts"},
+        "occurrence_counts": {"$ref": "#/$defs/occurrenceCounts"}
+      }
+    },
+    "candidateResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id", "positive_case_support", "hard_negative_case_support", "sentence_tp_delta", "sentence_fp_delta", "occurrence_tp_delta", "occurrence_fp_delta", "tuning_gate_passed"],
+      "properties": {
+        "candidate_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
+        "positive_case_support": {"type": "integer", "minimum": 0},
+        "hard_negative_case_support": {"type": "integer", "minimum": 0},
+        "sentence_tp_delta": {"type": "integer"},
+        "sentence_fp_delta": {"type": "integer"},
+        "occurrence_tp_delta": {"type": "integer"},
+        "occurrence_fp_delta": {"type": "integer"},
+        "tuning_gate_passed": {"type": "boolean"}
+      }
+    }
+  }
+}

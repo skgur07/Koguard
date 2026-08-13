@@ -72,8 +72,8 @@ def test_bundled_manifest_covers_every_packaged_literal_and_alias() -> None:
         aliases_path=DEFAULT_ALIASES_PATH,
     )
 
-    assert summary.source_count == 2
-    assert summary.candidate_count == 63
+    assert summary.source_count == 3
+    assert summary.candidate_count == 70
     assert summary.packaged_literal_count == 58
     assert summary.packaged_alias_count == 5
     assert summary.ai_candidate_count == 0
@@ -84,7 +84,7 @@ def test_provenance_manifest_stays_out_of_runtime_dictionary_data() -> None:
     payload = json.loads(DICTIONARY_PROVENANCE_PATH.read_text(encoding="utf-8"))
 
     assert payload["manifest_id"] == "koguard-default-dictionary-v1"
-    assert len(payload["candidates"]) == 63
+    assert len(payload["candidates"]) == 70
     assert not files("koguard.data").joinpath("provenance.json").is_file()
 
 
@@ -309,7 +309,7 @@ def test_cli_validates_bundled_manifest(capsys: pytest.CaptureFixture[str]) -> N
 
     captured = capsys.readouterr()
     assert exit_code == 0
-    assert "validated 63 candidates from 2 sources" in captured.out
+    assert "validated 70 candidates from 3 sources" in captured.out
     assert "packaged_literals=58" in captured.out
     assert "packaged_aliases=5" in captured.out
     assert captured.err == ""
