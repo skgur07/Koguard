@@ -12,6 +12,12 @@ duplicates, and stored one term per line. It does not copy Korcen's matching
 implementation. Korcen's MIT license and copyright notice are preserved in
 `KORCEN-MIT.txt`.
 
+Every bundled literal and Alias is linked to a stable candidate ID, source revision,
+license decision, review status, and evaluation reference in the source distribution's
+`evaluation/dictionary-provenance.v1.json`. This build-only manifest is not runtime
+wheel data. The offline validator and promotion policy are documented in
+`docs/dictionary-provenance.md` in the source distribution.
+
 The small alias mapping in `aliases.tsv` was manually selected for Koguard from
 user-reported false negatives. The following resource repository was consulted
 while researching Korean profanity representations:

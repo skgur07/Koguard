@@ -5,6 +5,21 @@ Korcen에 각각 입력하고, 문장 단위 및 가능한 범위의 occurrence 
 기록한다. 평가 대상 패키지는 코어 런타임 의존성에 추가하지 않으며, 네트워크 접근도
 러너 밖에서만 수행한다.
 
+## PF-006 dictionary provenance validator
+
+`dictionary_provenance.py`는 packaged literal·Alias와 `dictionary-provenance.v1.json`을
+양방향으로 비교한다. normalized 중복, Alias canonical 충돌, core 포함 hard-negative,
+미승인 review·license, 재배포 불가 source, AI 후보의 packaged 승격과 평가 근거 누락을 차단한다.
+
+```powershell
+uv run python -m evaluation.dictionary_provenance
+```
+
+manifest schema, core/AI 경계, 승격 순서와 변경 기록은
+[사전 후보 provenance 정책](../docs/dictionary-provenance.md)을 따른다. validator는 네트워크를
+사용하지 않으며 오류에 surface를 출력하지 않는다. manifest와 validator는 sdist·CI 전용이고
+wheel 런타임 데이터에는 포함하지 않는다.
+
 ## PF-005 license-pinned review intake
 
 `corpus_intake.py`는 외부 자료를 다운로드하지 않고 `sources/*.json`에 고정한 revision,
