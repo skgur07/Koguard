@@ -67,8 +67,8 @@ def test_ablation_records_accuracy_increment_overlap_cost_and_limitations() -> N
     assert report["environment"]["koguard_version"] == "0.1.0"
     assert report["corpus"]["classification"] == "provisional-regression"
     assert report["corpus"]["case_count"] == 20
-    assert report["corpus"]["positive_count"] == 11
-    assert report["corpus"]["hard_negative_count"] == 9
+    assert report["corpus"]["positive_count"] == 16
+    assert report["corpus"]["hard_negative_count"] == 4
     assert len(report["corpus"]["sha256"]) == 64
     workloads = {item["workload_id"]: item for item in report["configuration"]["workloads"]}
     assert list(workloads) == ["short_chat", "maximum_input"]
@@ -77,14 +77,14 @@ def test_ablation_records_accuracy_increment_overlap_cost_and_limitations() -> N
     assert all(len(item["sha256"]) == 64 for item in workloads.values())
 
     baseline = _profile(report, "exact-alias")
-    assert baseline["sentence_metrics"]["counts"] == {"tp": 2, "fp": 1, "fn": 9, "tn": 8}
-    assert baseline["occurrence_metrics"]["counts"] == {"tp": 2, "fp": 1, "fn": 9}
+    assert baseline["sentence_metrics"]["counts"] == {"tp": 3, "fp": 0, "fn": 13, "tn": 4}
+    assert baseline["occurrence_metrics"]["counts"] == {"tp": 3, "fp": 0, "fn": 13}
 
     repeated = _matcher(report, "repeated")
     assert repeated["comparison_profile"] == "exact-alias"
     assert repeated["contribution"]["added_tp"] == 1
     assert repeated["contribution"]["added_fp"] == 0
-    assert repeated["contribution"]["remaining_fn"] == 8
+    assert repeated["contribution"]["remaining_fn"] == 12
     assert set(repeated["cost_delta"]) == {
         "short_chat_p50_ms",
         "short_chat_p95_ms",
@@ -103,7 +103,7 @@ def test_ablation_records_accuracy_increment_overlap_cost_and_limitations() -> N
     assert segmented["contribution"]["added_tp"] == 1
 
     current = _profile(report, "all-enabled")
-    assert current["sentence_metrics"]["counts"] == {"tp": 11, "fp": 1, "fn": 0, "tn": 8}
+    assert current["sentence_metrics"]["counts"] == {"tp": 12, "fp": 0, "fn": 4, "tn": 4}
     assert current["performance"]["short_chat"]["p50_ms"] > 0
     assert current["performance"]["short_chat"]["p95_ms"] > 0
     assert current["performance"]["maximum_input"]["p50_ms"] > 0
@@ -189,7 +189,7 @@ def test_checked_provisional_report_matches_current_contract() -> None:
     assert payload["configuration"]["iterations"] == 100
     assert payload["configuration"]["warmups"] == 10
     assert payload["corpus"]["sha256"] == (
-        "0a735367a724d3c11bc868aecf2209c536b2699d8823828be87d100aa01caa0f"
+        "4ad85de87665defd4fdfbe9eca89884a9f1f8fa228fd005c4afc45c862bc2ce7"
     )
     assert payload["configuration"]["profile_configuration_sha256"] == (
         "3fcd74ed874c2cafe514b1497c65e07b06421eb2807c09583184b76ad7b7fb93"
@@ -199,10 +199,10 @@ def test_checked_provisional_report_matches_current_contract() -> None:
     ]
     assert {item["matcher"] for item in payload["matcher_ablation"]} == set(ABLATION_MATCHERS)
     assert _profile(payload, "all-enabled")["sentence_metrics"]["counts"] == {
-        "tp": 11,
-        "fp": 1,
-        "fn": 0,
-        "tn": 8,
+        "tp": 12,
+        "fp": 0,
+        "fn": 4,
+        "tn": 4,
     }
 
 

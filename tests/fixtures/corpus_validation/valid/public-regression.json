@@ -26,10 +26,16 @@
       "notes": "직접 표현의 span 표기 예시다."
     },
     {
-      "id": "example-hard-negative-substring",
+      "id": "example-positive-substring",
       "text": "시발점은 시작 위치다",
-      "label": "hard-negative",
-      "expected_matches": [],
+      "label": "positive",
+      "expected_matches": [
+        {
+          "start": 0,
+          "end": 2,
+          "canonical_term": "시발"
+        }
+      ],
       "slices": ["benign-substring"],
       "source": {
         "kind": "curated",
@@ -40,7 +46,7 @@
       },
       "license": "MIT",
       "split": "regression",
-      "notes": "정상 복합어를 탐지하지 않아야 하는 예시다."
+      "notes": "엄격 lexical core는 정상 복합어 문맥에서도 등록 욕설 substring을 차단한다."
     },
     {
       "id": "example-review-context",

@@ -24,15 +24,16 @@ boolean을 명시하고, Segmented는 prerequisite 비용과 기여를 섞지 �
 폐기한다.
 
 구현과 annotation 대조 과정에서 Alias token-prefix의 span이 전체 토큰이 아니라 실제 alias
-표면이어야 함을 발견해 0–3에서 0–2로 수정했다. `시발점`은 annotation 오류가 아니라 기본
-whitelist가 비어 있어 Exact부터 발생하는 실제 FP임을 확인해 결과에 그대로 보존했다.
+표면이어야 함을 발견해 0–3에서 0–2로 수정했다. 최초 측정에서는 `시발점`을 FP로 기록했지만,
+2026-08-13 문맥 무관 lexical core 정책 확정 후 등록 substring을 의도된 positive로
+재분류했다.
 
 ## 측정
 
-CPython 3.11.9에서 100 iterations/10 warmups로
+CPython 3.11.9에서 2026-08-13에 100 iterations/10 warmups로
 `evaluation/results/provisional-ablation-windows-python311.json`을 생성했다. 각 candidate는
-목표 TP 1건을 추가했고 추가 FP는 0건이었다. all-enabled는 TP 11/FP 1/FN 0이며 최대 입력
-p95 12.6805ms, retained memory 199,369 bytes였다. 보고서에는 Koguard/Python 버전과 두
+목표 TP 1건을 추가했고 추가 FP는 0건이었다. all-enabled는 TP 12/FP 0/FN 4/TN 4이며 최대 입력
+p95 12.2350ms, retained memory 199,302 bytes였다. 보고서에는 Koguard/Python 버전과 두
 workload의 길이·SHA-256도 함께 고정해 이후 실행이 같은 입력을 측정했는지 확인할 수 있다.
 
 이 결과는 구현 유래 20건 regression corpus에서만 유효하다. 독립 서비스 품질, matcher

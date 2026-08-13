@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "measured_at": "2026-08-12T05:43:54.378003+00:00",
+  "measured_at": "2026-08-13T00:56:48.554199+00:00",
   "corpus": {
     "classification": "provisional-regression",
     "corpus_ids": [
       "koguard-provisional-ablation-v1"
     ],
-    "sha256": "0a735367a724d3c11bc868aecf2209c536b2699d8823828be87d100aa01caa0f",
+    "sha256": "4ad85de87665defd4fdfbe9eca89884a9f1f8fa228fd005c4afc45c862bc2ce7",
     "case_count": 20,
-    "positive_count": 11,
-    "hard_negative_count": 9,
+    "positive_count": 16,
+    "hard_negative_count": 4,
     "excluded_review_count": 0
   },
   "environment": {
@@ -68,25 +68,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 2,
-          "fp": 1,
-          "fn": 9,
-          "tn": 8
+          "tp": 3,
+          "fp": 0,
+          "fn": 13,
+          "tn": 4
         },
-        "precision": 0.6666666666666666,
-        "recall": 0.18181818181818182,
-        "f1": 0.28571428571428575,
-        "accuracy": 0.5
+        "precision": 1.0,
+        "recall": 0.1875,
+        "f1": 0.3157894736842105,
+        "accuracy": 0.35
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 2,
-          "fp": 1,
-          "fn": 9
+          "tp": 3,
+          "fp": 0,
+          "fn": 13
         },
-        "precision": 0.6666666666666666,
-        "recall": 0.18181818181818182,
-        "f1": 0.28571428571428575
+        "precision": 1.0,
+        "recall": 0.1875,
+        "f1": 0.3157894736842105
       },
       "slice_metrics": [
         {
@@ -120,25 +120,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -148,19 +148,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": null,
             "recall": 0.0,
@@ -304,19 +304,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -382,19 +382,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -408,39 +408,13 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null,
-            "accuracy": 1.0
-          },
-          "occurrence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
-              "fn": 0
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null
-          }
-        },
-        {
-          "slice": "whitespace",
-          "case_count": 2,
-          "sentence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
               "fn": 1,
-              "tn": 1
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
@@ -452,18 +426,44 @@
             "recall": 0.0,
             "f1": null
           }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
         }
       ],
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0293,
-          "p95_ms": 0.034
+          "p50_ms": 0.0315,
+          "p95_ms": 0.0359
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 5.7835,
-          "p95_ms": 10.2824
+          "p50_ms": 6.4133,
+          "p95_ms": 7.0212
         },
         "engine_retained_memory_bytes": 70514
       }
@@ -499,25 +499,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8,
-          "tn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12,
+          "tn": 4
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997,
-        "accuracy": 0.55
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "accuracy": 0.4
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4
       },
       "slice_metrics": [
         {
@@ -551,25 +551,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -579,19 +579,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": null,
             "recall": 0.0,
@@ -735,19 +735,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -813,19 +813,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -839,39 +839,13 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null,
-            "accuracy": 1.0
-          },
-          "occurrence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
-              "fn": 0
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null
-          }
-        },
-        {
-          "slice": "whitespace",
-          "case_count": 2,
-          "sentence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
               "fn": 1,
-              "tn": 1
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
@@ -883,18 +857,44 @@
             "recall": 0.0,
             "f1": null
           }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
         }
       ],
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0313,
-          "p95_ms": 0.0427
+          "p50_ms": 0.0323,
+          "p95_ms": 0.0437
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 5.7752,
-          "p95_ms": 6.9505
+          "p50_ms": 6.2095,
+          "p95_ms": 6.7612
         },
         "engine_retained_memory_bytes": 70581
       }
@@ -930,25 +930,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8,
-          "tn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12,
+          "tn": 4
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997,
-        "accuracy": 0.55
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "accuracy": 0.4
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4
       },
       "slice_metrics": [
         {
@@ -982,25 +982,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -1010,19 +1010,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": null,
             "recall": 0.0,
@@ -1166,19 +1166,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -1244,23 +1244,23 @@
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 0.5,
-            "f1": 0.6666666666666666,
-            "accuracy": 0.6666666666666666
+            "recall": 0.3333333333333333,
+            "f1": 0.5,
+            "accuracy": 0.3333333333333333
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": 1.0,
-            "recall": 0.5,
-            "f1": 0.6666666666666666
+            "recall": 0.3333333333333333,
+            "f1": 0.5
           }
         },
         {
@@ -1270,45 +1270,45 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null,
-            "accuracy": 1.0
-          },
-          "occurrence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
-              "fn": 0
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null
-          }
-        },
-        {
-          "slice": "whitespace",
-          "case_count": 2,
-          "sentence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
               "fn": 1,
-              "tn": 1
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
               "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -1319,15 +1319,15 @@
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0355,
-          "p95_ms": 0.0672
+          "p50_ms": 0.0361,
+          "p95_ms": 0.048
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 5.6002,
-          "p95_ms": 7.4588
+          "p50_ms": 6.2669,
+          "p95_ms": 6.8661
         },
-        "engine_retained_memory_bytes": 70581
+        "engine_retained_memory_bytes": 70514
       }
     },
     {
@@ -1361,25 +1361,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8,
-          "tn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12,
+          "tn": 4
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997,
-        "accuracy": 0.55
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "accuracy": 0.4
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4
       },
       "slice_metrics": [
         {
@@ -1413,25 +1413,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -1441,19 +1441,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": null,
             "recall": 0.0,
@@ -1597,19 +1597,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -1675,19 +1675,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -1701,64 +1701,64 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 1,
+              "tn": 0
             },
             "precision": null,
-            "recall": null,
+            "recall": 0.0,
             "f1": null,
-            "accuracy": 1.0
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0
+              "fn": 1
             },
             "precision": null,
-            "recall": null,
+            "recall": 0.0,
             "f1": null
           }
         },
         {
           "slice": "whitespace",
-          "case_count": 2,
+          "case_count": 3,
           "sentence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0,
-            "accuracy": 1.0
+            "recall": 0.3333333333333333,
+            "f1": 0.5,
+            "accuracy": 0.3333333333333333
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0
+              "fn": 2
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0
+            "recall": 0.3333333333333333,
+            "f1": 0.5
           }
         }
       ],
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0427,
-          "p95_ms": 0.0469
+          "p50_ms": 0.0446,
+          "p95_ms": 0.0576
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 5.5675,
-          "p95_ms": 6.8776
+          "p50_ms": 6.2476,
+          "p95_ms": 6.7824
         },
-        "engine_retained_memory_bytes": 96353
+        "engine_retained_memory_bytes": 96286
       }
     },
     {
@@ -1792,25 +1792,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8,
-          "tn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12,
+          "tn": 4
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997,
-        "accuracy": 0.55
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "accuracy": 0.4
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4
       },
       "slice_metrics": [
         {
@@ -1844,25 +1844,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -1872,19 +1872,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": null,
             "recall": 0.0,
@@ -2028,19 +2028,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -2106,19 +2106,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -2132,39 +2132,13 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null,
-            "accuracy": 1.0
-          },
-          "occurrence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
-              "fn": 0
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null
-          }
-        },
-        {
-          "slice": "whitespace",
-          "case_count": 2,
-          "sentence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
               "fn": 1,
-              "tn": 1
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
@@ -2176,20 +2150,46 @@
             "recall": 0.0,
             "f1": null
           }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
         }
       ],
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0323,
-          "p95_ms": 0.0592
+          "p50_ms": 0.0335,
+          "p95_ms": 0.0521
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 5.8264,
-          "p95_ms": 7.9724
+          "p50_ms": 6.3279,
+          "p95_ms": 6.9673
         },
-        "engine_retained_memory_bytes": 109030
+        "engine_retained_memory_bytes": 109097
       }
     },
     {
@@ -2223,25 +2223,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8,
-          "tn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12,
+          "tn": 4
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997,
-        "accuracy": 0.55
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "accuracy": 0.4
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4
       },
       "slice_metrics": [
         {
@@ -2275,25 +2275,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -2303,19 +2303,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": null,
             "recall": 0.0,
@@ -2459,23 +2459,23 @@
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 0.5,
-            "f1": 0.6666666666666666,
-            "accuracy": 0.6666666666666666
+            "recall": 0.3333333333333333,
+            "f1": 0.5,
+            "accuracy": 0.3333333333333333
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": 1.0,
-            "recall": 0.5,
-            "f1": 0.6666666666666666
+            "recall": 0.3333333333333333,
+            "f1": 0.5
           }
         },
         {
@@ -2537,19 +2537,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -2563,39 +2563,13 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null,
-            "accuracy": 1.0
-          },
-          "occurrence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
-              "fn": 0
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null
-          }
-        },
-        {
-          "slice": "whitespace",
-          "case_count": 2,
-          "sentence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
               "fn": 1,
-              "tn": 1
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
@@ -2607,20 +2581,46 @@
             "recall": 0.0,
             "f1": null
           }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
         }
       ],
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.034,
-          "p95_ms": 0.0362
+          "p50_ms": 0.036,
+          "p95_ms": 0.0417
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 6.0812,
-          "p95_ms": 7.8113
+          "p50_ms": 6.6206,
+          "p95_ms": 8.038
         },
-        "engine_retained_memory_bytes": 70581
+        "engine_retained_memory_bytes": 70514
       }
     },
     {
@@ -2654,25 +2654,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8,
-          "tn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12,
+          "tn": 4
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997,
-        "accuracy": 0.55
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "accuracy": 0.4
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4
       },
       "slice_metrics": [
         {
@@ -2706,25 +2706,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -2734,19 +2734,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": null,
             "recall": 0.0,
@@ -2890,19 +2890,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -2968,19 +2968,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -2994,39 +2994,13 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null,
-            "accuracy": 1.0
-          },
-          "occurrence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
-              "fn": 0
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null
-          }
-        },
-        {
-          "slice": "whitespace",
-          "case_count": 2,
-          "sentence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
               "fn": 1,
-              "tn": 1
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
@@ -3038,20 +3012,46 @@
             "recall": 0.0,
             "f1": null
           }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
         }
       ],
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0316,
-          "p95_ms": 0.0698
+          "p50_ms": 0.0352,
+          "p95_ms": 0.0626
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 6.0486,
-          "p95_ms": 8.3782
+          "p50_ms": 6.4044,
+          "p95_ms": 6.8488
         },
-        "engine_retained_memory_bytes": 70581
+        "engine_retained_memory_bytes": 70514
       }
     },
     {
@@ -3085,25 +3085,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8,
-          "tn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12,
+          "tn": 4
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997,
-        "accuracy": 0.55
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "accuracy": 0.4
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4
       },
       "slice_metrics": [
         {
@@ -3137,25 +3137,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -3165,23 +3165,23 @@
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 1,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0,
-            "accuracy": 1.0
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.5
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0
+              "fn": 1
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -3321,19 +3321,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -3399,19 +3399,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -3425,39 +3425,13 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null,
-            "accuracy": 1.0
-          },
-          "occurrence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
-              "fn": 0
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null
-          }
-        },
-        {
-          "slice": "whitespace",
-          "case_count": 2,
-          "sentence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
               "fn": 1,
-              "tn": 1
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
@@ -3469,18 +3443,44 @@
             "recall": 0.0,
             "f1": null
           }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
         }
       ],
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0368,
-          "p95_ms": 0.0474
+          "p50_ms": 0.0443,
+          "p95_ms": 0.058
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 8.0828,
-          "p95_ms": 10.9216
+          "p50_ms": 8.4733,
+          "p95_ms": 9.2926
         },
         "engine_retained_memory_bytes": 108375
       }
@@ -3516,25 +3516,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 5,
-          "fp": 1,
-          "fn": 6,
-          "tn": 8
+          "tp": 6,
+          "fp": 0,
+          "fn": 10,
+          "tn": 4
         },
-        "precision": 0.8333333333333334,
-        "recall": 0.45454545454545453,
-        "f1": 0.5882352941176471,
-        "accuracy": 0.65
+        "precision": 1.0,
+        "recall": 0.375,
+        "f1": 0.5454545454545454,
+        "accuracy": 0.5
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 5,
-          "fp": 1,
-          "fn": 6
+          "tp": 6,
+          "fp": 0,
+          "fn": 10
         },
-        "precision": 0.8333333333333334,
-        "recall": 0.45454545454545453,
-        "f1": 0.5882352941176471
+        "precision": 1.0,
+        "recall": 0.375,
+        "f1": 0.5454545454545454
       },
       "slice_metrics": [
         {
@@ -3568,25 +3568,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -3596,23 +3596,23 @@
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 1,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0,
-            "accuracy": 1.0
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.5
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0
+              "fn": 1
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -3752,23 +3752,23 @@
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 0.5,
-            "f1": 0.6666666666666666,
-            "accuracy": 0.6666666666666666
+            "recall": 0.3333333333333333,
+            "f1": 0.5,
+            "accuracy": 0.3333333333333333
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": 1.0,
-            "recall": 0.5,
-            "f1": 0.6666666666666666
+            "recall": 0.3333333333333333,
+            "f1": 0.5
           }
         },
         {
@@ -3830,19 +3830,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -3856,39 +3856,13 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null,
-            "accuracy": 1.0
-          },
-          "occurrence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
-              "fn": 0
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null
-          }
-        },
-        {
-          "slice": "whitespace",
-          "case_count": 2,
-          "sentence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
               "fn": 1,
-              "tn": 1
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
@@ -3900,18 +3874,44 @@
             "recall": 0.0,
             "f1": null
           }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
         }
       ],
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0395,
-          "p95_ms": 0.0438
+          "p50_ms": 0.0445,
+          "p95_ms": 0.0924
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 7.9719,
-          "p95_ms": 10.5418
+          "p50_ms": 8.7888,
+          "p95_ms": 9.5896
         },
         "engine_retained_memory_bytes": 108375
       }
@@ -3947,25 +3947,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 6,
-          "fp": 1,
-          "fn": 5,
-          "tn": 8
+          "tp": 7,
+          "fp": 0,
+          "fn": 9,
+          "tn": 4
         },
-        "precision": 0.8571428571428571,
-        "recall": 0.5454545454545454,
-        "f1": 0.6666666666666665,
-        "accuracy": 0.7
+        "precision": 1.0,
+        "recall": 0.4375,
+        "f1": 0.6086956521739131,
+        "accuracy": 0.55
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 6,
-          "fp": 1,
-          "fn": 5
+          "tp": 7,
+          "fp": 0,
+          "fn": 9
         },
-        "precision": 0.8571428571428571,
-        "recall": 0.5454545454545454,
-        "f1": 0.6666666666666665
+        "precision": 1.0,
+        "recall": 0.4375,
+        "f1": 0.6086956521739131
       },
       "slice_metrics": [
         {
@@ -3999,25 +3999,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -4027,23 +4027,23 @@
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 1,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0,
-            "accuracy": 1.0
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.5
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0
+              "fn": 1
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -4183,23 +4183,23 @@
             "counts": {
               "tp": 2,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 1,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0,
-            "accuracy": 1.0
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "accuracy": 0.6666666666666666
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 2,
               "fp": 0,
-              "fn": 0
+              "fn": 1
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0
+            "recall": 0.6666666666666666,
+            "f1": 0.8
           }
         },
         {
@@ -4261,23 +4261,23 @@
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 0.5,
-            "f1": 0.6666666666666666,
-            "accuracy": 0.6666666666666666
+            "recall": 0.3333333333333333,
+            "f1": 0.5,
+            "accuracy": 0.3333333333333333
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": 1.0,
-            "recall": 0.5,
-            "f1": 0.6666666666666666
+            "recall": 0.3333333333333333,
+            "f1": 0.5
           }
         },
         {
@@ -4287,45 +4287,45 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null,
-            "accuracy": 1.0
-          },
-          "occurrence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
-              "fn": 0
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null
-          }
-        },
-        {
-          "slice": "whitespace",
-          "case_count": 2,
-          "sentence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
               "fn": 1,
-              "tn": 1
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
               "fn": 1
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -4336,15 +4336,15 @@
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0404,
-          "p95_ms": 0.0479
+          "p50_ms": 0.0454,
+          "p95_ms": 0.0788
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 7.8697,
-          "p95_ms": 12.3776
+          "p50_ms": 8.886,
+          "p95_ms": 9.5117
         },
-        "engine_retained_memory_bytes": 108375
+        "engine_retained_memory_bytes": 108308
       }
     },
     {
@@ -4378,25 +4378,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8,
-          "tn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12,
+          "tn": 4
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997,
-        "accuracy": 0.55
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "accuracy": 0.4
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 3,
-          "fp": 1,
-          "fn": 8
+          "tp": 4,
+          "fp": 0,
+          "fn": 12
         },
-        "precision": 0.75,
-        "recall": 0.2727272727272727,
-        "f1": 0.39999999999999997
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4
       },
       "slice_metrics": [
         {
@@ -4430,25 +4430,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -4458,19 +4458,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 1
+              "fn": 2
             },
             "precision": null,
             "recall": 0.0,
@@ -4614,19 +4614,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -4692,19 +4692,19 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2,
-              "tn": 1
+              "fn": 3,
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.3333333333333333
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 2
+              "fn": 3
             },
             "precision": null,
             "recall": 0.0,
@@ -4718,39 +4718,13 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null,
-            "accuracy": 1.0
-          },
-          "occurrence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
-              "fn": 0
-            },
-            "precision": null,
-            "recall": null,
-            "f1": null
-          }
-        },
-        {
-          "slice": "whitespace",
-          "case_count": 2,
-          "sentence_metrics": {
-            "counts": {
-              "tp": 0,
-              "fp": 0,
               "fn": 1,
-              "tn": 1
+              "tn": 0
             },
             "precision": null,
             "recall": 0.0,
             "f1": null,
-            "accuracy": 0.5
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
@@ -4762,18 +4736,44 @@
             "recall": 0.0,
             "f1": null
           }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null
+          }
         }
       ],
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.061,
-          "p95_ms": 0.0704
+          "p50_ms": 0.0711,
+          "p95_ms": 0.1483
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 7.9508,
-          "p95_ms": 10.1007
+          "p50_ms": 8.8331,
+          "p95_ms": 9.4724
         },
         "engine_retained_memory_bytes": 90807
       }
@@ -4809,25 +4809,25 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 11,
-          "fp": 1,
-          "fn": 0,
-          "tn": 8
+          "tp": 12,
+          "fp": 0,
+          "fn": 4,
+          "tn": 4
         },
-        "precision": 0.9166666666666666,
-        "recall": 1.0,
-        "f1": 0.9565217391304348,
-        "accuracy": 0.95
+        "precision": 1.0,
+        "recall": 0.75,
+        "f1": 0.8571428571428571,
+        "accuracy": 0.8
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 11,
-          "fp": 1,
-          "fn": 0
+          "tp": 12,
+          "fp": 0,
+          "fn": 4
         },
-        "precision": 0.9166666666666666,
-        "recall": 1.0,
-        "f1": 0.9565217391304348
+        "precision": 1.0,
+        "recall": 0.75,
+        "f1": 0.8571428571428571
       },
       "slice_metrics": [
         {
@@ -4861,25 +4861,25 @@
           "case_count": 4,
           "sentence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0,
-              "tn": 3
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 2
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "accuracy": 0.75
           },
           "occurrence_metrics": {
             "counts": {
-              "tp": 0,
-              "fp": 1,
-              "fn": 0
+              "tp": 1,
+              "fp": 0,
+              "fn": 1
             },
-            "precision": 0.0,
-            "recall": null,
-            "f1": null
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -4889,23 +4889,23 @@
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 1,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0,
-            "accuracy": 1.0
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.5
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0
+              "fn": 1
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0
+            "recall": 0.5,
+            "f1": 0.6666666666666666
           }
         },
         {
@@ -5045,23 +5045,23 @@
             "counts": {
               "tp": 2,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 1,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0,
-            "accuracy": 1.0
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "accuracy": 0.6666666666666666
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 2,
               "fp": 0,
-              "fn": 0
+              "fn": 1
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0
+            "recall": 0.6666666666666666,
+            "f1": 0.8
           }
         },
         {
@@ -5123,23 +5123,23 @@
             "counts": {
               "tp": 2,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 1,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0,
-            "accuracy": 1.0
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "accuracy": 0.6666666666666666
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 2,
               "fp": 0,
-              "fn": 0
+              "fn": 1
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0
+            "recall": 0.6666666666666666,
+            "f1": 0.8
           }
         },
         {
@@ -5149,64 +5149,64 @@
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 1,
+              "tn": 0
             },
             "precision": null,
-            "recall": null,
+            "recall": 0.0,
             "f1": null,
-            "accuracy": 1.0
+            "accuracy": 0.0
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 0,
               "fp": 0,
-              "fn": 0
+              "fn": 1
             },
             "precision": null,
-            "recall": null,
+            "recall": 0.0,
             "f1": null
           }
         },
         {
           "slice": "whitespace",
-          "case_count": 2,
+          "case_count": 3,
           "sentence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0,
-              "tn": 1
+              "fn": 2,
+              "tn": 0
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0,
-            "accuracy": 1.0
+            "recall": 0.3333333333333333,
+            "f1": 0.5,
+            "accuracy": 0.3333333333333333
           },
           "occurrence_metrics": {
             "counts": {
               "tp": 1,
               "fp": 0,
-              "fn": 0
+              "fn": 2
             },
             "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0
+            "recall": 0.3333333333333333,
+            "f1": 0.5
           }
         }
       ],
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.1007,
-          "p95_ms": 0.2096
+          "p50_ms": 0.1009,
+          "p95_ms": 0.1144
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 10.3318,
-          "p95_ms": 12.6805
+          "p50_ms": 11.3184,
+          "p95_ms": 12.235
         },
-        "engine_retained_memory_bytes": 199369
+        "engine_retained_memory_bytes": 199302
       }
     }
   ],
@@ -5225,7 +5225,7 @@
         "unique_added": 1,
         "unique_added_tp": 1,
         "unique_added_fp": 0,
-        "remaining_fn": 8
+        "remaining_fn": 12
       },
       "resolved_false_negative_slices": [
         {
@@ -5235,10 +5235,10 @@
       ],
       "new_false_positive_case_ids": [],
       "cost_delta": {
-        "short_chat_p50_ms": 0.0020000000000000018,
-        "short_chat_p95_ms": 0.0087,
-        "maximum_input_p50_ms": -0.008300000000000196,
-        "maximum_input_p95_ms": -3.331900000000001,
+        "short_chat_p50_ms": 0.0008000000000000021,
+        "short_chat_p95_ms": 0.007800000000000001,
+        "maximum_input_p50_ms": -0.20379999999999932,
+        "maximum_input_p95_ms": -0.2600000000000007,
         "engine_retained_memory_bytes": 67
       }
     },
@@ -5256,7 +5256,7 @@
         "unique_added": 1,
         "unique_added_tp": 1,
         "unique_added_fp": 0,
-        "remaining_fn": 8
+        "remaining_fn": 12
       },
       "resolved_false_negative_slices": [
         {
@@ -5266,11 +5266,11 @@
       ],
       "new_false_positive_case_ids": [],
       "cost_delta": {
-        "short_chat_p50_ms": 0.006199999999999997,
-        "short_chat_p95_ms": 0.03319999999999999,
-        "maximum_input_p50_ms": -0.18330000000000002,
-        "maximum_input_p95_ms": -2.8236000000000008,
-        "engine_retained_memory_bytes": 67
+        "short_chat_p50_ms": 0.0046,
+        "short_chat_p95_ms": 0.0121,
+        "maximum_input_p50_ms": -0.14639999999999986,
+        "maximum_input_p95_ms": -0.15510000000000002,
+        "engine_retained_memory_bytes": 0
       }
     },
     {
@@ -5287,7 +5287,7 @@
         "unique_added": 1,
         "unique_added_tp": 1,
         "unique_added_fp": 0,
-        "remaining_fn": 8
+        "remaining_fn": 12
       },
       "resolved_false_negative_slices": [
         {
@@ -5297,11 +5297,11 @@
       ],
       "new_false_positive_case_ids": [],
       "cost_delta": {
-        "short_chat_p50_ms": 0.013400000000000002,
-        "short_chat_p95_ms": 0.012899999999999995,
-        "maximum_input_p50_ms": -0.2160000000000002,
-        "maximum_input_p95_ms": -3.4048000000000007,
-        "engine_retained_memory_bytes": 25839
+        "short_chat_p50_ms": 0.0131,
+        "short_chat_p95_ms": 0.021699999999999997,
+        "maximum_input_p50_ms": -0.1656999999999993,
+        "maximum_input_p95_ms": -0.23880000000000035,
+        "engine_retained_memory_bytes": 25772
       }
     },
     {
@@ -5318,7 +5318,7 @@
         "unique_added": 1,
         "unique_added_tp": 1,
         "unique_added_fp": 0,
-        "remaining_fn": 8
+        "remaining_fn": 12
       },
       "resolved_false_negative_slices": [
         {
@@ -5328,11 +5328,11 @@
       ],
       "new_false_positive_case_ids": [],
       "cost_delta": {
-        "short_chat_p50_ms": 0.0030000000000000027,
-        "short_chat_p95_ms": 0.0252,
-        "maximum_input_p50_ms": 0.042899999999999494,
-        "maximum_input_p95_ms": -2.3100000000000005,
-        "engine_retained_memory_bytes": 38516
+        "short_chat_p50_ms": 0.0020000000000000018,
+        "short_chat_p95_ms": 0.0162,
+        "maximum_input_p50_ms": -0.08539999999999992,
+        "maximum_input_p95_ms": -0.0539000000000005,
+        "engine_retained_memory_bytes": 38583
       }
     },
     {
@@ -5349,7 +5349,7 @@
         "unique_added": 1,
         "unique_added_tp": 1,
         "unique_added_fp": 0,
-        "remaining_fn": 8
+        "remaining_fn": 12
       },
       "resolved_false_negative_slices": [
         {
@@ -5359,11 +5359,11 @@
       ],
       "new_false_positive_case_ids": [],
       "cost_delta": {
-        "short_chat_p50_ms": 0.004700000000000003,
-        "short_chat_p95_ms": 0.0022000000000000006,
-        "maximum_input_p50_ms": 0.29769999999999985,
-        "maximum_input_p95_ms": -2.4711000000000007,
-        "engine_retained_memory_bytes": 67
+        "short_chat_p50_ms": 0.004499999999999997,
+        "short_chat_p95_ms": 0.0058,
+        "maximum_input_p50_ms": 0.20730000000000004,
+        "maximum_input_p95_ms": 1.0168,
+        "engine_retained_memory_bytes": 0
       }
     },
     {
@@ -5380,7 +5380,7 @@
         "unique_added": 1,
         "unique_added_tp": 1,
         "unique_added_fp": 0,
-        "remaining_fn": 8
+        "remaining_fn": 12
       },
       "resolved_false_negative_slices": [
         {
@@ -5390,11 +5390,11 @@
       ],
       "new_false_positive_case_ids": [],
       "cost_delta": {
-        "short_chat_p50_ms": 0.0023000000000000034,
-        "short_chat_p95_ms": 0.0358,
-        "maximum_input_p50_ms": 0.26510000000000034,
-        "maximum_input_p95_ms": -1.9042000000000012,
-        "engine_retained_memory_bytes": 67
+        "short_chat_p50_ms": 0.003700000000000002,
+        "short_chat_p95_ms": 0.0267,
+        "maximum_input_p50_ms": -0.008899999999999686,
+        "maximum_input_p95_ms": -0.17240000000000055,
+        "engine_retained_memory_bytes": 0
       }
     },
     {
@@ -5411,7 +5411,7 @@
         "unique_added": 1,
         "unique_added_tp": 1,
         "unique_added_fp": 0,
-        "remaining_fn": 8
+        "remaining_fn": 12
       },
       "resolved_false_negative_slices": [
         {
@@ -5421,10 +5421,10 @@
       ],
       "new_false_positive_case_ids": [],
       "cost_delta": {
-        "short_chat_p50_ms": 0.0075,
-        "short_chat_p95_ms": 0.013399999999999995,
-        "maximum_input_p50_ms": 2.2993000000000006,
-        "maximum_input_p95_ms": 0.6391999999999989,
+        "short_chat_p50_ms": 0.012799999999999999,
+        "short_chat_p95_ms": 0.0221,
+        "maximum_input_p50_ms": 2.0600000000000005,
+        "maximum_input_p95_ms": 2.2714,
         "engine_retained_memory_bytes": 37861
       }
     },
@@ -5442,7 +5442,7 @@
         "unique_added": 1,
         "unique_added_tp": 1,
         "unique_added_fp": 0,
-        "remaining_fn": 5
+        "remaining_fn": 9
       },
       "resolved_false_negative_slices": [
         {
@@ -5460,11 +5460,11 @@
       ],
       "new_false_positive_case_ids": [],
       "cost_delta": {
-        "short_chat_p50_ms": 0.000899999999999998,
-        "short_chat_p95_ms": 0.0040999999999999995,
-        "maximum_input_p50_ms": -0.10219999999999985,
-        "maximum_input_p95_ms": 1.835799999999999,
-        "engine_retained_memory_bytes": 0
+        "short_chat_p50_ms": 0.000900000000000005,
+        "short_chat_p95_ms": -0.013600000000000001,
+        "maximum_input_p50_ms": 0.09719999999999906,
+        "maximum_input_p95_ms": -0.07790000000000141,
+        "engine_retained_memory_bytes": -67
       }
     },
     {
@@ -5481,7 +5481,7 @@
         "unique_added": 1,
         "unique_added_tp": 1,
         "unique_added_fp": 0,
-        "remaining_fn": 8
+        "remaining_fn": 12
       },
       "resolved_false_negative_slices": [
         {
@@ -5491,10 +5491,10 @@
       ],
       "new_false_positive_case_ids": [],
       "cost_delta": {
-        "short_chat_p50_ms": 0.0317,
-        "short_chat_p95_ms": 0.0364,
-        "maximum_input_p50_ms": 2.1673,
-        "maximum_input_p95_ms": -0.18170000000000108,
+        "short_chat_p50_ms": 0.039599999999999996,
+        "short_chat_p95_ms": 0.11239999999999999,
+        "maximum_input_p50_ms": 2.4198000000000004,
+        "maximum_input_p95_ms": 2.4512,
         "engine_retained_memory_bytes": 20293
       }
     }
@@ -6488,164 +6488,165 @@
     },
     {
       "case_id": "ablation-negative-benign-substring",
-      "label": "hard-negative",
+      "label": "positive",
       "slices": [
         "benign-substring"
       ],
-      "gold_occurrence_count": 0,
+      "gold_occurrence_count": 1,
       "profiles": [
         {
           "profile_id": "exact-alias",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "repeated",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "separator",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "whitespace",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "mixed",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "keyboard",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "jamo",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "choseong",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "segmented-prerequisites",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "segmented",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "fuzzy",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         },
         {
           "profile_id": "all-enabled",
           "detected": true,
-          "sentence_outcome": "fp",
+          "sentence_outcome": "tp",
           "predicted_occurrence_count": 1
         }
       ]
     },
     {
       "case_id": "ablation-negative-presentation",
-      "label": "hard-negative",
+      "label": "positive",
       "slices": [
+        "whitespace",
         "token-boundary"
       ],
-      "gold_occurrence_count": 0,
+      "gold_occurrence_count": 1,
       "profiles": [
         {
           "profile_id": "exact-alias",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "repeated",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "separator",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "whitespace",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "mixed",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "keyboard",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "jamo",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "choseong",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "segmented-prerequisites",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "segmented",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "fuzzy",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "all-enabled",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         }
       ]
@@ -6734,82 +6735,82 @@
     },
     {
       "case_id": "ablation-negative-finger",
-      "label": "hard-negative",
+      "label": "positive",
       "slices": [
         "benign-substring"
       ],
-      "gold_occurrence_count": 0,
+      "gold_occurrence_count": 1,
       "profiles": [
         {
           "profile_id": "exact-alias",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "repeated",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "separator",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "whitespace",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "mixed",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "keyboard",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "jamo",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "choseong",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "segmented-prerequisites",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "segmented",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "fuzzy",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "all-enabled",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         }
       ]
@@ -6980,166 +6981,166 @@
     },
     {
       "case_id": "ablation-negative-unconfigured-separator",
-      "label": "hard-negative",
+      "label": "positive",
       "slices": [
         "choseong",
         "separator"
       ],
-      "gold_occurrence_count": 0,
+      "gold_occurrence_count": 1,
       "profiles": [
         {
           "profile_id": "exact-alias",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "repeated",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "separator",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "whitespace",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "mixed",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "keyboard",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "jamo",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "choseong",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "segmented-prerequisites",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "segmented",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "fuzzy",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "all-enabled",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         }
       ]
     },
     {
       "case_id": "ablation-negative-newline-keyboard",
-      "label": "hard-negative",
+      "label": "positive",
       "slices": [
         "keyboard",
         "whitespace"
       ],
-      "gold_occurrence_count": 0,
+      "gold_occurrence_count": 1,
       "profiles": [
         {
           "profile_id": "exact-alias",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "repeated",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "separator",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "whitespace",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "mixed",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "keyboard",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "jamo",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "choseong",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "segmented-prerequisites",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "segmented",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "fuzzy",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         },
         {
           "profile_id": "all-enabled",
           "detected": false,
-          "sentence_outcome": "tn",
+          "sentence_outcome": "fn",
           "predicted_occurrence_count": 0
         }
       ]

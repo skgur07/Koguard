@@ -137,24 +137,24 @@
     {
       "id": "ablation-negative-benign-substring",
       "text": "시발점은 시작 위치다",
-      "label": "hard-negative",
-      "expected_matches": [],
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 2, "canonical_term": "시발"}],
       "slices": ["benign-substring"],
       "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
       "license": "MIT",
       "split": "regression",
-      "notes": "기본 whitelist 확인용 구현 유래 사례"
+      "notes": "문맥 무관 substring 차단 정책 확인용 구현 유래 사례"
     },
     {
       "id": "ablation-negative-presentation",
       "text": "시 발표",
-      "label": "hard-negative",
-      "expected_matches": [],
-      "slices": ["token-boundary"],
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 3, "canonical_term": "시발"}],
+      "slices": ["whitespace", "token-boundary"],
       "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
       "license": "MIT",
       "split": "regression",
-      "notes": "부분 토큰 경계 구현 유래 사례"
+      "notes": "문맥 무관 공백 우회 정책 확인용 구현 유래 사례"
     },
     {
       "id": "ablation-negative-watermelon",
@@ -170,13 +170,13 @@
     {
       "id": "ablation-negative-finger",
       "text": "새끼손가락을 다쳤다",
-      "label": "hard-negative",
-      "expected_matches": [],
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 2, "canonical_term": "새끼"}],
       "slices": ["benign-substring"],
       "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
       "license": "MIT",
       "split": "regression",
-      "notes": "Fuzzy 오탐 확인용 구현 유래 사례"
+      "notes": "문맥 무관 substring 차단 정책 확인용 구현 유래 사례"
     },
     {
       "id": "ablation-negative-development",
@@ -203,24 +203,24 @@
     {
       "id": "ablation-negative-unconfigured-separator",
       "text": "ㅅ/ㅂ",
-      "label": "hard-negative",
-      "expected_matches": [],
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 3, "canonical_term": "시발"}],
       "slices": ["choseong", "separator"],
       "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
       "license": "MIT",
       "split": "regression",
-      "notes": "미설정 구분자 구현 유래 사례"
+      "notes": "초성 구분자 우회 미탐 확인용 구현 유래 사례"
     },
     {
       "id": "ablation-negative-newline-keyboard",
       "text": "tl\nqkf",
-      "label": "hard-negative",
-      "expected_matches": [],
+      "label": "positive",
+      "expected_matches": [{"start": 0, "end": 6, "canonical_term": "시발"}],
       "slices": ["keyboard", "whitespace"],
       "source": {"kind": "curated", "name": "Koguard PF-003 provisional corpus", "reference": null, "revision": null, "redistribution_allowed": true},
       "license": "MIT",
       "split": "regression",
-      "notes": "줄바꿈 우회 차단 확인용 구현 유래 사례"
+      "notes": "두벌식 줄바꿈 우회 미탐 확인용 구현 유래 사례"
     }
   ]
 }

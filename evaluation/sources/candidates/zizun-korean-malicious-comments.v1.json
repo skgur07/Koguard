@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "source_id": "zizun-korean-malicious-comments",
+  "repository": "https://github.com/ZIZUN/korean-malicious-comments-dataset",
+  "revision": "50b92f50e89bb594db5c9ecafea8d48c1dd5b943",
+  "artifacts": {
+    "dataset": {
+      "url": "https://raw.githubusercontent.com/ZIZUN/korean-malicious-comments-dataset/50b92f50e89bb594db5c9ecafea8d48c1dd5b943/Dataset.csv",
+      "sha256": "8fee1801737cd9d1d3bd38eab7ba6b9ba1d8b91b566f49d980c112dcf778be04",
+      "size_bytes": 1054286,
+      "row_count": 10000
+    },
+    "license": {
+      "url": "https://raw.githubusercontent.com/ZIZUN/korean-malicious-comments-dataset/50b92f50e89bb594db5c9ecafea8d48c1dd5b943/LICENSE",
+      "sha256": "719828109791321378c5b4b479c927f6e971530b5ce5088ff361b7ccf3e3d38d",
+      "size_bytes": 1062
+    },
+    "provenance": {
+      "url": "https://raw.githubusercontent.com/ZIZUN/korean-malicious-comments-dataset/50b92f50e89bb594db5c9ecafea8d48c1dd5b943/README.md",
+      "sha256": "d9f03e0e1857b310baa133d83c4e18d1d20cd852f8361801861e70af0a5cfc51",
+      "size_bytes": 1096
+    }
+  },
+  "format": {
+    "kind": "tsv-header",
+    "text_column": "content",
+    "label_column": "lable",
+    "allowed_labels": ["0", "1"]
+  },
+  "components": [
+    {
+      "source_id": "korean-hate-speech",
+      "reference": "https://github.com/kocohub/korean-hate-speech",
+      "declared_license": "CC-BY-SA-4.0",
+      "stated_row_count": 5182
+    },
+    {
+      "source_id": "curse-detection-data",
+      "reference": "https://github.com/2runo/Curse-detection-data",
+      "declared_license": "MIT",
+      "stated_row_count": 2032
+    },
+    {
+      "source_id": "zizun-self-labeled",
+      "reference": "https://github.com/ZIZUN/korean-malicious-comments-dataset",
+      "declared_license": "MIT-declared-pending-provenance-review",
+      "stated_row_count": 2786
+    }
+  ],
+  "rights_review": {
+    "status": "pending",
+    "redistribution_allowed": false,
+    "allowed_scope": "local-quarantine-analysis-only",
+    "blockers": [
+      "The aggregate repository declares MIT while 5,182 stated rows derive from CC-BY-SA-4.0 material.",
+      "Dataset.csv does not retain per-row component provenance, so license obligations cannot be assigned per case.",
+      "The fixed artifact has 25 missing labels and does not reproduce the README's stated 5,000/5,000 label balance.",
+      "The fixed artifact has substantial direct and normalized overlap with Curse-detection-data."
+    ]
+  },
+  "exclusions": [
+    {
+      "source_id": "curse-detection-data",
+      "artifact_sha256": "1c3489417e4972dbbbdde19cc47bb8638292891f7f1a443ecbdc2e3c6843545a",
+      "format": "pipe-last-label"
+    }
+  ],
+  "intake": {
+    "corpus_id": "koguard-zizun-quarantine-review-v1",
+    "split": "tuning",
+    "selection": "stable-sha256-rank-v1",
+    "target_by_source_label": {"0": 250, "1": 250}
+  }
+}
