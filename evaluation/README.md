@@ -94,9 +94,25 @@ uv run python -m evaluation.annotation_workflow merge `
   --report evaluation\annotation-work\pf005-batch-001.report.json
 ```
 
+두 검토자의 판정이 다른 case는 동일 범위로 내보낸 세 번째 batch에서만 판정한다. 최초 두
+검토자가 합의한 case는 세 번째 batch의 초기 `pending` 상태를 유지해도 되며, 불일치 case는
+`approved` 후 최종 label·span·canonical term·slice를 기록하거나 `review`로 명시적으로
+유보한다. `adjudicate`는 세 reviewer와 annotation set ID가 모두 다른지 확인한다.
+
+```powershell
+uv run python -m evaluation.annotation_workflow adjudicate `
+  evaluation\corpus\tuning\curse-review-intake-v1.json `
+  evaluation\annotation-work\pf005-batch-001-primary.json `
+  evaluation\annotation-work\pf005-batch-001-secondary.json `
+  evaluation\annotation-work\pf005-batch-001-adjudicator.json `
+  --output evaluation\annotation-work\pf005-after-batch-001.adjudicated.json `
+  --report evaluation\annotation-work\pf005-batch-001.adjudicated.report.json
+```
+
 `annotation-batch.schema.json`과 `annotation-report.schema.json`이 공개 작업 계약이다. merge
-report의 `gold_ready=false`는 batch 합의만으로 PF-005 전체 규모, 출처 편향과 hidden evaluation
-조건을 충족했다고 오인하지 않도록 고정한다.
+report의 선택적 `adjudication_counts`는 불일치 판정 대상·해결·유보·privacy 제외 건수만
+공개한다. `gold_ready=false`는 batch 합의만으로 PF-005 전체 규모, 출처 편향과 hidden
+evaluation 조건을 충족했다고 오인하지 않도록 고정한다.
 
 ## PF-004 split guard
 

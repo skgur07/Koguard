@@ -162,6 +162,21 @@ uv run python -m evaluation.annotation_workflow merge `
   --report evaluation\annotation-work\pf005-batch-001.report.json
 ```
 
+최초 두 batch가 불일치하면 세 번째 독립 reviewer가 같은 범위의 blinded batch에서 해당 case만
+판정한다. 합의된 case는 세 번째 batch에서 `pending`이어도 무시하며, 불일치 case의 `pending`은
+완료되지 않은 판정으로 거부한다. 세 번째 reviewer가 `approved`+`review`로 남긴 case는 강제로
+확정하지 않고 unresolved로 집계한다.
+
+```powershell
+uv run python -m evaluation.annotation_workflow adjudicate `
+  evaluation\corpus\tuning\curse-review-intake-v1.json `
+  evaluation\annotation-work\pf005-batch-001-primary.json `
+  evaluation\annotation-work\pf005-batch-001-secondary.json `
+  evaluation\annotation-work\pf005-batch-001-adjudicator.json `
+  --output evaluation\annotation-work\pf005-after-batch-001.adjudicated.json `
+  --report evaluation\annotation-work\pf005-batch-001.adjudicated.report.json
+```
+
 `evaluation/annotation-work/`에는 원문과 판정자 작업 내용이 있으므로 Git과 sdist에서 제외한다.
 보호 저장소로 옮길 때도 PF-004 접근·보존 정책을 적용한다. aggregate report만 공개할 때는 stable
 case ID, 원문, canonical term, reviewer ID가 없는지 다시 확인한다.

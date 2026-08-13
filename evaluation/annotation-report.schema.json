@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/annotation-report.schema.json",
-  "title": "Koguard annotation merge report",
+  "title": "Koguard annotation report",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -38,6 +38,17 @@
         "disagreement": {"type": "integer", "minimum": 0},
         "privacy_excluded": {"type": "integer", "minimum": 0},
         "pending_privacy": {"type": "integer", "minimum": 0}
+      }
+    },
+    "adjudication_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eligible", "resolved", "unresolved", "privacy_excluded"],
+      "properties": {
+        "eligible": {"type": "integer", "minimum": 0},
+        "resolved": {"type": "integer", "minimum": 0},
+        "unresolved": {"type": "integer", "minimum": 0},
+        "privacy_excluded": {"type": "integer", "minimum": 0}
       }
     },
     "slice_counts": {
