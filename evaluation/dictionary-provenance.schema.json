@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/dictionary-provenance.schema.json",
+  "title": "Koguard dictionary provenance manifest",
+  "description": "Review, source, license, target-layer, and promotion metadata for dictionary candidates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "normalization_form",
+    "sources",
+    "candidates"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "manifest_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+    },
+    "normalization_form": {"const": "NFKC"},
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/candidate"}
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "kind",
+        "name",
+        "reference",
+        "revision",
+        "license",
+        "license_status",
+        "redistribution_allowed"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+        },
+        "kind": {"enum": ["curated", "licensed"]},
+        "name": {"type": "string", "minLength": 1, "maxLength": 200},
+        "reference": {"type": ["string", "null"], "minLength": 1, "maxLength": 500},
+        "revision": {"type": "string", "minLength": 1, "maxLength": 200},
+        "license": {"type": "string", "minLength": 1, "maxLength": 128},
+        "license_status": {"enum": ["pending", "approved", "rejected"]},
+        "redistribution_allowed": {"type": "boolean"}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "decision_reference", "notes"],
+      "properties": {
+        "status": {"enum": ["pending", "approved", "rejected"]},
+        "decision_reference": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "notes": {"type": "string", "maxLength": 1000}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "surface",
+        "normalized_surface",
+        "canonical",
+        "normalized_canonical",
+        "representation",
+        "matcher",
+        "target_layer",
+        "classification",
+        "status",
+        "source_id",
+        "evaluation_refs",
+        "review",
+        "notes"
+      ],
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+        },
+        "surface": {"type": "string", "minLength": 1, "maxLength": 128},
+        "normalized_surface": {"type": "string", "minLength": 1, "maxLength": 128},
+        "canonical": {"type": "string", "minLength": 1, "maxLength": 128},
+        "normalized_canonical": {"type": "string", "minLength": 1, "maxLength": 128},
+        "representation": {"enum": ["literal", "alias"]},
+        "matcher": {"enum": ["exact", "exact_token", "token_prefix"]},
+        "target_layer": {"enum": ["core", "ai-candidate"]},
+        "classification": {"enum": ["positive", "hard-negative", "review"]},
+        "status": {"enum": ["candidate", "packaged", "rejected"]},
+        "source_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+        },
+        "evaluation_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 500}
+        },
+        "review": {"$ref": "#/$defs/review"},
+        "notes": {"type": "string", "maxLength": 1000}
+      }
+    }
+  }
+}

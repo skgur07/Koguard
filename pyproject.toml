@@ -31,6 +31,9 @@ include = [
     "/docs/corpus-split-policy.md",
     "/docs/corpus-intake-status.md",
     "/docs/source-rights-audit.md",
+    "/docs/dictionary-provenance.md",
+    "/docs/dictionary-data-changelog.md",
+    "/docs/testing/dictionary-provenance.tdd.md",
     "/docs/testing/quarantine-intake.tdd.md",
     "/README.md",
 ]
