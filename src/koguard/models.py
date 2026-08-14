@@ -45,35 +45,36 @@ class MatchMethod(StrEnum):
     ALIAS = "alias"
     KEYBOARD = "keyboard"
     JAMO = "jamo"
-    TRIE = "trie"
     LEVENSHTEIN = "levenshtein"
-    EMBEDDING = "embedding"
     NONE = "none"
 
 
 @dataclass(frozen=True, slots=True)
 class Match:
-    """A single match mapped to the original input when possible."""
+    """A single match mapped to an exact original-input span."""
 
     term: str
     matched_text: str
-    start: int | None
-    end: int | None
+    start: int
+    end: int
     method: MatchMethod
     score: float
 
     def __post_init__(self) -> None:
+        if not isinstance(self.method, MatchMethod):
+            raise TypeError("method must be a MatchMethod")
         if self.method is MatchMethod.NONE:
             raise ValueError("MatchMethod.NONE cannot be used for a detected match")
         if not self.term:
             raise ValueError("term must not be empty")
         if not self.matched_text:
             raise ValueError("matched_text must not be empty")
-        if (self.start is None) != (self.end is None):
-            raise ValueError("start and end must both be set or both be None")
-        if self.start is not None and self.end is not None:
-            if self.start < 0 or self.end <= self.start:
-                raise ValueError("match span must satisfy 0 <= start < end")
+        if type(self.start) is not int:
+            raise TypeError("start must be an integer")
+        if type(self.end) is not int:
+            raise TypeError("end must be an integer")
+        if self.start < 0 or self.end <= self.start:
+            raise ValueError("match span must satisfy 0 <= start < end")
         if not 0.0 <= self.score <= 1.0:
             raise ValueError("score must be between 0.0 and 1.0")
 

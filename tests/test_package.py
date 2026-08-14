@@ -35,8 +35,12 @@ def test_sdist_includes_evaluation_contracts_and_corpus_policies() -> None:
     assert "/docs/dictionary-provenance.md" in sdist_includes
     assert "/docs/dictionary-data-changelog.md" in sdist_includes
     assert "/docs/profile-api-contract.md" in sdist_includes
+    assert "/docs/contains-api.md" in sdist_includes
+    assert "/docs/public-api-inventory.md" in sdist_includes
     assert "/docs/testing/dictionary-provenance.tdd.md" in sdist_includes
+    assert "/docs/testing/contains-api.tdd.md" in sdist_includes
     assert "/docs/testing/profile-api-contract.tdd.md" in sdist_includes
+    assert "/docs/testing/public-api-audit.tdd.md" in sdist_includes
     assert "/docs/testing/quarantine-intake.tdd.md" in sdist_includes
     assert "/evaluation/annotation-work" in sdist_excludes
     assert "/evaluation/quarantine" in sdist_excludes

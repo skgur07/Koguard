@@ -89,7 +89,7 @@ def test_multiple_matches_are_sorted_by_original_position() -> None:
 
     assert [match.term for match in result.matches] == ["병신", "시발"]
     assert [match.start for match in result.matches] == sorted(
-        match.start for match in result.matches if match.start is not None
+        match.start for match in result.matches
     )
 
 

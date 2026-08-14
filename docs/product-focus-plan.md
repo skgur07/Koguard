@@ -6,7 +6,7 @@
 
 ## 1. 결정 요약
 
-Koguard는 Phase 4 Adapter, Phase 5 Plugin System, Phase 6 Embedding Plugin 구현을 즉시
+Koguard는 Phase 4 Adapter, Phase 5 외부 detector, Phase 6 선택적 AI post-core 구현을 즉시
 보류한다. 최초 공개 전의 최우선 목표를 기능 표면 확장이 아니라 다음 다섯 문제의 해결로
 바꾼다.
 
@@ -366,17 +366,19 @@ Exact+Alias+Choseong으로 제한한다. 추가 독립 corpus에서 결과가 �
 
 ### 7.4 공개 표면 정리
 
+PF-011에서 공개 표면 감사를 수행했고 최종 inventory와 migration 영향은
+[`public-api-inventory.md`](public-api-inventory.md)에 고정했다.
+
 첫 공개 전에 다음을 감사한다.
 
-- 실제 런타임 경로가 없는 `MatchMethod` 값
-- 구현되지 않은 Adapter·Plugin을 암시하는 문서와 import
+- 실제 런타임 경로가 없는 `MatchMethod` 값은 제거한다.
+- 구현되지 않은 Adapter·Plugin을 암시하는 import·설정·구체 API 이름은 추가하지 않는다.
 - 사용자가 이해하기 어려운 중복 설정
 - boolean 판정과 상세 판정의 의미 차이
 - masking API가 반드시 core에 필요한지 여부
 
-미구현 미래 API는 호환성 약속이 되기 전에 제거한다. masking은 정확한 span으로 사용자가
-쉽게 구현할 수 있으므로 실제 반복 요구가 확인될 때까지 공개 core API의 차단 조건으로 삼지
-않는다.
+미구현 미래 API는 호환성 약속이 되기 전에 제거했다. masking은 정확한 span으로 사용자가
+쉽게 구현할 수 있으므로 실제 반복 요구가 확인될 때까지 공개 core API에 포함하지 않는다.
 
 ### 7.5 완료 조건
 
