@@ -330,26 +330,28 @@ engine.check("검사할 문장")     # CheckResult
 
 ### 7.2 프로필 계약
 
-프로필은 matcher의 내부 분리를 숨기는 공개 정책이다. 초기 제안은 다음과 같으며 Q1 ablation
-결과로 확정한다.
+프로필은 matcher의 내부 분리를 숨기는 공개 정책이다. PF-005 첫 독립 batch의 ablation을
+근거로 PF-008에서 다음 공개 전 계약을 확정했다. 상세 근거와 이동 계약은
+[`profile-api-contract.md`](profile-api-contract.md)를 따른다.
 
-| matcher | strict | balanced 후보 | aggressive |
+| matcher | strict | balanced | aggressive |
 | --- | ---: | ---: | ---: |
 | Exact | on | on | on |
 | Alias | on | on | on |
-| Repeated | off | on | on |
-| Separator | off | on | on |
-| Whitespace | off | on 후보 | on |
-| Mixed | off | on 후보 | on |
-| Keyboard | off | on 후보 | on |
-| Jamo composition | off | on 후보 | on |
-| Choseong | off | off | on |
+| Repeated | off | off | on |
+| Separator | off | off | on |
+| Whitespace | off | off | on |
+| Mixed | off | off | on |
+| Keyboard | off | off | on |
+| Jamo composition | off | off | on |
+| Choseong | off | on | on |
 | Segmented input | off | off | on |
 | Fuzzy | off | off | on |
 
-`balanced 후보` 항목은 자동 채택이 아니다. Q1에서 해당 matcher의 증분 recall, FP와 p95를
-측정한 뒤 기본 포함 여부를 결정한다. `aggressive`도 계산량 상한과 Whitelist를 우회하지
-않는다.
+첫 독립 batch에서 Choseong만 증분 TP 3건과 FP 0건을 기록했고 다른 고급 matcher는 증분
+TP가 없었다. Fuzzy는 occurrence TP 없이 FP 2건을 추가했다. 따라서 balanced는 우선
+Exact+Alias+Choseong으로 제한한다. 추가 독립 corpus에서 결과가 달라지면 같은 측정과 변경
+근거를 남기고 공개 전에 재조정한다. `aggressive`도 계산량 상한과 Whitelist를 우회하지 않는다.
 
 ### 7.3 설정 우선순위
 
@@ -387,8 +389,9 @@ engine.check("검사할 문장")     # CheckResult
 ### 8.1 현재 문제
 
 현재 모든 matcher가 기본 `True`다. 이는 기능 발견에는 편하지만, 각 단계의 추가 recall과
-추가 FP·latency가 검증되지 않은 상태에서 운영 기본값으로 부적절하다. 특히 초성, segmented,
-Fuzzy는 넓은 후보 공간이나 추가 index를 사용하므로 `aggressive` 후보로 취급한다.
+추가 FP·latency가 검증되지 않은 상태에서 운영 기본값으로 부적절하다. 특히 segmented와
+Fuzzy는 넓은 후보 공간이나 추가 index를 사용하므로 `aggressive`로 제한한다. Choseong은 첫
+독립 batch에서 확인한 증분 TP를 근거로 balanced에 포함하되 추가 corpus에서 재검증한다.
 
 ### 8.2 matcher ablation
 
@@ -435,7 +438,7 @@ Koguard가 아직 공개 `0.1.0` 이전이므로 이 전환은 장기 deprecatio
 - 모든 matcher가 strict/balanced/aggressive 중 명확한 위치를 가진다.
 - balanced 포함 matcher마다 증분 TP/FP/latency 근거가 있다.
 - 기본 config가 실수로 새 고급 matcher를 활성화하지 못하는 회귀 테스트가 있다.
-- aggressive가 필요 없는 사용자에게 Fuzzy·초성·segmented index 비용이 발생하지 않는다.
+- aggressive가 필요 없는 사용자에게 Fuzzy·segmented index 비용이 발생하지 않는다.
 
 ## 9. Workstream E — 로드맵 재정렬
 

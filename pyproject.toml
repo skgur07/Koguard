@@ -33,7 +33,9 @@ include = [
     "/docs/source-rights-audit.md",
     "/docs/dictionary-provenance.md",
     "/docs/dictionary-data-changelog.md",
+    "/docs/profile-api-contract.md",
     "/docs/testing/dictionary-provenance.tdd.md",
+    "/docs/testing/profile-api-contract.tdd.md",
     "/docs/testing/quarantine-intake.tdd.md",
     "/README.md",
 ]

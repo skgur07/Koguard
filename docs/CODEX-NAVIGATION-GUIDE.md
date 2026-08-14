@@ -24,6 +24,7 @@
 | `evaluation/README.md` | 고정 artifact 기반 비교 실행법, 리포트 계약과 한계 |
 | `docs/matcher-ablation-baseline.md` | matcher별 provisional 정확도·지연·메모리 근거 |
 | `docs/product-focus-plan.md` | 최초 공개 품질 우선순위, Phase 보류와 재개 조건 |
+| `docs/profile-api-contract.md` | strict·balanced·aggressive 공개 동작과 이동 계약 |
 | `docs/implementation-plan.md` | 단계별 제품 및 아키텍처 계획 |
 | `docs/accuracy-baseline.md` | 현재 정확도 기준선 |
 
