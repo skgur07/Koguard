@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "measured_at": "2026-08-14T03:36:02.088840+00:00",
+  "environment": {
+    "python_version": "3.11.9",
+    "implementation": "CPython",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel"
+  },
+  "configuration": {
+    "iterations": 100,
+    "warmups": 10
+  },
+  "accuracy": {
+    "totals": {
+      "cases": 20,
+      "exact_cases": 20,
+      "tp": 12,
+      "fp": 0,
+      "fn": 0
+    },
+    "slices": {
+      "combining-positive": {
+        "cases": 2,
+        "exact_cases": 2,
+        "tp": 2,
+        "fp": 0,
+        "fn": 0
+      },
+      "compatibility-positive": {
+        "cases": 2,
+        "exact_cases": 2,
+        "tp": 2,
+        "fp": 0,
+        "fn": 0
+      },
+      "format-positive": {
+        "cases": 5,
+        "exact_cases": 5,
+        "tp": 5,
+        "fp": 0,
+        "fn": 0
+      },
+      "policy-hard-negative": {
+        "cases": 8,
+        "exact_cases": 8,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "unicode-multiple": {
+        "cases": 1,
+        "exact_cases": 1,
+        "tp": 2,
+        "fp": 0,
+        "fn": 0
+      },
+      "whitelist-override": {
+        "cases": 2,
+        "exact_cases": 2,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0
+      }
+    }
+  },
+  "performance": [
+    {
+      "name": "format-only-maximum",
+      "profile": "balanced",
+      "input_length": 4096,
+      "expected_matches_after_hardening": 0,
+      "actual_matches": 0,
+      "memory_actual_matches": 0,
+      "p50_ms": 0.8802,
+      "p95_ms": 1.0235,
+      "peak_memory_bytes": 13319
+    },
+    {
+      "name": "format-interleaved-clean-maximum",
+      "profile": "balanced",
+      "input_length": 4096,
+      "expected_matches_after_hardening": 0,
+      "actual_matches": 0,
+      "memory_actual_matches": 0,
+      "p50_ms": 3.686,
+      "p95_ms": 4.4164,
+      "peak_memory_bytes": 338838
+    },
+    {
+      "name": "format-obfuscated-positive-maximum",
+      "profile": "balanced",
+      "input_length": 4096,
+      "expected_matches_after_hardening": 1,
+      "actual_matches": 1,
+      "memory_actual_matches": 1,
+      "p50_ms": 0.9197,
+      "p95_ms": 1.0997,
+      "peak_memory_bytes": 14079
+    },
+    {
+      "name": "combining-obfuscated-positive-maximum",
+      "profile": "balanced",
+      "input_length": 4096,
+      "expected_matches_after_hardening": 1,
+      "actual_matches": 1,
+      "memory_actual_matches": 1,
+      "p50_ms": 8.2924,
+      "p95_ms": 12.1432,
+      "peak_memory_bytes": 2499860
+    }
+  ]
+}

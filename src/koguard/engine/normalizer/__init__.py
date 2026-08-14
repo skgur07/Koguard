@@ -113,6 +113,17 @@ def _is_unicode_cluster_extension(character: str) -> bool:
     return category(character).startswith("M") or _is_variation_selector(character)
 
 
+def _is_hangul_character(character: str) -> bool:
+    codepoint = ord(character)
+    return _is_jamo(character) or 0xAC00 <= codepoint <= 0xD7A3
+
+
+def _is_format_character(character: str) -> bool:
+    """Return whether one invisible formatting code point can split a term."""
+
+    return category(character) == "Cf"
+
+
 def _is_stable_character(character: str) -> bool:
     """Return whether one character is unchanged by NFC and NFKC."""
 
@@ -196,6 +207,72 @@ def _make_spans_monotonic(
         ends[index] = max(ends[index], ends[index - 1])
 
     return tuple(zip(starts, ends, strict=True))
+
+
+def _strip_hangul_extensions(
+    text: str,
+    source_spans: tuple[tuple[int, int], ...],
+) -> tuple[str, tuple[tuple[int, int], ...]]:
+    """Ignore combining marks and variation selectors attached to Hangul."""
+
+    characters: list[str] = []
+    retained_spans: list[tuple[int, int]] = []
+    for character, source_span in zip(text, source_spans, strict=True):
+        if (
+            _is_unicode_cluster_extension(character)
+            and characters
+            and _is_hangul_character(characters[-1])
+        ):
+            previous_start, previous_end = retained_spans[-1]
+            retained_spans[-1] = (
+                previous_start,
+                max(previous_end, source_span[1]),
+            )
+            continue
+        characters.append(character)
+        retained_spans.append(source_span)
+    return "".join(characters), tuple(retained_spans)
+
+
+def _renormalize_with_source_spans(
+    text: str,
+    source_spans: tuple[tuple[int, int], ...],
+    unicode_form: NormalizationForm,
+) -> tuple[str, tuple[tuple[int, int], ...]]:
+    """Compose normalized fragments while retaining their original source spans."""
+
+    renormalized = normalize(unicode_form, text)
+    if renormalized == text:
+        return text, source_spans
+
+    compatibility = unicode_form == "NFKC"
+    source_decomposition = _decompose_with_origins(text, compatibility=compatibility)
+    normalized_decomposition = _decompose_with_origins(
+        renormalized,
+        compatibility=compatibility,
+    )
+    if [character for character, _ in source_decomposition] != [
+        character for character, _ in normalized_decomposition
+    ]:
+        full_span = (source_spans[0][0], source_spans[-1][1])
+        return renormalized, (full_span,) * len(renormalized)
+
+    source_indexes_by_output: list[list[int]] = [[] for _ in renormalized]
+    for (_, source_index), (_, output_index) in zip(
+        source_decomposition,
+        normalized_decomposition,
+        strict=True,
+    ):
+        source_indexes_by_output[output_index].append(source_index)
+
+    spans = tuple(
+        (
+            min(source_spans[index][0] for index in source_indexes),
+            max(source_spans[index][1] for index in source_indexes),
+        )
+        for source_indexes in source_indexes_by_output
+    )
+    return renormalized, _make_spans_monotonic(spans)
 
 
 def _decompose_character(
@@ -288,7 +365,7 @@ class NormalizedText:
 
 
 def normalize_text(text: str, unicode_form: NormalizationForm) -> NormalizedText:
-    """Normalize Unicode clusters and collapse each whitespace run to one space."""
+    """Normalize Unicode clusters, invisible format controls, and whitespace."""
 
     normalized_parts: list[str] = []
     source_spans: list[tuple[int, int]] = []
@@ -296,6 +373,19 @@ def normalize_text(text: str, unicode_form: NormalizationForm) -> NormalizedText
 
     while start < len(text):
         character = text[start]
+        if _is_format_character(character):
+            start += 1
+            continue
+        if (
+            _is_unicode_cluster_extension(character)
+            and normalized_parts
+            and normalized_parts[-1]
+            and _is_hangul_character(normalized_parts[-1][-1])
+        ):
+            previous_start, previous_end = source_spans[-1]
+            source_spans[-1] = (previous_start, max(previous_end, start + 1))
+            start += 1
+            continue
         if (
             not character.isspace()
             and _is_stable_character(character)
@@ -318,14 +408,28 @@ def normalize_text(text: str, unicode_form: NormalizationForm) -> NormalizedText
                 start,
                 unicode_form,
             )
+            normalized_cluster, cluster_spans = _strip_hangul_extensions(
+                normalized_cluster,
+                cluster_spans,
+            )
 
-        normalized_parts.append(normalized_cluster)
-        source_spans.extend(cluster_spans)
+        if normalized_cluster:
+            normalized_parts.append(normalized_cluster)
+            source_spans.extend(cluster_spans)
         start = end
 
+    normalized_text = "".join(normalized_parts)
+    normalized_spans = tuple(source_spans)
+    if any(_is_jamo(character) for character in normalized_text):
+        normalized_text, normalized_spans = _renormalize_with_source_spans(
+            normalized_text,
+            normalized_spans,
+            unicode_form,
+        )
+
     return NormalizedText(
-        text="".join(normalized_parts),
-        source_spans=tuple(source_spans),
+        text=normalized_text,
+        source_spans=normalized_spans,
     )
 
 

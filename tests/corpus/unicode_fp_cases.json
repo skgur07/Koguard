@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "policy": "Registered terms and approved transformations are context-independent positives; only inputs without them are hard-negatives.",
+  "cases": [
+    {
+      "id": "format-zero-width-space",
+      "slice": "format-positive",
+      "profile": "strict",
+      "text": "시\u200b발",
+      "expected_matches": [{"term": "시발", "start": 0, "end": 3, "method": "exact"}]
+    },
+    {
+      "id": "format-zero-width-joiner",
+      "slice": "format-positive",
+      "profile": "strict",
+      "text": "시\u200d발",
+      "expected_matches": [{"term": "시발", "start": 0, "end": 3, "method": "exact"}]
+    },
+    {
+      "id": "format-word-joiner",
+      "slice": "format-positive",
+      "profile": "strict",
+      "text": "시\u2060발",
+      "expected_matches": [{"term": "시발", "start": 0, "end": 3, "method": "exact"}]
+    },
+    {
+      "id": "format-byte-order-mark",
+      "slice": "format-positive",
+      "profile": "strict",
+      "text": "시\ufeff발",
+      "expected_matches": [{"term": "시발", "start": 0, "end": 3, "method": "exact"}]
+    },
+    {
+      "id": "format-bidi-override",
+      "slice": "format-positive",
+      "profile": "strict",
+      "text": "시\u202e발",
+      "expected_matches": [{"term": "시발", "start": 0, "end": 3, "method": "exact"}]
+    },
+    {
+      "id": "variation-selector",
+      "slice": "combining-positive",
+      "profile": "strict",
+      "text": "시\ufe0f발",
+      "expected_matches": [{"term": "시발", "start": 0, "end": 3, "method": "exact"}]
+    },
+    {
+      "id": "combining-acute",
+      "slice": "combining-positive",
+      "profile": "strict",
+      "text": "시\u0301발",
+      "expected_matches": [{"term": "시발", "start": 0, "end": 3, "method": "exact"}]
+    },
+    {
+      "id": "circled-hangul-jamo-composition",
+      "slice": "compatibility-positive",
+      "profile": "strict",
+      "text": "㉦ㅣ발",
+      "expected_matches": [{"term": "시발", "start": 0, "end": 3, "method": "exact"}]
+    },
+    {
+      "id": "fullwidth-keyboard-input",
+      "slice": "compatibility-positive",
+      "profile": "aggressive",
+      "text": "ｔｌｑｋｆ",
+      "expected_matches": [{"term": "시발", "start": 0, "end": 5, "method": "keyboard"}]
+    },
+    {
+      "id": "multiple-unicode-obfuscations",
+      "slice": "unicode-multiple",
+      "profile": "strict",
+      "text": "병\u200b신 그리고 시\u0301발",
+      "expected_matches": [
+        {"term": "병신", "start": 0, "end": 3, "method": "exact"},
+        {"term": "시발", "start": 8, "end": 11, "method": "exact"}
+      ]
+    },
+    {
+      "id": "format-whitelist-overlap",
+      "slice": "whitelist-override",
+      "profile": "strict",
+      "text": "시\u200b발점과 병신",
+      "whitelist": ["시발점"],
+      "expected_matches": [{"term": "병신", "start": 6, "end": 8, "method": "exact"}]
+    },
+    {
+      "id": "format-whitelist-only",
+      "slice": "whitelist-override",
+      "profile": "strict",
+      "text": "병\u200d신년",
+      "whitelist": ["병신년"],
+      "expected_matches": []
+    },
+    {
+      "id": "format-does-not-erase-space-boundary",
+      "slice": "policy-hard-negative",
+      "profile": "aggressive",
+      "text": "시\u200b 발표",
+      "expected_matches": []
+    },
+    {
+      "id": "combining-does-not-erase-space-boundary",
+      "slice": "policy-hard-negative",
+      "profile": "aggressive",
+      "text": "시\u0301 발표",
+      "expected_matches": []
+    },
+    {
+      "id": "normal-fruit-with-format",
+      "slice": "policy-hard-negative",
+      "profile": "aggressive",
+      "text": "수\u200b박",
+      "expected_matches": []
+    },
+    {
+      "id": "normal-hospital-request",
+      "slice": "policy-hard-negative",
+      "profile": "aggressive",
+      "text": "병\u200b원 신청",
+      "expected_matches": []
+    },
+    {
+      "id": "normal-flower-name",
+      "slice": "policy-hard-negative",
+      "profile": "aggressive",
+      "text": "개나리",
+      "expected_matches": []
+    },
+    {
+      "id": "normal-returning-phrase",
+      "slice": "policy-hard-negative",
+      "profile": "aggressive",
+      "text": "돌아오는 길",
+      "expected_matches": []
+    },
+    {
+      "id": "normal-compound-word",
+      "slice": "policy-hard-negative",
+      "profile": "aggressive",
+      "text": "새끼손가락",
+      "expected_matches": []
+    },
+    {
+      "id": "normal-emoji-zwj-sequence",
+      "slice": "policy-hard-negative",
+      "profile": "aggressive",
+      "text": "가족 👨\u200d👩\u200d👧 모임",
+      "expected_matches": []
+    }
+  ]
+}
