@@ -38,6 +38,22 @@ def test_alias_public_models_have_stable_values() -> None:
     assert rule.term == "병신"
 
 
+def test_match_method_has_only_implemented_public_values() -> None:
+    assert {method.value for method in MatchMethod} == {
+        "exact",
+        "repeated",
+        "separator",
+        "whitespace",
+        "mixed",
+        "choseong",
+        "alias",
+        "keyboard",
+        "jamo",
+        "levenshtein",
+        "none",
+    }
+
+
 @pytest.mark.parametrize(("field", "value"), [("alias", ""), ("term", "")])
 def test_alias_rule_rejects_empty_text_fields(field: str, value: str) -> None:
     values = {"alias": "ㅄ", "term": "병신"}
@@ -95,20 +111,22 @@ def test_result_rejects_non_match_items() -> None:
 @pytest.mark.parametrize(
     ("start", "end"),
     [
+        (None, None),
         (0, None),
         (None, 1),
+        (False, 1),
         (-1, 1),
         (1, 1),
         (2, 1),
     ],
 )
 def test_match_rejects_invalid_spans(start: int | None, end: int | None) -> None:
-    with pytest.raises(ValueError, match="start|span"):
+    with pytest.raises((TypeError, ValueError), match="start|end|span"):
         Match(
             term="금칙어",
             matched_text="금칙어",
-            start=start,
-            end=end,
+            start=cast(int, start),
+            end=cast(int, end),
             method=MatchMethod.EXACT,
             score=1.0,
         )
@@ -126,9 +144,9 @@ def test_match_rejects_empty_text_fields(field: str) -> None:
         Match(
             term=values["term"],
             matched_text=values["matched_text"],
-            start=None,
-            end=None,
-            method=MatchMethod.EMBEDDING,
+            start=0,
+            end=3,
+            method=MatchMethod.EXACT,
             score=0.8,
         )
 
@@ -139,10 +157,22 @@ def test_match_rejects_invalid_scores(score: float) -> None:
         Match(
             term="금칙어",
             matched_text="금칙어",
-            start=None,
-            end=None,
-            method=MatchMethod.EMBEDDING,
+            start=0,
+            end=3,
+            method=MatchMethod.EXACT,
             score=score,
+        )
+
+
+def test_match_rejects_non_enum_method() -> None:
+    with pytest.raises(TypeError, match="method"):
+        Match(
+            term="금칙어",
+            matched_text="금칙어",
+            start=0,
+            end=3,
+            method=cast(MatchMethod, "exact"),
+            score=1.0,
         )
 
 

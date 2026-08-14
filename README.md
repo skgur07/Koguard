@@ -16,6 +16,9 @@ Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy
 Koguard 정책으로 판정한 gold가 아닙니다. 현재 상태와 완료 전 blocker는
 [PF-005 corpus 상태](docs/corpus-intake-status.md)를 참고하세요.
 
+0.1.0의 폐쇄된 import 목록, 제거한 미래 enum과 Adapter·Plugin·AI·masking 비지원 경계는
+[공개 API inventory](docs/public-api-inventory.md)에 기록되어 있습니다.
+
 ## 사용법
 
 ```python
@@ -313,7 +316,7 @@ uv run python -m benchmarks.engine_benchmark `
 
 측정 항목과 결과 해석은 [`benchmarks/README.md`](benchmarks/README.md)를 참고합니다.
 
-## AI 개발 하네스
+## 개발 자동화 하네스
 
 Koguard는 [Everything Claude Code(ECC)](https://github.com/affaan-m/ECC)의 계획, TDD,
 검증, 전문 역할 분리 패턴을 프로젝트 로컬 Codex 설정으로 적용합니다.

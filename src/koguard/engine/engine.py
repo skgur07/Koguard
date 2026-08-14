@@ -49,8 +49,6 @@ def _merge_view_matches(
     selected: list[Match] = []
     for matches in match_groups:
         for match in matches:
-            if match.start is None or match.end is None:
-                continue
             if any(
                 protected_mask.find(b"\x01", match.start, match.end) >= 0
                 for protected_mask in protected_original_masks
@@ -63,11 +61,7 @@ def _merge_view_matches(
     return tuple(
         sorted(
             selected,
-            key=lambda match: (
-                match.start if match.start is not None else -1,
-                match.end if match.end is not None else -1,
-                match.term,
-            ),
+            key=lambda match: (match.start, match.end, match.term),
         )
     )
 
@@ -80,8 +74,7 @@ def _build_match_original_mask(
 
     occupied = bytearray(original_length)
     for match in matches:
-        if match.start is not None and match.end is not None:
-            occupied[match.start : match.end] = b"\x01" * (match.end - match.start)
+        occupied[match.start : match.end] = b"\x01" * (match.end - match.start)
     return bytes(occupied)
 
 

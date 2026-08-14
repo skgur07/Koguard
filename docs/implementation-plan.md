@@ -4,14 +4,15 @@
 
 ## 1. 검토 결론
 
-Engine과 Adapter를 분리하고, 사전 기반의 저비용 단계부터 선택적 AI Plugin까지 순차 실행하는
-아키텍처 방향은 유지한다. 다만 2026-08-12 제품 재검토에서 탐지 데이터, 독립 평가 corpus,
-단순 API와 안전한 기본값이 외부 통합보다 우선이라는 결정을 내렸다. 따라서 기존 Phase 4~6은
-보류하고 최초 공개 `0.1.0` 전까지 [제품 집중 계획](product-focus-plan.md)의 Q0~Q4를 현재
-실행 로드맵으로 사용한다.
+사전 기반 core를 작고 독립적으로 유지하고, 외부 통합이나 선택적 AI는 검증된 수요가 생긴 뒤
+core 밖의 post-core 계층으로 검토한다. 2026-08-12 제품 재검토에서 탐지 데이터, 독립 평가
+corpus, 단순 API와 안전한 기본값이 외부 통합보다 우선이라는 결정을 내렸다. 따라서 기존
+Phase 4~6은 보류하고 최초 공개 `0.1.0` 전까지 [제품 집중 계획](product-focus-plan.md)의 Q0~Q4를
+현재 실행 로드맵으로 사용한다.
 
-아래 Phase 4~6 내용은 폐기된 설계가 아니라 재개 조건을 충족한 뒤 검토할 설계 초안이다.
-런타임 네트워크 의존성을 없애고 결과 캐시를 도입하지 않는 결정도 그대로 유지한다.
+아래 Phase 4~6은 공개 API나 버전 약속이 아니다. 재개 조건을 충족한 뒤 문제와 계약을 새로
+설계하기 위한 조사 항목이며, 현재 문서의 클래스명·import·method를 예약하지 않는다. core의
+런타임 네트워크 의존성을 없애고 결과 캐시를 도입하지 않는 결정은 그대로 유지한다.
 
 다만 현재 문서만으로는 문장 안에서 발견된 여러 단어의 처리, 화이트리스트가 보호할 범위, 정규화 과정에서 원문 위치를 보존하는 방법, 유사도 탐색의 후보 생성 방법이 명확하지 않다. 이 항목은 탐지 정확도와 공개 API에 직접 영향을 주므로 v0.1 구현 전에 아래 권고안으로 확정한다.
 
@@ -36,18 +37,21 @@ Engine과 Adapter를 분리하고, 사전 기반의 저비용 단계부터 선�
 class Match:
     term: str
     matched_text: str
-    start: int | None
-    end: int | None
+    start: int
+    end: int
     method: MatchMethod
     score: float
 
 
 @dataclass(frozen=True, slots=True)
 class CheckResult:
-    detected: bool
     normalized_text: str
     matches: tuple[Match, ...]
     elapsed_ms: float
+
+    @property
+    def detected(self) -> bool:
+        return bool(self.matches)
 ```
 
 다중 `matches`가 필요한 이유는 다음과 같다.
@@ -70,19 +74,17 @@ result.matches   # (Match(term="병신", start=5, end=7, method=MatchMethod.EXAC
 - 매치는 원문 `start` 오름차순, 같은 위치에서는 긴 구간 우선, 그래도 같으면 matcher 우선순위 순으로 정렬한다.
 - 동일하거나 겹치는 블랙리스트 후보는 기본적으로 가장 긴 구간 하나만 남긴다. 단, 서로 독립된 구간은 모두 남긴다.
 - 화이트리스트와 겹치는 후보는 해당 후보만 제거하고 다른 매치에는 영향을 주지 않는다.
-- 기존의 단일 `matched_word`, `method`, `confidence`가 필요하면 첫 번째 매치에서 계산하는 호환 프로퍼티로 제공할 수 있지만, 새 코드는 `matches`를 사용한다.
+- 단일 `matched_word`, `method`, `confidence`는 첫 번째 매치에서 계산하는 읽기 전용 편의
+  property로 제공하지만, 새 코드는 `matches`를 사용한다.
 
-- `start`와 `end`는 가능한 경우 원문 기준 반열림 구간(`[start, end)`)으로 반환한다.
-- 정규화 때문에 원문 위치를 정확히 복원할 수 없는 Plugin은 위치를 `None`으로 반환할 수 있다.
-- `matched_word`, `method`, `confidence` 같은 단일 필드는 필요하면 첫 번째 또는 최고 점수 매치에서 계산하는 읽기 전용 호환 프로퍼티로 제공한다.
+- `start`와 `end`는 항상 원문 기준 정수 반열림 구간(`[start, end)`)으로 반환한다.
 - `confidence`는 통계적으로 보정된 확률로 오해될 수 있으므로 초기에는 `score`라는 이름을 권장한다.
 - `MatchMethod.NONE`은 개별 매치에는 사용하지 않는다. 미탐지는 빈 `matches`로 표현한다.
 
 ### 2.3 점수 규칙
 
-- EXACT/TRIE: `1.0`
+- EXACT와 결정적 규칙 matcher: `1.0`
 - LEVENSHTEIN: `1 - distance / max(len(candidate), len(term))`
-- EMBEDDING: Plugin이 `[0.0, 1.0]` 범위의 점수를 반환하되, 모델별 임계값과 점수 의미를 Plugin 문서에 명시한다.
 - 점수는 서로 다른 method 사이에서 확률처럼 직접 비교하지 않는다.
 
 ### 2.4 정규화
@@ -110,25 +112,21 @@ result.matches   # (Match(term="병신", start=5, end=7, method=MatchMethod.EXAC
 
 ### 2.6 Levenshtein 후보 탐색
 
-일반 Trie 탐색 결과만으로 후보를 좁히면 철자 누락이나 첫 글자 변형을 놓친다. 다음 중 하나를 벤치마크 후 채택한다.
+현재 Fuzzy runtime은 독립 영숫자 토큰에 deletion-signature index로 후보를 만든 뒤 bounded
+Levenshtein 거리를 계산한다. 거리와 score는 `max(len(candidate), len(term))`을 기준으로 하며,
+최소·최대 term 길이, 최대 거리, 최소 score, index entry와 입력별 연산량을 `EngineConfig`로
+제한한다. 1~2자 표현은 기본 후보에서 제외하고 Fuzzy는 `aggressive` 또는 직접 config에서만
+활성화한다.
 
-- Trie 위에서 동적 계획법 행을 전파하는 fuzzy trie 탐색
-- 길이 버킷 + 첫/끝 글자 등 저비용 인덱스로 후보를 좁힌 뒤 편집거리 계산
-- 데이터가 커질 경우 BK-tree 또는 SymSpell 계열 인덱스
+### 2.7 선택적 post-core 확장 경계
 
-거리 기준은 `max(len(candidate), len(term))`을 기준으로 적용한다. 1~2자 단어에 distance 1을 허용하면 오탐이 급증하므로 기본값은 exact-only로 두고, 3~4자부터 distance 1을 허용한다. 최종 임계값은 실제 사전과 검증 corpus로 조정한다.
+`KoguardEngine.check()`와 `contains()`는 동기·offline core API로 유지한다. 0.1.0에는 Plugin,
+비동기 검사, 외부 detector 등록 API가 없으며 관련 클래스명이나 import 경로를 예약하지 않는다.
 
-### 2.7 Plugin과 비동기 처리
-
-`KoguardEngine.check()`는 동기 API로 유지한다. 동기 Plugin만 Engine pipeline에 등록하며, Adapter의 비동기 진입점은 전체 `engine.check()`를 `asyncio.to_thread()`로 오프로딩한다.
-
-외부 HTTP API처럼 본질적으로 비동기인 Plugin이 필요해지는 시점에는 `AsyncPlugin`과 `acheck()`을 별도 계약으로 추가한다. v0.5의 `BasePlugin`에는 다음 정책도 포함한다.
-
-- 실행 순서와 조기 종료 여부
-- Plugin 실패 시 fail-open/fail-closed 정책
-- timeout과 예외 래핑
-- Plugin이 반환할 수 있는 method와 score 범위
-- thread-safety 요구사항
+향후 외부 detector 요구가 검증되면 core 결과 뒤에서만 동작하는 선택적 계층으로 새로
+설계한다. 이 계층은 core match를 취소하거나 Whitelist·입력·계산량 상한을 우회할 수 없다.
+실행 순서, 실패 정책, timeout, 비동기 경계와 thread safety가 실제 요구로 확인되기 전에는
+구체 API를 문서에 약속하지 않는다.
 
 ### 2.8 Dictionary와 데이터
 
@@ -141,15 +139,12 @@ result.matches   # (Match(term="병신", start=5, end=7, method=MatchMethod.EXAC
 - PyPI 배포 전 원본 데이터셋 URL, commit/hash, 라이선스, 변환 규칙을 `data/NOTICE.md`와 manifest에 기록한다.
 - 런타임 로그에는 기본적으로 입력 원문을 남기지 않는다.
 
-### 2.9 Adapter 범위
+### 2.9 외부 통합 범위
 
-`socket`, `websocket`, `fastapi`는 서로 메시지 경계와 프레임워크가 달라 범용 wrapper가 되기 어렵다.
-
-- FastAPI: 재사용 가능한 dependency 또는 요청/응답 helper와 예제 제공
-- WebSocket: 메시지 문자열을 검사하는 handler decorator/helper 제공
-- Raw socket: framing을 라이브러리가 추측하지 않고 사용자가 decoder/callback을 주입하는 helper 제공
-
-각 Adapter는 Engine을 변경하거나 monkey patch하지 않는다. FastAPI/WebSocket 같은 선택 의존성은 `project.optional-dependencies`의 extra로 분리한다.
+0.1.0은 프레임워크 Adapter를 제공하지 않는다. 사용자는 자신의 요청·메시지 경계에서
+`KoguardEngine`을 직접 호출한다. 최소 두 실제 통합에서 같은 boilerplate 문제가 확인되기
+전에는 FastAPI, WebSocket, raw socket용 helper·decorator·extra 이름을 공개 계약으로 만들지
+않는다.
 
 ## 3. 비기능 요구사항
 
@@ -161,7 +156,7 @@ result.matches   # (Match(term="병신", start=5, end=7, method=MatchMethod.EXAC
 - `py.typed`를 포함하고 공개 API에 타입 힌트를 제공한다.
 - 100% line coverage 자체보다 branch coverage, 오탐/미탐 corpus, 성능 회귀 기준을 품질 지표로 사용한다.
 
-## 4. 권장 프로젝트 구조
+## 4. 0.1.0 프로젝트 구조
 
 ```text
 Koguard/
@@ -174,22 +169,17 @@ Koguard/
 │   │   ├── engine.py
 │   │   ├── dictionary.py
 │   │   ├── matcher.py
-│   │   ├── pipeline.py
 │   │   └── normalizer/
-│   ├── plugins/
-│   │   └── base.py
-│   ├── adapters/
 │   └── data/
 │       ├── badwords.txt
+│       ├── aliases.tsv
 │       ├── whitelist.txt
 │       └── NOTICE.md
-├── scripts/
-│   └── build_dictionary.py
 ├── tests/
-│   ├── unit/
-│   ├── integration/
 │   ├── corpus/
-│   └── benchmarks/
+│   └── test_*.py
+├── evaluation/
+├── benchmarks/
 ├── docs/
 ├── pyproject.toml
 └── uv.lock
@@ -308,7 +298,7 @@ Koguard/
 세부 작업, 수치화 방법, 우선순위와 완료 조건은
 [제품 집중 계획](product-focus-plan.md)을 단일 기준으로 사용한다.
 
-### Phase 4 — v0.4 Adapters
+### Phase 4 — 외부 통합 Adapter 조사
 
 상태: **보류 (2026-08-12)**
 
@@ -318,11 +308,10 @@ boilerplate 문제가 확인될 때만 재개한다. 재개 시에도 가장 수
 
 작업:
 
-- 공통 adapter 결과/오류 정책 정의
-- FastAPI dependency/helper 및 async offload 구현
-- WebSocket handler helper 구현
-- decoder/callback 기반 raw socket 예제 구현
-- optional extra와 통합 테스트 추가
+- 반복되는 통합 boilerplate와 메시지 경계를 먼저 수집
+- 가장 수요가 큰 통합 한 종류의 결과·오류·동시성 요구 정의
+- core import와 의존성을 바꾸지 않는 별도 배포 경계 검토
+- 공개 이름을 정하기 전 최소 구현과 통합 테스트로 유효성 검증
 
 완료 조건:
 
@@ -330,7 +319,7 @@ boilerplate 문제가 확인될 때만 재개한다. 재개 시에도 가장 수
 - Engine 단독 설치에는 프레임워크 의존성이 포함되지 않음
 - Adapter가 Engine 내부 상태를 수정하지 않음
 
-### Phase 5 — v0.5 Plugin System
+### Phase 5 — 외부 detector post-core 조사
 
 상태: **보류 (2026-08-12)**
 
@@ -339,16 +328,17 @@ core matcher 계약이 안정되고, 서로 다른 두 종류 이상의 외부 d
 
 작업:
 
-- `BasePlugin`, `PluginManager`, 오류/timeout/순서 정책 구현
-- 예제 경량 Plugin과 contract test kit 제공
-- 동기 Plugin의 Adapter offload 검증
+- 외부 detector 요구에서 공통으로 필요한 오류·timeout·순서 정책 수집
+- 단순 사용자 callback으로 해결 가능한지 먼저 검증
+- core match를 취소하지 않는 post-core 합성 규칙과 test contract 설계
+- 공개 클래스·import·버전은 설계와 평가가 끝난 뒤 별도 결정
 
 완료 조건:
 
 - Plugin 미설치 시 core import/startup 비용 변화가 거의 없음
 - Plugin 오류 정책과 deterministic ordering 테스트 통과
 
-### Phase 6 — v0.6 Embedding Plugin
+### Phase 6 — 선택적 AI post-core 조사
 
 상태: **보류 (2026-08-12)**
 
@@ -358,16 +348,16 @@ core matcher 계약이 안정되고, 서로 다른 두 종류 이상의 외부 d
 
 작업:
 
-- 별도 extra로 BGE 계열 Plugin 구현
-- 모델 lazy loading, 장치 선택, batch 처리, threshold 설정
-- 모델 식별자와 다운로드/오프라인 동작 문서화
-- 모델별 평가 corpus와 score calibration 수행
+- unresolved false-negative cluster와 AI 증분 효과를 hidden evaluation으로 측정
+- CPU-only, offline, 개인정보, 모델 부재와 배포 크기 예산 정의
+- core와 분리된 선택 설치·기본 비활성화 경계 검증
+- 모델별 평가 corpus와 score calibration 가능 여부 확인
 
 완료 조건:
 
 - core wheel에는 모델/ML 의존성이 포함되지 않음
 - 모델 부재, offline, CPU-only 환경의 오류 메시지가 명확함
-- Exact/Trie/Fuzzy 대비 추가 recall과 지연 비용이 측정됨
+- core 규칙·Fuzzy 대비 추가 recall과 지연 비용이 측정됨
 
 ### Phase 7 — v1.0 배포
 
@@ -398,7 +388,7 @@ Adapter·Plugin·모델을 전제로 한 배포 항목은 각 보류 Phase가 �
 - Unit: normalizer 단계, span mapping, dictionary 충돌, matcher 경계값
 - Property-based: Unicode/공백/특수문자 변형에도 crash하지 않고 결과가 deterministic한지 검증
 - Corpus: true positive, false positive, whitelist, obfuscation을 분리하고 기대 결과를 versioning
-- Integration: 패키지 리소스, optional extras, adapter, wheel 설치
+- Integration: 패키지 리소스, 공개 API, wheel 설치
 - Performance: p50/p95, 처리량, peak memory, import/startup 시간
 
 모든 성능 수치는 목표 장비 없이 먼저 약속하지 않는다. v0.1에서 기준선을 얻고 v0.2부터 허용 회귀율을 정한다.
@@ -420,7 +410,7 @@ Adapter·Plugin·모델을 전제로 한 배포 항목은 각 보류 Phase가 �
    기본으로 바꾼다. 초성·분리 입력·Fuzzy는 우선 `aggressive` 후보로 둔다. 공백을 전역 제거해
    `시 발표` 같은 정상 문장을 결합하는 구현은 계속 허용하지 않는다.
 6. 규칙 기반 탐지로 처리하기 어려운 문맥, 신조어, 미등록 변형이 있다는 이유만으로 AI
-   Plugin을 먼저 구현하지 않는다. 독립 evaluation에서 규칙과 데이터로 해결되지 않는 cluster가
+   계층을 먼저 구현하지 않는다. 독립 evaluation에서 규칙과 데이터로 해결되지 않는 cluster가
    확인되고 [제품 집중 계획](product-focus-plan.md)의 재개 조건을 모두 충족할 때만 별도 extra,
    기본 비활성화와 lazy loading 원칙으로 검토한다.
 7. 공개 결과 모델은 불변 `matches: tuple[Match, ...]` 구조를 채택한다. scalar 속성은 첫
