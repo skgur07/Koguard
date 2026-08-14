@@ -152,7 +152,7 @@ def test_overlapping_occurrences_produce_one_deterministic_match() -> None:
 
 
 def test_repeated_vowel_extension_is_detected_with_original_span() -> None:
-    result = KoguardEngine().check("앞 시이이발 뒤")
+    result = KoguardEngine(profile="aggressive").check("앞 시이이발 뒤")
 
     assert len(result.matches) == 1
     assert result.matches[0].term == "시발"
@@ -178,7 +178,7 @@ def test_exact_match_keeps_priority_over_repeated_view() -> None:
 
 
 def test_exact_and_repeated_view_matches_are_both_preserved() -> None:
-    result = KoguardEngine().check("시이이발 그리고 병신")
+    result = KoguardEngine(profile="aggressive").check("시이이발 그리고 병신")
 
     assert [(match.term, match.method) for match in result.matches] == [
         ("시발", MatchMethod.REPEATED),
@@ -195,7 +195,7 @@ def test_whitelist_protects_repeated_view_match() -> None:
 
 
 def test_special_character_obfuscation_is_detected_with_original_span() -> None:
-    result = KoguardEngine().check("앞 시*!발 뒤")
+    result = KoguardEngine(profile="aggressive").check("앞 시*!발 뒤")
 
     assert len(result.matches) == 1
     assert result.matches[0].term == "시발"

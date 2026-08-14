@@ -2,6 +2,11 @@
 
 작성일: 2026-08-04
 
+> 2026-08-14 PF-009 보완: 아래 기본값은 직접 `EngineConfig()`를 만들 때의 all-enabled
+> 호환성 계약이다. 인자 없는 `KoguardEngine()`은 이제 Exact+Alias+Choseong의 `balanced`
+> profile을 사용한다. 공개 기본 동작은 [`profile-api-contract.tdd.md`](profile-api-contract.tdd.md)를
+> 우선한다.
+
 ## 목표
 
 현재 구현된 탐지 단계는 모두 기본으로 실행하되, 사용자가 각 단계를 정확한 `bool` 설정으로

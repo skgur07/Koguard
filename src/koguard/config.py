@@ -1,12 +1,15 @@
 """Configuration models for the Koguard engine."""
 
 from dataclasses import dataclass
-from typing import Literal, TypeAlias
+from typing import Final, Literal, TypeAlias
 from unicodedata import normalize
 
 from koguard.exceptions import ConfigurationError
 
 NormalizationForm: TypeAlias = Literal["NFC", "NFKC"]
+ProfileName: TypeAlias = Literal["strict", "balanced", "aggressive"]
+
+_PROFILE_NAMES: Final = ("strict", "balanced", "aggressive")
 
 
 @dataclass(frozen=True, slots=True)
@@ -108,3 +111,51 @@ class EngineConfig:
             raise ConfigurationError("fuzzy_max_operations must be a positive integer")
         if type(self.fuzzy_max_index_entries) is not int or self.fuzzy_max_index_entries <= 0:
             raise ConfigurationError("fuzzy_max_index_entries must be a positive integer")
+
+
+def _config_for_profile(profile: object) -> EngineConfig:
+    """Resolve one closed public profile into a fresh immutable configuration."""
+
+    if not isinstance(profile, str) or profile not in _PROFILE_NAMES:
+        raise ConfigurationError("profile must be one of: strict, balanced, aggressive")
+    if profile == "strict":
+        return EngineConfig(
+            exact_matching=True,
+            alias_matching=True,
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=False,
+            mixed_gap_matching=False,
+            keyboard_matching=False,
+            jamo_composition_matching=False,
+            choseong_matching=False,
+            segmented_input_matching=False,
+            fuzzy_matching=False,
+        )
+    if profile == "balanced":
+        return EngineConfig(
+            exact_matching=True,
+            alias_matching=True,
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=False,
+            mixed_gap_matching=False,
+            keyboard_matching=False,
+            jamo_composition_matching=False,
+            choseong_matching=True,
+            segmented_input_matching=False,
+            fuzzy_matching=False,
+        )
+    return EngineConfig(
+        exact_matching=True,
+        alias_matching=True,
+        repeated_matching=True,
+        separator_matching=True,
+        whitespace_gap_matching=True,
+        mixed_gap_matching=True,
+        keyboard_matching=True,
+        jamo_composition_matching=True,
+        choseong_matching=True,
+        segmented_input_matching=True,
+        fuzzy_matching=True,
+    )

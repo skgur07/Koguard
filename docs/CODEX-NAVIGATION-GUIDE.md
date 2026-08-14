@@ -22,6 +22,7 @@
 | `docs/dictionary-provenance.md` | 사전 후보 source·license·core/AI 경계와 승격 정책 |
 | `docs/dictionary-data-changelog.md` | candidate ID 기반 사전 변경과 증분 평가 기록 |
 | `evaluation/README.md` | 고정 artifact 기반 비교 실행법, 리포트 계약과 한계 |
+| `evaluation/profile_report.py` | 보호 ablation에서 공개 profile 집계만 추출하는 sanitizer |
 | `docs/matcher-ablation-baseline.md` | matcher별 provisional 정확도·지연·메모리 근거 |
 | `docs/product-focus-plan.md` | 최초 공개 품질 우선순위, Phase 보류와 재개 조건 |
 | `docs/profile-api-contract.md` | strict·balanced·aggressive 공개 동작과 이동 계약 |

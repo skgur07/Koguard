@@ -80,10 +80,13 @@ uv run python -m evaluation.ablation_runner `
 - machine-readable report:
   `evaluation/results/provisional-ablation-windows-python311.json`
 
-## 다음 결정
+## 후속 진행 상태
 
-1. PF-004에서 tuning과 hidden evaluation을 분리한다.
-2. PF-005에서 독립 corpus를 구축하고 이 runner를 그대로 재실행한다.
-3. PF-008에서 독립 결과를 근거로 strict·balanced·aggressive 후보표를 확정한다.
-4. 현재 4개 FN은 독립 primary/secondary 합의에서 같은 유형이 확인된 뒤 사전·구분자·공백·
-   두벌식 규칙의 최소 변경으로 해결한다.
+1. PF-004에서 tuning과 hidden evaluation을 물리적으로 분리했다.
+2. PF-005 첫 독립 이중 판정 batch 100건 중 92건을 확정해 이 runner로 다시 평가했다.
+3. PF-008/009에서 Exact+Alias+Choseong을 balanced로 확정하고 공개 profile API를 구현했다.
+4. 공개 집계와 한계는
+   [`pf009-profile-evaluation.report.json`](../evaluation/results/pf009-profile-evaluation.report.json)에
+   기록한다.
+5. 다음 결정은 PF-005 독립 batch 확대와 hidden 평가이며, 그 전에는 현재 profile 수치를
+   실서비스 전체로 일반화하지 않는다.

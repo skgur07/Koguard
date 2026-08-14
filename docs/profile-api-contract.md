@@ -1,6 +1,6 @@
 # Koguard 탐지 profile 공개 계약
 
-상태: PF-008에서 고정한 `0.1.0` 공개 전 계약. 구현은 PF-009에서 진행한다.
+상태: PF-008에서 고정하고 PF-009에서 구현한 `0.1.0` 공개 전 계약.
 
 ## 목적
 
@@ -87,8 +87,10 @@ engine = KoguardEngine(profile="aggressive")
 직접 설정을 조립한 기존 코드는 계속 동작한다. 특히
 `KoguardEngine(config=EngineConfig())`는 all-enabled 설정을 명시적으로 유지한다.
 
-## 구현 게이트
+## 구현 및 평가 결과
 
-PF-008의 계약 테스트는 구현 전 RED 상태를 `xfail(strict=True)`로 기록한다. PF-009는 해당
-표시를 제거한 뒤 같은 테스트를 수정하지 않고 통과시켜야 한다. 공개 전 profile 구성이 바뀌면
-독립 평가 근거, 이 문서, 전체 기대표와 테스트를 한 변경으로 함께 갱신한다.
+PF-009에서 RED 표시를 제거한 공개 계약 테스트를 모두 통과시켰다. 보호된 ablation의 원문,
+case ID, canonical 표현을 제외하고 세 profile의 설정·정확도·성능 집계만
+[`pf009-profile-evaluation.report.json`](../evaluation/results/pf009-profile-evaluation.report.json)에
+공개한다. 공개 전 profile 구성이 바뀌면 독립 평가 근거, 이 문서, 전체 기대표와 테스트를 한
+변경으로 함께 갱신한다.

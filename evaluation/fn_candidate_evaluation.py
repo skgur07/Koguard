@@ -37,7 +37,7 @@ class _Metrics:
 
 
 def evaluate_fn_candidates(corpus_path: Path, manifest_path: Path) -> dict[str, Any]:
-    """Compare approved literal candidates with the packaged default baseline."""
+    """Compare approved literal candidates with the packaged aggressive baseline."""
 
     try:
         validate_corpus_paths([corpus_path])
@@ -53,7 +53,7 @@ def evaluate_fn_candidates(corpus_path: Path, manifest_path: Path) -> dict[str, 
     if not positive_cases:
         raise FnCandidateEvaluationError("corpus contains no positive cases")
 
-    baseline = _evaluate(KoguardEngine(), evaluated)
+    baseline = _evaluate(KoguardEngine(profile="aggressive"), evaluated)
     individual: list[dict[str, Any]] = []
     for candidate in candidates:
         metrics = _evaluate(_candidate_engine((candidate,)), evaluated)
@@ -173,7 +173,7 @@ def _candidate_engine(candidates: Sequence[_Candidate]) -> KoguardEngine:
     dictionary = KoguardDictionary.from_sources(
         blacklist=(candidate.surface for candidate in candidates),
     )
-    return KoguardEngine(dictionary=dictionary)
+    return KoguardEngine(profile="aggressive", dictionary=dictionary)
 
 
 def _evaluate(engine: KoguardEngine, cases: Sequence[dict[str, Any]]) -> _Metrics:
