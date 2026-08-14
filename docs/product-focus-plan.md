@@ -314,8 +314,8 @@ positive의 30%를 넘으면 별도 보고하고 편향을 줄인다.
 
 ### 7.1 목표 API
 
-상세 결과가 필요한 사용자는 기존 `check()`를 유지하고, 단순 사용자는 다음 정도로 끝나야
-한다.
+PF-010에서 상세 결과가 필요한 기존 `check()`를 유지하면서, 단순 사용자가 한 줄로 끝낼 수
+있는 `contains()`를 추가했다.
 
 ```python
 from koguard import KoguardEngine
@@ -328,7 +328,7 @@ engine.check("검사할 문장")     # CheckResult
 
 전역 singleton 기반 `koguard.check()`는 사전·설정·동시성 정책을 숨기므로 첫 구현에서는
 추가하지 않는다. `contains()`는 `check(text).detected`와 완전히 같은 판정을 반환하는 얇은
-편의 API로 제한한다.
+편의 API로 제한한다. 전체 동작과 성능 경계는 [`contains-api.md`](contains-api.md)에 기록한다.
 
 ### 7.2 프로필 계약
 
@@ -381,7 +381,7 @@ Exact+Alias+Choseong으로 제한한다. 추가 독립 corpus에서 결과가 �
 ### 7.5 완료 조건
 
 - quickstart가 profile 한 개와 `contains()` 또는 `check()` 한 줄로 설명된다.
-- profile과 직접 config의 충돌·결정성·thread safety 테스트가 통과한다.
+- profile과 직접 config의 충돌·결정성·thread safety 및 `contains()` 동등성 테스트가 통과한다.
 - 기존 상세 `CheckResult`의 다중 매치와 span 계약이 유지된다.
 - profile별 정확도·성능 결과가 문서화된다.
 - 공개 API에 구현되지 않은 미래 기능의 흔적이 없다.
