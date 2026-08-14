@@ -18,11 +18,6 @@ from koguard import (
 
 ProfileName = str
 
-_PROFILE_RED = pytest.mark.xfail(
-    strict=True,
-    reason="PF-009 implements the profile API fixed by PF-008",
-)
-
 _MATCHER_FIELDS = (
     "exact_matching",
     "alias_matching",
@@ -118,7 +113,6 @@ def test_direct_config_contract_remains_available() -> None:
     assert engine.config is config
 
 
-@_PROFILE_RED
 @pytest.mark.parametrize("profile", ["strict", "balanced", "aggressive"])
 def test_profile_exposes_the_fully_resolved_immutable_config(profile: ProfileName) -> None:
     engine = _engine_factory()(profile=profile)
@@ -126,35 +120,29 @@ def test_profile_exposes_the_fully_resolved_immutable_config(profile: ProfileNam
     assert engine.config == _EXPECTED_CONFIGS[profile]
 
 
-@_PROFILE_RED
 def test_default_engine_resolves_to_balanced_profile() -> None:
     assert KoguardEngine().config == _EXPECTED_CONFIGS["balanced"]
 
 
-@_PROFILE_RED
 def test_aggressive_preserves_the_pre_profile_all_enabled_configuration() -> None:
     assert _engine_factory()(profile="aggressive").config == EngineConfig()
 
 
-@_PROFILE_RED
 def test_none_profile_is_equivalent_to_omitting_profile() -> None:
     assert _engine_factory()(profile=None).config == KoguardEngine().config
 
 
-@_PROFILE_RED
 def test_profile_and_direct_config_are_mutually_exclusive() -> None:
     with pytest.raises(ConfigurationError, match="profile.*config"):
         _engine_factory()(profile="strict", config=EngineConfig())
 
 
-@_PROFILE_RED
 @pytest.mark.parametrize("profile", ["", "BALANCED", "unknown", 1, True])
 def test_invalid_profile_is_rejected_as_configuration_error(profile: object) -> None:
     with pytest.raises(ConfigurationError, match="strict.*balanced.*aggressive"):
         _engine_factory()(profile=profile)
 
 
-@_PROFILE_RED
 @pytest.mark.parametrize("profile", ["strict", "balanced", "aggressive"])
 def test_every_profile_preserves_context_independent_exact_and_alias_core(
     profile: ProfileName,
@@ -169,7 +157,6 @@ def test_every_profile_preserves_context_independent_exact_and_alias_core(
     ]
 
 
-@_PROFILE_RED
 @pytest.mark.parametrize("profile", ["strict", "balanced", "aggressive"])
 def test_every_profile_keeps_whitelist_as_the_only_core_suppression(
     profile: ProfileName,
@@ -189,7 +176,6 @@ def test_every_profile_keeps_whitelist_as_the_only_core_suppression(
     ]
 
 
-@_PROFILE_RED
 @pytest.mark.parametrize(
     ("profile", "expected"),
     [
@@ -213,7 +199,6 @@ def test_profile_scope_is_visible_through_public_detection_behavior(
     assert actual == expected
 
 
-@_PROFILE_RED
 @pytest.mark.parametrize("profile", ["strict", "balanced", "aggressive"])
 def test_profile_results_are_deterministic(profile: ProfileName) -> None:
     engine = _engine_factory()(profile=profile, dictionary=_make_dictionary())
@@ -224,7 +209,6 @@ def test_profile_results_are_deterministic(profile: ProfileName) -> None:
     assert signatures == [signatures[0]] * len(signatures)
 
 
-@_PROFILE_RED
 @pytest.mark.parametrize("profile", ["strict", "balanced", "aggressive"])
 def test_profile_engine_is_safe_for_concurrent_checks(profile: ProfileName) -> None:
     engine = _engine_factory()(profile=profile, dictionary=_make_dictionary())

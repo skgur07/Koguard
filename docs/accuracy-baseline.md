@@ -6,6 +6,11 @@
 > [matcher ablation 기준선](matcher-ablation-baseline.md)을 사용하며, 최종 정확도는 PF-005
 > 독립 판정 완료 후 다시 측정한다.
 
+> 2026-08-14 PF-009에서 첫 독립 확정 92건으로 strict·balanced·aggressive를 다시 매핑했다.
+> 최신 공개 집계는
+> [`pf009-profile-evaluation.report.json`](../evaluation/results/pf009-profile-evaluation.report.json)을
+> 사용한다. 이 결과도 tuning 표본이며 아직 최종 gold나 hidden 평가는 아니다.
+
 측정일: 2026-07-28
 
 대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성·Alias·

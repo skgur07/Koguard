@@ -4,11 +4,12 @@
 
 현재 v0.1에서는 기본 사전 기반 Exact Match, 반복·구분자 우회 view, 공백·혼합·초성·명시적
 Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy Match와 구간 단위 Whitelist
-처리를 제공합니다. 모든 탐지 단계는 기본으로 활성화되며 단계별로 끌 수 있습니다.
+처리를 제공합니다. 기본 `balanced` profile은 Exact·Alias·Choseong만 사용하고, 모든 우회
+단계가 필요한 경우 `aggressive`를 선택할 수 있습니다.
 
 > **개발 우선순위:** Adapter·Plugin·AI 구현은 현재 보류했습니다. 최초 공개 `0.1.0` 전까지
-> 탐지 데이터, 독립 평가 corpus, 단순 profile API와 안전한 기본값을 먼저 완성합니다. 현재
-> 코드의 all-enabled 기본값은 아직 유지되며, 변경 계획과 품질 게이트는
+> 탐지 데이터, 독립 평가 corpus와 단순 사용자 API를 먼저 완성합니다. profile API와
+> `balanced` 기본값은 구현했으며, 변경 근거와 남은 품질 게이트는
 > [제품 집중 계획](docs/product-focus-plan.md)에 기록되어 있습니다.
 
 실서비스 corpus는 라이선스가 고정된 2,500건 tuning review intake까지 확보했지만 아직 사람이
@@ -20,12 +21,32 @@ Koguard 정책으로 판정한 gold가 아닙니다. 현재 상태와 완료 전
 ```python
 from koguard import KoguardEngine
 
-engine = KoguardEngine()
+engine = KoguardEngine()  # balanced
 result = engine.check("검사할 문장")
 
 print(result.detected)
 print(result.matches)
 ```
+
+### 탐지 프로필
+
+```python
+strict = KoguardEngine(profile="strict")
+balanced = KoguardEngine(profile="balanced")
+aggressive = KoguardEngine(profile="aggressive")
+```
+
+| profile | 활성 범위 | 용도 |
+| --- | --- | --- |
+| `strict` | Exact + 승인 Alias | 최소 비용의 등록 표현 탐지 |
+| `balanced` | Strict + Choseong | 독립 batch에서 증분 TP가 확인된 기본값 |
+| `aggressive` | 현재 구현된 모든 matcher | 반복·구분자·공백·자판·자모·Fuzzy 우회까지 검사 |
+
+모든 profile은 사전에 등록된 표현을 문맥과 무관하게 부분 문자열로 탐지하므로 `시발점`도
+`시발` match를 반환합니다. profile과 직접 `EngineConfig`는 동시에 전달할 수 없습니다.
+해석된 불변 설정은 `engine.config`에서 확인할 수 있습니다. 전체 계약과 첫 독립 평가 수치는
+[profile API 계약](docs/profile-api-contract.md)과
+[공개 profile 보고서](evaluation/results/pf009-profile-evaluation.report.json)에 기록합니다.
 
 기본 사전 대신 직접 만든 사전을 사용할 수도 있습니다.
 
@@ -42,7 +63,9 @@ engine = KoguardEngine(dictionary=dictionary)
 
 ### 탐지 단계 설정
 
-모든 탐지 플래그는 기본값이 `True`이고 정확한 `bool` 값만 허용합니다.
+직접 `EngineConfig`를 만드는 고급 경로에서는 모든 탐지 플래그 기본값이 `True`이며 정확한
+`bool` 값만 허용합니다. 인자 없는 `KoguardEngine()`은 이 all-enabled 설정 대신
+`balanced` profile을 사용합니다.
 
 | 설정 | 탐지 단계 | 기본값 |
 | --- | --- | --- |
@@ -85,17 +108,18 @@ Match 표현을 포함하며 기본 Whitelist는 비어 있습니다. 고정한 
 따라서 `시발점`, `병신년`처럼 금칙어를 포함한 복합어도 기본 정책에서는 탐지합니다.
 서비스 문맥에서 허용할 표현은 `whitelist` 또는 `whitelist_path`로 명시적으로 주입해야 합니다.
 
-앞 음절과 같은 모음의 독립 음절을 두 번 이상 늘인 표현은 반복 문자 view에서 추가로
-탐지합니다. 예를 들어 `시이이발`은 `시발`로 탐지되며 결과의 `matched_text`와 span은
-원문 전체를 가리킵니다. 한 번만 추가된 `시이발`은 기본값에서 축약하지 않습니다.
+`aggressive`의 반복 문자 view는 앞 음절과 같은 모음의 독립 음절을 두 번 이상 늘인 표현을
+추가 탐지합니다. 예를 들어 `시이이발`은 `시발`로 탐지되며 결과의 `matched_text`와 span은
+원문 전체를 가리킵니다. 한 번만 추가된 `시이발`은 축약하지 않습니다.
 
-문자 사이에 삽입된 `!@#$%^&*_-+=~.·,` 기호는 특수문자 view에서 제거해 탐지합니다.
+`aggressive`의 특수문자 view는 문자 사이에 삽입된 `!@#$%^&*_-+=~.·,` 기호를 제거해
+탐지합니다.
 예를 들어 `시*!발`은 `시발`로 탐지되며 원문 span은 삽입된 기호까지 포함합니다. 제거할
 문자 집합은 `EngineConfig.obfuscation_separators`로 제한할 수 있고, 공백이나 영숫자는
 구분자로 설정할 수 없습니다.
 
-공백 삽입과 공백·구분자 혼합 우회 탐지는 기본으로 활성화됩니다. 필요하면 서로 독립적으로
-끌 수 있습니다.
+공백 삽입과 공백·구분자 혼합 우회 탐지는 `aggressive` 또는 직접 만든 기본
+`EngineConfig()`에서 활성화됩니다. 필요하면 서로 독립적으로 끌 수 있습니다.
 
 ```python
 from koguard import EngineConfig, KoguardEngine
@@ -108,7 +132,7 @@ config = EngineConfig(
 engine = KoguardEngine(config=config)
 ```
 
-기본 설정은 사전 단어의 글자 사이에 들어간 짧은 공백과 탭을 허용하며, 공백과 설정된
+해당 설정을 켜면 사전 단어의 글자 사이에 들어간 짧은 공백과 탭을 허용하며, 공백과 설정된
 `obfuscation_separators`를 함께 섞은 `시 * 발`도 탐지합니다. 각 공백 구간은
 `max_whitespace_gap` 이하이어야 하며 줄바꿈은 허용하지 않습니다. 또한 매치 양끝이 영숫자
 토큰 중간이면 후보를 버리므로 `시 발`, `시 * 발`, `개 새끼`는 탐지하지만 `시 발표`,
@@ -122,8 +146,9 @@ Whitespace와 Mixed 매칭에서는 Whitelist의 우회 형태를 별도로 확�
 Whitelist에 `시발 자동차`가 있어도 입력 `시 발 자동차`와 `시 * 발 자동차`의 욕설 구간은
 탐지합니다. Whitelist는 입력에 실제로 겹치는 기존 정규화 view의 구간만 보호합니다.
 
-초성 표현 탐지도 기본으로 활성화됩니다. 초성 인덱스의 오탐 가능성이나 추가 메모리 비용을
-피하려면 `EngineConfig(choseong_matching=False)`로 끌 수 있습니다.
+초성 표현 탐지는 기본 `balanced`와 `aggressive`에서 활성화됩니다. 초성 인덱스의 오탐
+가능성이나 추가 메모리 비용을 피하려면 `strict`를 사용하거나
+`EngineConfig(choseong_matching=False)`로 끌 수 있습니다.
 
 ```python
 from koguard import KoguardDictionary, KoguardEngine
@@ -195,7 +220,7 @@ Whitelist는 같은 Unicode form으로 정규화되며, Alias 결과도 원문�
 ```python
 from koguard import EngineConfig, KoguardEngine, MatchMethod
 
-engine = KoguardEngine()
+engine = KoguardEngine(profile="aggressive")
 assert engine.check("tlqkf").method is MatchMethod.KEYBOARD
 assert engine.check("ㅅㅣㅂㅏㄹ").method is MatchMethod.JAMO
 
@@ -219,9 +244,10 @@ disabled = KoguardEngine(
 각각 기존 `CHOSEONG`, `KEYBOARD`, `JAMO`를 사용하고 원문 span에는 제거된 구간이 포함됩니다.
 세벌식이나 일반 로마자 표기법은 현재 지원하지 않습니다.
 
-Fuzzy 탐지는 사전어와 편집거리 1인 독립 영숫자 토큰을 기본으로 탐지합니다. 1~2글자
-사전어는 오탐 보호를 위해 Exact Match만 사용하고, 기본적으로 3~32글자 사전어만 Fuzzy
-index에 포함합니다. 예를 들어 `개세끼`, `개끼`, `개새애끼`는 `개새끼`로 탐지하며 결과의
+Fuzzy 탐지는 `aggressive` 또는 직접 설정했을 때 사전어와 편집거리 1인 독립 영숫자 토큰을
+탐지합니다. 1~2글자 사전어는 오탐 보호를 위해 Exact Match만 사용하고, 기본 threshold에서는
+3~32글자 사전어만 Fuzzy index에 포함합니다. 예를 들어 `개세끼`, `개끼`, `개새애끼`는
+`개새끼`로 탐지하며 결과의
 `method`는 `MatchMethod.LEVENSHTEIN`, `score`는
 `1 - distance / max(len(token), len(term))`입니다.
 

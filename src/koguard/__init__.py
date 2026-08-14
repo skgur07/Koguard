@@ -2,7 +2,7 @@
 
 from importlib.metadata import PackageNotFoundError, version
 
-from koguard.config import EngineConfig, NormalizationForm
+from koguard.config import EngineConfig, NormalizationForm, ProfileName
 from koguard.engine import KoguardDictionary, KoguardEngine
 from koguard.exceptions import (
     ConfigurationError,
@@ -33,5 +33,6 @@ __all__ = [
     "Match",
     "MatchMethod",
     "NormalizationForm",
+    "ProfileName",
     "__version__",
 ]

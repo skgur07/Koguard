@@ -44,8 +44,9 @@ uv run python -m benchmarks.engine_benchmark
 각 case에는 `expected_matches`가 있다. 탐지 결과가 기대값과 다르면 성능 수치를 저장하지 않고
 실패하므로 정확도 회귀를 성능 향상으로 오인하지 않는다.
 
-`engine_profile`은 case마다 사용할 엔진 설정을 지정한다. 생략하거나 `default`이면 모든 탐지
-단계가 활성화된 기본 설정을 사용한다. `minimal`은 Exact Match만 활성화한다.
+`engine_profile`은 case마다 사용할 엔진 설정을 지정한다. 생략하거나 `default`이면 직접
+`EngineConfig()`를 만든 all-enabled 호환성 설정을 사용하며, 공개 API의 기본 `balanced`와는
+다르다. `minimal`은 Exact Match만 활성화한다.
 `whitespace-gap`은 Exact Match와 공백·혼합 매칭만 활성화하고, `choseong`은 Exact Match와
 초성 매칭만 활성화한다. `alias`는 명시적 Alias만 활성화하고, `segmented-input`은 초성·호환
 자모·영문 자판과 제한된 조합 우회만 활성화한다. 이렇게 격리된 profile을 사용해 각 추가

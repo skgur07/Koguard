@@ -182,6 +182,24 @@ balanced profile 포함 여부는 [PF-003 기준선](../docs/matcher-ablation-ba
 한계대로 PF-005 독립 corpus 재측정 전까지 확정하지 않는다. report schema는
 `ablation-report.schema.json` version 1이다.
 
+## PF-009 공개 profile 평가 보고서
+
+`profile_report.py`는 보호된 PF-005 ablation에서 `exact-alias`, `choseong`, `all-enabled`를
+각각 공개 `strict`, `balanced`, `aggressive`로 검증해 매핑한다. 원문, case ID, canonical
+표현과 slice별 결과는 복사하지 않고 설정·전체 정확도·성능 집계만 allowlist로 출력한다.
+
+```powershell
+uv run python -m evaluation.profile_report `
+  --source-ablation C:\protected\pf005-batch-001.adjudicated.ablation.json `
+  --output evaluation\results\pf009-profile-evaluation.report.json
+```
+
+공개 보고서는 원본 ablation과 corpus SHA-256, 환경, 세 profile 집계, balanced 증분과 임시
+FP·p95 게이트를 기록한다. 현재 balanced는 strict보다 문장·occurrence TP가 각각 3건 늘고
+FP 증분은 0이며, short-chat p95 0.0472ms와 최대 입력 p95 9.4027ms로 임시 예산을 통과했다.
+다만 확정 92건과 hard-negative 30건뿐인 tuning 결과이므로 실서비스 FP나 최종 recall로
+일반화할 수 없다. 계약은 `profile-report.schema.json` version 1이다.
+
 ## 비교 계약
 
 - Koguard profile은 현재 모든 matcher를 명시적으로 켠 `current-all-enabled`이다.

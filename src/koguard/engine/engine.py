@@ -2,7 +2,7 @@
 
 from time import perf_counter_ns
 
-from koguard.config import EngineConfig
+from koguard.config import EngineConfig, ProfileName, _config_for_profile
 from koguard.engine.dictionary import KoguardDictionary
 from koguard.engine.matcher import (
     AliasMatcher,
@@ -100,10 +100,14 @@ class KoguardEngine:
     def __init__(
         self,
         *,
+        profile: ProfileName | None = None,
         config: EngineConfig | None = None,
         dictionary: KoguardDictionary | None = None,
     ) -> None:
-        resolved_config = config or EngineConfig()
+        if profile is not None and config is not None:
+            raise ConfigurationError("profile and config cannot be provided together")
+        profile_name: object = "balanced" if profile is None else profile
+        resolved_config = config if config is not None else _config_for_profile(profile_name)
         resolved_dictionary = dictionary or KoguardDictionary.default(resolved_config.unicode_form)
 
         if resolved_dictionary.unicode_form != resolved_config.unicode_form:

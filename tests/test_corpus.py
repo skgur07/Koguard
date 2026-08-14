@@ -27,7 +27,7 @@ def _load_cases(path: Path = _CORPUS_PATH) -> list[ExactCase]:
 
 
 def test_exact_corpus_has_no_false_positives_or_false_negatives() -> None:
-    engine = KoguardEngine()
+    engine = KoguardEngine(profile="aggressive")
     true_positives = 0
     false_positives = 0
     false_negatives = 0
@@ -133,7 +133,7 @@ def test_alias_corpus_has_no_false_positives_or_false_negatives() -> None:
 
 
 def test_segmented_input_corpus_has_no_false_positives_or_false_negatives() -> None:
-    engine = KoguardEngine()
+    engine = KoguardEngine(profile="aggressive")
     true_positives = 0
     false_positives = 0
     false_negatives = 0
@@ -161,7 +161,7 @@ def test_fuzzy_corpus_has_no_false_positives_or_false_negatives() -> None:
         blacklist=["개새끼", "돌아이", "빡대가리"],
         include_defaults=False,
     )
-    engine = KoguardEngine(dictionary=dictionary)
+    engine = KoguardEngine(profile="aggressive", dictionary=dictionary)
     true_positives = 0
     false_positives = 0
     false_negatives = 0

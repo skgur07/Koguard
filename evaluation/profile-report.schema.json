@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/evaluation/profile-report.schema.json",
+  "title": "Koguard public profile evaluation report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_contract_version",
+    "source",
+    "profiles",
+    "balanced_evidence",
+    "balanced_gates",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "profile_contract_version": {"const": 1},
+    "source": {
+      "type": "object",
+      "required": ["ablation_report_sha256", "measured_at", "corpus", "environment"],
+      "properties": {
+        "ablation_report_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "measured_at": {"type": "string", "format": "date-time"},
+        "corpus": {
+          "type": "object",
+          "required": ["classification", "sha256", "case_count", "positive_count", "hard_negative_count", "excluded_review_count", "gold_ready"],
+          "properties": {
+            "classification": {"const": "independent-tuning-provisional"},
+            "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "case_count": {"type": "integer", "minimum": 1},
+            "positive_count": {"type": "integer", "minimum": 1},
+            "hard_negative_count": {"type": "integer", "minimum": 1},
+            "excluded_review_count": {"type": "integer", "minimum": 0},
+            "gold_ready": {"const": false}
+          }
+        },
+        "environment": {"type": "object"}
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["profile", "source_profile_id", "settings", "sentence_metrics", "occurrence_metrics", "performance"],
+        "properties": {
+          "profile": {"enum": ["strict", "balanced", "aggressive"]},
+          "source_profile_id": {"enum": ["exact-alias", "choseong", "all-enabled"]},
+          "settings": {"type": "object"},
+          "sentence_metrics": {"type": "object"},
+          "occurrence_metrics": {"type": "object"},
+          "performance": {"type": "object"}
+        }
+      }
+    },
+    "balanced_evidence": {
+      "type": "object",
+      "required": ["sentence_tp_delta_vs_strict", "sentence_fp_delta_vs_strict", "occurrence_tp_delta_vs_strict", "occurrence_fp_delta_vs_strict"],
+      "properties": {
+        "sentence_tp_delta_vs_strict": {"type": "integer"},
+        "sentence_fp_delta_vs_strict": {"type": "integer"},
+        "occurrence_tp_delta_vs_strict": {"type": "integer"},
+        "occurrence_fp_delta_vs_strict": {"type": "integer"}
+      }
+    },
+    "balanced_gates": {
+      "type": "object",
+      "required": ["normal_sentence_fp_rate", "normal_sentence_fp_rate_limit", "short_chat_p95_ms", "short_chat_p95_ms_limit", "maximum_input_p95_ms", "maximum_input_p95_ms_limit", "passed"],
+      "properties": {
+        "normal_sentence_fp_rate": {"type": "number", "minimum": 0},
+        "normal_sentence_fp_rate_limit": {"type": "number", "minimum": 0},
+        "short_chat_p95_ms": {"type": "number", "minimum": 0},
+        "short_chat_p95_ms_limit": {"type": "number", "minimum": 0},
+        "maximum_input_p95_ms": {"type": "number", "minimum": 0},
+        "maximum_input_p95_ms_limit": {"type": "number", "minimum": 0},
+        "passed": {"type": "boolean"}
+      }
+    },
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}
