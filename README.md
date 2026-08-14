@@ -222,11 +222,18 @@ Whitelist는 같은 Unicode form으로 정규화되며, Alias 결과도 원문�
 [`src/koguard/data/NOTICE.md`](src/koguard/data/NOTICE.md)에 기록합니다. 필요하면
 `EngineConfig(alias_matching=False)`로 이 단계만 끌 수 있습니다.
 
+제로폭 문자, joiner, bidi control 같은 Unicode format character는 보이지 않는 term 분리자로
+인정하지 않습니다. 한글에 붙인 combining mark와 variation selector도 탐지 view에서 무시하고,
+NFKC 호환 자모는 완성형 한글로 재조합합니다. 이때 반환하는 `matched_text`와 `[start, end)`는
+제거된 내부 code point를 포함한 원문 구간을 그대로 가리키며 Whitelist도 같은 구간을
+보호합니다. 세부 정책과 측정 결과는
+[`docs/unicode-fp-hardening.md`](docs/unicode-fp-hardening.md)에 있습니다.
+
 영문 두벌식 자판 입력과 호환 자모 입력은 동일한 현대 한글 조합기를 사용하는 별도 view로
 처리합니다. `tlqkf`는 영문 키를 `ㅅㅣㅂㅏㄹ`로 치환한 뒤 `시발`로 조합하고,
 `ㅅㅣㅂㅏㄹ`은 치환 없이 바로 `시발`로 조합합니다. 두 view 모두 원문 자체를 바꾸지 않으므로
-`normalized_text`는 기본 Unicode 정규화 결과를 유지하며, 매치의 `matched_text`와 span은
-각각 원래 `tlqkf` 또는 `ㅅㅣㅂㅏㄹ` 전체를 가리킵니다.
+`normalized_text`는 위 Unicode hardening을 적용한 기본 정규화 view를 유지하며, 매치의
+`matched_text`와 span은 각각 원래 `tlqkf` 또는 `ㅅㅣㅂㅏㄹ` 전체를 가리킵니다.
 
 ```python
 from koguard import EngineConfig, KoguardEngine, MatchMethod

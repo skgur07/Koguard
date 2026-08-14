@@ -28,6 +28,7 @@
 | `docs/profile-api-contract.md` | strict·balanced·aggressive 공개 동작과 이동 계약 |
 | `docs/contains-api.md` | boolean 편의 API와 `check()` 동등성·성능 계약 |
 | `docs/public-api-inventory.md` | 0.1.0 공개 심볼과 제거·비지원·확장 경계 |
+| `docs/unicode-fp-hardening.md` | PF-012 Unicode·오탐 정책, 전후 정확도·성능과 한계 |
 | `docs/implementation-plan.md` | 단계별 제품 및 아키텍처 계획 |
 | `docs/accuracy-baseline.md` | 현재 정확도 기준선 |
 

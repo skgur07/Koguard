@@ -283,3 +283,19 @@ import 중 출력한 stdout/stderr는 corpus 유출과 프로토콜 오염을 �
   임의 wheel 실행 수단으로 사용해서는 안 된다.
 - 작은 공개 fixture는 실행 계약 검증용일 뿐 실제 서비스 정확도 결론을 내릴 corpus가
   아니다. PF-003 이후 corpus 확장 전에는 두 제품의 우열을 수치로 일반화할 수 없다.
+
+## PF-012 Unicode hardening 보고서
+
+공개 Unicode 회귀 20건의 slice별 TP·FP·FN과 `balanced` 최대 입력 적대 workload의
+p50·p95·peak allocation은 별도 경량 runner로 함께 측정한다. 성능만 좋아지고 탐지가 꺼진
+결과를 허용하지 않도록 각 workload에 수정 후 기대 match count와 실제 count를 기록한다.
+
+```powershell
+uv run python -m evaluation.unicode_hardening_report `
+  --iterations 100 `
+  --warmups 10 `
+  --output evaluation/results/pf012-local.json
+```
+
+고정 전후 결과와 해석은 [`../docs/unicode-fp-hardening.md`](../docs/unicode-fp-hardening.md)를
+따른다. 이 공개 synthetic corpus는 결정적 회귀용이며 hidden 실서비스 평가를 대체하지 않는다.

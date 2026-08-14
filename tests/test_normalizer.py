@@ -55,6 +55,44 @@ def test_normalizer_composes_combining_character() -> None:
     assert normalized.source_spans == ((0, 2),)
 
 
+def test_normalizer_ignores_format_character_inside_hangul_term() -> None:
+    normalized = normalize_text("시\u200b발", "NFKC")
+
+    assert normalized.text == "시발"
+    assert normalized.source_spans == ((0, 1), (2, 3))
+    assert normalized.original_span(0, 2) == (0, 3)
+
+
+def test_normalizer_ignores_combining_extension_inside_hangul_term() -> None:
+    normalized = normalize_text("시\u0301발", "NFKC")
+
+    assert normalized.text == "시발"
+    assert normalized.source_spans == ((0, 2), (2, 3))
+    assert normalized.original_span(0, 2) == (0, 3)
+
+
+def test_normalizer_recomposes_nfkc_jamo_across_source_clusters() -> None:
+    normalized = normalize_text("㉦ㅣ발", "NFKC")
+
+    assert normalized.text == "시발"
+    assert normalized.source_spans == ((0, 2), (2, 3))
+    assert normalized.original_span(0, 2) == (0, 3)
+
+
+def test_normalizer_ignores_format_only_maximum_input_without_slow_path(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def reject_slow_path(form: str, text: str) -> str:
+        raise AssertionError(f"format-only input unexpectedly normalized with {form}: {text}")
+
+    monkeypatch.setattr(normalizer_module, "normalize", reject_slow_path)
+
+    normalized = normalize_text("\u200b" * 4096, "NFKC")
+
+    assert normalized.text == ""
+    assert normalized.source_spans == ()
+
+
 def test_normalizer_keeps_reordered_combining_spans_forward() -> None:
     normalized = normalize_text("a\u0315\u0327", "NFC")
 
