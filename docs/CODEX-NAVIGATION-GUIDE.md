@@ -7,7 +7,7 @@
 | `src/koguard/__init__.py` | 공개 import 표면과 버전 |
 | `src/koguard/config.py` | 입력 제한과 정규화 설정 |
 | `src/koguard/models.py` | 공개 결과 모델과 불변 조건 |
-| `src/koguard/engine/engine.py` | 탐지 파이프라인 조립과 공개 `check` |
+| `src/koguard/engine/engine.py` | 탐지 파이프라인 조립과 공개 `check`·`contains` |
 | `src/koguard/engine/dictionary.py` | 사전 로딩, 정규화, 결정적 순서 |
 | `src/koguard/engine/matcher.py` | Exact 후보와 Whitelist 구간 처리 |
 | `src/koguard/engine/normalizer/` | 정규화 view와 원문 인덱스 매핑 |
@@ -26,6 +26,7 @@
 | `docs/matcher-ablation-baseline.md` | matcher별 provisional 정확도·지연·메모리 근거 |
 | `docs/product-focus-plan.md` | 최초 공개 품질 우선순위, Phase 보류와 재개 조건 |
 | `docs/profile-api-contract.md` | strict·balanced·aggressive 공개 동작과 이동 계약 |
+| `docs/contains-api.md` | boolean 편의 API와 `check()` 동등성·성능 계약 |
 | `docs/implementation-plan.md` | 단계별 제품 및 아키텍처 계획 |
 | `docs/accuracy-baseline.md` | 현재 정확도 기준선 |
 

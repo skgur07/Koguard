@@ -152,6 +152,11 @@ class KoguardEngine:
 
         return self._dictionary
 
+    def contains(self, text: str) -> bool:
+        """Return whether ``check(text)`` detects at least one match."""
+
+        return self.check(text).detected
+
     def check(self, text: str) -> CheckResult:
         """Check one input string and return every non-whitelisted profanity match."""
 

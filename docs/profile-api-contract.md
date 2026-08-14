@@ -70,7 +70,10 @@ matcher 독립 증분 중 Choseong만 TP 3건을 추가하고 FP를 추가하지
 - 모든 profile은 검토·승인된 기본 Alias 탐지를 보존한다.
 - Whitelist는 겹치는 core match 구간만 보호하며 같은 문장의 다른 match를 제거하지 않는다.
 - 동일한 입력, 사전, profile에는 match 내용과 순서가 결정적이다.
-- 하나의 engine 인스턴스를 여러 thread의 동시 `check()` 호출에서 안전하게 공유할 수 있다.
+- 하나의 engine 인스턴스를 여러 thread의 동시 `check()`·`contains()` 호출에서 안전하게
+  공유할 수 있다.
+- `contains(text)`는 모든 profile에서 정확히 `check(text).detected`와 같은 판정과 예외를
+  사용한다.
 - profile은 최대 입력 길이와 matcher 계산량 상한을 우회하지 않는다.
 - 향후 AI 검사는 별도 선택적 후처리 계층이며 profile의 core 결과를 취소하지 않는다.
 

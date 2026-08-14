@@ -22,8 +22,16 @@ Koguard 정책으로 판정한 gold가 아닙니다. 현재 상태와 완료 전
 from koguard import KoguardEngine
 
 engine = KoguardEngine()  # balanced
-result = engine.check("검사할 문장")
+print(engine.contains("검사할 문장"))  # bool
+```
 
+`contains(text)`는 별도 탐지 경로가 아니라 정확히 `check(text).detected`를 반환하는 편의
+메서드입니다. 따라서 profile, 직접 설정, 사용자 사전, Whitelist, 입력 검증과 계산량 제한이
+`check()`와 완전히 같습니다. match와 원문 span이 필요하면 `check()`를 한 번 호출해 그 결과를
+사용하세요. 두 메서드의 전체 계약은 [boolean API 계약](docs/contains-api.md)에 기록합니다.
+
+```python
+result = engine.check("검사할 문장")  # CheckResult
 print(result.detected)
 print(result.matches)
 ```
