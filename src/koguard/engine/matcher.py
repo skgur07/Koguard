@@ -998,12 +998,13 @@ class FuzzyMatcher:
 class AliasMatcher:
     """Find explicit aliases using rule-specific token boundaries."""
 
-    __slots__ = ("_automaton", "_modes", "_term_aliases")
+    __slots__ = ("_automaton", "_leading_characters", "_modes", "_term_aliases")
 
     def __init__(self, dictionary: KoguardDictionary) -> None:
         aliases = dictionary.ordered_aliases
         self._term_aliases = MappingProxyType({rule.alias: rule.term for rule in aliases})
         self._modes = MappingProxyType({rule.alias: rule.mode for rule in aliases})
+        self._leading_characters = frozenset(rule.alias[0] for rule in aliases)
         self._automaton = _build_term_automaton(tuple(rule.alias for rule in aliases))
 
     def find(
@@ -1016,7 +1017,7 @@ class AliasMatcher:
     ) -> tuple[Match, ...]:
         """Return non-overlapping alias matches mapped to original spans."""
 
-        if not self._term_aliases:
+        if not self._term_aliases or self._leading_characters.isdisjoint(normalized.text):
             return ()
 
         boundaries = _build_alphanumeric_boundaries(normalized.text)
@@ -1080,12 +1081,15 @@ class AliasMatcher:
 class ChoseongMatcher:
     """Find standalone compatibility-choseong abbreviations of Hangul terms."""
 
-    __slots__ = ("_automaton", "_term_aliases")
+    __slots__ = ("_automaton", "_initial_characters", "_term_aliases")
 
     def __init__(self, dictionary: KoguardDictionary) -> None:
         self._term_aliases = _build_choseong_aliases(dictionary)
         ordered_initials = tuple(
             sorted(self._term_aliases, key=lambda initials: (-len(initials), initials))
+        )
+        self._initial_characters = frozenset(
+            character for initials in ordered_initials for character in initials
         )
         self._automaton = _build_term_automaton(ordered_initials)
 
@@ -1099,7 +1103,7 @@ class ChoseongMatcher:
     ) -> tuple[Match, ...]:
         """Return non-overlapping initial sequences at full token boundaries."""
 
-        if not self._term_aliases:
+        if not self._term_aliases or self._initial_characters.isdisjoint(normalized.text):
             return ()
 
         boundaries = _build_alphanumeric_boundaries(normalized.text)

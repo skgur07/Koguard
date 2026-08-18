@@ -24,3 +24,10 @@
 라이선스 문자열과 재배포 boolean만으로는 검토 완료를 표현할 수 없어 `license_status`를 별도
 필드로 추가했다. 승인 결정 근거와 평가 reference도 packaged 승격 필수 조건으로 강화했다.
 오류는 candidate ID만 식별자로 사용하도록 유지했다.
+
+## 2026-08-18 사전 승격 회귀
+
+소유자가 승인한 한국어 literal 4개와 직접 선별한 소문자 로마자 literal 3개를 먼저 테스트에
+추가해 18건의 실패를 확인했다. packaged file과 provenance를 함께 갱신한 뒤 source 3개,
+candidate 73개, packaged literal 65개, Alias 5개의 양방향 검증이 통과했다. PF-007 후보 중
+승격하지 않은 3개는 `candidate` 상태를 유지한다.

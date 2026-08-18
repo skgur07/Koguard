@@ -1,5 +1,7 @@
 # Koguard
 
+[![CI](https://github.com/skgur07/Koguard/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/skgur07/Koguard/actions/workflows/ci.yml)
+
 한국어 욕설·비속어 탐지를 위한 경량 Python 라이브러리입니다.
 
 현재 v0.1에서는 기본 사전 기반 Exact Match, 반복·구분자 우회 view, 공백·혼합·초성·명시적
@@ -10,14 +12,14 @@ Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy
 > **개발 우선순위:** Adapter·Plugin·AI 구현은 현재 보류했습니다. 최초 공개 `0.1.0` 전까지
 > 탐지 데이터, 독립 평가 corpus와 단순 사용자 API를 먼저 완성합니다. profile API와
 > `balanced` 기본값은 구현했으며, 변경 근거와 남은 품질 게이트는
-> [제품 집중 계획](docs/product-focus-plan.md)에 기록되어 있습니다.
+> [제품 집중 계획](https://github.com/skgur07/Koguard/blob/dev/docs/product-focus-plan.md)에 기록되어 있습니다.
 
 실서비스 corpus는 라이선스가 고정된 2,500건 tuning review intake까지 확보했지만 아직 사람이
 Koguard 정책으로 판정한 gold가 아닙니다. 현재 상태와 완료 전 blocker는
-[PF-005 corpus 상태](docs/corpus-intake-status.md)를 참고하세요.
+[PF-005 corpus 상태](https://github.com/skgur07/Koguard/blob/dev/docs/corpus-intake-status.md)를 참고하세요.
 
 0.1.0의 폐쇄된 import 목록, 제거한 미래 enum과 Adapter·Plugin·AI·masking 비지원 경계는
-[공개 API inventory](docs/public-api-inventory.md)에 기록되어 있습니다.
+[공개 API inventory](https://github.com/skgur07/Koguard/blob/dev/docs/public-api-inventory.md)에 기록되어 있습니다.
 
 ## 사용법
 
@@ -31,7 +33,7 @@ print(engine.contains("검사할 문장"))  # bool
 `contains(text)`는 별도 탐지 경로가 아니라 정확히 `check(text).detected`를 반환하는 편의
 메서드입니다. 따라서 profile, 직접 설정, 사용자 사전, Whitelist, 입력 검증과 계산량 제한이
 `check()`와 완전히 같습니다. match와 원문 span이 필요하면 `check()`를 한 번 호출해 그 결과를
-사용하세요. 두 메서드의 전체 계약은 [boolean API 계약](docs/contains-api.md)에 기록합니다.
+사용하세요. 두 메서드의 전체 계약은 [boolean API 계약](https://github.com/skgur07/Koguard/blob/dev/docs/contains-api.md)에 기록합니다.
 
 ```python
 result = engine.check("검사할 문장")  # CheckResult
@@ -56,8 +58,8 @@ aggressive = KoguardEngine(profile="aggressive")
 모든 profile은 사전에 등록된 표현을 문맥과 무관하게 부분 문자열로 탐지하므로 `시발점`도
 `시발` match를 반환합니다. profile과 직접 `EngineConfig`는 동시에 전달할 수 없습니다.
 해석된 불변 설정은 `engine.config`에서 확인할 수 있습니다. 전체 계약과 첫 독립 평가 수치는
-[profile API 계약](docs/profile-api-contract.md)과
-[공개 profile 보고서](evaluation/results/pf009-profile-evaluation.report.json)에 기록합니다.
+[profile API 계약](https://github.com/skgur07/Koguard/blob/dev/docs/profile-api-contract.md)과
+[공개 profile 보고서](https://github.com/skgur07/Koguard/blob/dev/evaluation/results/pf009-profile-evaluation.report.json)에 기록합니다.
 
 기본 사전 대신 직접 만든 사전을 사용할 수도 있습니다.
 
@@ -113,9 +115,11 @@ config = EngineConfig(
 engine = KoguardEngine(config=config)
 ```
 
-기본 사전은 프로젝트에서 직접 선별한 표현과 MIT 라이선스 Korcen에서 소량 선별한 Exact
-Match 표현을 포함하며 기본 Whitelist는 비어 있습니다. 고정한 원본 revision과 라이선스는
-[`src/koguard/data/NOTICE.md`](src/koguard/data/NOTICE.md)에 기록합니다.
+기본 사전은 프로젝트에서 직접 선별한 표현, MIT Korcen에서 선별한 표현, 독립 검토 뒤
+MIT `2runo/Curse-detection-data`에서 승격한 표현을 포함하며 기본 Whitelist는 비어 있습니다.
+소문자 로마자 literal `sibal`, `ssibal`, `shibal`도 Exact Match로 탐지합니다. 고정한 원본
+revision과 라이선스는
+[`src/koguard/data/NOTICE.md`](https://github.com/skgur07/Koguard/blob/dev/src/koguard/data/NOTICE.md)에 기록합니다.
 따라서 `시발점`, `병신년`처럼 금칙어를 포함한 복합어도 기본 정책에서는 탐지합니다.
 서비스 문맥에서 허용할 표현은 `whitelist` 또는 `whitelist_path`로 명시적으로 주입해야 합니다.
 
@@ -219,7 +223,7 @@ engine = KoguardEngine(dictionary=dictionary)
 TSV 파일은 `alias<TAB>term<TAB>mode` 형식으로 `alias_path`에 전달할 수 있습니다. 입력과
 Whitelist는 같은 Unicode form으로 정규화되며, Alias 결과도 원문의 `matched_text`와
 `[start, end)` span을 보존합니다. 기본 규칙의 조사 출처와 데이터 포함 경계는
-[`src/koguard/data/NOTICE.md`](src/koguard/data/NOTICE.md)에 기록합니다. 필요하면
+[`src/koguard/data/NOTICE.md`](https://github.com/skgur07/Koguard/blob/dev/src/koguard/data/NOTICE.md)에 기록합니다. 필요하면
 `EngineConfig(alias_matching=False)`로 이 단계만 끌 수 있습니다.
 
 제로폭 문자, joiner, bidi control 같은 Unicode format character는 보이지 않는 term 분리자로
@@ -227,7 +231,7 @@ Whitelist는 같은 Unicode form으로 정규화되며, Alias 결과도 원문�
 NFKC 호환 자모는 완성형 한글로 재조합합니다. 이때 반환하는 `matched_text`와 `[start, end)`는
 제거된 내부 code point를 포함한 원문 구간을 그대로 가리키며 Whitelist도 같은 구간을
 보호합니다. 세부 정책과 측정 결과는
-[`docs/unicode-fp-hardening.md`](docs/unicode-fp-hardening.md)에 있습니다.
+[`docs/unicode-fp-hardening.md`](https://github.com/skgur07/Koguard/blob/dev/docs/unicode-fp-hardening.md)에 있습니다.
 
 영문 두벌식 자판 입력과 호환 자모 입력은 동일한 현대 한글 조합기를 사용하는 별도 view로
 처리합니다. `tlqkf`는 영문 키를 `ㅅㅣㅂㅏㄹ`로 치환한 뒤 `시발`로 조합하고,
@@ -260,7 +264,8 @@ disabled = KoguardEngine(
 조합 우회를 함께 끌 수 있으며, `choseong_matching`, `keyboard_matching`,
 `jamo_composition_matching`을 끄면 해당 입력 체계의 조합 우회도 함께 꺼집니다. 결과 method는
 각각 기존 `CHOSEONG`, `KEYBOARD`, `JAMO`를 사용하고 원문 span에는 제거된 구간이 포함됩니다.
-세벌식이나 일반 로마자 표기법은 현재 지원하지 않습니다.
+세벌식이나 일반 로마자 변환은 지원하지 않습니다. 등록된 소문자 로마자 literal만 Exact
+Match하며 대문자·혼합 대소문자나 등록되지 않은 다른 표기를 자동 변환하지 않습니다.
 
 Fuzzy 탐지는 `aggressive` 또는 직접 설정했을 때 사전어와 편집거리 1인 독립 영숫자 토큰을
 탐지합니다. 1~2글자 사전어는 오탐 보호를 위해 Exact Match만 사용하고, 기본 threshold에서는
@@ -321,17 +326,24 @@ uv run python -m benchmarks.engine_benchmark `
   --output benchmarks/results/local.json
 ```
 
-측정 항목과 결과 해석은 [`benchmarks/README.md`](benchmarks/README.md)를 참고합니다.
+측정 항목과 결과 해석은 [`benchmarks/README.md`](https://github.com/skgur07/Koguard/blob/dev/benchmarks/README.md)를 참고합니다.
 
 ## 개발 자동화 하네스
 
 Koguard는 [Everything Claude Code(ECC)](https://github.com/affaan-m/ECC)의 계획, TDD,
 검증, 전문 역할 분리 패턴을 프로젝트 로컬 Codex 설정으로 적용합니다.
 
-- 저장소 규칙: [`AGENTS.md`](AGENTS.md)
-- Codex 탐색 지도: [`docs/CODEX-NAVIGATION-GUIDE.md`](docs/CODEX-NAVIGATION-GUIDE.md)
-- 개발 워크플로: [`docs/development-workflow.md`](docs/development-workflow.md)
-- 코드 리뷰 기준: [`docs/code-review.md`](docs/code-review.md)
-- DAILY/LIBRARY 분류: [`docs/ecc-install-plan.md`](docs/ecc-install-plan.md)
+- 저장소 규칙: [`AGENTS.md`](https://github.com/skgur07/Koguard/blob/dev/AGENTS.md)
+- Codex 탐색 지도: [`docs/CODEX-NAVIGATION-GUIDE.md`](https://github.com/skgur07/Koguard/blob/dev/docs/CODEX-NAVIGATION-GUIDE.md)
+- 개발 워크플로: [`docs/development-workflow.md`](https://github.com/skgur07/Koguard/blob/dev/docs/development-workflow.md)
+- 코드 리뷰 기준: [`docs/code-review.md`](https://github.com/skgur07/Koguard/blob/dev/docs/code-review.md)
+- DAILY/LIBRARY 분류: [`docs/ecc-install-plan.md`](https://github.com/skgur07/Koguard/blob/dev/docs/ecc-install-plan.md)
 
 전역 모델, 알림, MCP 서버, 자격 증명 설정은 변경하지 않습니다.
+
+## 라이선스
+
+Koguard 코드와 프로젝트가 직접 선별한 데이터는 [MIT License](https://github.com/skgur07/Koguard/blob/dev/LICENSE)로
+배포합니다. 기본 사전에 포함된 외부 선별 literal의 고정 revision과 고지는
+[dictionary NOTICE](https://github.com/skgur07/Koguard/blob/dev/src/koguard/data/NOTICE.md)와 각 MIT
+라이선스 파일에 보존합니다.

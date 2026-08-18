@@ -4,10 +4,24 @@ version = "0.1.0"
 description = "A lightweight Korean profanity detection engine"
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
+license = "MIT"
+license-files = [
+    "LICENSE",
+    "src/koguard/data/KORCEN-MIT.txt",
+    "src/koguard/data/CURSE-DETECTION-DATA-MIT.txt",
+]
+authors = [{ name = "skgur07" }]
+keywords = ["korean", "profanity", "filter", "moderation"]
 dependencies = []
 
+[project.urls]
+Repository = "https://github.com/skgur07/Koguard"
+Issues = "https://github.com/skgur07/Koguard/issues"
+Documentation = "https://github.com/skgur07/Koguard#readme"
+Changelog = "https://github.com/skgur07/Koguard/blob/dev/CHANGELOG.md"
+
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling==1.31.0"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
@@ -27,6 +41,7 @@ include = [
     "/tests",
     "/benchmarks",
     "/evaluation",
+    "/release",
     "/docs/corpus-annotation-guide.md",
     "/docs/corpus-split-policy.md",
     "/docs/corpus-intake-status.md",
@@ -37,13 +52,20 @@ include = [
     "/docs/contains-api.md",
     "/docs/public-api-inventory.md",
     "/docs/unicode-fp-hardening.md",
+    "/docs/release-hardening.md",
     "/docs/testing/dictionary-provenance.tdd.md",
     "/docs/testing/contains-api.tdd.md",
     "/docs/testing/public-api-audit.tdd.md",
     "/docs/testing/unicode-fp-hardening.tdd.md",
+    "/docs/testing/release-hardening.tdd.md",
     "/docs/testing/profile-api-contract.tdd.md",
     "/docs/testing/quarantine-intake.tdd.md",
     "/README.md",
+    "/CHANGELOG.md",
+    "/SECURITY.md",
+    "/CONTRIBUTING.md",
+    "/LICENSE",
+    "/.mailmap",
 ]
 exclude = [
     "/evaluation/annotation-work",
@@ -54,7 +76,7 @@ exclude = [
 [tool.ruff]
 target-version = "py311"
 line-length = 100
-src = ["src", "tests", "evaluation"]
+src = ["src", "tests", "evaluation", "release"]
 
 [tool.ruff.lint]
 select = ["B", "E", "F", "I", "UP"]
@@ -62,7 +84,7 @@ select = ["B", "E", "F", "I", "UP"]
 [tool.mypy]
 python_version = "3.11"
 strict = true
-files = ["src", "tests", "benchmarks", "evaluation"]
+files = ["src", "tests", "benchmarks", "evaluation", "release"]
 
 [tool.pytest.ini_options]
 addopts = [

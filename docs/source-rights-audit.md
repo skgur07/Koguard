@@ -1,6 +1,6 @@
 # 외부 평가 자료 사용·권리 감사 대장
 
-- 기준일: 2026-08-12
+- 기준일: 2026-08-14
 - 원칙: 권리 검토가 끝나지 않은 원문은 로컬 quarantine 분석에만 사용하고 Git, wheel,
   sdist와 공개 corpus에 포함하지 않는다.
 - 승인 방식: 저장소 단위 선언만 보지 않고 원출처, 파생 관계, 행 단위 provenance, 재배포와
@@ -15,8 +15,27 @@
 | `2runo/Curse-detection-data` | 기존 intake 원본 및 ZIZUN 중복 제외 기준 | 기존 승인 범위 유지 | MIT 확인 |
 | `kocohub/korean-hate-speech` | ZIZUN 구성 자료의 원출처·license 확인 | 원문 없음 | CC-BY-SA-4.0 확인 |
 
+PF-013 최종 재확인에서 다음 고정 revision과 공개 artifact 경계를 확정했다.
+
+| 자료 | 재확인 revision | 공개 artifact 판정 |
+| --- | --- | --- |
+| `Tanat05/korcen` | `eecd9763dbdccce3dc96ddb578ef0b6396058fa9` | 선별 literal과 MIT 고지 포함 승인 |
+| `2runo/Curse-detection-data` | `ff241621e103b6f220d30de324d0d07987887308` | 원문 제외, 고정 metadata·license·검토 후보 근거만 유지 |
+| `Tanat05/korean-profanity-resources` | `289ed960d10a9e6e3096090fba012ca0796fc641` | discovery reference만, 목록 복사 금지 |
+| `ZIZUN/korean-malicious-comments-dataset` | `50b92f50e89bb594db5c9ecafea8d48c1dd5b943` | 원문·annotation 공개 금지, local quarantine만 |
+| `kocohub/korean-hate-speech` | `f8d05dce2b22007bb149e5139c0060c68ad8f94b` | CC-BY-SA-4.0 구성 출처 reference만 |
+
+Koguard 소유자는 2026-08-18 코드와 직접 작성한 기본 데이터의 MIT 공개를 승인했다. Git 이력의
+`s23019 <s23019@gsm.hs.kr>`도 같은 소유자의 이전 identity임을 확인했으며 `.mailmap`으로
+`skgur07 <pigjaoki0970@gmail.com>`에 정규화한다. commit hash를 바꾸는 history rewrite는 하지
+않는다.
+
 `Tanat05/korean-profanity-resources` 자체의 단어 목록이나 링크된 제3자 원문은 가져오지 않았다.
 따라서 해당 목록은 데이터 출처가 아니라 discovery reference다.
+
+PF-007 독립 검토 후보 중 소유자가 승인한 4개 literal은 2026-08-18 기본 사전에 승격했다.
+`2runo/Curse-detection-data` 원문은 공개하지 않고 선별 literal, 고정 revision과 MIT 고지만
+배포한다. `src/koguard/data/CURSE-DETECTION-DATA-MIT.txt`가 wheel과 sdist에 포함된다.
 
 2026-08-13 PF-007에서는 `2runo/Curse-detection-data`의 독립 판정 첫 100건에서 확인된 상위
 false-negative canonical cluster 7개를 provenance manifest의 `candidate`로 기록했다. source는

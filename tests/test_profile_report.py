@@ -154,7 +154,7 @@ def test_committed_profile_report_is_aggregate_only_and_passes_balanced_gates() 
 
     assert report["schema_version"] == 1
     assert report["source"]["ablation_report_sha256"] == (
-        "c4976c46122205fa2e4cb6faa57642272e3c725290c205289b7aee8a0bcaa664"
+        "b5eecc613ca2aa72208b0881a5bd3804f68d099d42d9c2d14f90987b74eae7bb"
     )
     assert report["source"]["corpus"] == {
         "classification": "independent-tuning-provisional",

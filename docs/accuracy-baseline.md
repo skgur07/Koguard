@@ -11,6 +11,11 @@
 > [`pf009-profile-evaluation.report.json`](../evaluation/results/pf009-profile-evaluation.report.json)을
 > 사용한다. 이 결과도 tuning 표본이며 아직 최종 gold나 hidden 평가는 아니다.
 
+> 2026-08-18 한국어 literal 4개와 소문자 로마자 literal 3개를 승격한 뒤 같은 92건을
+> 재측정했다. `balanced` 문장 recall은 62.9%, occurrence recall은 40.9%로 상승했고 문장 FP는
+> 0/30을 유지했다. 일반 입력의 불필요한 Alias·초성 work를 제거한 뒤 short-chat p95 0.0719ms,
+> 최대 입력 p95 13.053ms로 기존 15ms 임시 예산도 통과했다.
+
 측정일: 2026-07-28
 
 대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성·Alias·

@@ -2,8 +2,8 @@
   "schema_version": 1,
   "profile_contract_version": 1,
   "source": {
-    "ablation_report_sha256": "c4976c46122205fa2e4cb6faa57642272e3c725290c205289b7aee8a0bcaa664",
-    "measured_at": "2026-08-13T03:57:06.869096+00:00",
+    "ablation_report_sha256": "b5eecc613ca2aa72208b0881a5bd3804f68d099d42d9c2d14f90987b74eae7bb",
+    "measured_at": "2026-08-18T00:37:05.604304+00:00",
     "corpus": {
       "classification": "independent-tuning-provisional",
       "sha256": "727792cea7aa399e3d939ebe0c3cd694917b94a17cd8313a662230dafc013276",
@@ -51,38 +51,38 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 33,
+          "tp": 36,
           "fp": 0,
-          "fn": 29,
+          "fn": 26,
           "tn": 30
         },
         "precision": 1.0,
-        "recall": 0.532258064516129,
-        "f1": 0.6947368421052631,
-        "accuracy": 0.6847826086956522
+        "recall": 0.5806451612903226,
+        "f1": 0.7346938775510204,
+        "accuracy": 0.717391304347826
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 38,
+          "tp": 42,
           "fp": 11,
-          "fn": 72
+          "fn": 68
         },
-        "precision": 0.7755102040816326,
-        "recall": 0.34545454545454546,
-        "f1": 0.47798742138364786
+        "precision": 0.7924528301886793,
+        "recall": 0.38181818181818183,
+        "f1": 0.5153374233128835
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0275,
-          "p95_ms": 0.0317
+          "p50_ms": 0.0279,
+          "p95_ms": 0.0371
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 5.8473,
-          "p95_ms": 7.1989
+          "p50_ms": 5.2375,
+          "p95_ms": 8.993
         },
-        "engine_retained_memory_bytes": 70447
+        "engine_retained_memory_bytes": 80221
       }
     },
     {
@@ -114,38 +114,38 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 36,
+          "tp": 39,
           "fp": 0,
-          "fn": 26,
+          "fn": 23,
           "tn": 30
         },
         "precision": 1.0,
-        "recall": 0.5806451612903226,
-        "f1": 0.7346938775510204,
-        "accuracy": 0.717391304347826
+        "recall": 0.6290322580645161,
+        "f1": 0.7722772277227723,
+        "accuracy": 0.75
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 41,
+          "tp": 45,
           "fp": 11,
-          "fn": 69
+          "fn": 65
         },
-        "precision": 0.7884615384615384,
-        "recall": 0.37272727272727274,
-        "f1": 0.5061728395061729
+        "precision": 0.8035714285714286,
+        "recall": 0.4090909090909091,
+        "f1": 0.5421686746987951
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0352,
-          "p95_ms": 0.0472
+          "p50_ms": 0.0494,
+          "p95_ms": 0.0719
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 7.8746,
-          "p95_ms": 9.4027
+          "p50_ms": 7.7763,
+          "p95_ms": 13.053
         },
-        "engine_retained_memory_bytes": 108308
+        "engine_retained_memory_bytes": 122683
       }
     },
     {
@@ -177,38 +177,38 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 37,
+          "tp": 41,
           "fp": 0,
-          "fn": 25,
+          "fn": 21,
           "tn": 30
         },
         "precision": 1.0,
-        "recall": 0.5967741935483871,
-        "f1": 0.7474747474747475,
-        "accuracy": 0.7282608695652174
+        "recall": 0.6612903225806451,
+        "f1": 0.7961165048543689,
+        "accuracy": 0.7717391304347826
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 41,
+          "tp": 46,
           "fp": 13,
-          "fn": 69
+          "fn": 64
         },
-        "precision": 0.7592592592592593,
-        "recall": 0.37272727272727274,
-        "f1": 0.5
+        "precision": 0.7796610169491526,
+        "recall": 0.41818181818181815,
+        "f1": 0.5443786982248521
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.092,
-          "p95_ms": 0.1248
+          "p50_ms": 0.1129,
+          "p95_ms": 0.2994
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 10.1599,
-          "p95_ms": 13.9253
+          "p50_ms": 14.6284,
+          "p95_ms": 19.8175
         },
-        "engine_retained_memory_bytes": 199302
+        "engine_retained_memory_bytes": 226527
       }
     }
   ],
@@ -221,9 +221,9 @@
   "balanced_gates": {
     "normal_sentence_fp_rate": 0.0,
     "normal_sentence_fp_rate_limit": 0.005,
-    "short_chat_p95_ms": 0.0472,
+    "short_chat_p95_ms": 0.0719,
     "short_chat_p95_ms_limit": 1.0,
-    "maximum_input_p95_ms": 9.4027,
+    "maximum_input_p95_ms": 13.053,
     "maximum_input_p95_ms_limit": 15.0,
     "passed": true
   },

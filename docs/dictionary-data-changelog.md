@@ -40,6 +40,27 @@
 support 1건 이상, 독립 hard-negative 2건 이상, occurrence TP 순증가와 sentence FP 무증가만
 확인한 중간 상태다.
 
+## v2/2026-08-18 — 소유자 승인 Exact Match 확대
+
+- 승격: `core.literal.pf007.003` ~ `.006` 4개
+- 직접 추가: `core.literal.curated.033` ~ `.035` 소문자 로마자 literal 3개
+- packaged literal: 65개 (`badwords.txt` 63개 + Alias canonical 2개)
+- packaged Alias: 5개
+- 전체 candidate record: 73개, 이 중 PF-007 candidate 3개는 계속 보류
+- source: MIT Koguard 직접 선별, MIT Korcen, MIT `2runo/Curse-detection-data`
+- 검토 근거: PF-005 독립 이중 검토·조정, PF-007 증분 결과, 2026-08-18 소유자 승인
+- 정책: 문맥과 무관한 substring Exact Match. 중의적 복합어 오탐도 core positive로 취급
+- 로마자 경계: `sibal`, `ssibal`, `shibal` 소문자 literal만 지원하며 일반 로마자 변환·case
+  folding은 추가하지 않음
+- 외부 고지: `CURSE-DETECTION-DATA-MIT.txt`를 wheel과 sdist에 포함
+- 한계: `따먹다`는 PF-007 개별 tuning에서 occurrence 순증가가 없었지만 소유자 정책으로
+  승격했다. hidden evaluation은 아직 없으므로 rollback 기준은 후속 독립 corpus에서 정한다.
+
+동일한 92건 provisional tuning corpus 재측정에서 `balanced` 문장 recall은 58.1%에서 62.9%,
+`aggressive`는 59.7%에서 66.1%로 상승했다. hard-negative 30건의 문장 FP는 여전히 0이지만
+표본이 작으므로 실서비스 오탐률로 일반화하지 않는다. 최신 공개 집계는
+`evaluation/results/pf009-profile-evaluation.report.json`에 기록한다.
+
 ## 변경 기록 template
 
 새 변경은 아래 항목을 복사해 추가한다.

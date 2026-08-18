@@ -195,10 +195,12 @@ uv run python -m evaluation.profile_report `
 ```
 
 공개 보고서는 원본 ablation과 corpus SHA-256, 환경, 세 profile 집계, balanced 증분과 임시
-FP·p95 게이트를 기록한다. 현재 balanced는 strict보다 문장·occurrence TP가 각각 3건 늘고
-FP 증분은 0이며, short-chat p95 0.0472ms와 최대 입력 p95 9.4027ms로 임시 예산을 통과했다.
-다만 확정 92건과 hard-negative 30건뿐인 tuning 결과이므로 실서비스 FP나 최종 recall로
-일반화할 수 없다. 계약은 `profile-report.schema.json` version 1이다.
+FP·p95 게이트를 기록한다. 2026-08-18 사전 승격 뒤 balanced는 strict보다 문장·occurrence TP가
+각각 3건 늘고 FP 증분은 0이다. balanced 문장 recall은 62.9%, occurrence recall은 40.9%다.
+일반 한글 입력에서 Alias·초성·분절 검사의 불필요한 work를 건너뛴 뒤 short-chat p95는
+0.0719ms, 최대 입력 p95는 13.053ms로 기존 15ms 임시 예산을 통과했다. 확정 92건과
+hard-negative 30건뿐인 tuning 결과이므로 실서비스 FP나 최종 recall로 일반화할 수 없고,
+성능은 세 OS CI에서 다시 확인해야 한다. 계약은 `profile-report.schema.json` version 1이다.
 
 ## 비교 계약
 
