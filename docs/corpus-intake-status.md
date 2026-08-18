@@ -35,10 +35,10 @@ MIT로 재배포 가능한 `2runo/Curse-detection-data`의 고정 commit과 arti
   `5cb5b18cc855e245f8e299b931a1203479a56fd79a752b102d623056ba5d7c2c`
 - generated corpus SHA-256:
   `c26c942a3d825e1667d2d520d41fcda6f03a4e07d81ad4d8ba84038096125b83`
-- intake report SHA-256:
-  `385832a9b0d264eaa4c3bc248f64eec6287ff0451d7a1a431ae29dab2b1c7af9`
-- split manifest v2 SHA-256:
-  `ae9b87258ebf02f8ef6078f290360ff1ab1b2ea9f5566842e4d7e319fe4fd502`
+- intake report canonical-LF SHA-256:
+  `1d2e31ada27896cbd155e4e9ff7779e795ce53b931bc112a69cef4317e0d400a`
+- split manifest v2 canonical-LF SHA-256:
+  `06dc923ece416dee03cf6db984b319daa6290b7a1b3e212f2f8c0cbb042f846d`
 
 ```powershell
 uv run python -m evaluation.corpus_intake `
