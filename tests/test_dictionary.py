@@ -24,10 +24,27 @@ def test_default_dictionary_loads_bundled_terms() -> None:
         "뒤져",
         "느그애미",
         "빡대가리",
+        "틀딱",
+        "따먹다",
+        "보지",
+        "조센징",
+        "sibal",
+        "ssibal",
+        "shibal",
     } <= dictionary.blacklist
     assert len(dictionary.blacklist) >= 50
     assert "병신년" not in dictionary.whitelist
     assert "시발점" not in dictionary.whitelist
+
+
+@pytest.mark.parametrize(
+    "term",
+    ["틀딱", "따먹다", "보지", "조센징", "sibal", "ssibal", "shibal"],
+)
+def test_default_dictionary_detects_owner_approved_literal_expansion(term: str) -> None:
+    dictionary = KoguardDictionary.default()
+
+    assert term in dictionary.blacklist
 
 
 def test_packaged_korcen_terms_include_pinned_mit_notice() -> None:
@@ -39,6 +56,17 @@ def test_packaged_korcen_terms_include_pinned_mit_notice() -> None:
     assert "eecd9763dbdccce3dc96ddb578ef0b6396058fa9" in notice
     assert "MIT License" in license_text
     assert "Copyright (c) 2026 Tanat" in license_text
+
+
+def test_promoted_curse_data_terms_include_pinned_mit_notice() -> None:
+    data_directory = Path("src/koguard/data")
+    notice = (data_directory / "NOTICE.md").read_text(encoding="utf-8")
+    license_text = (data_directory / "CURSE-DETECTION-DATA-MIT.txt").read_text(encoding="utf-8")
+
+    assert "https://github.com/2runo/Curse-detection-data" in notice
+    assert "ff241621e103b6f220d30de324d0d07987887308" in notice
+    assert "MIT License" in license_text
+    assert "Copyright (c) 2020 2runo" in license_text
 
 
 def test_dictionary_normalizes_deduplicates_and_skips_comments() -> None:

@@ -14,6 +14,7 @@ from koguard import (
     KoguardEngine,
     MatchMethod,
 )
+from koguard.engine import engine as engine_module
 from koguard.engine import matcher as matcher_module
 
 
@@ -81,6 +82,24 @@ def test_default_engine_detects_both_former_whitelist_examples() -> None:
     result = KoguardEngine().check("시발점과 병신년")
 
     assert [match.term for match in result.matches] == ["시발", "병신"]
+
+
+@pytest.mark.parametrize(
+    "term",
+    ["틀딱", "따먹다", "보지", "조센징", "sibal", "ssibal", "shibal"],
+)
+def test_default_balanced_engine_detects_owner_approved_literal_expansion(term: str) -> None:
+    text = f"앞 {term} 뒤"
+
+    result = KoguardEngine().check(text)
+
+    assert [(match.term, match.matched_text, match.method) for match in result.matches] == [
+        (term, term, MatchMethod.EXACT)
+    ]
+    assert (result.matches[0].start, result.matches[0].end) == (
+        text.index(term),
+        text.index(term) + len(term),
+    )
 
 
 def test_multiple_matches_are_sorted_by_original_position() -> None:
@@ -766,6 +785,41 @@ def test_choseong_matching_does_not_convert_normal_hangul_text() -> None:
     result = engine.check("수박")
 
     assert result.detected is False
+
+
+def test_choseong_matching_skips_boundary_work_without_initial_input() -> None:
+    engine = make_engine(
+        blacklist=["시발", "틀딱", "보지", "조센징"],
+        config=EngineConfig(
+            exact_matching=False,
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=False,
+            mixed_gap_matching=False,
+            alias_matching=False,
+            keyboard_matching=False,
+            jamo_composition_matching=False,
+            choseong_matching=True,
+            segmented_input_matching=False,
+            fuzzy_matching=False,
+        ),
+    )
+
+    with patch.object(matcher_module, "_build_alphanumeric_boundaries") as boundaries:
+        result = engine.check("가나다라마바사아자차카타파하" * 256)
+
+    assert result.detected is False
+    boundaries.assert_not_called()
+
+
+def test_balanced_profile_skips_segmented_source_probe() -> None:
+    engine = KoguardEngine(profile="balanced")
+
+    with patch.object(engine_module, "has_compatibility_choseong_input") as probe:
+        result = engine.check("가나다라마바사아자차카타파하" * 256)
+
+    assert result.detected is False
+    probe.assert_not_called()
 
 
 @pytest.mark.parametrize(

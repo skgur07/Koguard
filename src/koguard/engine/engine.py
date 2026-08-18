@@ -175,7 +175,7 @@ class KoguardEngine:
         segmented_keyboard = keyboard
         segmented_jamo = jamo_composed
         segmented_choseong = normalized
-        has_segmented_source = (
+        has_segmented_source = self._config.segmented_input_matching and (
             keyboard is not normalized
             or jamo_composed is not normalized
             or (self._config.choseong_matching and has_compatibility_choseong_input(text))

@@ -37,11 +37,21 @@ def test_sdist_includes_evaluation_contracts_and_corpus_policies() -> None:
     assert "/docs/profile-api-contract.md" in sdist_includes
     assert "/docs/contains-api.md" in sdist_includes
     assert "/docs/public-api-inventory.md" in sdist_includes
+    assert "/docs/unicode-fp-hardening.md" in sdist_includes
+    assert "/docs/release-hardening.md" in sdist_includes
+    assert "/release" in sdist_includes
     assert "/docs/testing/dictionary-provenance.tdd.md" in sdist_includes
     assert "/docs/testing/contains-api.tdd.md" in sdist_includes
     assert "/docs/testing/profile-api-contract.tdd.md" in sdist_includes
     assert "/docs/testing/public-api-audit.tdd.md" in sdist_includes
     assert "/docs/testing/quarantine-intake.tdd.md" in sdist_includes
+    assert "/docs/testing/unicode-fp-hardening.tdd.md" in sdist_includes
+    assert "/docs/testing/release-hardening.tdd.md" in sdist_includes
+    assert "/CHANGELOG.md" in sdist_includes
+    assert "/SECURITY.md" in sdist_includes
+    assert "/CONTRIBUTING.md" in sdist_includes
+    assert "/LICENSE" in sdist_includes
+    assert "/.mailmap" in sdist_includes
     assert "/evaluation/annotation-work" in sdist_excludes
     assert "/evaluation/quarantine" in sdist_excludes
     assert "/evaluation/corpus/tuning/curse-review-intake-v1.json" in sdist_excludes

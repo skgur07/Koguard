@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-08-18",
+  "project_license": "MIT",
+  "artifact_policy": "Only approved payload may enter the wheel or sdist; pending sources remain reference-only or local quarantine.",
+  "sources": [
+    {
+      "source_id": "koguard-code",
+      "reference": "https://github.com/skgur07/Koguard",
+      "revision": "0.1.0 release tree",
+      "declared_license": "MIT",
+      "rights_status": "approved",
+      "allowed_scope": "MIT-licensed project release",
+      "payload_in_artifacts": true,
+      "runtime_dependency": false,
+      "evidence": "LICENSE and pyproject.toml; s23019 is the maintainer's previous Git identity normalized by .mailmap."
+    },
+    {
+      "source_id": "koguard-curated-defaults",
+      "reference": "evaluation/dictionary-provenance.v1.json#koguard-curated-v1",
+      "revision": "2026-08-18",
+      "declared_license": "MIT",
+      "rights_status": "approved",
+      "allowed_scope": "packaged lexical defaults under project MIT license",
+      "payload_in_artifacts": true,
+      "runtime_dependency": false,
+      "evidence": "LICENSE; evaluation/dictionary-provenance.v1.json; owner approval on 2026-08-18."
+    },
+    {
+      "source_id": "korcen-selected-literals",
+      "reference": "https://github.com/Tanat05/korcen",
+      "revision": "eecd9763dbdccce3dc96ddb578ef0b6396058fa9",
+      "declared_license": "MIT",
+      "rights_status": "approved",
+      "allowed_scope": "selected-literals-with-license-notice",
+      "payload_in_artifacts": true,
+      "runtime_dependency": false,
+      "evidence": "src/koguard/data/KORCEN-MIT.txt; SHA-256 71019ed51eada81b0a73069d0778a2a12d4d55754a24f2b0964e044145ff0af7"
+    },
+    {
+      "source_id": "curse-detection-data",
+      "reference": "https://github.com/2runo/Curse-detection-data",
+      "revision": "ff241621e103b6f220d30de324d0d07987887308",
+      "declared_license": "MIT",
+      "rights_status": "approved",
+      "allowed_scope": "tuning analysis and four reviewed selected literals with license notice",
+      "payload_in_artifacts": true,
+      "runtime_dependency": false,
+      "evidence": "src/koguard/data/CURSE-DETECTION-DATA-MIT.txt; raw corpus text remains excluded"
+    },
+    {
+      "source_id": "korean-profanity-resources",
+      "reference": "https://github.com/Tanat05/korean-profanity-resources",
+      "revision": "289ed960d10a9e6e3096090fba012ca0796fc641",
+      "declared_license": null,
+      "rights_status": "pending",
+      "allowed_scope": "discovery-reference-only",
+      "payload_in_artifacts": false,
+      "runtime_dependency": false,
+      "evidence": "No root LICENSE; slang.csv and LoL list are marked confirmation required"
+    },
+    {
+      "source_id": "zizun-korean-malicious-comments",
+      "reference": "https://github.com/ZIZUN/korean-malicious-comments-dataset",
+      "revision": "50b92f50e89bb594db5c9ecafea8d48c1dd5b943",
+      "declared_license": "MIT-declared-with-component-conflict",
+      "rights_status": "pending",
+      "allowed_scope": "local-quarantine-analysis-only",
+      "payload_in_artifacts": false,
+      "runtime_dependency": false,
+      "evidence": "evaluation/sources/candidates/zizun-korean-malicious-comments.v1.json"
+    },
+    {
+      "source_id": "kocohub-korean-hate-speech",
+      "reference": "https://github.com/kocohub/korean-hate-speech",
+      "revision": "f8d05dce2b22007bb149e5139c0060c68ad8f94b",
+      "declared_license": "CC-BY-SA-4.0",
+      "rights_status": "approved-reference-only",
+      "allowed_scope": "provenance-reference-only",
+      "payload_in_artifacts": false,
+      "runtime_dependency": false,
+      "evidence": "GitHub license metadata reports CC-BY-SA-4.0; no corpus rows are bundled"
+    }
+  ]
+}

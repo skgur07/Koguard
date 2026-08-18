@@ -1,5 +1,7 @@
 """Integration tests for explicit profanity alias matching."""
 
+from unittest.mock import patch
+
 import pytest
 
 from koguard import (
@@ -10,6 +12,7 @@ from koguard import (
     KoguardEngine,
     MatchMethod,
 )
+from koguard.engine import matcher as matcher_module
 
 _ALIAS_RULES = (
     AliasRule("ㅈ같", "좆같다", AliasMode.TOKEN_PREFIX),
@@ -92,6 +95,30 @@ def test_alias_matching_is_enabled_by_default_and_can_be_disabled() -> None:
 )
 def test_alias_matching_rejects_unlisted_or_partial_tokens(text: str) -> None:
     assert make_alias_engine().check(text).detected is False
+
+
+def test_alias_matching_skips_boundary_work_without_alias_leading_character() -> None:
+    engine = make_alias_engine(
+        config=EngineConfig(
+            exact_matching=False,
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=False,
+            mixed_gap_matching=False,
+            alias_matching=True,
+            keyboard_matching=False,
+            jamo_composition_matching=False,
+            choseong_matching=False,
+            segmented_input_matching=False,
+            fuzzy_matching=False,
+        )
+    )
+
+    with patch.object(matcher_module, "_build_alphanumeric_boundaries") as boundaries:
+        result = engine.check("가나다라마바사아자차카타파하" * 256)
+
+    assert result.detected is False
+    boundaries.assert_not_called()
 
 
 def test_alias_matching_accepts_token_prefix_before_punctuation() -> None:

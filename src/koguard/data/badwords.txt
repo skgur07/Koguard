@@ -58,3 +58,16 @@
 니애미
 니애비
 니엄마
+
+# Independently reviewed Exact Match terms selected from the MIT-licensed
+# 2runo/Curse-detection-data source. See NOTICE.md and
+# CURSE-DETECTION-DATA-MIT.txt for the pinned source and license boundary.
+틀딱
+따먹다
+보지
+조센징
+
+# Owner-approved Koguard romanized Exact Match terms.
+sibal
+ssibal
+shibal
