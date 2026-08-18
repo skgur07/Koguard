@@ -24,6 +24,10 @@ _CHECKED_MANIFEST_PATH = Path("evaluation/splits/corpus-splits.v2.json")
 _BUNDLED_LICENSE_PATH = Path("evaluation/sources/licenses/curse-detection-data-MIT.txt")
 
 
+def _canonical_lf_sha256(content: bytes) -> str:
+    return hashlib.sha256(content.replace(b"\r\n", b"\n")).hexdigest()
+
+
 def test_intake_schemas_are_versioned_and_closed() -> None:
     source_schema = json.loads(SOURCE_SPEC_SCHEMA_PATH.read_text(encoding="utf-8"))
     report_schema = json.loads(INTAKE_REPORT_SCHEMA_PATH.read_text(encoding="utf-8"))
@@ -219,11 +223,11 @@ def test_checked_review_intake_matches_pinned_contract() -> None:
     report = json.loads(report_bytes)
     manifest = json.loads(manifest_bytes)
 
-    assert hashlib.sha256(report_bytes).hexdigest() == (
-        "385832a9b0d264eaa4c3bc248f64eec6287ff0451d7a1a431ae29dab2b1c7af9"
+    assert _canonical_lf_sha256(report_bytes) == (
+        "1d2e31ada27896cbd155e4e9ff7779e795ce53b931bc112a69cef4317e0d400a"
     )
-    assert hashlib.sha256(manifest_bytes).hexdigest() == (
-        "ae9b87258ebf02f8ef6078f290360ff1ab1b2ea9f5566842e4d7e319fe4fd502"
+    assert _canonical_lf_sha256(manifest_bytes) == (
+        "06dc923ece416dee03cf6db984b319daa6290b7a1b3e212f2f8c0cbb042f846d"
     )
     assert report["selected_source_label_counts"] == {"0": 500, "1": 2000}
     assert report["sensitive_pattern_excluded_count"] == 25
@@ -235,6 +239,10 @@ def test_checked_review_intake_matches_pinned_contract() -> None:
     assert report["gold_ready"] is False
     assert manifest["manifest_version"] == 2
     assert len(manifest["assignments"]) == 2520
+
+
+def test_canonical_lf_hash_is_checkout_independent() -> None:
+    assert _canonical_lf_sha256(b'{"value": 1}\r\n') == _canonical_lf_sha256(b'{"value": 1}\n')
 
 
 def _write_spec(
