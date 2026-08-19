@@ -188,7 +188,69 @@ def test_match_rejects_none_method() -> None:
         )
 
 
+@pytest.mark.parametrize("field", ["term", "matched_text"])
+def test_match_rejects_non_string_text_fields(field: str) -> None:
+    values: dict[str, object] = {"term": "금칙어", "matched_text": "금칙어"}
+    values[field] = 123
+
+    with pytest.raises(TypeError, match=field):
+        Match(
+            term=cast(str, values["term"]),
+            matched_text=cast(str, values["matched_text"]),
+            start=0,
+            end=3,
+            method=MatchMethod.EXACT,
+            score=1.0,
+        )
+
+
+@pytest.mark.parametrize("score", [True, "1.0", None])
+def test_match_rejects_non_numeric_scores(score: object) -> None:
+    with pytest.raises(TypeError, match="score"):
+        Match(
+            term="금칙어",
+            matched_text="금칙어",
+            start=0,
+            end=3,
+            method=MatchMethod.EXACT,
+            score=cast(float, score),
+        )
+
+
+def test_match_normalizes_integer_score_to_float() -> None:
+    match = Match(
+        term="금칙어",
+        matched_text="금칙어",
+        start=0,
+        end=3,
+        method=MatchMethod.EXACT,
+        score=cast(float, 1),
+    )
+
+    assert match.score == 1.0
+    assert type(match.score) is float
+
+
 @pytest.mark.parametrize("elapsed_ms", [-0.01, float("nan"), float("inf")])
 def test_result_rejects_invalid_elapsed_time(elapsed_ms: float) -> None:
     with pytest.raises(ValueError, match="elapsed_ms"):
         CheckResult(normalized_text="", elapsed_ms=elapsed_ms)
+
+
+def test_result_rejects_non_string_normalized_text() -> None:
+    with pytest.raises(TypeError, match="normalized_text"):
+        CheckResult(normalized_text=cast(str, 123))
+
+
+@pytest.mark.parametrize("elapsed_ms", [True, "1.0", None])
+def test_result_rejects_non_numeric_elapsed_time(elapsed_ms: object) -> None:
+    with pytest.raises(TypeError, match="elapsed_ms"):
+        CheckResult(normalized_text="", elapsed_ms=cast(float, elapsed_ms))
+
+
+def test_result_normalizes_elapsed_time_and_excludes_it_from_equality() -> None:
+    first = CheckResult(normalized_text="금칙어", matches=(make_match(),), elapsed_ms=1)
+    second = CheckResult(normalized_text="금칙어", matches=(make_match(),), elapsed_ms=2.0)
+
+    assert type(first.elapsed_ms) is float
+    assert first == second

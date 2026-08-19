@@ -1,8 +1,17 @@
 """Public result models returned by Koguard."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import StrEnum
 from math import isfinite
+
+
+def _finite_float(value: object, label: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise TypeError(f"{label} must be a number")
+    resolved = float(value)
+    if not isfinite(resolved):
+        raise ValueError(f"{label} must be finite")
+    return resolved
 
 
 class AliasMode(StrEnum):
@@ -61,6 +70,10 @@ class Match:
     score: float
 
     def __post_init__(self) -> None:
+        if type(self.term) is not str:
+            raise TypeError("term must be a string")
+        if type(self.matched_text) is not str:
+            raise TypeError("matched_text must be a string")
         if not isinstance(self.method, MatchMethod):
             raise TypeError("method must be a MatchMethod")
         if self.method is MatchMethod.NONE:
@@ -75,8 +88,10 @@ class Match:
             raise TypeError("end must be an integer")
         if self.start < 0 or self.end <= self.start:
             raise ValueError("match span must satisfy 0 <= start < end")
-        if not 0.0 <= self.score <= 1.0:
+        score = _finite_float(self.score, "score")
+        if not 0.0 <= score <= 1.0:
             raise ValueError("score must be between 0.0 and 1.0")
+        object.__setattr__(self, "score", score)
 
 
 @dataclass(frozen=True, slots=True)
@@ -85,16 +100,20 @@ class CheckResult:
 
     normalized_text: str
     matches: tuple[Match, ...] = ()
-    elapsed_ms: float = 0.0
+    elapsed_ms: float = field(default=0.0, compare=False)
 
     def __post_init__(self) -> None:
+        if type(self.normalized_text) is not str:
+            raise TypeError("normalized_text must be a string")
         normalized_matches = tuple(self.matches)
         if not all(isinstance(match, Match) for match in normalized_matches):
             raise TypeError("matches must contain only Match instances")
         object.__setattr__(self, "matches", normalized_matches)
 
-        if not isfinite(self.elapsed_ms) or self.elapsed_ms < 0.0:
+        elapsed_ms = _finite_float(self.elapsed_ms, "elapsed_ms")
+        if elapsed_ms < 0.0:
             raise ValueError("elapsed_ms must be finite and non-negative")
+        object.__setattr__(self, "elapsed_ms", elapsed_ms)
 
     @property
     def detected(self) -> bool:

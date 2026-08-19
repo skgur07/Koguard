@@ -4,6 +4,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from importlib.resources import files
 from pathlib import Path
+from typing import cast
 
 from koguard.config import NormalizationForm
 from koguard.engine.normalizer import normalize_text
@@ -120,6 +121,27 @@ class KoguardDictionary:
     aliases: tuple[AliasRule, ...] = ()
 
     def __post_init__(self) -> None:
+        if not isinstance(self.unicode_form, str) or self.unicode_form not in {"NFC", "NFKC"}:
+            raise DictionaryError("unicode_form must be either 'NFC' or 'NFKC'")
+        normalized_collections: dict[str, frozenset[str]] = {}
+        for label, entries in (
+            ("blacklist", self.blacklist),
+            ("whitelist", self.whitelist),
+        ):
+            if isinstance(entries, (str, bytes)) or not isinstance(entries, Iterable):
+                raise DictionaryError(f"{label} must be an iterable of strings")
+            normalized_collections[label] = frozenset(
+                _normalize_entries(
+                    cast(Iterable[str], entries),
+                    self.unicode_form,
+                    label,
+                )
+            )
+        object.__setattr__(self, "blacklist", normalized_collections["blacklist"])
+        object.__setattr__(self, "whitelist", normalized_collections["whitelist"])
+
+        if isinstance(self.aliases, (str, bytes)) or not isinstance(self.aliases, Iterable):
+            raise DictionaryError("aliases must be an iterable of AliasRule instances")
         source_aliases = tuple(self.aliases)
         resolved_aliases = _normalize_alias_rules(
             source_aliases,
@@ -128,7 +150,7 @@ class KoguardDictionary:
         )
         if len(resolved_aliases) != len(source_aliases):
             raise DictionaryError("aliases must not contain duplicate normalized forms")
-        if any(rule.term not in self.blacklist for rule in resolved_aliases):
+        if any(rule.term not in normalized_collections["blacklist"] for rule in resolved_aliases):
             raise DictionaryError("every alias canonical term must exist in the blacklist")
         object.__setattr__(self, "aliases", resolved_aliases)
 
