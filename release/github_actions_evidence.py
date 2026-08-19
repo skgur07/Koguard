@@ -22,6 +22,7 @@ _REQUIRED_JOBS: tuple[tuple[str, str], ...] = (
     ("ubuntu-latest", "ubuntu-latest / CPython 3.11.9"),
     ("windows-latest", "windows-latest / CPython 3.11.9"),
     ("macos-latest", "macos-latest / CPython 3.11.9"),
+    ("release-artifact", "Verify reproducible release artifact"),
 )
 
 

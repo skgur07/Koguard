@@ -32,8 +32,8 @@
     "verified_at": {"type": "string", "format": "date-time"},
     "jobs": {
       "type": "array",
-      "minItems": 3,
-      "maxItems": 3,
+      "minItems": 4,
+      "maxItems": 4,
       "items": {"$ref": "#/$defs/job"}
     }
   },
@@ -45,7 +45,7 @@
       "properties": {
         "job_id": {"type": "integer", "minimum": 1},
         "name": {"type": "string", "minLength": 1},
-        "runner": {"enum": ["ubuntu-latest", "windows-latest", "macos-latest"]},
+        "runner": {"enum": ["ubuntu-latest", "windows-latest", "macos-latest", "release-artifact"]},
         "conclusion": {"const": "success"}
       }
     }

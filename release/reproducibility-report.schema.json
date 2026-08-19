@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/release/reproducibility-report.schema.json",
+  "title": "Koguard cross-platform artifact reproducibility report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "verified_at",
+    "release_commit",
+    "git_tree",
+    "authoritative_builder",
+    "builders",
+    "audits",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "verified_at": {"type": "string", "format": "date-time"},
+    "release_commit": {"$ref": "#/$defs/gitOid"},
+    "git_tree": {"$ref": "#/$defs/gitOid"},
+    "authoritative_builder": {"const": "Linux"},
+    "builders": {"const": ["Linux", "Windows", "macOS"]},
+    "audits": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/audit"}
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"$ref": "#/$defs/artifact"}
+    }
+  },
+  "$defs": {
+    "gitOid": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["builder", "sha256"],
+      "properties": {
+        "builder": {"enum": ["Linux", "Windows", "macOS"]},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "filename", "size_bytes", "sha256"],
+      "properties": {
+        "kind": {"enum": ["wheel", "sdist"]},
+        "filename": {"enum": ["koguard-0.1.0-py3-none-any.whl", "koguard-0.1.0.tar.gz"]},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

@@ -80,9 +80,11 @@ def _write_sdist(
         "release/artifact-audit.schema.json": b"{}\n",
         "release/ci-evidence.schema.json": b"{}\n",
         "release/github_actions_evidence.py": b'"""CI evidence."""\n',
+        "release/reproducibility-report.schema.json": b"{}\n",
         "release/rights-manifest.schema.json": b"{}\n",
         "release/rights-manifest.v1.json": b"{}\n",
         "release/testpypi-evidence.schema.json": b"{}\n",
+        "release/verify_reproducible_artifacts.py": b'"""Reproducibility."""\n',
     }
     if forbidden_member is not None:
         members[forbidden_member] = b"must not ship\n"
@@ -273,6 +275,8 @@ def test_project_metadata_and_release_documents_are_publication_complete() -> No
         Path("release/artifact-audit.schema.json"),
         Path("release/ci-evidence.schema.json"),
         Path("release/github_actions_evidence.py"),
+        Path("release/reproducibility-report.schema.json"),
+        Path("release/verify_reproducible_artifacts.py"),
         Path("release/release_report.py"),
         Path("release/release-report.schema.json"),
         Path("release/testpypi-evidence.schema.json"),
@@ -314,6 +318,7 @@ def test_ci_matrix_pins_actions_and_runs_complete_release_gate() -> None:
     assert "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97" in workflow
     assert "astral-sh/setup-uv@ae62891fec2bb8e7d6c99fc78c9fec3a63790f8d" in workflow
     assert "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a" in workflow
+    assert "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c" in workflow
     assert "uses: actions/checkout@v" not in workflow
     assert "uses: actions/setup-python@v" not in workflow
     assert "uses: astral-sh/setup-uv@v" not in workflow
@@ -329,3 +334,11 @@ def test_ci_matrix_pins_actions_and_runs_complete_release_gate() -> None:
         "uv run python -m release.clean_install_smoke",
     ):
         assert command in workflow
+    assert "uv run python -m release.verify_reproducible_artifacts" in workflow
+    assert "koguard-0.1.0-release-candidate" in workflow
+
+
+def test_repository_enforces_canonical_lf_for_text_build_inputs() -> None:
+    attributes = Path(".gitattributes").read_text(encoding="utf-8").splitlines()
+
+    assert attributes[0] == "* text=auto eol=lf"

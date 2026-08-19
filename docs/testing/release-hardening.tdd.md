@@ -55,3 +55,15 @@ probe를 생략했다. 탐지 회귀 44개를 통과한 뒤 같은 corpus 재측
 통과했다. 이어 provenance 73 candidates/65 packaged literals/5 aliases, wheel·sdist build,
 artifact metadata·권리·내용 감사와 두 clean-install quickstart를 통과했다. 최종 공개 hash는
 원격 CI와 TestPyPI 전 마지막 재현 build에서 다시 고정한다.
+
+## 2026-08-19 cross-platform reproducibility hardening
+
+동일 commit의 CI run `32225185730`에서 Linux/macOS hash는 같았지만 Windows wheel·sdist hash가
+달랐다. Windows checkout의 CRLF가 source와 data member에 들어간 것을 재현했고, backend 고정만으로
+재현 가능하다는 기존 가정을 폐기했다.
+
+RED 테스트는 저장소 전체 canonical LF 정책, 세 OS 후보의 실제 파일/audit hash 비교, hash가 다른
+후보 거부, pinned `download-artifact`, 단일 authoritative artifact 이름을 먼저 요구했다.
+구현은 matrix 산출물을 3일 보존 검증 후보로 분리하고, 네 번째 필수 CI job에서 세 후보가
+byte-identical일 때만 Linux 묶음을 14일 보존 release candidate로 승격한다. TestPyPI/PyPI는 이
+단일 묶음만 사용한다.

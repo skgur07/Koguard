@@ -46,6 +46,11 @@ def _jobs() -> dict[str, Any]:
                 "name": "macos-latest / CPython 3.11.9",
                 "conclusion": "success",
             },
+            {
+                "id": 4,
+                "name": "Verify reproducible release artifact",
+                "conclusion": "success",
+            },
         ]
     }
 
@@ -64,6 +69,7 @@ def test_build_github_actions_evidence_uses_successful_api_payload() -> None:
         "ubuntu-latest",
         "windows-latest",
         "macos-latest",
+        "release-artifact",
     ]
 
 

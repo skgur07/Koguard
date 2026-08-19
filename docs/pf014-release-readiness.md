@@ -55,7 +55,7 @@ hidden report 생성기는 다음 조건을 모두 강제한다.
 
 - `release.artifact_audit`의 release commit·Git tree, wheel·sdist metadata, 크기와 SHA-256
 - closed MIT rights manifest와 공개 payload 승인 상태
-- GitHub API에서 직접 확인한 최종 release commit의 3 OS CI 성공
+- GitHub API에서 직접 확인한 최종 release commit의 3 OS CI와 reproducibility 승격 job 성공
 - 공개 API 동결, README 주장 검토, 알려진 한계, core/AI 범위 분리
 - `gold_ready=true` hidden aggregate와 balanced gate
 - TestPyPI의 동일 artifact hash 설치 및 smoke evidence

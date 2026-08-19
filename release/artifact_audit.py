@@ -259,9 +259,11 @@ def _audit_sdist(path: Path) -> tuple[dict[str, object], dict[str, object]]:
             "release/artifact-audit.schema.json",
             "release/ci-evidence.schema.json",
             "release/github_actions_evidence.py",
+            "release/reproducibility-report.schema.json",
             "release/rights-manifest.schema.json",
             "release/rights-manifest.v1.json",
             "release/testpypi-evidence.schema.json",
+            "release/verify_reproducible_artifacts.py",
         )
         _require_members(
             names,

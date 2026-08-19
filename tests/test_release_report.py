@@ -108,6 +108,12 @@ def _ci_evidence() -> dict[str, Any]:
                 "runner": "macos-latest",
                 "conclusion": "success",
             },
+            {
+                "job_id": 14,
+                "name": "Verify reproducible release artifact",
+                "runner": "release-artifact",
+                "conclusion": "success",
+            },
         ],
     }
 
