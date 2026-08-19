@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/hidden-evaluation-attestation.schema.json",
+  "title": "Koguard hidden evaluation attestation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "evaluation_id",
+    "evaluation_version",
+    "release_commit",
+    "protected_ablation_report_sha256",
+    "manifest",
+    "corpus",
+    "review"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "evaluation_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
+    "evaluation_version": {"type": "integer", "minimum": 1},
+    "release_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "protected_ablation_report_sha256": {"$ref": "#/$defs/sha256"},
+    "manifest": {"$ref": "#/$defs/manifest"},
+    "corpus": {"$ref": "#/$defs/corpus"},
+    "review": {"$ref": "#/$defs/review"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "stableId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_id",
+        "manifest_version",
+        "normalization_version",
+        "direct_leak_count",
+        "normalized_leak_count"
+      ],
+      "properties": {
+        "manifest_id": {"$ref": "#/$defs/stableId"},
+        "manifest_version": {"type": "integer", "minimum": 1},
+        "normalization_version": {"const": "nfkc-casefold-strip-pzc-repeat-v1"},
+        "direct_leak_count": {"const": 0},
+        "normalized_leak_count": {"const": 0}
+      }
+    },
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sha256",
+        "case_count",
+        "positive_count",
+        "hard_negative_count",
+        "excluded_review_count"
+      ],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "case_count": {"type": "integer", "minimum": 2},
+        "positive_count": {"type": "integer", "minimum": 1},
+        "hard_negative_count": {"type": "integer", "minimum": 1},
+        "excluded_review_count": {"const": 0}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "annotation_status",
+        "privacy_review_complete",
+        "rights_review_complete",
+        "custodian_approval_id",
+        "release_reviewer_approval_id"
+      ],
+      "properties": {
+        "annotation_status": {"const": "independent-consensus"},
+        "privacy_review_complete": {"const": true},
+        "rights_review_complete": {"const": true},
+        "custodian_approval_id": {"$ref": "#/$defs/stableId"},
+        "release_reviewer_approval_id": {"$ref": "#/$defs/stableId"}
+      }
+    }
+  }
+}

@@ -161,6 +161,29 @@ uv run python -m evaluation.split_guard `
 hidden/private 접근과 승인 절차는
 [corpus split 정책](../docs/corpus-split-policy.md)을 따른다.
 
+## PF-014 hidden evaluation 공개 집계
+
+hidden 원문과 `ablation_runner`의 case-level 결과는 저장소 밖 보호 환경에만 둔다. corpus
+custodian은 고정 release commit에서 split guard 누출 0건을 확인하고 protected ablation을
+생성한 뒤, corpus hash·건수·manifest version·독립 합의·privacy·rights 검토와 서로 다른 두
+승인을 `hidden-evaluation-attestation.schema.json` 계약으로 묶는다.
+
+`hidden_evaluation_report.py`는 보호 ablation과 attestation hash가 일치하는지 확인하고
+`strict`·`balanced`·`aggressive` 전체 지표와 balanced slice 집계만 allowlist로 내보낸다.
+case ID, 원문, canonical term, reviewer ID와 실패 사례 목록은 공개 report에 포함하지 않는다.
+
+```powershell
+uv run python -m evaluation.hidden_evaluation_report `
+  --source-ablation C:\protected\pf014-hidden-v1.ablation.json `
+  --attestation C:\protected\pf014-hidden-v1.attestation.json `
+  --output C:\handoff\pf014-hidden-v1.aggregate.json
+```
+
+attestation은 `release_commit`, protected ablation SHA-256, corpus SHA-256과 건수, split manifest
+version, 고정 normalization version, direct/normalized leak 0건을 함께 고정한다. 확정 positive와
+hard-negative가 모두 있고 review가 0건이며 annotation·privacy·rights와 두 역할의 독립 승인이
+완료된 경우에만 `gold_ready=true` report를 만들 수 있다.
+
 ## PF-003 matcher ablation
 
 `ablation_runner.py`는 Exact+Alias 기준선, matcher별 isolated candidate, Segmented

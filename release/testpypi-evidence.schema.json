@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/release/testpypi-evidence.schema.json",
+  "title": "Koguard TestPyPI installation evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "index_url",
+    "project_url",
+    "package",
+    "tested_at",
+    "python_version",
+    "metadata_verified",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "index_url": {"const": "https://test.pypi.org/simple/"},
+    "project_url": {"const": "https://test.pypi.org/project/koguard/0.1.0/"},
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"const": "koguard"},
+        "version": {"const": "0.1.0"}
+      }
+    },
+    "tested_at": {"type": "string", "format": "date-time"},
+    "python_version": {"const": "3.11.9"},
+    "metadata_verified": {"const": true},
+    "artifacts": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "sha256", "smoke_passed"],
+        "properties": {
+          "kind": {"enum": ["wheel", "sdist"]},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "smoke_passed": {"const": true}
+        }
+      }
+    }
+  }
+}

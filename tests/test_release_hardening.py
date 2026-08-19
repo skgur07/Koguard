@@ -66,7 +66,14 @@ def _write_sdist(
         "src/koguard/data/KORCEN-MIT.txt": b"MIT\n",
         "src/koguard/data/CURSE-DETECTION-DATA-MIT.txt": b"MIT\n",
         "docs/release-hardening.md": b"# Release hardening\n",
+        "docs/pf014-release-readiness.md": b"# PF-014\n",
+        "evaluation/hidden_evaluation_report.py": b'"""Aggregate report."""\n',
+        "evaluation/hidden-evaluation-attestation.schema.json": b"{}\n",
+        "evaluation/hidden-evaluation-report.schema.json": b"{}\n",
+        "release/release_report.py": b'"""Release report."""\n',
+        "release/release-report.schema.json": b"{}\n",
         "release/rights-manifest.v1.json": b"{}\n",
+        "release/testpypi-evidence.schema.json": b"{}\n",
     }
     if forbidden_member is not None:
         members[forbidden_member] = b"must not ship\n"
@@ -198,7 +205,14 @@ def test_project_metadata_and_release_documents_are_publication_complete() -> No
         Path("SECURITY.md"),
         Path("CONTRIBUTING.md"),
         Path("docs/release-hardening.md"),
+        Path("docs/pf014-release-readiness.md"),
         Path("release/rights-manifest.v1.json"),
+        Path("release/release_report.py"),
+        Path("release/release-report.schema.json"),
+        Path("release/testpypi-evidence.schema.json"),
+        Path("evaluation/hidden_evaluation_report.py"),
+        Path("evaluation/hidden-evaluation-attestation.schema.json"),
+        Path("evaluation/hidden-evaluation-report.schema.json"),
         Path(".mailmap"),
     ):
         assert path.is_file(), path

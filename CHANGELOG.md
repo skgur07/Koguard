@@ -13,6 +13,8 @@ Semantic Versioning after the first public release.
 - Cross-platform CI, clean-install smoke tests, security policy, contribution guide, and source-rights ledger.
 - MIT project license and Git identity normalization for the maintainer's previous `s23019` identity.
 - Four independently reviewed Korean literals and three owner-selected lowercase romanized literals.
+- Aggregate-only hidden evaluation attestation and PF-014 release decision report tooling.
+- TestPyPI evidence contract that binds installation smoke results to audited artifact hashes.
 
 ### Changed
 
@@ -24,5 +26,6 @@ Semantic Versioning after the first public release.
 - Maximum-input and matcher candidate bounds are enforced on adversarial Unicode, prefix, Whitelist, and gap
   paths.
 - Runtime processing remains offline and does not log inspected text by default.
+- GitHub private vulnerability reporting is enabled for confidential security reports.
 
 [Unreleased]: https://github.com/skgur07/Koguard/compare/dev...HEAD

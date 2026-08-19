@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/release/release-report.schema.json",
+  "title": "Koguard PF-014 release decision report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "release",
+    "evidence",
+    "package",
+    "artifacts",
+    "gates",
+    "blockers",
+    "decision",
+    "publication"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "commit"],
+      "properties": {
+        "name": {"const": "koguard"},
+        "version": {"const": "0.1.0"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_audit_sha256",
+        "rights_manifest_sha256",
+        "hidden_evaluation_sha256",
+        "testpypi_evidence_sha256",
+        "ci_run_url"
+      ],
+      "properties": {
+        "artifact_audit_sha256": {"$ref": "#/$defs/sha256"},
+        "rights_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "hidden_evaluation_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "testpypi_evidence_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "ci_run_url": {"type": "string", "format": "uri"}
+      }
+    },
+    "package": {"type": "object"},
+    "artifacts": {"type": "array", "minItems": 2, "maxItems": 2},
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifacts", "rights", "ci", "public_contract", "hidden_evaluation", "testpypi"],
+      "properties": {
+        "artifacts": {"type": "boolean"},
+        "rights": {"type": "boolean"},
+        "ci": {"type": "boolean"},
+        "public_contract": {"type": "boolean"},
+        "hidden_evaluation": {"type": "boolean"},
+        "testpypi": {"type": "boolean"}
+      }
+    },
+    "blockers": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "decision": {"enum": ["blocked", "ready-for-maintainer-approval"]},
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maintainer_approval_required", "main_promoted", "pypi_published"],
+      "properties": {
+        "maintainer_approval_required": {"const": true},
+        "main_promoted": {"const": false},
+        "pypi_published": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
