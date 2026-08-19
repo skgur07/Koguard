@@ -31,6 +31,7 @@ _ATTESTATION_FIELDS = frozenset(
         "evaluation_version",
         "release_commit",
         "protected_ablation_report_sha256",
+        "evaluated_artifact",
         "manifest",
         "corpus",
         "review",
@@ -63,6 +64,7 @@ _REVIEW_FIELDS = frozenset(
         "release_reviewer_approval_id",
     }
 )
+_EVALUATED_ARTIFACT_FIELDS = frozenset({"kind", "sha256"})
 
 
 class HiddenEvaluationReportError(ValueError):
@@ -209,6 +211,22 @@ def _validated_attestation(
     if bound_source_sha256 != source_sha256:
         raise HiddenEvaluationReportError("attestation is not bound to the protected report")
 
+    evaluated_artifact = _object(attestation.get("evaluated_artifact"), "evaluated_artifact")
+    _require_closed_fields(
+        evaluated_artifact,
+        _EVALUATED_ARTIFACT_FIELDS,
+        "evaluated_artifact",
+    )
+    if evaluated_artifact.get("kind") != "wheel":
+        raise HiddenEvaluationReportError("evaluated_artifact.kind must be wheel")
+    evaluated_artifact_evidence = {
+        "kind": "wheel",
+        "sha256": _sha256(
+            evaluated_artifact.get("sha256"),
+            "evaluated_artifact.sha256",
+        ),
+    }
+
     manifest = _object(attestation.get("manifest"), "manifest")
     _require_closed_fields(manifest, _MANIFEST_FIELDS, "manifest")
     manifest_id = _stable_id(manifest.get("manifest_id"), "manifest.manifest_id")
@@ -294,6 +312,7 @@ def _validated_attestation(
         "release_commit": release_commit,
         "manifest_id": manifest_id,
         "manifest_version": manifest_version,
+        "evaluated_artifact": evaluated_artifact_evidence,
         "corpus": corpus_evidence,
     }
 
@@ -345,6 +364,7 @@ def build_hidden_evaluation_report(
             "manifest_version": attested["manifest_version"],
             "normalization_version": NORMALIZATION_VERSION,
             "attestation_sha256": attestation_digest,
+            "evaluated_artifact": attested["evaluated_artifact"],
             "approval_count": 2,
             "direct_leak_count": 0,
             "normalized_leak_count": 0,

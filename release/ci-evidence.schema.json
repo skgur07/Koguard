@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/release/ci-evidence.schema.json",
+  "title": "Koguard GitHub Actions release evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider",
+    "repository",
+    "workflow",
+    "run_id",
+    "run_attempt",
+    "run_url",
+    "head_sha",
+    "event",
+    "conclusion",
+    "verified_at",
+    "jobs"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "provider": {"const": "github-actions"},
+    "repository": {"const": "skgur07/Koguard"},
+    "workflow": {"const": "CI"},
+    "run_id": {"type": "integer", "minimum": 1},
+    "run_attempt": {"type": "integer", "minimum": 1},
+    "run_url": {"type": "string", "pattern": "^https://github\\.com/skgur07/Koguard/actions/runs/[1-9][0-9]*$"},
+    "head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "event": {"enum": ["push", "workflow_dispatch"]},
+    "conclusion": {"const": "success"},
+    "verified_at": {"type": "string", "format": "date-time"},
+    "jobs": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/job"}
+    }
+  },
+  "$defs": {
+    "job": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["job_id", "name", "runner", "conclusion"],
+      "properties": {
+        "job_id": {"type": "integer", "minimum": 1},
+        "name": {"type": "string", "minLength": 1},
+        "runner": {"enum": ["ubuntu-latest", "windows-latest", "macos-latest"]},
+        "conclusion": {"const": "success"}
+      }
+    }
+  }
+}

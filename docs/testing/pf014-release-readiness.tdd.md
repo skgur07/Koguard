@@ -24,3 +24,23 @@
 불일치와 TestPyPI artifact hash 불일치를 각각 거부하거나 release blocker로 유지하는 것을
 확인했다. 최종 정렬 후 전체 634 tests와 branch coverage 95.62%, format, lint, mypy,
 dictionary provenance, build, artifact audit, wheel·sdist clean-install smoke가 모두 통과했다.
+
+## 2026-08-19 최종 evidence hardening
+
+전체 리뷰에서 schema상 필수인 profile·slice·limitation이 없는 축약 hidden JSON도 release gate를
+통과하는 실패를 재현했다. 또한 artifact audit에 commit/tree가 없고 CI 상태를 CLI 인자로
+직접 만들 수 있어 stale evidence를 최종 commit에 연결할 수 있었다.
+
+RED 테스트는 다음을 먼저 고정했다.
+
+- 축약·unknown-field·corpus 합계 불일치 hidden report 차단
+- hidden 평가 wheel SHA-256과 artifact audit wheel 불일치 차단
+- artifact audit release commit 불일치 거부
+- closed CI evidence와 세 OS job 성공 강제
+- GitHub Actions API 응답의 stale commit·누락 job 거부
+- closed rights manifest와 artifact source identity 기록
+
+구현 후 targeted 36 tests가 통과했다. `release.github_actions_evidence`는 실제 Actions run/job API를
+조회해 증거를 만들고, `release.release_report` CLI는 같은 조회 경로를 직접 사용한다. hidden
+attestation은 평가에 사용한 wheel SHA-256을 기록하며 최종 gate가 audited wheel과 대조한다.
+최종 전체 gate 수치는 모든 후속 hardening이 끝난 release commit에서 다시 기록한다.

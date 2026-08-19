@@ -17,6 +17,7 @@ from evaluation.hidden_evaluation_report import (
 
 _SOURCE_PATH = Path("evaluation/results/provisional-ablation-windows-python311.json")
 _RELEASE_COMMIT = "a" * 40
+_EVALUATED_WHEEL_SHA256 = "c" * 64
 
 
 def _sha256(path: Path) -> str:
@@ -31,6 +32,10 @@ def _attestation(source: dict[str, Any], source_sha256: str) -> dict[str, Any]:
         "evaluation_version": 1,
         "release_commit": _RELEASE_COMMIT,
         "protected_ablation_report_sha256": source_sha256,
+        "evaluated_artifact": {
+            "kind": "wheel",
+            "sha256": _EVALUATED_WHEEL_SHA256,
+        },
         "manifest": {
             "manifest_id": "koguard-release-evaluation",
             "manifest_version": 1,
@@ -82,6 +87,10 @@ def test_hidden_report_exposes_only_aggregate_release_evidence() -> None:
     assert report["report_kind"] == "hidden-evaluation"
     assert report["release_commit"] == _RELEASE_COMMIT
     assert report["evaluation"]["gold_ready"] is True
+    assert report["evaluation"]["evaluated_artifact"] == {
+        "kind": "wheel",
+        "sha256": _EVALUATED_WHEEL_SHA256,
+    }
     assert report["source"]["corpus"]["classification"] == "independent-hidden-evaluation"
     assert [profile["profile"] for profile in report["profiles"]] == [
         "strict",
@@ -104,6 +113,21 @@ def test_hidden_report_rejects_attestation_not_bound_to_source() -> None:
     attestation["corpus"]["sha256"] = "0" * 64
 
     with pytest.raises(HiddenEvaluationReportError, match="corpus evidence"):
+        build_hidden_evaluation_report(
+            source,
+            source_sha256=source_sha256,
+            attestation=attestation,
+            attestation_sha256="b" * 64,
+        )
+
+
+def test_hidden_report_rejects_invalid_evaluated_artifact() -> None:
+    source = json.loads(_SOURCE_PATH.read_text(encoding="utf-8"))
+    source_sha256 = _sha256(_SOURCE_PATH)
+    attestation = _attestation(source, source_sha256)
+    attestation["evaluated_artifact"]["sha256"] = "not-a-digest"
+
+    with pytest.raises(HiddenEvaluationReportError, match="evaluated_artifact"):
         build_hidden_evaluation_report(
             source,
             source_sha256=source_sha256,

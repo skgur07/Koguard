@@ -9,14 +9,19 @@ from pathlib import Path
 
 import pytest
 from release.artifact_audit import (
+    ARTIFACT_AUDIT_SCHEMA_PATH,
+    RIGHTS_MANIFEST_SCHEMA_PATH,
     ReleaseAuditError,
     audit_distributions,
     validate_rights_manifest,
+    validate_rights_manifest_payload,
 )
 from release.clean_install_smoke import discover_artifacts
 
 _WHEEL_NAME = "koguard-0.1.0-py3-none-any.whl"
 _SDIST_NAME = "koguard-0.1.0.tar.gz"
+_RELEASE_COMMIT = "a" * 40
+_SOURCE_TREE = "b" * 40
 _METADATA = """Metadata-Version: 2.4
 Name: koguard
 Version: 0.1.0
@@ -72,6 +77,10 @@ def _write_sdist(
         "evaluation/hidden-evaluation-report.schema.json": b"{}\n",
         "release/release_report.py": b'"""Release report."""\n',
         "release/release-report.schema.json": b"{}\n",
+        "release/artifact-audit.schema.json": b"{}\n",
+        "release/ci-evidence.schema.json": b"{}\n",
+        "release/github_actions_evidence.py": b'"""CI evidence."""\n',
+        "release/rights-manifest.schema.json": b"{}\n",
         "release/rights-manifest.v1.json": b"{}\n",
         "release/testpypi-evidence.schema.json": b"{}\n",
     }
@@ -90,9 +99,17 @@ def test_release_audit_records_hash_size_metadata_and_zero_runtime_dependencies(
     _write_wheel(tmp_path / _WHEEL_NAME)
     _write_sdist(tmp_path / _SDIST_NAME)
 
-    report = audit_distributions(tmp_path)
+    report = audit_distributions(
+        tmp_path,
+        release_commit=_RELEASE_COMMIT,
+        source_tree=_SOURCE_TREE,
+    )
 
     assert report["schema_version"] == 1
+    assert report["source"] == {
+        "release_commit": _RELEASE_COMMIT,
+        "git_tree": _SOURCE_TREE,
+    }
     assert report["package"] == {
         "name": "koguard",
         "version": "0.1.0",
@@ -105,12 +122,26 @@ def test_release_audit_records_hash_size_metadata_and_zero_runtime_dependencies(
     assert all(artifact["size_bytes"] > 0 for artifact in report["artifacts"])
 
 
+def test_release_audit_and_rights_schemas_are_closed() -> None:
+    audit_schema = json.loads(ARTIFACT_AUDIT_SCHEMA_PATH.read_text(encoding="utf-8"))
+    rights_schema = json.loads(RIGHTS_MANIFEST_SCHEMA_PATH.read_text(encoding="utf-8"))
+
+    assert audit_schema["properties"]["schema_version"]["const"] == 1
+    assert audit_schema["additionalProperties"] is False
+    assert rights_schema["properties"]["project_license"]["const"] == "MIT"
+    assert rights_schema["additionalProperties"] is False
+
+
 def test_release_audit_accepts_equivalent_requires_python_order(tmp_path: Path) -> None:
     reordered_metadata = _METADATA.replace(">=3.11,<3.12", "<3.12,>=3.11")
     _write_wheel(tmp_path / _WHEEL_NAME, metadata=reordered_metadata)
     _write_sdist(tmp_path / _SDIST_NAME, metadata=reordered_metadata)
 
-    report = audit_distributions(tmp_path)
+    report = audit_distributions(
+        tmp_path,
+        release_commit=_RELEASE_COMMIT,
+        source_tree=_SOURCE_TREE,
+    )
 
     assert report["package"]["requires_python"] == ">=3.11,<3.12"
 
@@ -120,7 +151,11 @@ def test_release_audit_rejects_non_runtime_payload_in_wheel(tmp_path: Path) -> N
     _write_sdist(tmp_path / _SDIST_NAME)
 
     with pytest.raises(ReleaseAuditError, match="forbidden wheel member"):
-        audit_distributions(tmp_path)
+        audit_distributions(
+            tmp_path,
+            release_commit=_RELEASE_COMMIT,
+            source_tree=_SOURCE_TREE,
+        )
 
 
 def test_release_audit_rejects_unexpected_wheel_root(tmp_path: Path) -> None:
@@ -128,7 +163,11 @@ def test_release_audit_rejects_unexpected_wheel_root(tmp_path: Path) -> None:
     _write_sdist(tmp_path / _SDIST_NAME)
 
     with pytest.raises(ReleaseAuditError, match="unexpected wheel member root"):
-        audit_distributions(tmp_path)
+        audit_distributions(
+            tmp_path,
+            release_commit=_RELEASE_COMMIT,
+            source_tree=_SOURCE_TREE,
+        )
 
 
 def test_release_audit_rejects_unsafe_archive_member(tmp_path: Path) -> None:
@@ -136,7 +175,11 @@ def test_release_audit_rejects_unsafe_archive_member(tmp_path: Path) -> None:
     _write_sdist(tmp_path / _SDIST_NAME)
 
     with pytest.raises(ReleaseAuditError, match="unsafe wheel member name"):
-        audit_distributions(tmp_path)
+        audit_distributions(
+            tmp_path,
+            release_commit=_RELEASE_COMMIT,
+            source_tree=_SOURCE_TREE,
+        )
 
 
 def test_release_audit_rejects_raw_dataset_in_sdist(tmp_path: Path) -> None:
@@ -144,7 +187,11 @@ def test_release_audit_rejects_raw_dataset_in_sdist(tmp_path: Path) -> None:
     _write_sdist(tmp_path / _SDIST_NAME, forbidden_member="evaluation/external/dataset.txt")
 
     with pytest.raises(ReleaseAuditError, match="forbidden sdist member"):
-        audit_distributions(tmp_path)
+        audit_distributions(
+            tmp_path,
+            release_commit=_RELEASE_COMMIT,
+            source_tree=_SOURCE_TREE,
+        )
 
 
 def test_rights_manifest_rejects_unapproved_public_payload(tmp_path: Path) -> None:
@@ -153,13 +200,20 @@ def test_rights_manifest_rejects_unapproved_public_payload(tmp_path: Path) -> No
         json.dumps(
             {
                 "schema_version": 1,
+                "reviewed_at": "2026-08-19",
                 "project_license": "MIT",
+                "artifact_policy": "Only approved payload may ship.",
                 "sources": [
                     {
                         "source_id": "unapproved-source",
+                        "reference": "https://example.invalid/source",
+                        "revision": "test-revision",
+                        "declared_license": None,
                         "rights_status": "pending",
+                        "allowed_scope": "reference-only",
                         "payload_in_artifacts": True,
                         "runtime_dependency": False,
+                        "evidence": "test fixture",
                     }
                 ],
             }
@@ -169,6 +223,14 @@ def test_rights_manifest_rejects_unapproved_public_payload(tmp_path: Path) -> No
 
     with pytest.raises(ReleaseAuditError, match="unapproved public payload"):
         validate_rights_manifest(manifest_path)
+
+
+def test_rights_manifest_rejects_unknown_fields() -> None:
+    manifest = json.loads(Path("release/rights-manifest.v1.json").read_text(encoding="utf-8"))
+    manifest["unexpected"] = True
+
+    with pytest.raises(ReleaseAuditError, match="closed contract"):
+        validate_rights_manifest_payload(manifest)
 
 
 def test_clean_install_discovers_exactly_one_wheel_and_sdist(tmp_path: Path) -> None:
@@ -207,6 +269,10 @@ def test_project_metadata_and_release_documents_are_publication_complete() -> No
         Path("docs/release-hardening.md"),
         Path("docs/pf014-release-readiness.md"),
         Path("release/rights-manifest.v1.json"),
+        Path("release/rights-manifest.schema.json"),
+        Path("release/artifact-audit.schema.json"),
+        Path("release/ci-evidence.schema.json"),
+        Path("release/github_actions_evidence.py"),
         Path("release/release_report.py"),
         Path("release/release-report.schema.json"),
         Path("release/testpypi-evidence.schema.json"),

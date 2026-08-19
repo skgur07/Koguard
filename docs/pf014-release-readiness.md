@@ -33,13 +33,15 @@ clean-install smoke를 통과했다. 이 결과는 로컬 준비 근거이며 �
    0건을 확인한다.
 3. 같은 commit과 CPython 3.11.9에서 `evaluation.ablation_runner`를 실행하고 case-level report는
    보호 환경 밖으로 반출하지 않는다.
-4. protected report SHA-256, corpus SHA-256·건수, manifest version, 독립 합의, privacy·rights
+4. artifact audit의 wheel을 설치해 실행하고 해당 wheel SHA-256을 기록한다.
+5. protected report SHA-256, corpus SHA-256·건수, manifest version, 독립 합의, privacy·rights
    완료와 서로 다른 custodian/release reviewer approval ID를 attestation에 기록한다.
-5. `evaluation.hidden_evaluation_report`로 aggregate-only report를 생성해 전달한다.
+6. `evaluation.hidden_evaluation_report`로 aggregate-only report를 생성해 전달한다.
 
 hidden report 생성기는 다음 조건을 모두 강제한다.
 
 - attestation과 protected ablation SHA-256 일치
+- attestation의 evaluated wheel SHA-256과 최종 artifact audit 일치
 - corpus SHA-256과 positive·hard-negative·review 건수 일치
 - 확정 positive와 hard-negative 각각 1건 이상, unresolved review 0건
 - 고정 split normalization version과 direct/normalized leak 0건
@@ -51,9 +53,9 @@ hidden report 생성기는 다음 조건을 모두 강제한다.
 
 `release.release_report`는 다음 증거를 하나의 결정 보고서로 묶는다.
 
-- `release.artifact_audit`의 wheel·sdist metadata, 크기와 SHA-256
-- MIT rights manifest와 공개 payload 승인 상태
-- 최종 release commit과 동일한 3 OS CI 성공
+- `release.artifact_audit`의 release commit·Git tree, wheel·sdist metadata, 크기와 SHA-256
+- closed MIT rights manifest와 공개 payload 승인 상태
+- GitHub API에서 직접 확인한 최종 release commit의 3 OS CI 성공
 - 공개 API 동결, README 주장 검토, 알려진 한계, core/AI 범위 분리
 - `gold_ready=true` hidden aggregate와 balanced gate
 - TestPyPI의 동일 artifact hash 설치 및 smoke evidence
@@ -63,13 +65,20 @@ uv run python -m release.release_report `
   --artifact-audit C:\handoff\release-audit.json `
   --release-commit <40-character-final-commit> `
   --ci-run-url <final-ci-run-url> `
-  --ci-head-sha <40-character-final-commit> `
   --public-contract-reviewed `
   --private-vulnerability-reporting-enabled `
   --hidden-evaluation C:\handoff\pf014-hidden-v1.aggregate.json `
   --testpypi-evidence C:\handoff\testpypi-evidence.json `
   --output C:\handoff\release-report.json
 ```
+
+`--ci-run-url`은 성공으로 간주하는 수동 문자열이 아니다. release report CLI가 GitHub Actions
+run과 jobs API를 다시 조회해 repository, workflow, head SHA, trigger, conclusion과 정확한 세 OS
+CPython 3.11.9 job을 확인하고 canonical CI evidence hash를 최종 보고서에 기록한다. API rate
+limit이 필요한 환경에서는 `GITHUB_TOKEN`을 설정할 수 있으며 값은 보고서나 로그에 남기지 않는다.
+
+artifact audit CLI는 clean Git checkout에서 `HEAD`와 `HEAD^{tree}`를 직접 읽는다. 따라서
+commit되지 않은 tracked 변경으로 만든 산출물은 release evidence로 감사할 수 없다.
 
 hidden 또는 TestPyPI evidence가 없으면 보고서는 실패로 사라지지 않고 `decision=blocked`와
 구체적인 blocker code를 기록한다. 모든 자동 gate가 통과해도 결과는
