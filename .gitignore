@@ -11,6 +11,9 @@ htmlcov/
 build/
 dist/
 /release-audit*.json
+/release-report*.json
+/hidden-evaluation*.json
+/testpypi-evidence*.json
 /test.py
 # Protected corpus raw text must never become a public repository artifact.
 /evaluation/hidden/

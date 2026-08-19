@@ -195,7 +195,14 @@ def _audit_sdist(path: Path) -> tuple[dict[str, object], dict[str, object]]:
             "src/koguard/data/KORCEN-MIT.txt",
             "src/koguard/data/CURSE-DETECTION-DATA-MIT.txt",
             "docs/release-hardening.md",
+            "docs/pf014-release-readiness.md",
+            "evaluation/hidden_evaluation_report.py",
+            "evaluation/hidden-evaluation-attestation.schema.json",
+            "evaluation/hidden-evaluation-report.schema.json",
+            "release/release_report.py",
+            "release/release-report.schema.json",
             "release/rights-manifest.v1.json",
+            "release/testpypi-evidence.schema.json",
         )
         _require_members(
             names,

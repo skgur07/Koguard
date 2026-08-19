@@ -18,6 +18,12 @@ Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy
 Koguard 정책으로 판정한 gold가 아닙니다. 현재 상태와 완료 전 blocker는
 [PF-005 corpus 상태](https://github.com/skgur07/Koguard/blob/dev/docs/corpus-intake-status.md)를 참고하세요.
 
+`0.1.0`은 아직 PyPI에 공개하지 않았습니다. PF-013의 MIT·CI·artifact hardening은 완료했고
+비공개 취약점 신고도 활성화했습니다. 남은 공개 gate는 저장소 밖 독립 hidden evaluation과
+TestPyPI 설치 검증이며, 실제 `main` 승격과 PyPI 업로드는 유지관리자의 별도 승인을 요구합니다.
+현재 판정과 안전한 실행 절차는
+[PF-014 릴리즈 준비 보고서](https://github.com/skgur07/Koguard/blob/dev/docs/pf014-release-readiness.md)에 기록합니다.
+
 0.1.0의 폐쇄된 import 목록, 제거한 미래 enum과 Adapter·Plugin·AI·masking 비지원 경계는
 [공개 API inventory](https://github.com/skgur07/Koguard/blob/dev/docs/public-api-inventory.md)에 기록되어 있습니다.
 

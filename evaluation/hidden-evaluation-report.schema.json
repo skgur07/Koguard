@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/hidden-evaluation-report.schema.json",
+  "title": "Koguard aggregate-only hidden evaluation report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "report_kind",
+    "release_commit",
+    "evaluation",
+    "source",
+    "profiles",
+    "balanced_evidence",
+    "balanced_gates",
+    "balanced_slice_metrics",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "report_kind": {"const": "hidden-evaluation"},
+    "release_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluation_id",
+        "evaluation_version",
+        "manifest_id",
+        "manifest_version",
+        "normalization_version",
+        "attestation_sha256",
+        "approval_count",
+        "direct_leak_count",
+        "normalized_leak_count",
+        "gold_ready"
+      ],
+      "properties": {
+        "evaluation_id": {"type": "string"},
+        "evaluation_version": {"type": "integer", "minimum": 1},
+        "manifest_id": {"type": "string"},
+        "manifest_version": {"type": "integer", "minimum": 1},
+        "normalization_version": {"const": "nfkc-casefold-strip-pzc-repeat-v1"},
+        "attestation_sha256": {"$ref": "#/$defs/sha256"},
+        "approval_count": {"const": 2},
+        "direct_leak_count": {"const": 0},
+        "normalized_leak_count": {"const": 0},
+        "gold_ready": {"const": true}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protected_ablation_report_sha256", "measured_at", "corpus", "environment"],
+      "properties": {
+        "protected_ablation_report_sha256": {"$ref": "#/$defs/sha256"},
+        "measured_at": {"type": "string", "format": "date-time"},
+        "corpus": {"$ref": "#/$defs/corpus"},
+        "environment": {"type": "object"}
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/profile"}
+    },
+    "balanced_evidence": {"type": "object"},
+    "balanced_gates": {
+      "type": "object",
+      "required": ["passed"],
+      "properties": {"passed": {"type": "boolean"}}
+    },
+    "balanced_slice_metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/sliceMetric"}
+    },
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "sha256",
+        "case_count",
+        "positive_count",
+        "hard_negative_count",
+        "excluded_review_count",
+        "gold_ready"
+      ],
+      "properties": {
+        "classification": {"const": "independent-hidden-evaluation"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "case_count": {"type": "integer", "minimum": 2},
+        "positive_count": {"type": "integer", "minimum": 1},
+        "hard_negative_count": {"type": "integer", "minimum": 1},
+        "excluded_review_count": {"const": 0},
+        "gold_ready": {"const": true}
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "source_profile_id",
+        "settings",
+        "sentence_metrics",
+        "occurrence_metrics",
+        "performance"
+      ],
+      "properties": {
+        "profile": {"enum": ["strict", "balanced", "aggressive"]},
+        "source_profile_id": {"enum": ["exact-alias", "choseong", "all-enabled"]},
+        "settings": {"type": "object"},
+        "sentence_metrics": {"type": "object"},
+        "occurrence_metrics": {"type": "object"},
+        "performance": {"type": "object"}
+      }
+    },
+    "sliceMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slice", "case_count", "sentence_metrics", "occurrence_metrics"],
+      "properties": {
+        "slice": {"type": "string"},
+        "case_count": {"type": "integer", "minimum": 1},
+        "sentence_metrics": {"type": "object"},
+        "occurrence_metrics": {"type": "object"}
+      }
+    }
+  }
+}
