@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/corpus-composition-report.schema.json",
+  "title": "Koguard multi-source review composition report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "composition_id",
+    "corpus_id",
+    "selected_count",
+    "configured_max_source_share",
+    "maximum_observed_source_share",
+    "source_bias_gate_passed",
+    "source_statistics",
+    "generated_label_counts",
+    "adjudication_quality",
+    "gold_ready",
+    "completion_blockers"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "composition_id": {"type": "string"},
+    "corpus_id": {"type": "string"},
+    "selected_count": {"type": "integer", "minimum": 1},
+    "configured_max_source_share": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+    "maximum_observed_source_share": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+    "source_bias_gate_passed": {"const": true},
+    "source_statistics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "available_count", "selected_count", "duplicate_excluded_count", "share"],
+        "properties": {
+          "source_id": {"type": "string"},
+          "available_count": {"type": "integer", "minimum": 1},
+          "selected_count": {"type": "integer", "minimum": 1},
+          "duplicate_excluded_count": {"type": "integer", "minimum": 0},
+          "share": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+        }
+      }
+    },
+    "generated_label_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positive", "hard-negative", "review"],
+      "properties": {
+        "positive": {"type": "integer", "minimum": 0},
+        "hard-negative": {"type": "integer", "minimum": 0},
+        "review": {"type": "integer", "minimum": 0}
+      }
+    },
+    "adjudication_quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["carried_finalized", "pending_review"],
+      "properties": {
+        "carried_finalized": {"type": "integer", "minimum": 0},
+        "pending_review": {"type": "integer", "minimum": 0}
+      }
+    },
+    "gold_ready": {"const": false},
+    "completion_blockers": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}

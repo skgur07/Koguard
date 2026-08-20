@@ -17,6 +17,29 @@ upstream의 0/1 판정은 Koguard의 욕설 정책, exact span, canonical term a
 따라서 Koguard는 이를 gold label로 복사하지 않고 2,500건의 tuning `review` intake만 생성한다.
 source label은 deterministic 층화 선택에만 사용하고 생성 case에는 기록하지 않는다.
 
+## KOTE v1
+
+- upstream: <https://github.com/searle-j/KOTE>
+- revision: `cafd2c3f54a6f4b25ac74eaa02a2e76c3ef8c977`
+- artifact: `train.tsv`, 40,000 rows
+- license: MIT
+- source spec: `kote.v1.json`
+
+정서 label은 Koguard lexical 정책과 무관하므로 intake에 복사하지 않는다. 750건을 전체 row에서
+stable SHA-256 rank로 선택해 모두 tuning `review`로 유지한다.
+
+## BEEP Korean Hate Speech v1
+
+- upstream: <https://github.com/kocohub/korean-hate-speech>
+- revision: `f8d05dce2b22007bb149e5139c0060c68ad8f94b`
+- artifact: `labeled/train.tsv`, 7,896 rows
+- license: CC-BY-SA-4.0
+- source spec: `beep-korean-hate-speech.v1.json`
+
+upstream의 `hate`/`offensive`/`none`은 선택 strata로만 사용한다. 각 250건을 골라 750건 review
+intake를 만들며 Koguard label·span으로 복사하지 않는다. 향후 원문 또는 annotation 공개물은
+CC-BY-SA attribution과 share-alike 경계를 별도로 유지한다.
+
 ## 제외한 후보
 
 - Korean UnSmile dataset: 데이터 라이선스가 CC-BY-NC-ND 4.0이므로 상용 사용과 변형이 필요한

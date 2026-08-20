@@ -16,8 +16,19 @@ occurrence TP +20/FP -1을 확인했고 개별 5개가 tuning gate를 통과했�
 PF-009 기본 profile 전환 뒤에도 후보 증분의 비교 기준이 바뀌지 않도록 baseline과 후보 engine은
 `aggressive`를 명시한다.
 
-## 남은 작업
+## 당시 남은 작업
 
 두 실패 후보는 효과 없음 또는 occurrence 정합성 비용 때문에 그대로 승격하지 않는다. 통과
 후보도 hidden evaluation이 없으므로 `candidate` 상태를 유지한다. PF-005의 다음 독립 batch로
 support와 FP 예산을 늘리고 hidden gate를 통과한 뒤에만 packaged data 변경을 검토한다.
+
+## 2026-08-19 다중 출처 재평가
+
+다중 출처 composition에 기존 확정 92건을 보존해 남은 후보 3개를 다시 평가했다. 입력 hash가
+Windows CRLF와 Git LF에서 달라지지 않도록 JSON 바이트의 줄바꿈을 LF로 정규화한 뒤 SHA-256을
+계산하는 회귀를 추가했다. 새 보고서는 승격 전 manifest의 Git blob과 보호 composition의
+canonical-LF hash에 결박된다.
+
+새 평가에서 `.001`, `.002`는 tuning gate를 통과해 소유자의 문맥 무관 차단 정책에 따라
+packaged로 승격했고, `.007`은 문장 TP 증가 없이 occurrence FP가 1건 늘어 candidate로 남겼다.
+hidden evaluation 전에는 #9를 완료로 닫지 않는다.

@@ -60,6 +60,7 @@ include = [
     "/docs/testing/unicode-fp-hardening.tdd.md",
     "/docs/testing/release-hardening.tdd.md",
     "/docs/testing/pf014-release-readiness.tdd.md",
+    "/docs/testing/multi-source-corpus-intake.tdd.md",
     "/docs/testing/profile-api-contract.tdd.md",
     "/docs/testing/quarantine-intake.tdd.md",
     "/README.md",
@@ -73,6 +74,10 @@ exclude = [
     "/evaluation/annotation-work",
     "/evaluation/quarantine",
     "/evaluation/corpus/tuning/curse-review-intake-v1.json",
+    "/evaluation/corpus/tuning/kote-review-intake-v1.json",
+    "/evaluation/corpus/tuning/beep-review-intake-v1.json",
+    "/evaluation/corpus/tuning/pf005-balanced-review-intake-v1.json",
+    "/evaluation/corpus/tuning/curated-policy-slices-v1.json",
 ]
 
 [tool.ruff]

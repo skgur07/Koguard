@@ -1,0 +1,4756 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-curated-policy-slices-v1",
+  "cases": [
+    {
+      "id": "koguard-curated-review-013f4ecdc66fac6a23aa",
+      "text": "검토할 사용자명은 지랄마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-014363faa8bd31831f4b",
+      "text": "검토할 사용자명은 염병마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-01b9364aa22fde87eec6",
+      "text": "교육 문서에서 미소 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-01e995c80ce40a3a8e4b",
+      "text": "게임 아이템 뒤뜰 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-03887b443ee4a2edd7d6",
+      "text": "따뜻 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-065f6205d0e843c77d15",
+      "text": "양치 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-0683c12ad5878997eabe",
+      "text": "게임 아이템 또박 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-071c0d6d448e2b3e6c07",
+      "text": "교육 문서에서 조선 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-0723518ec05cff413f02",
+      "text": "검토할 사용자명은 찐따마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-0797a5000fdad3de7337",
+      "text": "문서에 인용된 표현은 '미친년'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-095474e378a97080c050",
+      "text": "문서에 인용된 표현은 '머저리'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-0a9f05f341d5f14abcf9",
+      "text": "교육 문서에서 보조 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-0afaf6b91588a973c86a",
+      "text": "병신이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-0bc385d5ea2b224f4c9b",
+      "text": "게임 채팅 기록에 개년이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-0bfef3e9391744d2226e",
+      "text": "검토할 사용자명은 존나마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-0ce92bb371f4b5af4f30",
+      "text": "느낌 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-0dd1396925dc96e91316",
+      "text": "검토할 사용자명은 개념연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-0fde6a29c835c46550f8",
+      "text": "교육 자료에서 닥쳐이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-108a98097e4bdfdef8e5",
+      "text": "교육 자료에서 미친놈이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-121c46f55c9c42c0d1c3",
+      "text": "닭요리 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-130e1ab62d30add928bd",
+      "text": "검토할 사용자명은 좋다연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-1431a4256d2f9731f2ff",
+      "text": "게임 채팅 기록에 좆이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-164c1d2aea0447902ade",
+      "text": "교육 문서에서 씨앗 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-16704030a5b931d2ddb0",
+      "text": "개나리 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-17dbb1e2c1abdb42b245",
+      "text": "교육 문서에서 좋다 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-182cad851f81e3a81d7e",
+      "text": "개년이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-196281589df2458c3a9e",
+      "text": "교육 자료에서 또라이이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-196ad1a087820b8a91e7",
+      "text": "미술 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-1a374d99ea9905bb4e74",
+      "text": "게임 아이템 미술 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-1bfe1c305484e4397baf",
+      "text": "교육 자료에서 개놈이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-1ce3f69067e6a2a29899",
+      "text": "게임 아이템 씨앗 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-1d5cfc7ee0c35b677be5",
+      "text": "게임 아이템 미소 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-1f9f61bbc126f1f41c63",
+      "text": "문서에 인용된 표현은 '미친놈'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-1fc08828bd99b41d10f3",
+      "text": "검토할 사용자명은 미친놈마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-2044436fdf0ebf2157ba",
+      "text": "교육 자료에서 등신이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-20a9e7e3262908bf3fd5",
+      "text": "문서에 인용된 표현은 '느금마'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-212e16ce7a8a0aeaae2a",
+      "text": "교육 문서에서 꼴찌 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-221a5fccde1924d41006",
+      "text": "문서에 인용된 표현은 '개년'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-226d12bc9356674b8753",
+      "text": "검토할 사용자명은 틀니연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-2424f5ed94dafef2cdf7",
+      "text": "거주 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-25b0cbe20f9390d64ba9",
+      "text": "조선 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-266bd2902ecc9cdbcbe2",
+      "text": "검토할 사용자명은 느금마마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-286900150ce1db230f1e",
+      "text": "게임 채팅 기록에 지랄이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-2881ac590006843b091a",
+      "text": "보조 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-2890739e00415afabede",
+      "text": "게임 채팅 기록에 찐따이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-29fc3cfc99607cb6027b",
+      "text": "게임 아이템 좋다 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-2ab938ca6680ebaaf83b",
+      "text": "게임 채팅 기록에 미친년이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-2bc5e74ebd534cf4a9d8",
+      "text": "교육 문서에서 돌잔치 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-2c0bfe0ab4a2c1d29826",
+      "text": "문서에 인용된 표현은 '개새끼'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-2c372ee651537cdedc34",
+      "text": "게임 채팅 기록에 느금마이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-2f2588687ddd8068fd45",
+      "text": "미친놈이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-30552ac413f791e49306",
+      "text": "교육 문서에서 머리 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-3117625244aeca4bef8b",
+      "text": "존나이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-31b7911c74bbc2960cc7",
+      "text": "씨앗 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-32c316793750ca6e2f57",
+      "text": "문서에 인용된 표현은 '존나'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-3363e15affc23776cdcb",
+      "text": "검토할 사용자명은 느낌연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-34aa9e5eddbd8ca94b64",
+      "text": "검토할 사용자명은 머리연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-34c38b57dedca3469117",
+      "text": "검토할 사용자명은 닥쳐마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-35633ac6673af247359c",
+      "text": "게임 채팅 기록에 또라이이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-366aa9365a0606fb7757",
+      "text": "개나리 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-367462e4b4f9bc6e1f44",
+      "text": "문서에 인용된 표현은 '또라이'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-36f12a129417b8623c06",
+      "text": "게임 아이템 보조 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-383e51376f8291a60820",
+      "text": "검토할 사용자명은 머저리마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-3848d06bd9ec7650e2f1",
+      "text": "검토할 사용자명은 뒤뜰연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-392bd23f671fa50aae41",
+      "text": "교육 문서에서 염색 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-3a9b3f580f991b08348e",
+      "text": "교육 문서에서 뒤뜰 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-3d0b9da57cc32a61690a",
+      "text": "게임 아이템 진달래 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-3d8376958b35b894ad8a",
+      "text": "검토할 사용자명은 보조연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-3da46bf26a7ae7aa0700",
+      "text": "게임 채팅 기록에 머저리이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-3e57dc791429970f446a",
+      "text": "양치 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-3e848b5660e6d58dd77a",
+      "text": "문서에 인용된 표현은 '틀딱'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-3f25f160abb772ed6629",
+      "text": "등신이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-4054f059a08e42ffc2d0",
+      "text": "쓰레받기 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-40b47d3678555a08ff84",
+      "text": "게임 아이템 머리 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-426dbd9cfba13e5f3ecc",
+      "text": "또박 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-4333bba10dc0e8212ea9",
+      "text": "교육 문서에서 창문 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-4692a1484417c3c31bf4",
+      "text": "문서에 인용된 표현은 '좆'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-46c3316aaf555b8a06cb",
+      "text": "문서에 인용된 표현은 '개놈'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-47ae0f3ba35a38a132ce",
+      "text": "교육 문서에서 개울 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-47b7a013296071c7daa2",
+      "text": "또박 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-48b750c99f15b02d8fd8",
+      "text": "게임 아이템 따뜻 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-4913c1954025f2270b18",
+      "text": "거주 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-493db17ceccf8aea6ad8",
+      "text": "개념 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-496ccf28fd00413e6e27",
+      "text": "게임 아이템 시범 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-4ca82657c8235374d109",
+      "text": "게임 아이템 다쳐 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-4d284beade1d60ac6be9",
+      "text": "머리 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-4e45e0b481bc07fd54dd",
+      "text": "게임 아이템 개념 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-4eabf0f277b40f7d19e0",
+      "text": "창문 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-4f187abc30bb552896b4",
+      "text": "교육 문서에서 병원 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-502614bc2115ff08039d",
+      "text": "다쳐 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-502e20eb33120dcb0bad",
+      "text": "틀딱이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-50b90f130102e9bd25b4",
+      "text": "교육 문서에서 시범 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-516375ba134422496e8d",
+      "text": "게임 아이템 병원 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-543e87d2fe9a300d12b2",
+      "text": "교육 문서에서 지리산 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-54e794cd2735800af32d",
+      "text": "지리산 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-55a002566409fe78bf40",
+      "text": "검토할 사용자명은 미소연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-58cb3cd353955e244a11",
+      "text": "닭요리 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-58cedfb3f96d794daf6b",
+      "text": "돌잔치 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-58d5f0429758f4ce2880",
+      "text": "교육 문서에서 쓰레받기 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-5a032eb63092c88167b0",
+      "text": "교육 문서에서 존중 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-5cea04fbb4a45b66fc5d",
+      "text": "개울 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-5d398aa66affaef7d632",
+      "text": "교육 문서에서 느낌 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-5d5261ef7ee1f696b651",
+      "text": "미친년이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-5e2dae8c546ad4f03d73",
+      "text": "검토할 사용자명은 개나리연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-5e6b29c5b85433aafbbe",
+      "text": "게임 아이템 조선 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-5edc3e6925ca3409d08e",
+      "text": "게임 아이템 쓰레받기 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-5f250ca0ec49f1e99ff9",
+      "text": "염색 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-60a18d84b70743452ad5",
+      "text": "교육 문서에서 닭요리 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-60cbdea5b0cdf2967e75",
+      "text": "교육 문서에서 진달래 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-6224d75b0e0d5fd0595e",
+      "text": "쓰레받기 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-624a7a64a92e009e4ae6",
+      "text": "게임 채팅 기록에 미친놈이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-6267a21bac2842eabde9",
+      "text": "문서에 인용된 표현은 '병신'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-62ad644a479021fd6c2e",
+      "text": "게임 채팅 기록에 닥쳐이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-63ee6a208b5ecf7f4cd7",
+      "text": "창문 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-6b45ee4293065ba09c8e",
+      "text": "시범 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-6be1027d00a88527844d",
+      "text": "병원 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-6d858c116b109c3fabf3",
+      "text": "꺼져이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-6e182c89202a8dc4a5cb",
+      "text": "검토할 사용자명은 양치연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-6e434e848233c257eb75",
+      "text": "교육 문서에서 양치 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-6f08a0a2591727b1740c",
+      "text": "게임 아이템 존중 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-6f5ff8c6db85c3e6e6cf",
+      "text": "교육 문서에서 또박 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-7087cc70cbd1d97a98d9",
+      "text": "교육 자료에서 개년이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-70c1aa07ebcfeb293f76",
+      "text": "검토할 사용자명은 닭요리연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-711c920044b7f07d0c32",
+      "text": "교육 자료에서 개새끼이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-71d284a2b0d3fac9cd20",
+      "text": "꼴찌 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-721225fcd70c78f748b1",
+      "text": "머저리이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-72237c73511cc40c0098",
+      "text": "게임 아이템 개나리 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-72257d076077bccae976",
+      "text": "문서에 인용된 표현은 '찐따'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-74785ec7d16f114b2ad1",
+      "text": "검토할 사용자명은 병원연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-7573719201709358b448",
+      "text": "닥쳐이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-75ed650e74c1627dbea4",
+      "text": "게임 아이템 양치 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-7651ecc4e3dfb3c5a36d",
+      "text": "따뜻 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-76546623fc08e2b413b9",
+      "text": "검토할 사용자명은 거주연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-78d7d7d012a13abf92d9",
+      "text": "게임 아이템 창문 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-7c2bc1b894cd21bc7e22",
+      "text": "좆이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-7c7ae4afc7c565aa4887",
+      "text": "검토할 사용자명은 창문연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-830e1bd224ae1a88994c",
+      "text": "교육 자료에서 느금마이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-847e8b4f7e99f2d68adc",
+      "text": "교육 문서에서 따뜻 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-8510250807baf8c288b4",
+      "text": "좋다 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-8510a693ff8b68e283bc",
+      "text": "게임 아이템 지리산 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-85628a1c4beaf4cc3f66",
+      "text": "게임 채팅 기록에 개놈이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-85aee5b51d004f3d2d49",
+      "text": "머리 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-8792b899f36989a10f38",
+      "text": "검토할 사용자명은 씨앗연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-8842f77e6d76a595e1c9",
+      "text": "씨앗 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-886c44295fecd6bfb13c",
+      "text": "검토할 사용자명은 꼴찌연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-88e5b674a827e9cd87cf",
+      "text": "검토할 사용자명은 진달래연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-89a9b5ac05fe165ee81d",
+      "text": "교육 문서에서 개나리 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-8b50b847f7ecf4536137",
+      "text": "검토할 사용자명은 꺼져마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-8baf50e2572aa9910313",
+      "text": "진달래 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-8be08a4aff1d8562aaee",
+      "text": "검토할 사용자명은 존중연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-8c26c5dec0a9770986e9",
+      "text": "문서에 인용된 표현은 '꺼져'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-8c454f3b189ce8cace8a",
+      "text": "시범 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-8d3ea6b2f60eeb176fce",
+      "text": "돌잔치 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-903787dbef840f55fc90",
+      "text": "또라이이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-903f405f9804b431a1ff",
+      "text": "검토할 사용자명은 또박연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-92b9e127032172a1fac2",
+      "text": "지랄이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-98535675a1056a04db54",
+      "text": "뒤뜰 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-98fea2111637fcdea783",
+      "text": "개놈이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-9900b8ad8ab1ac343ead",
+      "text": "검토할 사용자명은 개놈마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-9b53f99722664fdeebc5",
+      "text": "게임 아이템 개울 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-9c6e8222a19a7ccc3674",
+      "text": "검토할 사용자명은 시발마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-9e6188f951e7f71f7968",
+      "text": "검토할 사용자명은 따뜻연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-9e753291323cfd068a76",
+      "text": "진달래 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-a0362bed3745075ee66c",
+      "text": "게임 아이템 돌잔치 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-a1794a31d1b49f1ebbcb",
+      "text": "게임 아이템 등산 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-a3d80bbe8af199e6d898",
+      "text": "뒤뜰 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-a3e8848915f4c3996720",
+      "text": "게임 채팅 기록에 염병이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-a6567e9418e2e79e1e23",
+      "text": "교육 문서에서 등산 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-a67a5ee3a730685b940e",
+      "text": "찐따이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-aa1e6cdf7888366ef0f2",
+      "text": "개울 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-aa994482cd1ddc8bede4",
+      "text": "느금마이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-aac97f6b6f95589b1a78",
+      "text": "조선 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ac6274e3ea8a35104dc8",
+      "text": "교육 자료에서 머저리이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-adf6fea61a93b7081e16",
+      "text": "교육 문서에서 거주 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ae51577e1a9cc3cac961",
+      "text": "게임 채팅 기록에 시발이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-aeb7f5a4b0f902c9bda5",
+      "text": "문서에 인용된 표현은 '씨발'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-b3076f07a9c250d34eef",
+      "text": "문서에 인용된 표현은 '염병'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-b56efa1c22992bd29d56",
+      "text": "교육 자료에서 틀딱이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-b5a4023cc6b3adfbb3ec",
+      "text": "미술 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-b61ebc74b79ecc12801d",
+      "text": "씨발이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-b82340bfe9a1a5c5b8d9",
+      "text": "게임 채팅 기록에 개새끼이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-b8e46e7c5767f6b8bcf1",
+      "text": "검토할 사용자명은 개년마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-b980d87a3f8a1e0aae57",
+      "text": "게임 아이템 꼴찌 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ba2bf5fc5327f833b926",
+      "text": "다쳐 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-bb74e6fa9e652949cf42",
+      "text": "검토할 사용자명은 돌잔치연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-bc7db0788679234fdbe9",
+      "text": "게임 아이템 염색 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-be40b2b1787a3007c3e2",
+      "text": "틀니 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-beb03a9330730f829a62",
+      "text": "검토할 사용자명은 미술연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-bee5217252b94d09a024",
+      "text": "검토할 사용자명은 다쳐연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-bf09fc48689e14649abc",
+      "text": "개념 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-c02e3dc8cac9bddc8666",
+      "text": "교육 문서에서 미술 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-c032d3028e9390890da4",
+      "text": "등산 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-c1a7b797c9c530af4aec",
+      "text": "게임 아이템 닭요리 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-c3fb5541926ff73d5f19",
+      "text": "교육 자료에서 씨발이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-c5615304085ef2e93863",
+      "text": "틀니 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-c6b8514b1eb463f6770f",
+      "text": "검토할 사용자명은 개울연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-c71a25e71f675042cd80",
+      "text": "병원 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-c9b514f1005703d9020d",
+      "text": "검토할 사용자명은 쓰레받기연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ca3427d43bb19ad1b58c",
+      "text": "게임 아이템 틀니 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-cb8d6ca78f01e6d4f729",
+      "text": "검토할 사용자명은 염색연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-cba6e9c4086c47c30540",
+      "text": "개새끼이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-cd9bf5d2ab6b51f1d5e4",
+      "text": "게임 채팅 기록에 꺼져이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ce68ff1ef0f0c6373515",
+      "text": "검토할 사용자명은 씨발마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-cfdfe26750cc3aa39671",
+      "text": "게임 채팅 기록에 등신이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-d0c3cdaa385ba9c50f8e",
+      "text": "문서에 인용된 표현은 '지랄'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-d1adcc33427f5f79f8b9",
+      "text": "검토할 사용자명은 좆마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-d34ab594cf489fd9de14",
+      "text": "게임 채팅 기록에 틀딱이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-d352374ba5b740dff271",
+      "text": "교육 자료에서 존나이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-d40f8df690541903bc04",
+      "text": "게임 아이템 느낌 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-d797d0fe4272ecd26dd7",
+      "text": "문서에 인용된 표현은 '시발'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-d894fd64900ab0636781",
+      "text": "교육 문서에서 개념 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-d8e0d1f01f0eb63a2fb2",
+      "text": "지리산 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-da8c725c316e2fcdc189",
+      "text": "보조 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-dd9f3bc15113c2356f3e",
+      "text": "검토할 사용자명은 미친년마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ddcb0e5877d123eccc1b",
+      "text": "게임 아이템 거주 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-de5730d257b1f807f04c",
+      "text": "검토할 사용자명은 등신마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-df16d209133205fb67f0",
+      "text": "검토할 사용자명은 지리산연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-e002d44bb350475f0a82",
+      "text": "시발이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-e013d132ff73c523c015",
+      "text": "교육 문서에서 다쳐 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-e27c4265f6589f466348",
+      "text": "교육 문서에서 틀니 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-e29be8f144ba9954d98d",
+      "text": "미소 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-e89c30da17bcba0ac9f8",
+      "text": "교육 자료에서 좆이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-e9fca28fcac002a7dad7",
+      "text": "게임 채팅 기록에 존나이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ea2eaf3f39274ad37a3b",
+      "text": "등산 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ebf8a9af1bd7538cba66",
+      "text": "검토할 사용자명은 시범연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ecb77b4828c099424cb9",
+      "text": "검토할 사용자명은 병신마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ed2e2242b3ee9d53aa5e",
+      "text": "검토할 사용자명은 개새끼마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ed9e72578602b5e426ae",
+      "text": "느낌 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-efff5a14c17a0cdc5dc1",
+      "text": "검토할 사용자명은 또라이마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f0392a2598a0ef99b97b",
+      "text": "좋다 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f0dcd685ee376f813428",
+      "text": "미소 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f2008c6909b3054ea52d",
+      "text": "교육 자료에서 찐따이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f2d1b3d68969310fbf5c",
+      "text": "교육 자료에서 꺼져이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f42f84b32c3fc6ec2a9d",
+      "text": "검토할 사용자명은 조선연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f4645603305b9868a898",
+      "text": "존중 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f46879564bfe7c7adbb4",
+      "text": "게임 채팅 기록에 병신이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f57b45ff4a35ab856a90",
+      "text": "검토할 사용자명은 등산연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f64e10fbedd7763f7951",
+      "text": "염병이 포함된 복합 문자열을 차단 정책 예시로 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f8f4f4fa167e7cdc0d1e",
+      "text": "문서에 인용된 표현은 '닥쳐'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-f950770f1ed1041f7e6f",
+      "text": "교육 자료에서 미친년이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-fbe7d5cb2ca6091b694b",
+      "text": "교육 자료에서 병신이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-fc7099d917a7016d4588",
+      "text": "존중 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-fcce42f9b9006e2a3972",
+      "text": "교육 자료에서 지랄이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-fce53d1599fe0ef17647",
+      "text": "문서에 인용된 표현은 '등신'입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-fdce2e471d716dff7dca",
+      "text": "꼴찌 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-fdf944d84414c7f4ff80",
+      "text": "교육 자료에서 염병이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-fe1ad89018ac6be8d36d",
+      "text": "염색 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ff508c1121acb0714f74",
+      "text": "검토할 사용자명은 틀딱마스터입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ff5dc0ce8c0e23a1c981",
+      "text": "게임 채팅 기록에 씨발이라고 적혀 있습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    },
+    {
+      "id": "koguard-curated-review-ff5fa46bcd957869d5e6",
+      "text": "교육 자료에서 시발이라는 표현의 사용을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated policy slices",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored policy slice."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 2,
+  "source_id": "kote",
+  "source_name": "searle-j/KOTE",
+  "repository": "https://github.com/searle-j/KOTE",
+  "revision": "cafd2c3f54a6f4b25ac74eaa02a2e76c3ef8c977",
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/searle-j/KOTE/cafd2c3f54a6f4b25ac74eaa02a2e76c3ef8c977/train.tsv",
+    "sha256": "62c18dc385f7c140624b693a2806e98060daaf9e7427ceb7d050828d0a55f992",
+    "size_bytes": 6741184,
+    "line_count": 40000
+  },
+  "license": {
+    "spdx": "MIT",
+    "url": "https://raw.githubusercontent.com/searle-j/KOTE/cafd2c3f54a6f4b25ac74eaa02a2e76c3ef8c977/LICENSE",
+    "sha256": "485d03537f29b7a85d24e931e7d8e2b22a9235676a3584fde76dd0da79be5629",
+    "redistribution_allowed": true
+  },
+  "format": {
+    "kind": "delimited",
+    "delimiter": "\t",
+    "encoding": "utf-8",
+    "header_rows": 0,
+    "text_column": 1,
+    "label_column": null,
+    "allowed_labels": null
+  },
+  "intake": {
+    "corpus_id": "koguard-kote-review-intake-v1",
+    "split": "tuning",
+    "selection": "stable-sha256-rank-v1",
+    "target_count": 750,
+    "target_by_source_label": null
+  }
+}

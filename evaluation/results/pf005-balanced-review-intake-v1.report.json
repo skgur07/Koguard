@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "composition_id": "pf005-balanced-review-intake-v1",
+  "corpus_id": "koguard-pf005-balanced-review-intake-v1",
+  "selected_count": 2500,
+  "configured_max_source_share": 0.3,
+  "maximum_observed_source_share": 0.3,
+  "source_bias_gate_passed": true,
+  "source_statistics": [
+    {
+      "source_id": "curse-detection-data",
+      "available_count": 2500,
+      "selected_count": 750,
+      "duplicate_excluded_count": 0,
+      "share": 0.3
+    },
+    {
+      "source_id": "kote",
+      "available_count": 750,
+      "selected_count": 750,
+      "duplicate_excluded_count": 0,
+      "share": 0.3
+    },
+    {
+      "source_id": "beep-korean-hate-speech",
+      "available_count": 750,
+      "selected_count": 750,
+      "duplicate_excluded_count": 0,
+      "share": 0.3
+    },
+    {
+      "source_id": "koguard-curated-policy",
+      "available_count": 250,
+      "selected_count": 250,
+      "duplicate_excluded_count": 0,
+      "share": 0.1
+    }
+  ],
+  "generated_label_counts": {
+    "positive": 62,
+    "hard-negative": 30,
+    "review": 2408
+  },
+  "adjudication_quality": {
+    "carried_finalized": 92,
+    "pending_review": 2408
+  },
+  "gold_ready": false,
+  "completion_blockers": [
+    "Pending selected cases still require independent double annotation.",
+    "Disagreements require a separate adjudicator before gold promotion.",
+    "Independent hidden evaluation is not part of this tuning composition."
+  ]
+}

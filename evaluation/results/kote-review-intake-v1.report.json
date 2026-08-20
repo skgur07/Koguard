@@ -1,52 +1,49 @@
 {
   "schema_version": 2,
-  "source_id": "curse-detection-data",
-  "source_revision": "ff241621e103b6f220d30de324d0d07987887308",
-  "artifact_sha256": "1c3489417e4972dbbbdde19cc47bb8638292891f7f1a443ecbdc2e3c6843545a",
-  "source_row_count": 5825,
+  "source_id": "kote",
+  "source_revision": "cafd2c3f54a6f4b25ac74eaa02a2e76c3ef8c977",
+  "artifact_sha256": "62c18dc385f7c140624b693a2806e98060daaf9e7427ceb7d050828d0a55f992",
+  "source_row_count": 40000,
   "source_label_counts": {
-    "0": 3781,
-    "1": 2044
+    "__all__": 40000
   },
   "duplicate_text_excluded_count": 0,
-  "sensitive_pattern_excluded_count": 25,
+  "sensitive_pattern_excluded_count": 45,
   "eligible_source_label_counts": {
-    "0": 3762,
-    "1": 2038
+    "__all__": 39955
   },
-  "selected_count": 2500,
+  "selected_count": 750,
   "selected_source_label_counts": {
-    "0": 500,
-    "1": 2000
+    "__all__": 750
   },
   "generated_label_counts": {
     "positive": 0,
     "hard-negative": 0,
-    "review": 2500
+    "review": 750
   },
   "source_statistics": [
     {
-      "source_id": "curse-detection-data",
-      "selected_count": 2500,
+      "source_id": "kote",
+      "selected_count": 750,
       "share": 1.0
     }
   ],
   "slice_counts": {
-    "unadjudicated-intake": 2500
+    "unadjudicated-intake": 750
   },
   "adjudication_quality": {
     "adjudicated": 0,
     "single_review": 0,
     "double_review": 0,
     "disagreement": 0,
-    "pending_review": 2500
+    "pending_review": 750
   },
   "bias_findings": [
     "One source supplies 100% of this intake; add at least two independent sources and curated negative slices before gold evaluation."
   ],
   "gold_ready": false,
   "completion_blockers": [
-    "2500 review cases still require Koguard-policy adjudication and exact spans.",
+    "750 review cases still require Koguard-policy adjudication and exact spans.",
     "Automated sensitive-pattern exclusion still requires manual privacy review.",
     "Independent hidden evaluation material is not part of this public intake."
   ]

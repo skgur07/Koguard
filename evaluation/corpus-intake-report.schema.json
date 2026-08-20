@@ -11,6 +11,7 @@
     "artifact_sha256",
     "source_row_count",
     "source_label_counts",
+    "duplicate_text_excluded_count",
     "sensitive_pattern_excluded_count",
     "eligible_source_label_counts",
     "selected_count",
@@ -24,12 +25,13 @@
     "completion_blockers"
   ],
   "properties": {
-    "schema_version": {"const": 1},
+    "schema_version": {"const": 2},
     "source_id": {"type": "string"},
     "source_revision": {"type": "string"},
     "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "source_row_count": {"type": "integer", "minimum": 1},
     "source_label_counts": {"$ref": "#/$defs/sourceCounts"},
+    "duplicate_text_excluded_count": {"type": "integer", "minimum": 0},
     "sensitive_pattern_excluded_count": {"type": "integer", "minimum": 0},
     "eligible_source_label_counts": {"$ref": "#/$defs/sourceCounts"},
     "selected_count": {"type": "integer", "minimum": 1},
@@ -56,12 +58,8 @@
   "$defs": {
     "sourceCounts": {
       "type": "object",
-      "additionalProperties": false,
-      "required": ["0", "1"],
-      "properties": {
-        "0": {"type": "integer", "minimum": 0},
-        "1": {"type": "integer", "minimum": 0}
-      }
+      "minProperties": 1,
+      "additionalProperties": {"type": "integer", "minimum": 0}
     },
     "generatedCounts": {
       "type": "object",
