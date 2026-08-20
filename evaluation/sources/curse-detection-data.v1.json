@@ -1,6 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "source_id": "curse-detection-data",
+  "source_name": "2runo/Curse-detection-data",
   "repository": "https://github.com/2runo/Curse-detection-data",
   "revision": "ff241621e103b6f220d30de324d0d07987887308",
   "artifact": {
@@ -16,15 +17,19 @@
     "redistribution_allowed": true
   },
   "format": {
+    "kind": "delimited",
     "delimiter": "|",
+    "encoding": "utf-8",
+    "header_rows": 0,
     "text_column": 0,
-    "label_column": 1,
+    "label_column": -1,
     "allowed_labels": ["0", "1"]
   },
   "intake": {
     "corpus_id": "koguard-curse-review-intake-v1",
     "split": "tuning",
     "selection": "stable-sha256-rank-v1",
+    "target_count": null,
     "target_by_source_label": {"0": 500, "1": 2000}
   }
 }

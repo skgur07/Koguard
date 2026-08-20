@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/release/rights-manifest.schema.json",
+  "title": "Koguard release rights manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "reviewed_at", "project_license", "artifact_policy", "sources"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "reviewed_at": {"type": "string", "format": "date"},
+    "project_license": {"const": "MIT"},
+    "artifact_policy": {"type": "string", "minLength": 1},
+    "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "reference",
+        "revision",
+        "declared_license",
+        "rights_status",
+        "allowed_scope",
+        "payload_in_artifacts",
+        "runtime_dependency",
+        "evidence"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
+        "reference": {"type": "string", "minLength": 1},
+        "revision": {"type": "string", "minLength": 1},
+        "declared_license": {"type": ["string", "null"]},
+        "rights_status": {"type": "string", "minLength": 1},
+        "allowed_scope": {"type": "string", "minLength": 1},
+        "payload_in_artifacts": {"type": "boolean"},
+        "runtime_dependency": {"const": false},
+        "evidence": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

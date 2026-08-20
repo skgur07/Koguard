@@ -4,10 +4,11 @@
   "title": "Koguard external corpus source pin",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "source_id", "repository", "revision", "artifact", "license", "format", "intake"],
+  "required": ["schema_version", "source_id", "source_name", "repository", "revision", "artifact", "license", "format", "intake"],
   "properties": {
-    "schema_version": {"const": 1},
+    "schema_version": {"const": 2},
     "source_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
+    "source_name": {"type": "string", "minLength": 1, "maxLength": 200},
     "repository": {"type": "string", "format": "uri"},
     "revision": {"type": "string", "minLength": 1, "maxLength": 200},
     "artifact": {"$ref": "#/$defs/artifact"},
@@ -33,7 +34,7 @@
       "additionalProperties": false,
       "required": ["spdx", "url", "sha256", "redistribution_allowed"],
       "properties": {
-        "spdx": {"const": "MIT"},
+        "spdx": {"enum": ["MIT", "Apache-2.0", "CC-BY-4.0", "CC-BY-SA-4.0"]},
         "url": {"type": "string", "format": "uri"},
         "sha256": {"$ref": "#/$defs/sha256"},
         "redistribution_allowed": {"const": true}
@@ -42,32 +43,63 @@
     "format": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["delimiter", "text_column", "label_column", "allowed_labels"],
+      "required": ["kind", "delimiter", "encoding", "header_rows", "text_column", "label_column", "allowed_labels"],
       "properties": {
-        "delimiter": {"const": "|"},
-        "text_column": {"const": 0},
-        "label_column": {"const": 1},
-        "allowed_labels": {"const": ["0", "1"]}
-      }
+        "kind": {"const": "delimited"},
+        "delimiter": {"enum": ["|", "\t", ","]},
+        "encoding": {"const": "utf-8"},
+        "header_rows": {"enum": [0, 1]},
+        "text_column": {"type": "integer", "minimum": 0},
+        "label_column": {"type": ["integer", "null"], "minimum": -1},
+        "allowed_labels": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"label_column": {"type": "null"}}, "required": ["label_column"]},
+          "then": {"properties": {"allowed_labels": {"type": "null"}}},
+          "else": {"properties": {"allowed_labels": {"type": "array"}}}
+        }
+      ]
     },
     "intake": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["corpus_id", "split", "selection", "target_by_source_label"],
+      "required": ["corpus_id", "split", "selection", "target_count", "target_by_source_label"],
       "properties": {
         "corpus_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
         "split": {"const": "tuning"},
         "selection": {"const": "stable-sha256-rank-v1"},
+        "target_count": {"type": ["integer", "null"], "minimum": 1},
         "target_by_source_label": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["0", "1"],
+          "type": ["object", "null"],
+          "minProperties": 1,
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        }
+      },
+      "oneOf": [
+        {
           "properties": {
-            "0": {"type": "integer", "minimum": 0},
-            "1": {"type": "integer", "minimum": 0}
+            "target_count": {"type": "integer"},
+            "target_by_source_label": {"type": "null"}
+          }
+        },
+        {
+          "properties": {
+            "target_count": {"type": "null"},
+            "target_by_source_label": {"type": "object"}
           }
         }
-      }
+      ]
     }
   }
 }

@@ -74,7 +74,7 @@ def test_bundled_manifest_covers_every_packaged_literal_and_alias() -> None:
 
     assert summary.source_count == 3
     assert summary.candidate_count == 73
-    assert summary.packaged_literal_count == 65
+    assert summary.packaged_literal_count == 67
     assert summary.packaged_alias_count == 5
     assert summary.ai_candidate_count == 0
     assert summary.pending_review_count == 0
@@ -310,7 +310,7 @@ def test_cli_validates_bundled_manifest(capsys: pytest.CaptureFixture[str]) -> N
     captured = capsys.readouterr()
     assert exit_code == 0
     assert "validated 73 candidates from 3 sources" in captured.out
-    assert "packaged_literals=65" in captured.out
+    assert "packaged_literals=67" in captured.out
     assert "packaged_aliases=5" in captured.out
     assert captured.err == ""
 

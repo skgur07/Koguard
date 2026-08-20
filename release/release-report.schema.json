@@ -35,6 +35,7 @@
       "required": [
         "artifact_audit_sha256",
         "rights_manifest_sha256",
+        "ci_evidence_sha256",
         "hidden_evaluation_sha256",
         "testpypi_evidence_sha256",
         "ci_run_url"
@@ -42,6 +43,7 @@
       "properties": {
         "artifact_audit_sha256": {"$ref": "#/$defs/sha256"},
         "rights_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "ci_evidence_sha256": {"$ref": "#/$defs/sha256"},
         "hidden_evaluation_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
         "testpypi_evidence_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
         "ci_run_url": {"type": "string", "format": "uri"}

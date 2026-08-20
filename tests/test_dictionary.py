@@ -5,7 +5,14 @@ from typing import cast
 
 import pytest
 
-from koguard import AliasMode, AliasRule, DictionaryError, KoguardDictionary
+from koguard import (
+    AliasMode,
+    AliasRule,
+    DictionaryError,
+    KoguardDictionary,
+    KoguardEngine,
+    NormalizationForm,
+)
 
 
 def test_default_dictionary_loads_bundled_terms() -> None:
@@ -31,6 +38,8 @@ def test_default_dictionary_loads_bundled_terms() -> None:
         "sibal",
         "ssibal",
         "shibal",
+        "새끼",
+        "병신새끼",
     } <= dictionary.blacklist
     assert len(dictionary.blacklist) >= 50
     assert "병신년" not in dictionary.whitelist
@@ -39,7 +48,17 @@ def test_default_dictionary_loads_bundled_terms() -> None:
 
 @pytest.mark.parametrize(
     "term",
-    ["틀딱", "따먹다", "보지", "조센징", "sibal", "ssibal", "shibal"],
+    [
+        "틀딱",
+        "따먹다",
+        "보지",
+        "조센징",
+        "sibal",
+        "ssibal",
+        "shibal",
+        "새끼",
+        "병신새끼",
+    ],
 )
 def test_default_dictionary_detects_owner_approved_literal_expansion(term: str) -> None:
     dictionary = KoguardDictionary.default()
@@ -130,6 +149,51 @@ def test_dictionary_normalizes_aliases_passed_to_direct_constructor() -> None:
     )
 
     assert dictionary.aliases == (AliasRule("ᄡ", "병신", AliasMode.EXACT_TOKEN),)
+
+
+def test_direct_dictionary_copies_and_normalizes_mutable_collections() -> None:
+    blacklist = {" 욕설 ", "ＳＩＢＡＬ"}
+    whitelist = {" 정상 표현 "}
+    dictionary = KoguardDictionary(
+        blacklist=cast(frozenset[str], blacklist),
+        whitelist=cast(frozenset[str], whitelist),
+        unicode_form="NFKC",
+    )
+    engine = KoguardEngine(dictionary=dictionary)
+
+    blacklist.add("추가")
+    whitelist.add("추가 보호")
+
+    assert type(dictionary.blacklist) is frozenset
+    assert type(dictionary.whitelist) is frozenset
+    assert dictionary.blacklist == frozenset({"욕설", "SIBAL"})
+    assert dictionary.whitelist == frozenset({"정상 표현"})
+    assert "추가" not in engine.dictionary.blacklist
+    assert engine.contains("추가") is False
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("blacklist", ["정상", 123]),
+        ("whitelist", [object()]),
+        ("unicode_form", "NFD"),
+    ],
+)
+def test_direct_dictionary_rejects_invalid_runtime_values(field: str, value: object) -> None:
+    values: dict[str, object] = {
+        "blacklist": frozenset({"욕설"}),
+        "whitelist": frozenset(),
+        "unicode_form": "NFKC",
+    }
+    values[field] = value
+
+    with pytest.raises(DictionaryError, match=field):
+        KoguardDictionary(
+            blacklist=cast(frozenset[str], values["blacklist"]),
+            whitelist=cast(frozenset[str], values["whitelist"]),
+            unicode_form=cast(NormalizationForm, values["unicode_form"]),
+        )
 
 
 @pytest.mark.parametrize(

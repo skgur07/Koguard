@@ -143,6 +143,24 @@ def test_cli_refuses_to_overwrite_an_input(tmp_path: Path, capsys: Any) -> None:
     assert "output must not overwrite an input" in capsys.readouterr().err
 
 
+def test_input_hashes_are_stable_across_lf_and_crlf(tmp_path: Path) -> None:
+    corpus = (json.dumps(_corpus(), ensure_ascii=False, indent=2) + "\n").encode()
+    manifest = (json.dumps(_manifest(), ensure_ascii=False, indent=2) + "\n").encode()
+    lf_corpus = tmp_path / "lf-corpus.json"
+    crlf_corpus = tmp_path / "crlf-corpus.json"
+    lf_manifest = tmp_path / "lf-manifest.json"
+    crlf_manifest = tmp_path / "crlf-manifest.json"
+    lf_corpus.write_bytes(corpus)
+    crlf_corpus.write_bytes(corpus.replace(b"\n", b"\r\n"))
+    lf_manifest.write_bytes(manifest)
+    crlf_manifest.write_bytes(manifest.replace(b"\n", b"\r\n"))
+
+    lf_inputs = evaluate_fn_candidates(lf_corpus, lf_manifest)["inputs"]
+    crlf_inputs = evaluate_fn_candidates(crlf_corpus, crlf_manifest)["inputs"]
+
+    assert lf_inputs == crlf_inputs
+
+
 def _manifest() -> dict[str, Any]:
     source = {
         "source_id": "unit-source",

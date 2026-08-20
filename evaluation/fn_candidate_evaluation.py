@@ -227,9 +227,11 @@ def _read_object(path: Path, description: str) -> dict[str, Any]:
 
 def _sha256(path: Path) -> str:
     try:
-        return hashlib.sha256(path.read_bytes()).hexdigest()
+        content = path.read_bytes()
     except OSError as exc:
         raise FnCandidateEvaluationError("failed to hash evaluation input") from exc
+    canonical_lf = content.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(canonical_lf).hexdigest()
 
 
 def _parser() -> argparse.ArgumentParser:

@@ -66,6 +66,8 @@
 따먹다
 보지
 조센징
+새끼
+병신새끼
 
 # Owner-approved Koguard romanized Exact Match terms.
 sibal

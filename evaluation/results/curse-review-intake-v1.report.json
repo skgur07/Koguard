@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "source_id": "curse-detection-data",
   "source_revision": "ff241621e103b6f220d30de324d0d07987887308",
   "artifact_sha256": "1c3489417e4972dbbbdde19cc47bb8638292891f7f1a443ecbdc2e3c6843545a",
@@ -8,6 +8,7 @@
     "0": 3781,
     "1": 2044
   },
+  "duplicate_text_excluded_count": 0,
   "sensitive_pattern_excluded_count": 25,
   "eligible_source_label_counts": {
     "0": 3762,

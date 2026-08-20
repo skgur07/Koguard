@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/skgur07/Koguard/blob/dev/evaluation/curated-intake-report.schema.json",
+  "title": "Koguard curated policy intake report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "corpus_id",
+    "case_count",
+    "design_counts",
+    "design_slice_counts",
+    "source_statistics",
+    "privacy_status",
+    "generated_label_counts",
+    "gold_ready",
+    "completion_blockers"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "corpus_id": {"const": "koguard-curated-policy-slices-v1"},
+    "case_count": {"const": 250},
+    "design_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positive_target", "hard_negative_target"],
+      "properties": {
+        "positive_target": {"const": 100},
+        "hard_negative_target": {"const": 150}
+      }
+    },
+    "design_slice_counts": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 1}
+    },
+    "source_statistics": {"type": "array", "minItems": 1},
+    "privacy_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["synthetic", "approved"],
+      "properties": {
+        "synthetic": {"const": 250},
+        "approved": {"const": 250}
+      }
+    },
+    "generated_label_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positive", "hard-negative", "review"],
+      "properties": {
+        "positive": {"const": 0},
+        "hard-negative": {"const": 0},
+        "review": {"const": 250}
+      }
+    },
+    "gold_ready": {"const": false},
+    "completion_blockers": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}

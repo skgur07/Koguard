@@ -154,11 +154,11 @@ def test_committed_profile_report_is_aggregate_only_and_passes_balanced_gates() 
 
     assert report["schema_version"] == 1
     assert report["source"]["ablation_report_sha256"] == (
-        "b5eecc613ca2aa72208b0881a5bd3804f68d099d42d9c2d14f90987b74eae7bb"
+        "0d7010309b31ad1f5f3c76aad22da4d19da8fdc998da5ee2c0ec6a97ca9f211e"
     )
     assert report["source"]["corpus"] == {
         "classification": "independent-tuning-provisional",
-        "sha256": "727792cea7aa399e3d939ebe0c3cd694917b94a17cd8313a662230dafc013276",
+        "sha256": "74a23024a60b42e7d188f4723894f9d057bf2b0d90d84d77e9645ddee4ff2091",
         "case_count": 92,
         "positive_count": 62,
         "hard_negative_count": 30,
@@ -172,6 +172,10 @@ def test_committed_profile_report_is_aggregate_only_and_passes_balanced_gates() 
         "occurrence_fp_delta_vs_strict": 0,
     }
     assert report["balanced_gates"]["passed"] is True
+    assert report["limitations"][:2] == [
+        "다중 출처 intake 중 독립 검토로 확정된 92건만 평가한 tuning 결과다.",
+        "gold_ready가 아니며 2408건은 review로 자동 평가에서 제외됐다.",
+    ]
     assert {profile["profile"]: profile["settings"] for profile in report["profiles"]} == {
         profile: _settings(profile) for profile in ("strict", "balanced", "aggressive")
     }

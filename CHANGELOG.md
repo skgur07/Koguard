@@ -12,9 +12,10 @@ Semantic Versioning after the first public release.
 - Unicode format-character, combining-mark, compatibility-jamo, span, Whitelist, and adversarial regressions.
 - Cross-platform CI, clean-install smoke tests, security policy, contribution guide, and source-rights ledger.
 - MIT project license and Git identity normalization for the maintainer's previous `s23019` identity.
-- Four independently reviewed Korean literals and three owner-selected lowercase romanized literals.
+- Six independently reviewed Korean literals and three owner-selected lowercase romanized literals.
 - Aggregate-only hidden evaluation attestation and PF-014 release decision report tooling.
 - TestPyPI evidence contract that binds installation smoke results to audited artifact hashes.
+- License-pinned KOTE and BEEP review intakes plus a duplicate-free, 30%-capped PF-005 composition.
 
 ### Changed
 

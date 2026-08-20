@@ -1,11 +1,13 @@
 # PF-005 초기 corpus 구축 상태
 
 - 기준일: 2026-08-12
-- 상태: intake 완료, 첫 100건 독립 판정·제3 판정 완료, 전체 corpus 미완료
+- 상태: 다중 출처 balanced intake 완료, 첫 100건 독립 판정·제3 판정 완료, 전체 gold corpus 미완료
 - annotation workflow: 이중 판정·불일치 제3 판정 구현 및 실제 batch 검증 완료
-- 로컬 tuning review: 2,500건
+- 로컬 source별 tuning 후보: 4,250건
+- balanced tuning composition: 2,500건
 - 확정 positive: 62건
 - 확정 hard-negative: 30건
+- 판정 대기: 2,408건
 - hidden evaluation: 0건
 
 ## 현재 결과
@@ -26,6 +28,17 @@ MIT로 재배포 가능한 `2runo/Curse-detection-data`의 고정 commit과 arti
 | Koguard-policy finalized | 92/2,500 |
 | exact span annotated positive | 62건, 110 occurrence |
 
+2026-08-19에는 공개 재배포 조건을 확인한 독립 원출처 두 개와 Koguard 직접 작성 정책 slice를
+추가했다. `searle-j/KOTE` train 40,000건 중 750건, `kocohub/korean-hate-speech` train
+7,896건 중 label strata별 250건씩 750건, Koguard 직접 작성 review 250건을 고정했다. KOTE는
+MIT, Korean Hate Speech는 CC-BY-SA-4.0이며 source revision, artifact·license SHA-256을 source
+spec v2에 기록했다. 원문은 수동 privacy review 전까지 계속 Git·sdist·wheel에서 제외한다.
+
+최종 review composition은 첫 batch 확정 92건을 보존한 2runo 750건, KOTE 750건, Korean Hate
+Speech 750건, Koguard curated 250건으로 총 2,500건이다. 출처별 비중은 `30%/30%/30%/10%`,
+직접·NFKC+casefold 중복은 0건이며 30% 상한을 통과했다. 이 수치는 source 편향 gate만 통과한
+것이고, 판정 대기 2,408건을 gold로 승격하거나 실서비스 분포를 보장하지 않는다.
+
 ## 재현성
 
 - source revision: `ff241621e103b6f220d30de324d0d07987887308`
@@ -35,10 +48,19 @@ MIT로 재배포 가능한 `2runo/Curse-detection-data`의 고정 commit과 arti
   `5cb5b18cc855e245f8e299b931a1203479a56fd79a752b102d623056ba5d7c2c`
 - generated corpus SHA-256:
   `c26c942a3d825e1667d2d520d41fcda6f03a4e07d81ad4d8ba84038096125b83`
-- intake report canonical-LF SHA-256:
-  `1d2e31ada27896cbd155e4e9ff7779e795ce53b931bc112a69cef4317e0d400a`
+- intake report v2 canonical-LF SHA-256:
+  `54319c0e838ae2f61a7ed601ceefb951ebc84300888ed746c81ac8672020603f`
 - split manifest v2 canonical-LF SHA-256:
   `06dc923ece416dee03cf6db984b319daa6290b7a1b3e212f2f8c0cbb042f846d`
+- KOTE intake report canonical-LF SHA-256:
+  `acf3420143f20be0b7131d223473f5817d72971d8d630f36ebaf439c19be89f7`
+- Korean Hate Speech intake report canonical-LF SHA-256:
+  `ac1bdffdcff4291eff4633e6ab36254ace2c9d4e3e73d1fd485e3e1a1ab915f4`
+- curated policy intake report canonical-LF SHA-256:
+  `55cdf26d6102dd00776f51d616e660d169821abe6fe82a9f877082b9272bfd15`
+- balanced composition config/report canonical-LF SHA-256:
+  `969c360992fba7ebbe4719c76a6efe681c3cfce0de3d60bf649b9608b6c94465` /
+  `685d537b8e97409886bb30801b62a9709340812903758d7c0bfca195c70c4081`
 
 ```powershell
 uv run python -m evaluation.corpus_intake `
@@ -54,14 +76,31 @@ uv run python -m evaluation.split_manifest_builder `
   --manifest-version 2 `
   --change-reason "PF-005 licensed tuning review intake" `
   --output evaluation\splits\corpus-splits.v2.json
+
+uv run python -m evaluation.corpus_intake `
+  evaluation\sources\kote.v1.json C:\artifacts\kote-train.tsv `
+  --output evaluation\corpus\tuning\kote-review-intake-v1.json `
+  --report evaluation\results\kote-review-intake-v1.report.json
+
+uv run python -m evaluation.corpus_intake `
+  evaluation\sources\beep-korean-hate-speech.v1.json C:\artifacts\beep-train.tsv `
+  --output evaluation\corpus\tuning\beep-review-intake-v1.json `
+  --report evaluation\results\beep-review-intake-v1.report.json
+
+uv run python -m evaluation.curated_policy_intake
+
+uv run python -m evaluation.corpus_composer `
+  evaluation\compositions\pf005-balanced-review-intake.v1.json `
+  --output evaluation\corpus\tuning\pf005-balanced-review-intake-v1.json `
+  --report evaluation\results\pf005-balanced-review-intake-v1.report.json
 ```
 
 ## 편향과 품질 한계
 
-현재 2,500건은 한 출처가 100%를 차지해 이슈 기준의 30%를 넘는다. 외부 댓글 분포, 정책과
-annotation 방식도 단일 출처에 종속된다. 완화하려면 등록 표현을 포함한 정상 substring·
-인용/설명·사용자명/게임 문맥 positive와 등록 표현이 없는 유사 hard-negative를 직접 작성해
-각각 100건 이상 추가하고, 재배포 가능한 서로 다른 출처를 두 개 이상 더 확보해야 한다.
+balanced composition은 어느 한 source도 30%를 넘지 않아 이슈의 수치상 출처 편향 조건을
+충족한다. 다만 세 외부 자료가 모두 온라인 댓글이고, KOTE와 Korean Hate Speech의 플랫폼·수집
+시기·annotation 목적이 Koguard lexical 정책과 다르므로 실서비스 대표성을 보장하지 않는다.
+Koguard 직접 작성 250건도 정책 경계와 slice를 보강하는 합성 자료이지 실사용 댓글이 아니다.
 
 `unadjudicated-intake`는 실제 평가 slice가 아니라 판정 대기 상태다. 현재는 direct, 변형, 우회,
 정상 substring 같은 slice별 TP·FP·FN을 계산할 수 없다. runner가 `review`를 자동 제외하므로 이
@@ -71,8 +110,8 @@ annotation 방식도 단일 출처에 종속된다. 완화하려면 등록 표�
 25건을 자동 제외했다. 이 검사는 명백한 패턴의 방어선일 뿐 이름이나 간접 식별자를 보장하지
 못하므로 사람의 privacy review가 끝나기 전에는 gold로 승격하지 않는다.
 
-수동 privacy review가 끝나지 않은 원문을 공개하지 않고 runtime 크기에 평가 원문 비용도
-전가하지 않도록 2,500건 intake는 Git, wheel, sdist에서 모두 제외한다. 로컬 생성 artifact는
+수동 privacy review가 끝나지 않은 외부 원문을 공개하지 않고 runtime 크기에 평가 원문 비용도
+전가하지 않도록 외부 intake와 balanced composition은 Git, wheel, sdist에서 모두 제외한다. 로컬 생성 artifact는
 보호 경로에서 유지한다. source pin, 생성기, license notice, aggregate report와 stable-ID
 manifest는 sdist에 남아 고정 upstream artifact로 corpus를 재생성·검증할 수 있다.
 
@@ -135,13 +174,13 @@ case ID, canonical term, reviewer ID와 전체 ablation case 결과는 Git·배�
 
 ## PF-005 종료 전 남은 작업
 
-1. 다음 100건 primary/secondary batch를 생성해 같은 독립 판정 절차 반복
+1. balanced composition의 판정 대기 2,408건을 primary/secondary batch로 나눠 같은 독립 판정 절차 반복
 2. 첫 batch의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
    등록 표현·승인 변형이 없는 hard-negative 2건 이상 고정
 3. 핵심 positive slice별 30건, 등록 표현을 포함한 정상 substring·인용/설명·사용자명/게임
    문맥 positive와 등록 표현이 없는 철자 유사 negative 확보
-6. 단일 출처 100% 편향 완화
-7. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
-8. 확정 positive 500건·hard-negative 2,000건으로 전체 및 slice별 지표 재생성
+4. KOTE·Korean Hate Speech 원문의 수동 privacy 검토와 CC-BY-SA attribution 경계 확정
+5. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
+6. 확정 positive 500건·hard-negative 2,000건으로 전체 및 slice별 지표 재생성
 
 이 조건 전에는 #7을 완료로 닫거나 2,500건을 실서비스 gold corpus라고 부르지 않는다.

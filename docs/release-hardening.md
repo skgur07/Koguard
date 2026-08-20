@@ -2,7 +2,7 @@
 
 - 기준일: 2026-08-18
 - 대상: Koguard `0.1.0` release candidate
-- 현재 상태: **MIT 승인·로컬 전체 gate 통과 — 원격 3 OS CI 검증 대기**
+- 현재 상태: **MIT 승인·3 OS 품질 gate 통과 — byte-identical release artifact gate 재검증 대기**
 
 ## 품질·패키징 계약
 
@@ -16,12 +16,16 @@ GitHub Actions는 Ubuntu, Windows, macOS와 CPython 3.11.9 조합에서 다음�
 6. wheel과 sdist build
 7. artifact 내용·metadata·SHA-256·크기 감사
 8. wheel과 sdist 각각의 격리 환경 clean-install quickstart
+9. 세 OS artifact의 실제 파일 크기와 SHA-256 교차 비교
+10. byte-identical일 때만 Linux 결과를 단일 authoritative release candidate로 승격
 
 외부 GitHub Action은 이동 tag가 아니라 검토한 full commit SHA에 고정한다. CI 토큰 권한은
 `contents: read`뿐이며 checkout credential을 보존하지 않는다. `uv`도 `0.12.3`으로 고정한다.
 
-빌드 backend는 재현 가능한 배포를 위해 `hatchling==1.31.0`으로 고정한다. 다음 도구는 개발·CI
-환경에서만 사용하며 wheel의 runtime dependency나 배포 payload에는 들어가지 않는다.
+빌드 backend는 `hatchling==1.31.0`으로 고정하고 `.gitattributes`의 저장소 전체 text 정책을
+`eol=lf`로 고정한다. backend 버전 고정만으로 재현 가능하다고 간주하지 않으며 CI가 실제
+wheel·sdist byte hash를 세 OS에서 비교한다. 다음 도구는 개발·CI 환경에서만 사용하며 wheel의
+runtime dependency나 배포 payload에는 들어가지 않는다.
 
 | 도구 | 용도 | 라이선스 |
 | --- | --- | --- |
@@ -66,6 +70,12 @@ sdist는 재현에 필요한 테스트, 공개 corpus, benchmark, 평가 도구,
 `python -m release.clean_install_smoke`는 각 artifact를 별도 임시 환경에 `--offline --no-deps`로
 설치한 뒤 기본 사전 로드와 `contains()`·`check()` quickstart를 isolated Python으로 실행한다.
 
+matrix job이 올리는 OS별 파일은 3일 보존하는 검증 후보일 뿐 공개 대상이 아니다.
+`release.verify_reproducible_artifacts`가 다운로드된 세 후보의 audit와 실제 파일 hash, release
+commit, Git tree를 다시 대조한다. 모두 같을 때만 Linux 후보를
+`koguard-0.1.0-release-candidate`라는 단일 14일 보존 artifact로 승격한다. TestPyPI와 PyPI에는
+이 authoritative 묶음의 파일만 사용할 수 있다.
+
 ## 외부 출처 최종 판정
 
 | source | 고정 revision | 공개 payload | 판정 |
@@ -90,8 +100,9 @@ engineering release gate다.
 
 소유자는 2026-08-18 Koguard 코드와 직접 작성한 기본 term·Alias를 MIT로 공개하도록 승인했고,
 `s23019`가 동일인의 이전 Git identity임을 확인했다. root `LICENSE`, Core Metadata,
-rights manifest와 `.mailmap`에 이 결정을 반영했다. 남은 gate는 세 OS 원격 CI, TestPyPI 설치
-smoke와 최종 artifact hash 확인이다. 2026-08-18 로컬에서는 format, lint, mypy,
-620개 pytest, branch coverage 95.62%, provenance, build, artifact audit와 wheel/sdist clean-install을
-통과했다. provisional tuning corpus는 `gold_ready=false`로
+rights manifest와 `.mailmap`에 이 결정을 반영했다. 기존 3 OS CI run `32225185730`은 품질 gate를
+통과했지만 Windows artifact hash가 Linux/macOS와 달랐다. canonical LF와 byte 비교 gate를 추가한
+최종 commit에서 다시 성공해야 한다. 2026-08-19 evidence hardening 뒤 로컬에서는 format, lint,
+mypy, 646개 pytest, branch coverage 95.62%를 통과했다. provisional tuning corpus는
+`gold_ready=false`로
 유지하며 hidden evaluation 부재를 `0.1.0`의 알려진 품질 한계로 공개한다.

@@ -30,6 +30,7 @@
         "manifest_version",
         "normalization_version",
         "attestation_sha256",
+        "evaluated_artifact",
         "approval_count",
         "direct_leak_count",
         "normalized_leak_count",
@@ -42,6 +43,7 @@
         "manifest_version": {"type": "integer", "minimum": 1},
         "normalization_version": {"const": "nfkc-casefold-strip-pzc-repeat-v1"},
         "attestation_sha256": {"$ref": "#/$defs/sha256"},
+        "evaluated_artifact": {"$ref": "#/$defs/evaluatedArtifact"},
         "approval_count": {"const": 2},
         "direct_leak_count": {"const": 0},
         "normalized_leak_count": {"const": 0},
@@ -80,6 +82,15 @@
   },
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evaluatedArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sha256"],
+      "properties": {
+        "kind": {"const": "wheel"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
     "rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
     "corpus": {
       "type": "object",

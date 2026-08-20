@@ -13,14 +13,15 @@ duplicates, and stored one term per line. It does not copy Korcen's matching
 implementation. Korcen's MIT license and copyright notice are preserved in
 `KORCEN-MIT.txt`.
 
-Four independently reviewed Korean Exact Match terms were promoted from the
+Six independently reviewed Korean Exact Match terms were promoted from the
 MIT-licensed `2runo/Curse-detection-data` tuning source:
 
 - Project: https://github.com/2runo/Curse-detection-data
 - Pinned revision: `ff241621e103b6f220d30de324d0d07987887308`
-- Promotion evidence: `evaluation/results/pf007-top-candidates.report.json`
+- Promotion evidence: `evaluation/results/pf007-top-candidates.report.json` and
+  `evaluation/results/pf007-balanced-candidates.report.json`
 
-The source corpus and private review text are not bundled. Only the four
+The source corpus and private review text are not bundled. Only the six
 approved literals and the source's copyright and MIT notice are distributed;
 the notice is preserved in `CURSE-DETECTION-DATA-MIT.txt`.
 

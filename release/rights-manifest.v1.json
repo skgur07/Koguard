@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "reviewed_at": "2026-08-18",
+  "reviewed_at": "2026-08-19",
   "project_license": "MIT",
   "artifact_policy": "Only approved payload may enter the wheel or sdist; pending sources remain reference-only or local quarantine.",
   "sources": [
@@ -43,10 +43,10 @@
       "revision": "ff241621e103b6f220d30de324d0d07987887308",
       "declared_license": "MIT",
       "rights_status": "approved",
-      "allowed_scope": "tuning analysis and four reviewed selected literals with license notice",
+      "allowed_scope": "tuning analysis and six reviewed selected literals with license notice",
       "payload_in_artifacts": true,
       "runtime_dependency": false,
-      "evidence": "src/koguard/data/CURSE-DETECTION-DATA-MIT.txt; raw corpus text remains excluded"
+      "evidence": "src/koguard/data/CURSE-DETECTION-DATA-MIT.txt; evaluation/results/pf007-top-candidates.report.json; evaluation/results/pf007-balanced-candidates.report.json; raw corpus text remains excluded"
     },
     {
       "source_id": "korean-profanity-resources",
@@ -76,10 +76,21 @@
       "revision": "f8d05dce2b22007bb149e5139c0060c68ad8f94b",
       "declared_license": "CC-BY-SA-4.0",
       "rights_status": "approved-reference-only",
-      "allowed_scope": "provenance-reference-only",
+      "allowed_scope": "local tuning review; source pin and aggregate report only until privacy review",
       "payload_in_artifacts": false,
       "runtime_dependency": false,
-      "evidence": "GitHub license metadata reports CC-BY-SA-4.0; no corpus rows are bundled"
+      "evidence": "evaluation/sources/beep-korean-hate-speech.v1.json; raw corpus rows remain excluded"
+    },
+    {
+      "source_id": "kote",
+      "reference": "https://github.com/searle-j/KOTE",
+      "revision": "cafd2c3f54a6f4b25ac74eaa02a2e76c3ef8c977",
+      "declared_license": "MIT",
+      "rights_status": "approved-reference-only",
+      "allowed_scope": "local tuning review; source pin and aggregate report only until privacy review",
+      "payload_in_artifacts": false,
+      "runtime_dependency": false,
+      "evidence": "evaluation/sources/kote.v1.json; raw corpus rows remain excluded"
     }
   ]
 }

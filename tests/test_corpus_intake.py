@@ -22,6 +22,34 @@ from evaluation.corpus_validator import validate_corpus_paths
 _CHECKED_REPORT_PATH = Path("evaluation/results/curse-review-intake-v1.report.json")
 _CHECKED_MANIFEST_PATH = Path("evaluation/splits/corpus-splits.v2.json")
 _BUNDLED_LICENSE_PATH = Path("evaluation/sources/licenses/curse-detection-data-MIT.txt")
+_ADDITIONAL_SOURCE_SPECS = {
+    Path("evaluation/sources/kote.v1.json"): {
+        "source_id": "kote",
+        "revision": "cafd2c3f54a6f4b25ac74eaa02a2e76c3ef8c977",
+        "artifact_sha256": "62c18dc385f7c140624b693a2806e98060daaf9e7427ceb7d050828d0a55f992",
+        "license_spdx": "MIT",
+        "target_count": 750,
+    },
+    Path("evaluation/sources/beep-korean-hate-speech.v1.json"): {
+        "source_id": "beep-korean-hate-speech",
+        "revision": "f8d05dce2b22007bb149e5139c0060c68ad8f94b",
+        "artifact_sha256": "ebebacdcd023af2c4acc8c0a37695fb6433ac04fc009feff8f222724e303a5a9",
+        "license_spdx": "CC-BY-SA-4.0",
+        "target_count": None,
+    },
+}
+_ADDITIONAL_REPORTS = {
+    Path("evaluation/results/kote-review-intake-v1.report.json"): {
+        "source_row_count": 40000,
+        "selected_source_label_counts": {"__all__": 750},
+        "sensitive_pattern_excluded_count": 45,
+    },
+    Path("evaluation/results/beep-review-intake-v1.report.json"): {
+        "source_row_count": 7896,
+        "selected_source_label_counts": {"hate": 250, "none": 250, "offensive": 250},
+        "sensitive_pattern_excluded_count": 9,
+    },
+}
 
 
 def _canonical_lf_sha256(content: bytes) -> str:
@@ -32,10 +60,10 @@ def test_intake_schemas_are_versioned_and_closed() -> None:
     source_schema = json.loads(SOURCE_SPEC_SCHEMA_PATH.read_text(encoding="utf-8"))
     report_schema = json.loads(INTAKE_REPORT_SCHEMA_PATH.read_text(encoding="utf-8"))
 
-    assert source_schema["properties"]["schema_version"]["const"] == 1
+    assert source_schema["properties"]["schema_version"]["const"] == 2
     assert source_schema["additionalProperties"] is False
     assert source_schema["$defs"]["artifact"]["additionalProperties"] is False
-    assert report_schema["properties"]["schema_version"]["const"] == 1
+    assert report_schema["properties"]["schema_version"]["const"] == 2
     assert report_schema["additionalProperties"] is False
 
 
@@ -43,6 +71,7 @@ def test_checked_source_spec_pins_license_revision_and_artifact() -> None:
     spec = json.loads(DEFAULT_SOURCE_SPEC_PATH.read_text(encoding="utf-8"))
 
     assert spec["source_id"] == "curse-detection-data"
+    assert spec["source_name"] == "2runo/Curse-detection-data"
     assert spec["revision"] == "ff241621e103b6f220d30de324d0d07987887308"
     assert spec["artifact"]["sha256"] == (
         "1c3489417e4972dbbbdde19cc47bb8638292891f7f1a443ecbdc2e3c6843545a"
@@ -57,6 +86,123 @@ def test_checked_source_spec_pins_license_revision_and_artifact() -> None:
         hashlib.sha256(_BUNDLED_LICENSE_PATH.read_bytes()).hexdigest() == spec["license"]["sha256"]
     )
     assert spec["intake"]["target_by_source_label"] == {"0": 500, "1": 2000}
+
+
+@pytest.mark.parametrize(("source_path", "expected"), _ADDITIONAL_SOURCE_SPECS.items())
+def test_additional_pf005_source_specs_are_pinned_and_review_only(
+    source_path: Path,
+    expected: dict[str, Any],
+) -> None:
+    spec = json.loads(source_path.read_text(encoding="utf-8"))
+
+    assert spec["schema_version"] == 2
+    assert spec["source_id"] == expected["source_id"]
+    assert spec["revision"] == expected["revision"]
+    assert spec["artifact"]["sha256"] == expected["artifact_sha256"]
+    assert spec["license"]["spdx"] == expected["license_spdx"]
+    assert spec["license"]["redistribution_allowed"] is True
+    assert spec["intake"]["split"] == "tuning"
+    assert spec["intake"]["target_count"] == expected["target_count"]
+
+
+@pytest.mark.parametrize(("report_path", "expected"), _ADDITIONAL_REPORTS.items())
+def test_additional_pf005_intake_reports_are_non_sensitive_and_pending_review(
+    report_path: Path,
+    expected: dict[str, Any],
+) -> None:
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+
+    assert report["schema_version"] == 2
+    assert report["source_row_count"] == expected["source_row_count"]
+    assert report["selected_count"] == 750
+    assert report["selected_source_label_counts"] == expected["selected_source_label_counts"]
+    assert (
+        report["sensitive_pattern_excluded_count"] == expected["sensitive_pattern_excluded_count"]
+    )
+    assert report["duplicate_text_excluded_count"] == 0
+    assert report["generated_label_counts"] == {
+        "positive": 0,
+        "hard-negative": 0,
+        "review": 750,
+    }
+    assert report["adjudication_quality"]["pending_review"] == 750
+    assert report["gold_ready"] is False
+
+
+def test_generic_tsv_intake_supports_headers_and_non_mit_sources(tmp_path: Path) -> None:
+    artifact = tmp_path / "source.tsv"
+    artifact.write_text(
+        "comment\tclass\n첫 문장\tnone\n둘째 문장\toffensive\n셋째 문장\thate\n",
+        encoding="utf-8",
+    )
+    spec_path = _write_spec(tmp_path, artifact, targets={"0": 1, "1": 0})
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    spec["source_id"] = "generic-tsv-source"
+    spec["source_name"] = "example/generic-tsv"
+    spec["license"]["spdx"] = "CC-BY-SA-4.0"
+    spec["format"] = {
+        "kind": "delimited",
+        "delimiter": "\t",
+        "encoding": "utf-8",
+        "header_rows": 1,
+        "text_column": 0,
+        "label_column": 1,
+        "allowed_labels": ["none", "offensive", "hate"],
+    }
+    spec["intake"] = {
+        "corpus_id": "generic-tsv-review-intake",
+        "split": "tuning",
+        "selection": "stable-sha256-rank-v1",
+        "target_count": 2,
+        "target_by_source_label": None,
+    }
+    spec_path.write_text(json.dumps(spec, ensure_ascii=False), encoding="utf-8")
+
+    result = build_review_intake(spec_path, artifact)
+
+    assert result.report["source_row_count"] == 3
+    assert result.report["source_label_counts"] == {"hate": 1, "none": 1, "offensive": 1}
+    assert result.report["selected_count"] == 2
+    assert sum(result.report["selected_source_label_counts"].values()) == 2
+    assert all(case["source"]["name"] == "example/generic-tsv" for case in result.corpus["cases"])
+    assert all(case["license"] == "CC-BY-SA-4.0" for case in result.corpus["cases"])
+
+
+def test_unlabelled_source_and_duplicate_texts_are_supported_safely(tmp_path: Path) -> None:
+    artifact = tmp_path / "source.tsv"
+    artifact.write_text(
+        "1\t중복 문장\tlabels-a\n2\t중복 문장\tlabels-b\n3\t고유 문장\tlabels-c\n",
+        encoding="utf-8",
+    )
+    spec_path = _write_spec(tmp_path, artifact, targets={"0": 1, "1": 0})
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    spec["source_id"] = "unlabelled-tsv-source"
+    spec["source_name"] = "example/unlabelled-tsv"
+    spec["format"] = {
+        "kind": "delimited",
+        "delimiter": "\t",
+        "encoding": "utf-8",
+        "header_rows": 0,
+        "text_column": 1,
+        "label_column": None,
+        "allowed_labels": None,
+    }
+    spec["intake"] = {
+        "corpus_id": "unlabelled-tsv-review-intake",
+        "split": "tuning",
+        "selection": "stable-sha256-rank-v1",
+        "target_count": 2,
+        "target_by_source_label": None,
+    }
+    spec_path.write_text(json.dumps(spec, ensure_ascii=False), encoding="utf-8")
+
+    result = build_review_intake(spec_path, artifact)
+
+    assert result.report["source_row_count"] == 3
+    assert result.report["duplicate_text_excluded_count"] == 1
+    assert result.report["eligible_source_label_counts"] == {"__all__": 2}
+    assert result.report["selected_source_label_counts"] == {"__all__": 2}
+    assert len({case["text"] for case in result.corpus["cases"]}) == 2
 
 
 def test_intake_is_deterministic_review_only_and_validator_compatible(tmp_path: Path) -> None:
@@ -79,6 +225,7 @@ def test_intake_is_deterministic_review_only_and_validator_compatible(tmp_path: 
     assert first.corpus == second.corpus
     assert first.report == second.report
     assert first.report["source_row_count"] == 5
+    assert first.report["duplicate_text_excluded_count"] == 0
     assert first.report["sensitive_pattern_excluded_count"] == 0
     assert first.report["eligible_source_label_counts"] == {"0": 3, "1": 2}
     assert first.report["selected_count"] == 3
@@ -224,12 +371,13 @@ def test_checked_review_intake_matches_pinned_contract() -> None:
     manifest = json.loads(manifest_bytes)
 
     assert _canonical_lf_sha256(report_bytes) == (
-        "1d2e31ada27896cbd155e4e9ff7779e795ce53b931bc112a69cef4317e0d400a"
+        "54319c0e838ae2f61a7ed601ceefb951ebc84300888ed746c81ac8672020603f"
     )
     assert _canonical_lf_sha256(manifest_bytes) == (
         "06dc923ece416dee03cf6db984b319daa6290b7a1b3e212f2f8c0cbb042f846d"
     )
     assert report["selected_source_label_counts"] == {"0": 500, "1": 2000}
+    assert report["duplicate_text_excluded_count"] == 0
     assert report["sensitive_pattern_excluded_count"] == 25
     assert report["eligible_source_label_counts"] == {"0": 3762, "1": 2038}
     assert report["generated_label_counts"]["review"] == 2500

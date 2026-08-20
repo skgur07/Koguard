@@ -13,6 +13,9 @@
 | `src/koguard/engine/normalizer/` | 정규화 view와 원문 인덱스 매핑 |
 | `src/koguard/data/` | 기본 사전, Whitelist, 출처 고지 |
 | `evaluation/` | 평가 corpus, validator, blinded annotation, 비교·ablation runner |
+| `evaluation/corpus_intake.py` | license-pinned 외부 source를 review-only corpus로 변환 |
+| `evaluation/curated_policy_intake.py` | 프로젝트 작성 정책 경계 사례를 blinded review로 생성 |
+| `evaluation/corpus_composer.py` | source quota·중복·30% 상한을 검증해 balanced tuning 구성 |
 | `tests/` | 공개 계약과 회귀 테스트 |
 | `tests/corpus/` | 정확도 기준 corpus |
 | `docs/corpus-annotation-guide.md` | label, span, 출처, split annotation 정책 |

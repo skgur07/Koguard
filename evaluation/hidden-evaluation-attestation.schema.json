@@ -10,6 +10,7 @@
     "evaluation_version",
     "release_commit",
     "protected_ablation_report_sha256",
+    "evaluated_artifact",
     "manifest",
     "corpus",
     "review"
@@ -20,6 +21,7 @@
     "evaluation_version": {"type": "integer", "minimum": 1},
     "release_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "protected_ablation_report_sha256": {"$ref": "#/$defs/sha256"},
+    "evaluated_artifact": {"$ref": "#/$defs/evaluatedArtifact"},
     "manifest": {"$ref": "#/$defs/manifest"},
     "corpus": {"$ref": "#/$defs/corpus"},
     "review": {"$ref": "#/$defs/review"}
@@ -27,6 +29,15 @@
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "stableId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
+    "evaluatedArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sha256"],
+      "properties": {
+        "kind": {"const": "wheel"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
     "manifest": {
       "type": "object",
       "additionalProperties": false,

@@ -77,14 +77,14 @@ def test_ablation_records_accuracy_increment_overlap_cost_and_limitations() -> N
     assert all(len(item["sha256"]) == 64 for item in workloads.values())
 
     baseline = _profile(report, "exact-alias")
-    assert baseline["sentence_metrics"]["counts"] == {"tp": 3, "fp": 0, "fn": 13, "tn": 4}
-    assert baseline["occurrence_metrics"]["counts"] == {"tp": 3, "fp": 0, "fn": 13}
+    assert baseline["sentence_metrics"]["counts"] == {"tp": 4, "fp": 0, "fn": 12, "tn": 4}
+    assert baseline["occurrence_metrics"]["counts"] == {"tp": 4, "fp": 0, "fn": 12}
 
     repeated = _matcher(report, "repeated")
     assert repeated["comparison_profile"] == "exact-alias"
     assert repeated["contribution"]["added_tp"] == 1
     assert repeated["contribution"]["added_fp"] == 0
-    assert repeated["contribution"]["remaining_fn"] == 12
+    assert repeated["contribution"]["remaining_fn"] == 11
     assert set(repeated["cost_delta"]) == {
         "short_chat_p50_ms",
         "short_chat_p95_ms",
@@ -103,7 +103,7 @@ def test_ablation_records_accuracy_increment_overlap_cost_and_limitations() -> N
     assert segmented["contribution"]["added_tp"] == 1
 
     current = _profile(report, "all-enabled")
-    assert current["sentence_metrics"]["counts"] == {"tp": 12, "fp": 0, "fn": 4, "tn": 4}
+    assert current["sentence_metrics"]["counts"] == {"tp": 13, "fp": 0, "fn": 3, "tn": 4}
     assert current["performance"]["short_chat"]["p50_ms"] > 0
     assert current["performance"]["short_chat"]["p95_ms"] > 0
     assert current["performance"]["maximum_input"]["p50_ms"] > 0

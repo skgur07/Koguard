@@ -31,3 +31,11 @@
 추가해 18건의 실패를 확인했다. packaged file과 provenance를 함께 갱신한 뒤 source 3개,
 candidate 73개, packaged literal 65개, Alias 5개의 양방향 검증이 통과했다. PF-007 후보 중
 승격하지 않은 3개는 `candidate` 상태를 유지한다.
+
+## 2026-08-19 다중 출처 intake 기반 추가 승격
+
+기존 92건 독립 consensus를 2,500건 다중 출처 review intake에 보존하고 남은 PF-007 후보 3개를
+재평가했다. tuning gate를 통과하고 소유자의 문맥 무관 차단 정책에 맞는 literal 2개를 먼저
+실패 테스트로 고정한 뒤 packaged file과 provenance를 함께 갱신했다. candidate 73개,
+packaged literal 67개, Alias 5개가 양방향으로 일치하며 PF-007 후보 1개는 gate 실패로 계속
+`candidate` 상태를 유지한다.

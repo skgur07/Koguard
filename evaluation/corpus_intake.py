@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
+import io
 import json
 import re
 import sys
@@ -51,6 +53,14 @@ class _SourceRow:
     rank: str
 
 
+@dataclass(frozen=True, slots=True)
+class _ParsedSource:
+    rows: tuple[_SourceRow, ...]
+    source_row_count: int
+    source_label_counts: Mapping[str, int]
+    duplicate_text_excluded_count: int
+
+
 def build_review_intake(
     source_spec_path: Path,
     artifact_path: Path,
@@ -69,28 +79,33 @@ def build_review_intake(
     if len(content) != artifact["size_bytes"]:
         raise CorpusIntakeError("artifact byte size mismatch")
 
-    rows = _parse_rows(content, spec)
-    if len(rows) != artifact["line_count"]:
+    if _line_count(content, spec) != artifact["line_count"]:
         raise CorpusIntakeError("artifact line count mismatch")
-    eligible_rows = tuple(row for row in rows if _SENSITIVE_PATTERN.search(row.text) is None)
+    parsed = _parse_rows(content, spec)
+    eligible_rows = tuple(row for row in parsed.rows if _SENSITIVE_PATTERN.search(row.text) is None)
     intake = cast(dict[str, Any], spec["intake"])
-    target_by_label = cast(dict[str, int], intake["target_by_source_label"])
-    selected = _select_rows(eligible_rows, target_by_label)
+    target_by_label = cast(dict[str, int] | None, intake["target_by_source_label"])
+    target_count = cast(int | None, intake["target_count"])
+    selected = _select_rows(
+        eligible_rows,
+        target_by_label=target_by_label,
+        target_count=target_count,
+    )
     corpus = _build_corpus(spec, selected)
-    source_counts = Counter(row.source_label for row in rows)
     eligible_counts = Counter(row.source_label for row in eligible_rows)
     selected_counts = Counter(row.source_label for row in selected)
     report: dict[str, Any] = {
-        "schema_version": 1,
+        "schema_version": 2,
         "source_id": spec["source_id"],
         "source_revision": spec["revision"],
         "artifact_sha256": actual_sha256,
-        "source_row_count": len(rows),
-        "source_label_counts": {label: source_counts[label] for label in ("0", "1")},
-        "sensitive_pattern_excluded_count": len(rows) - len(eligible_rows),
-        "eligible_source_label_counts": {label: eligible_counts[label] for label in ("0", "1")},
+        "source_row_count": parsed.source_row_count,
+        "source_label_counts": dict(sorted(parsed.source_label_counts.items())),
+        "duplicate_text_excluded_count": parsed.duplicate_text_excluded_count,
+        "sensitive_pattern_excluded_count": len(parsed.rows) - len(eligible_rows),
+        "eligible_source_label_counts": dict(sorted(eligible_counts.items())),
         "selected_count": len(selected),
-        "selected_source_label_counts": {label: selected_counts[label] for label in ("0", "1")},
+        "selected_source_label_counts": dict(sorted(selected_counts.items())),
         "generated_label_counts": {
             "positive": 0,
             "hard-negative": 0,
@@ -142,6 +157,7 @@ def _load_spec(path: Path) -> dict[str, Any]:
     required = {
         "schema_version",
         "source_id",
+        "source_name",
         "repository",
         "revision",
         "artifact",
@@ -149,13 +165,16 @@ def _load_spec(path: Path) -> dict[str, Any]:
         "format",
         "intake",
     }
-    if set(spec) != required or spec.get("schema_version") != 1:
-        raise CorpusIntakeError("source specification violates version 1 contract")
+    if set(spec) != required or spec.get("schema_version") != 2:
+        raise CorpusIntakeError("source specification violates version 2 contract")
     source_id = spec.get("source_id")
+    source_name = spec.get("source_name")
     repository = spec.get("repository")
     revision = spec.get("revision")
     if not isinstance(source_id, str) or _ID_PATTERN.fullmatch(source_id) is None:
         raise CorpusIntakeError("source_id is invalid")
+    if not isinstance(source_name, str) or not 1 <= len(source_name) <= 200:
+        raise CorpusIntakeError("source_name is invalid")
     if not isinstance(repository, str) or not repository.startswith("https://"):
         raise CorpusIntakeError("source repository is invalid")
     if not isinstance(revision, str) or not revision or len(revision) > 200:
@@ -188,7 +207,16 @@ def _load_spec(path: Path) -> dict[str, Any]:
         "redistribution_allowed",
     }:
         raise CorpusIntakeError("source license is invalid")
-    if license_data.get("spdx") != "MIT" or license_data.get("redistribution_allowed") is not True:
+    if (
+        license_data.get("spdx")
+        not in {
+            "MIT",
+            "Apache-2.0",
+            "CC-BY-4.0",
+            "CC-BY-SA-4.0",
+        }
+        or license_data.get("redistribution_allowed") is not True
+    ):
         raise CorpusIntakeError("source license is not approved for redistribution")
     license_url = license_data.get("url")
     license_sha256 = license_data.get("sha256")
@@ -197,18 +225,49 @@ def _load_spec(path: Path) -> dict[str, Any]:
     if not isinstance(license_sha256, str) or _SHA256_PATTERN.fullmatch(license_sha256) is None:
         raise CorpusIntakeError("source license SHA-256 is invalid")
     format_data = spec.get("format")
-    if not isinstance(format_data, dict) or format_data != {
-        "delimiter": "|",
-        "text_column": 0,
-        "label_column": 1,
-        "allowed_labels": ["0", "1"],
+    if not isinstance(format_data, dict) or set(format_data) != {
+        "kind",
+        "delimiter",
+        "encoding",
+        "header_rows",
+        "text_column",
+        "label_column",
+        "allowed_labels",
     }:
         raise CorpusIntakeError("source format is unsupported")
+    delimiter = format_data.get("delimiter")
+    header_rows = format_data.get("header_rows")
+    text_column = format_data.get("text_column")
+    label_column = format_data.get("label_column")
+    allowed_labels = format_data.get("allowed_labels")
+    if (
+        format_data.get("kind") != "delimited"
+        or delimiter not in {"|", "\t", ","}
+        or format_data.get("encoding") != "utf-8"
+        or type(header_rows) is not int
+        or header_rows not in {0, 1}
+        or type(text_column) is not int
+        or text_column < 0
+        or (label_column is not None and (type(label_column) is not int or label_column < -1))
+        or label_column == text_column
+    ):
+        raise CorpusIntakeError("source format is unsupported")
+    if label_column is None:
+        if allowed_labels is not None:
+            raise CorpusIntakeError("unlabelled source must not declare allowed labels")
+    elif (
+        not isinstance(allowed_labels, list)
+        or not allowed_labels
+        or any(not isinstance(label, str) or not label for label in allowed_labels)
+        or len(set(cast(list[str], allowed_labels))) != len(allowed_labels)
+    ):
+        raise CorpusIntakeError("source labels are invalid")
     intake = spec.get("intake")
     if not isinstance(intake, dict) or set(intake) != {
         "corpus_id",
         "split",
         "selection",
+        "target_count",
         "target_by_source_label",
     }:
         raise CorpusIntakeError("intake configuration is invalid")
@@ -217,14 +276,25 @@ def _load_spec(path: Path) -> dict[str, Any]:
         raise CorpusIntakeError("intake corpus_id is invalid")
     if intake.get("split") != "tuning" or intake.get("selection") != "stable-sha256-rank-v1":
         raise CorpusIntakeError("intake policy is unsupported")
+    target_count = intake.get("target_count")
     targets = intake.get("target_by_source_label")
-    if (
-        not isinstance(targets, dict)
-        or set(targets) != {"0", "1"}
-        or any(type(value) is not int or value < 0 for value in targets.values())
-        or sum(cast(dict[str, int], targets).values()) < 1
-    ):
-        raise CorpusIntakeError("target_by_source_label is invalid")
+    if (target_count is None) == (targets is None):
+        raise CorpusIntakeError("exactly one intake target policy is required")
+    if target_count is not None and (type(target_count) is not int or target_count < 1):
+        raise CorpusIntakeError("target_count is invalid")
+    if targets is not None:
+        if (
+            not isinstance(targets, dict)
+            or not targets
+            or any(not isinstance(label, str) or not label for label in targets)
+            or any(type(value) is not int or value < 0 for value in targets.values())
+            or sum(cast(dict[str, int], targets).values()) < 1
+        ):
+            raise CorpusIntakeError("target_by_source_label is invalid")
+        if label_column is None or set(cast(dict[str, int], targets)) - set(
+            cast(list[str], allowed_labels)
+        ):
+            raise CorpusIntakeError("target labels are not declared by the source format")
     return spec
 
 
@@ -235,27 +305,62 @@ def _read_artifact(path: Path) -> bytes:
         raise CorpusIntakeError("failed to read source artifact") from exc
 
 
-def _parse_rows(content: bytes, spec: Mapping[str, Any]) -> tuple[_SourceRow, ...]:
+def _line_count(content: bytes, spec: Mapping[str, Any]) -> int:
+    format_data = cast(dict[str, Any], spec["format"])
     try:
-        lines = content.decode("utf-8-sig").splitlines()
+        text = content.decode(cast(str, format_data["encoding"]) + "-sig")
     except UnicodeDecodeError as exc:
         raise CorpusIntakeError("source artifact must be UTF-8") from exc
+    return len(text.splitlines())
+
+
+def _parse_rows(content: bytes, spec: Mapping[str, Any]) -> _ParsedSource:
+    format_data = cast(dict[str, Any], spec["format"])
+    try:
+        decoded = content.decode(cast(str, format_data["encoding"]) + "-sig")
+    except UnicodeDecodeError as exc:
+        raise CorpusIntakeError("source artifact must be UTF-8") from exc
+    try:
+        records = list(
+            csv.reader(
+                io.StringIO(decoded, newline=""),
+                delimiter=cast(str, format_data["delimiter"]),
+                quoting=csv.QUOTE_NONE,
+            )
+        )
+    except csv.Error as exc:
+        raise CorpusIntakeError("source artifact has invalid delimited data") from exc
+    header_rows = cast(int, format_data["header_rows"])
+    if len(records) <= header_rows or len(records) != len(decoded.splitlines()):
+        raise CorpusIntakeError("source artifact row structure is unsupported")
     source_id = cast(str, spec["source_id"])
     revision = cast(str, spec["revision"])
+    text_column = cast(int, format_data["text_column"])
+    label_column = cast(int | None, format_data["label_column"])
+    allowed_labels = cast(list[str] | None, format_data["allowed_labels"])
     rows: list[_SourceRow] = []
+    source_counts: Counter[str] = Counter()
     seen_identity: set[str] = set()
-    for row_number, line in enumerate(lines, start=1):
-        try:
-            text, source_label = line.rsplit("|", 1)
-        except ValueError as exc:
-            raise CorpusIntakeError(f"source row {row_number} has invalid format") from exc
-        if not text or source_label not in {"0", "1"}:
+    duplicate_count = 0
+    for row_number, record in enumerate(records[header_rows:], start=header_rows + 1):
+        required_column = max(text_column, label_column if label_column is not None else 0)
+        if len(record) <= required_column:
+            raise CorpusIntakeError(f"source row {row_number} has invalid format")
+        text = (
+            cast(str, format_data["delimiter"]).join(record[text_column:label_column])
+            if label_column == -1
+            else record[text_column]
+        )
+        source_label = "__all__" if label_column is None else record[label_column]
+        if not text or (allowed_labels is not None and source_label not in allowed_labels):
             raise CorpusIntakeError(f"source row {row_number} has invalid fields")
         if len(text) > 4096:
             raise CorpusIntakeError(f"source row {row_number} exceeds maximum text length")
+        source_counts[source_label] += 1
         identity = hashlib.sha256(text.encode("utf-8")).hexdigest()
         if identity in seen_identity:
-            raise CorpusIntakeError(f"source row {row_number} duplicates an earlier text")
+            duplicate_count += 1
+            continue
         seen_identity.add(identity)
         rank_payload = f"{source_id}\0{revision}\0{source_label}\0{identity}".encode()
         rows.append(
@@ -267,18 +372,32 @@ def _parse_rows(content: bytes, spec: Mapping[str, Any]) -> tuple[_SourceRow, ..
                 rank=hashlib.sha256(rank_payload).hexdigest(),
             )
         )
-    return tuple(rows)
+    return _ParsedSource(
+        rows=tuple(rows),
+        source_row_count=len(records) - header_rows,
+        source_label_counts=dict(source_counts),
+        duplicate_text_excluded_count=duplicate_count,
+    )
 
 
 def _select_rows(
     rows: Sequence[_SourceRow],
-    target_by_label: Mapping[str, int],
+    *,
+    target_by_label: Mapping[str, int] | None,
+    target_count: int | None,
 ) -> tuple[_SourceRow, ...]:
+    if target_count is not None:
+        if len(rows) < target_count:
+            raise CorpusIntakeError(
+                f"source has {len(rows)} eligible rows; {target_count} required"
+            )
+        return tuple(sorted(rows, key=lambda row: (row.rank, row.row_number))[:target_count])
+    assert target_by_label is not None
     by_label: dict[str, list[_SourceRow]] = defaultdict(list)
     for row in rows:
         by_label[row.source_label].append(row)
     selected: list[_SourceRow] = []
-    for label in ("0", "1"):
+    for label in sorted(target_by_label):
         available = by_label[label]
         target = target_by_label[label]
         if len(available) < target:
@@ -291,9 +410,11 @@ def _select_rows(
 
 def _build_corpus(spec: Mapping[str, Any], rows: Sequence[_SourceRow]) -> dict[str, Any]:
     source_id = cast(str, spec["source_id"])
+    source_name = cast(str, spec["source_name"])
     repository = cast(str, spec["repository"])
     revision = cast(str, spec["revision"])
     intake = cast(dict[str, Any], spec["intake"])
+    license_data = cast(dict[str, Any], spec["license"])
     return {
         "schema_version": 1,
         "corpus_id": intake["corpus_id"],
@@ -306,12 +427,12 @@ def _build_corpus(spec: Mapping[str, Any], rows: Sequence[_SourceRow]) -> dict[s
                 "slices": ["unadjudicated-intake"],
                 "source": {
                     "kind": "licensed",
-                    "name": "2runo/Curse-detection-data",
+                    "name": source_name,
                     "reference": repository,
                     "revision": revision,
                     "redistribution_allowed": True,
                 },
-                "license": "MIT",
+                "license": license_data["spdx"],
                 "split": "tuning",
                 "notes": "Unadjudicated intake; external annotation is not Koguard gold.",
             }

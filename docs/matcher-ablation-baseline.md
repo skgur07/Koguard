@@ -88,5 +88,8 @@ uv run python -m evaluation.ablation_runner `
 4. 공개 집계와 한계는
    [`pf009-profile-evaluation.report.json`](../evaluation/results/pf009-profile-evaluation.report.json)에
    기록한다.
-5. 다음 결정은 PF-005 독립 batch 확대와 hidden 평가이며, 그 전에는 현재 profile 수치를
+5. 2026-08-19에는 2,500건 다중 출처 intake에 기존 확정 92건을 보존한 상태로 최종 후보
+   사전을 재측정했다. balanced 문장 TP/FP/FN/TN은 45/0/17/30이고 occurrence TP/FP/FN은
+   59/11/51이다.
+6. 다음 결정은 남은 2,408건의 독립 판정과 hidden 평가이며, 그 전에는 현재 profile 수치를
    실서비스 전체로 일반화하지 않는다.

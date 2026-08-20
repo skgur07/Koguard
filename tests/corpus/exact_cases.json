@@ -90,8 +90,33 @@
     "expected_terms": []
   },
   {
-    "id": "benign_words_near_excluded_ambiguous_terms",
+    "id": "context_independent_registered_substring",
     "text": "새끼손가락을 다쳐 허리띠를 졸라매고 애니미즘을 공부했다",
+    "expected_terms": ["새끼"]
+  },
+  {
+    "id": "pf007_compound_literal_uses_longest_canonical",
+    "text": "병신새끼라고 적었다",
+    "expected_terms": ["병신새끼"]
+  },
+  {
+    "id": "pf007_baby_near_miss_remains_clean",
+    "text": "새 기차가 도착했고 색이 선명하다",
+    "expected_terms": []
+  },
+  {
+    "id": "pf007_baby_second_near_miss_remains_clean",
+    "text": "새로운 기계를 점검했다",
+    "expected_terms": []
+  },
+  {
+    "id": "pf007_compound_first_near_miss_remains_clean",
+    "text": "병실에서 신생아를 돌봤다",
+    "expected_terms": []
+  },
+  {
+    "id": "pf007_compound_second_near_miss_remains_clean",
+    "text": "병원에서 새 기계를 설치했다",
     "expected_terms": []
   },
   {

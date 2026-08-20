@@ -5,11 +5,13 @@ from __future__ import annotations
 import argparse
 import json
 import platform
+import re
+import subprocess
 import sys
 import tarfile
 import zipfile
 from collections.abc import Sequence
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from email import policy
 from email.message import Message
 from email.parser import BytesParser
@@ -17,12 +19,33 @@ from hashlib import sha256
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+ARTIFACT_AUDIT_SCHEMA_PATH = Path(__file__).with_name("artifact-audit.schema.json")
+RIGHTS_MANIFEST_SCHEMA_PATH = Path(__file__).with_name("rights-manifest.schema.json")
+
 _PACKAGE_NAME = "koguard"
 _PACKAGE_VERSION = "0.1.0"
 _REQUIRES_PYTHON = ">=3.11,<3.12"
 _LICENSE_EXPRESSION = "MIT"
 _MAX_WHEEL_BYTES = 256 * 1024
 _MAX_SDIST_BYTES = 2 * 1024 * 1024
+_GIT_OID_PATTERN = re.compile(r"^[0-9a-f]{40}$")
+_SOURCE_ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._-]{0,127}$")
+_RIGHTS_FIELDS = frozenset(
+    {"schema_version", "reviewed_at", "project_license", "artifact_policy", "sources"}
+)
+_RIGHTS_SOURCE_FIELDS = frozenset(
+    {
+        "source_id",
+        "reference",
+        "revision",
+        "declared_license",
+        "rights_status",
+        "allowed_scope",
+        "payload_in_artifacts",
+        "runtime_dependency",
+        "evidence",
+    }
+)
 _FORBIDDEN_SUFFIXES = frozenset(
     {
         ".bin",
@@ -58,6 +81,38 @@ def _hash_file(path: Path) -> str:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _git_source_identity(repo_root: Path) -> tuple[str, str]:
+    """Return the clean checkout's commit and Git tree identifiers."""
+
+    resolved_root = repo_root.resolve()
+    for arguments, label in (
+        (("diff", "--quiet"), "tracked worktree"),
+        (("diff", "--cached", "--quiet"), "staged worktree"),
+    ):
+        completed = subprocess.run(
+            ("git", "-C", str(resolved_root), *arguments),
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if completed.returncode != 0:
+            raise ReleaseAuditError(f"{label} must be clean before release artifact audit")
+
+    identifiers: list[str] = []
+    for revision in ("HEAD", "HEAD^{tree}"):
+        completed = subprocess.run(
+            ("git", "-C", str(resolved_root), "rev-parse", "--verify", revision),
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        identifier = completed.stdout.strip()
+        if completed.returncode != 0 or _GIT_OID_PATTERN.fullmatch(identifier) is None:
+            raise ReleaseAuditError(f"failed to resolve Git identity: {revision}")
+        identifiers.append(identifier)
+    return identifiers[0], identifiers[1]
 
 
 def _require_one(paths: Sequence[Path], label: str) -> Path:
@@ -201,8 +256,14 @@ def _audit_sdist(path: Path) -> tuple[dict[str, object], dict[str, object]]:
             "evaluation/hidden-evaluation-report.schema.json",
             "release/release_report.py",
             "release/release-report.schema.json",
+            "release/artifact-audit.schema.json",
+            "release/ci-evidence.schema.json",
+            "release/github_actions_evidence.py",
+            "release/reproducibility-report.schema.json",
+            "release/rights-manifest.schema.json",
             "release/rights-manifest.v1.json",
             "release/testpypi-evidence.schema.json",
+            "release/verify_reproducible_artifacts.py",
         )
         _require_members(
             names,
@@ -228,9 +289,18 @@ def _audit_sdist(path: Path) -> tuple[dict[str, object], dict[str, object]]:
     return metadata, details
 
 
-def audit_distributions(dist_dir: Path) -> dict[str, Any]:
+def audit_distributions(
+    dist_dir: Path,
+    *,
+    release_commit: str,
+    source_tree: str,
+) -> dict[str, Any]:
     """Validate both distributions and return hashes, sizes, and package metadata."""
 
+    if _GIT_OID_PATTERN.fullmatch(release_commit) is None:
+        raise ReleaseAuditError("release_commit must be a full lowercase Git SHA")
+    if _GIT_OID_PATTERN.fullmatch(source_tree) is None:
+        raise ReleaseAuditError("source_tree must be a full lowercase Git tree identifier")
     wheel, sdist = discover_distributions(dist_dir)
     if wheel.stat().st_size > _MAX_WHEEL_BYTES:
         raise ReleaseAuditError(f"wheel exceeds {_MAX_WHEEL_BYTES} bytes")
@@ -243,6 +313,10 @@ def audit_distributions(dist_dir: Path) -> dict[str, Any]:
     return {
         "schema_version": 1,
         "generated_at": datetime.now(UTC).isoformat(),
+        "source": {
+            "release_commit": release_commit,
+            "git_tree": source_tree,
+        },
         "environment": {
             "python_version": platform.python_version(),
             "implementation": platform.python_implementation(),
@@ -268,33 +342,72 @@ def audit_distributions(dist_dir: Path) -> dict[str, Any]:
     }
 
 
+def validate_rights_manifest_payload(payload: object) -> dict[str, object]:
+    """Validate the closed rights manifest and block unapproved public payload."""
+
+    if not isinstance(payload, dict):
+        raise ReleaseAuditError("rights manifest must be an object")
+    if set(payload) != _RIGHTS_FIELDS:
+        raise ReleaseAuditError("rights manifest fields do not match the closed contract")
+    if payload.get("schema_version") != 1:
+        raise ReleaseAuditError("rights manifest must use schema_version 1")
+    if payload.get("project_license") != _LICENSE_EXPRESSION:
+        raise ReleaseAuditError("project license is not approved for release")
+    reviewed_at = payload.get("reviewed_at")
+    if not isinstance(reviewed_at, str):
+        raise ReleaseAuditError("rights manifest reviewed_at must be an ISO date")
+    try:
+        date.fromisoformat(reviewed_at)
+    except ValueError as exc:
+        raise ReleaseAuditError("rights manifest reviewed_at must be an ISO date") from exc
+    if not isinstance(payload.get("artifact_policy"), str) or not payload["artifact_policy"]:
+        raise ReleaseAuditError("rights manifest artifact_policy must be non-empty")
+    sources = payload.get("sources")
+    if not isinstance(sources, list) or not sources:
+        raise ReleaseAuditError("rights manifest must contain sources")
+    source_ids: set[str] = set()
+    for source in sources:
+        if not isinstance(source, dict):
+            raise ReleaseAuditError("rights manifest sources must be objects")
+        if set(source) != _RIGHTS_SOURCE_FIELDS:
+            raise ReleaseAuditError("rights source fields do not match the closed contract")
+        source_id = source.get("source_id")
+        if not isinstance(source_id, str) or _SOURCE_ID_PATTERN.fullmatch(source_id) is None:
+            raise ReleaseAuditError("rights source_id must be a stable identifier")
+        if source_id in source_ids:
+            raise ReleaseAuditError(f"duplicate rights source: {source_id}")
+        source_ids.add(source_id)
+        for field in ("reference", "revision", "rights_status", "allowed_scope", "evidence"):
+            if not isinstance(source.get(field), str) or not source[field]:
+                raise ReleaseAuditError(f"rights source {field} must be non-empty: {source_id}")
+        declared_license = source.get("declared_license")
+        if declared_license is not None and (
+            not isinstance(declared_license, str) or not declared_license
+        ):
+            raise ReleaseAuditError(f"declared_license must be a string or null: {source_id}")
+        if type(source.get("payload_in_artifacts")) is not bool:
+            raise ReleaseAuditError(f"payload_in_artifacts must be boolean: {source_id}")
+        if source.get("runtime_dependency") is not False:
+            raise ReleaseAuditError(f"runtime dependency is not allowed: {source_id}")
+        if source.get("payload_in_artifacts") is True and source.get("rights_status") != "approved":
+            raise ReleaseAuditError(f"unapproved public payload: {source_id}")
+    return payload
+
+
 def validate_rights_manifest(path: Path) -> dict[str, object]:
-    """Block public payload whose rights status is not approved."""
+    """Load and validate the closed release rights manifest."""
 
     try:
         payload: object = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ReleaseAuditError(f"failed to load rights manifest: {path}") from exc
-    if not isinstance(payload, dict) or payload.get("schema_version") != 1:
-        raise ReleaseAuditError("rights manifest must use schema_version 1")
-    if payload.get("project_license") != _LICENSE_EXPRESSION:
-        raise ReleaseAuditError("project license is not approved for release")
-    sources = payload.get("sources")
-    if not isinstance(sources, list) or not sources:
-        raise ReleaseAuditError("rights manifest must contain sources")
-    for source in sources:
-        if not isinstance(source, dict):
-            raise ReleaseAuditError("rights manifest sources must be objects")
-        if source.get("runtime_dependency") is not False:
-            raise ReleaseAuditError(f"runtime dependency is not allowed: {source.get('source_id')}")
-        if source.get("payload_in_artifacts") is True and source.get("rights_status") != "approved":
-            raise ReleaseAuditError(f"unapproved public payload: {source.get('source_id')}")
-    return payload
+    return validate_rights_manifest_payload(payload)
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dist-dir", type=Path, default=Path("dist"))
+    parser.add_argument("--repo-root", type=Path, default=Path("."))
     parser.add_argument(
         "--rights-manifest",
         type=Path,
@@ -309,7 +422,12 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     arguments = _parser().parse_args(argv)
     validate_rights_manifest(arguments.rights_manifest)
-    report = audit_distributions(arguments.dist_dir)
+    release_commit, source_tree = _git_source_identity(arguments.repo_root)
+    report = audit_distributions(
+        arguments.dist_dir,
+        release_commit=release_commit,
+        source_tree=source_tree,
+    )
     arguments.output.parent.mkdir(parents=True, exist_ok=True)
     serialized = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     arguments.output.write_text(serialized, encoding="utf-8")

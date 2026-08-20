@@ -27,8 +27,9 @@
 | 메타데이터 | `__version__` | 설치된 배포 버전 |
 
 `KoguardEngine`의 공개 동작은 `config`, `dictionary`, `contains(text)`, `check(text)`다.
-`KoguardDictionary`의 공개 생성 경로는 `default()`와 `from_sources()`이며, 불변 원본 필드와
-`ordered_blacklist`, `ordered_whitelist`, `ordered_aliases`를 읽을 수 있다.
+`KoguardDictionary`의 권장 생성 경로는 `default()`와 `from_sources()`다. dataclass 직접
+생성자도 같은 불변식으로 검증되며, 불변 원본 필드와 `ordered_blacklist`,
+`ordered_whitelist`, `ordered_aliases`를 읽을 수 있다.
 
 ## 결과 모델 결정
 
@@ -45,6 +46,16 @@ detector를 위해 `None`을 미리 허용하지 않는다.
 `CheckResult.detected`, `matched_word`, `method`, `confidence`는 모두 현재 구현된 읽기 전용
 property이므로 유지한다. 새 코드는 다중 결과와 원문 위치가 보존되는 `matches`를 우선 사용하고,
 scalar property는 첫 match의 편의 view로 이해해야 한다.
+
+`Match.term`, `matched_text`와 `CheckResult.normalized_text`는 runtime에서도 문자열만 허용한다.
+`score`와 `elapsed_ms`는 `bool`을 숫자로 취급하지 않고 유한한 `float`로 정규화한다. 탐지 결과의
+동등성은 normalized text와 matches를 비교하며 wall-clock 관측값인 `elapsed_ms`는 비교에서
+제외한다. 따라서 같은 탐지 payload는 실행 시간이 달라도 같은 결과로 비교된다.
+
+`KoguardDictionary` 직접 생성자는 전달받은 blacklist·whitelist collection을 같은 Unicode
+정책으로 정규화한 새 `frozenset`으로 복사한다. 호출자가 원본 `set`을 나중에 변경해도 공개
+dictionary와 이미 생성된 matcher index가 갈라지지 않는다. 잘못된 Unicode form이나 문자열이
+아닌 사전 항목은 `DictionaryError`로 즉시 거부한다.
 
 ## 설정 감사
 
