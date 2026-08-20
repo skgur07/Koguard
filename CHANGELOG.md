@@ -21,6 +21,7 @@ Semantic Versioning after the first public release.
 
 - The no-argument engine now uses the measured `balanced` profile instead of the legacy all-enabled config.
 - Public API exports are limited to implemented core contracts required for `0.1.0`.
+- Wheel ZIP creator metadata is canonicalized before audit so supported OS builds are byte-identical.
 
 ### Security
 

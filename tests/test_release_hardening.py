@@ -80,6 +80,7 @@ def _write_sdist(
         "release/artifact-audit.schema.json": b"{}\n",
         "release/ci-evidence.schema.json": b"{}\n",
         "release/github_actions_evidence.py": b'"""CI evidence."""\n',
+        "release/normalize_wheel.py": b'"""Wheel metadata normalization."""\n',
         "release/reproducibility-report.schema.json": b"{}\n",
         "release/rights-manifest.schema.json": b"{}\n",
         "release/rights-manifest.v1.json": b"{}\n",
@@ -275,6 +276,7 @@ def test_project_metadata_and_release_documents_are_publication_complete() -> No
         Path("release/artifact-audit.schema.json"),
         Path("release/ci-evidence.schema.json"),
         Path("release/github_actions_evidence.py"),
+        Path("release/normalize_wheel.py"),
         Path("release/reproducibility-report.schema.json"),
         Path("release/verify_reproducible_artifacts.py"),
         Path("release/release_report.py"),
@@ -329,6 +331,7 @@ def test_ci_matrix_pins_actions_and_runs_complete_release_gate() -> None:
         "uv run mypy",
         "uv run pytest",
         "uv build",
+        "uv run python -m release.normalize_wheel --dist-dir dist",
         "uv run python -m evaluation.dictionary_provenance",
         "uv run python -m release.artifact_audit",
         "uv run python -m release.clean_install_smoke",
@@ -336,6 +339,8 @@ def test_ci_matrix_pins_actions_and_runs_complete_release_gate() -> None:
         assert command in workflow
     assert "uv run python -m release.verify_reproducible_artifacts" in workflow
     assert "koguard-0.1.0-release-candidate" in workflow
+    assert workflow.index("uv build") < workflow.index("release.normalize_wheel")
+    assert workflow.index("release.normalize_wheel") < workflow.index("release.artifact_audit")
 
 
 def test_repository_enforces_canonical_lf_for_text_build_inputs() -> None:
