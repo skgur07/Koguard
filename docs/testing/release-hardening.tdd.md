@@ -71,3 +71,15 @@ RED 테스트는 저장소 전체 canonical LF 정책, 세 OS 후보의 실제 �
 구현은 matrix 산출물을 3일 보존 검증 후보로 분리하고, 네 번째 필수 CI job에서 세 후보가
 byte-identical일 때만 Linux 묶음을 14일 보존 release candidate로 승격한다. TestPyPI/PyPI는 이
 단일 묶음만 사용한다.
+
+## 2026-08-20 wheel ZIP creator metadata 정규화
+
+CI run `32332576212`에서 세 OS sdist SHA-256은 모두 같았고 wheel의 모든 member content·CRC·압축
+크기도 같았다. Windows가 ZIP `create_system=0`, Linux·macOS가 `3`을 기록한 차이만으로 Windows
+wheel SHA-256이 달라졌다. RED 테스트는 이 두 wheel이 정규화 후 byte-identical하고 같은 wheel을
+두 번 정규화해도 hash가 바뀌지 않을 것을 먼저 요구했다.
+
+`release.normalize_wheel`은 build 직후 archive comment와 각 member의 content·순서·timestamp·권한을
+보존하면서 `create_system=3`으로 다시 쓴다. 실패 run에서 내려받은 세 실제 wheel에 적용했을 때
+모두 `dbea839233d38b7d65c8769843478e0dfef3f4e5796417e72eee82e737314231`로 수렴했다. CI는
+정규화 뒤에만 artifact audit, clean-install, upload와 byte 비교를 수행한다.

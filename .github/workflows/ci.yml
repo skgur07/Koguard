@@ -65,6 +65,9 @@ jobs:
       - name: Build wheel and source distribution
         run: uv build
 
+      - name: Normalize wheel archive metadata
+        run: uv run python -m release.normalize_wheel --dist-dir dist
+
       - name: Audit public artifact contents
         run: uv run python -m release.artifact_audit --dist-dir dist --output release-audit-${{ runner.os }}.json
 

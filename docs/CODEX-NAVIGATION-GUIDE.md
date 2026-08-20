@@ -35,7 +35,7 @@
 | `docs/release-hardening.md` | PF-013 CI·artifact·권리 감사 gate와 공개 blocker |
 | `docs/pf014-release-readiness.md` | hidden·TestPyPI 증거와 0.1.0 공개 판정 절차 |
 | `evaluation/hidden_evaluation_report.py` | 보호 ablation과 독립 승인에서 aggregate-only hidden report 생성 |
-| `release/` | wheel/sdist 감사, clean-install, 권리 manifest와 PF-014 release 판정 |
+| `release/` | wheel metadata 정규화, wheel/sdist 감사, clean-install, 권리 manifest와 PF-014 판정 |
 | `docs/implementation-plan.md` | 단계별 제품 및 아키텍처 계획 |
 | `docs/accuracy-baseline.md` | 현재 정확도 기준선 |
 
