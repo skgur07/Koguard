@@ -23,15 +23,30 @@ wheel 런타임 데이터에는 포함하지 않는다.
 ## PF-005 license-pinned review intake
 
 `corpus_intake.py`는 외부 자료를 다운로드하지 않고 `sources/*.json`에 고정한 revision,
-artifact SHA-256, LICENSE SHA-256과 형식을 검증한다. 현재 MIT
-`2runo/Curse-detection-data` 5,825건 중 source label strata `0:500`, `1:2,000`을
-deterministic SHA-256 rank로 선택했다.
+artifact SHA-256, LICENSE SHA-256과 형식을 검증한다. source spec v2는 UTF-8 구분자 파일,
+header 유무, label strata 또는 전체 quota, MIT·Apache-2.0·CC-BY·CC-BY-SA source를 닫힌
+계약으로 다룬다. 현재 2runo 2,500건, KOTE 750건, Korean Hate Speech 750건을 생성한다.
 
-upstream label은 Koguard gold가 아니므로 생성된 2,500건은 모두 tuning `review`이며 exact
-span이나 실제 평가 slice를 갖지 않는다. `results/curse-review-intake-v1.report.json`은
-`gold_ready=false`를 고정한다. 현재 상태와 남은 판정 작업은
+upstream label은 Koguard gold가 아니므로 새 source case는 모두 tuning `review`이며 exact
+span이나 실제 평가 slice를 갖지 않는다. source별 report는 `gold_ready=false`를 고정한다.
+`curated_policy_intake.py`는 100개 positive-target 정책 문맥과 150개 hard-negative-target
+유사 표기를 직접 작성하지만, 설계 의도가 gold를 대신하지 않도록 역시 blinded review로 만든다.
+
+`corpus_composer.py`는 첫 batch 확정 92건을 우선 보존하고 2runo/KOTE/Korean Hate Speech/
+Koguard curated를 `750/750/750/250`으로 선택한다. 직접·NFKC+casefold 중복을 제거하고 source
+비중 30% 상한을 강제한다. balanced 원문은 보호 경로에만 두며 공개 report에는 aggregate만 남긴다.
+현재 상태와 남은 판정 작업은
 [PF-005 corpus 상태](../docs/corpus-intake-status.md)에 기록한다. 생성 원문은 수동 privacy
 review 전까지 Git과 배포물에 포함하지 않는다.
+
+```powershell
+uv run python -m evaluation.curated_policy_intake
+
+uv run python -m evaluation.corpus_composer `
+  evaluation\compositions\pf005-balanced-review-intake.v1.json `
+  --output evaluation\corpus\tuning\pf005-balanced-review-intake-v1.json `
+  --report evaluation\results\pf005-balanced-review-intake-v1.report.json
+```
 
 ## PF-005 rights-pending quarantine intake
 
@@ -71,27 +86,27 @@ batch·merge 결과 원문은 `evaluation/annotation-work/` 또는 저장소 밖
 
 ```powershell
 uv run python -m evaluation.annotation_workflow export `
-  evaluation\corpus\tuning\curse-review-intake-v1.json `
-  --annotation-set-id pf005-batch-001-primary `
+  evaluation\corpus\tuning\pf005-balanced-review-intake-v1.json `
+  --annotation-set-id pf005-balanced-batch-001-primary `
   --reviewer-id reviewer-a `
   --offset 0 `
-  --limit 100 `
-  --output evaluation\annotation-work\pf005-batch-001-primary.json
+  --limit 500 `
+  --output evaluation\annotation-work\pf005-balanced-batch-001-primary.json
 
 uv run python -m evaluation.annotation_workflow export `
-  evaluation\corpus\tuning\curse-review-intake-v1.json `
-  --annotation-set-id pf005-batch-001-secondary `
+  evaluation\corpus\tuning\pf005-balanced-review-intake-v1.json `
+  --annotation-set-id pf005-balanced-batch-001-secondary `
   --reviewer-id reviewer-b `
   --offset 0 `
-  --limit 100 `
-  --output evaluation\annotation-work\pf005-batch-001-secondary.json
+  --limit 500 `
+  --output evaluation\annotation-work\pf005-balanced-batch-001-secondary.json
 
 uv run python -m evaluation.annotation_workflow merge `
-  evaluation\corpus\tuning\curse-review-intake-v1.json `
-  evaluation\annotation-work\pf005-batch-001-primary.json `
-  evaluation\annotation-work\pf005-batch-001-secondary.json `
-  --output evaluation\annotation-work\pf005-after-batch-001.json `
-  --report evaluation\annotation-work\pf005-batch-001.report.json
+  evaluation\corpus\tuning\pf005-balanced-review-intake-v1.json `
+  evaluation\annotation-work\pf005-balanced-batch-001-primary.json `
+  evaluation\annotation-work\pf005-balanced-batch-001-secondary.json `
+  --output evaluation\annotation-work\pf005-balanced-after-batch-001.json `
+  --report evaluation\annotation-work\pf005-balanced-batch-001.report.json
 ```
 
 두 검토자의 판정이 다른 case는 동일 범위로 내보낸 세 번째 batch에서만 판정한다. 최초 두
@@ -213,15 +228,15 @@ balanced profile 포함 여부는 [PF-003 기준선](../docs/matcher-ablation-ba
 
 ```powershell
 uv run python -m evaluation.profile_report `
-  --source-ablation C:\protected\pf005-batch-001.adjudicated.ablation.json `
+  --source-ablation C:\protected\pf005-balanced-review-intake.v1.ablation.json `
   --output evaluation\results\pf009-profile-evaluation.report.json
 ```
 
 공개 보고서는 원본 ablation과 corpus SHA-256, 환경, 세 profile 집계, balanced 증분과 임시
-FP·p95 게이트를 기록한다. 2026-08-18 사전 승격 뒤 balanced는 strict보다 문장·occurrence TP가
-각각 3건 늘고 FP 증분은 0이다. balanced 문장 recall은 62.9%, occurrence recall은 40.9%다.
-일반 한글 입력에서 Alias·초성·분절 검사의 불필요한 work를 건너뛴 뒤 short-chat p95는
-0.0719ms, 최대 입력 p95는 13.053ms로 기존 15ms 임시 예산을 통과했다. 확정 92건과
+FP·p95 게이트를 기록한다. 2026-08-19 최종 후보 사전에서 balanced는 strict보다
+문장·occurrence TP가 각각 3건 늘고 FP 증분은 0이다. balanced 문장 recall은 72.6%, occurrence
+recall은 53.6%다. short-chat p95는 0.0251ms, 최대 입력 p95는 6.1068ms로 기존 15ms 임시
+예산을 통과했다. 확정 92건과
 hard-negative 30건뿐인 tuning 결과이므로 실서비스 FP나 최종 recall로 일반화할 수 없고,
 성능은 세 OS CI에서 다시 확인해야 한다. 계약은 `profile-report.schema.json` version 1이다.
 

@@ -14,6 +14,8 @@
 | `ZIZUN/korean-malicious-comments-dataset` | 고정 artifact 분석과 로컬 500건 review queue 생성 | source pin, 집계 report, 선언 LICENSE 사본만 | pending |
 | `2runo/Curse-detection-data` | 기존 intake 원본 및 ZIZUN 중복 제외 기준 | 기존 승인 범위 유지 | MIT 확인 |
 | `kocohub/korean-hate-speech` | ZIZUN 구성 자료의 원출처·license 확인 | 원문 없음 | CC-BY-SA-4.0 확인 |
+| `searle-j/KOTE` | 고정 train 40,000건에서 로컬 review 750건 | source pin·집계 report만 | MIT 확인 |
+| `kocohub/korean-hate-speech` 직접 pin | 고정 train 7,896건에서 로컬 review 750건 | source pin·집계 report만 | CC-BY-SA-4.0 확인 |
 
 PF-013 최종 재확인에서 다음 고정 revision과 공개 artifact 경계를 확정했다.
 
@@ -24,6 +26,7 @@ PF-013 최종 재확인에서 다음 고정 revision과 공개 artifact 경계�
 | `Tanat05/korean-profanity-resources` | `289ed960d10a9e6e3096090fba012ca0796fc641` | discovery reference만, 목록 복사 금지 |
 | `ZIZUN/korean-malicious-comments-dataset` | `50b92f50e89bb594db5c9ecafea8d48c1dd5b943` | 원문·annotation 공개 금지, local quarantine만 |
 | `kocohub/korean-hate-speech` | `f8d05dce2b22007bb149e5139c0060c68ad8f94b` | CC-BY-SA-4.0 구성 출처 reference만 |
+| `searle-j/KOTE` | `cafd2c3f54a6f4b25ac74eaa02a2e76c3ef8c977` | 원문 제외, source pin·aggregate만 공개 |
 
 Koguard 소유자는 2026-08-18 코드와 직접 작성한 기본 데이터의 MIT 공개를 승인했다. Git 이력의
 `s23019 <s23019@gsm.hs.kr>`도 같은 소유자의 이전 identity임을 확인했으며 `.mailmap`으로
@@ -33,14 +36,35 @@ Koguard 소유자는 2026-08-18 코드와 직접 작성한 기본 데이터의 M
 `Tanat05/korean-profanity-resources` 자체의 단어 목록이나 링크된 제3자 원문은 가져오지 않았다.
 따라서 해당 목록은 데이터 출처가 아니라 discovery reference다.
 
-PF-007 독립 검토 후보 중 소유자가 승인한 4개 literal은 2026-08-18 기본 사전에 승격했다.
+PF-007 독립 검토 후보 중 소유자가 승인한 4개 literal은 2026-08-18, 추가 2개 literal은
+2026-08-19 기본 사전에 승격했다.
 `2runo/Curse-detection-data` 원문은 공개하지 않고 선별 literal, 고정 revision과 MIT 고지만
 배포한다. `src/koguard/data/CURSE-DETECTION-DATA-MIT.txt`가 wheel과 sdist에 포함된다.
 
+## PF-005 다중 출처 balanced intake
+
+2026-08-19에 KOTE와 Korean Hate Speech 원저장소를 직접 고정했다. KOTE `train.tsv`는
+SHA-256 `62c18dc385f7c140624b693a2806e98060daaf9e7427ceb7d050828d0a55f992`, LICENSE는
+SHA-256 `485d03537f29b7a85d24e931e7d8e2b22a9235676a3584fde76dd0da79be5629`다.
+Korean Hate Speech `labeled/train.tsv`는 SHA-256
+`ebebacdcd023af2c4acc8c0a37695fb6433ac04fc009feff8f222724e303a5a9`, LICENSE는
+SHA-256 `87a816969906840bf7af8d4d01cdfad4741b18946365e1f286007935509f2edb`다.
+
+두 자료 모두 upstream label을 Koguard gold로 복사하지 않는다. KOTE 750건, Korean Hate Speech
+750건은 모든 case를 `review`로 만들고 자동 민감 패턴 제외 뒤 수동 privacy review를 기다린다.
+Koguard 직접 작성 review 250건과 첫 100건의 확정 판정을 보존한 2runo 750건을 합쳐
+`750/750/750/250` composition을 만들었으며, 직접·NFKC 정규화 중복은 0건이다.
+
+Korean Hate Speech 원문과 파생 annotation을 공개할 때는 CC-BY-SA-4.0 attribution과
+share-alike를 유지해야 한다. Koguard 코드와 직접 작성 데이터의 MIT 선언이 이 source partition을
+MIT로 재라이선스하지 않는다. 따라서 수동 privacy review와 공개 artifact별 라이선스 분리가
+끝날 때까지 외부 원문·annotation·balanced composition은 Git·wheel·sdist에서 제외한다.
+
 2026-08-13 PF-007에서는 `2runo/Curse-detection-data`의 독립 판정 첫 100건에서 확인된 상위
 false-negative canonical cluster 7개를 provenance manifest의 `candidate`로 기록했다. source는
-기존 고정 revision과 MIT 검증을 그대로 참조한다. 이 후보들은 tuning 평가만 수행했으며
-`badwords.txt`, wheel 또는 runtime 데이터에는 아직 포함하지 않았다.
+기존 고정 revision과 MIT 검증을 그대로 참조한다. 2026-08-18에 4개, 다중 출처 intake에 기존
+확정 92건을 보존해 재평가한 2026-08-19에 2개를 `badwords.txt`로 승격했다. 나머지 1개는
+문장 TP 증가 없이 occurrence FP가 증가해 candidate로 보류한다.
 
 ## ZIZUN 고정 근거
 

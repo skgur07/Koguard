@@ -56,6 +56,10 @@ probe를 생략했다. 탐지 회귀 44개를 통과한 뒤 같은 corpus 재측
 artifact metadata·권리·내용 감사와 두 clean-install quickstart를 통과했다. 최종 공개 hash는
 원격 CI와 TestPyPI 전 마지막 재현 build에서 다시 고정한다.
 
+2026-08-19 추가 승격 뒤 provenance 기준은 73 candidates/67 packaged literals/5 aliases로
+변경됐다. 앞 문단의 65개 기록은 당시 검증 결과이며, 새 기준은 전체 품질 게이트와 재현
+build에서 다시 검증한다.
+
 ## 2026-08-19 cross-platform reproducibility hardening
 
 동일 commit의 CI run `32225185730`에서 Linux/macOS hash는 같았지만 Windows wheel·sdist hash가

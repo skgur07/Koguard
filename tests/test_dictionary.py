@@ -38,6 +38,8 @@ def test_default_dictionary_loads_bundled_terms() -> None:
         "sibal",
         "ssibal",
         "shibal",
+        "새끼",
+        "병신새끼",
     } <= dictionary.blacklist
     assert len(dictionary.blacklist) >= 50
     assert "병신년" not in dictionary.whitelist
@@ -46,7 +48,17 @@ def test_default_dictionary_loads_bundled_terms() -> None:
 
 @pytest.mark.parametrize(
     "term",
-    ["틀딱", "따먹다", "보지", "조센징", "sibal", "ssibal", "shibal"],
+    [
+        "틀딱",
+        "따먹다",
+        "보지",
+        "조센징",
+        "sibal",
+        "ssibal",
+        "shibal",
+        "새끼",
+        "병신새끼",
+    ],
 )
 def test_default_dictionary_detects_owner_approved_literal_expansion(term: str) -> None:
     dictionary = KoguardDictionary.default()

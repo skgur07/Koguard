@@ -61,6 +61,29 @@ support 1건 이상, 독립 hard-negative 2건 이상, occurrence TP 순증가�
 표본이 작으므로 실서비스 오탐률로 일반화하지 않는다. 최신 공개 집계는
 `evaluation/results/pf009-profile-evaluation.report.json`에 기록한다.
 
+## v3/2026-08-19 — 다중 출처 intake 기반 보류 후보 재평가
+
+- 승격: `core.literal.pf007.001`, `.002` 2개
+- 보류: `core.literal.pf007.007` 1개
+- packaged literal: 67개 (`badwords.txt` 65개 + Alias canonical 2개)
+- packaged Alias: 5개
+- 전체 candidate record: 73개, 이 중 PF-007 candidate 1개는 계속 보류
+- source: MIT `2runo/Curse-detection-data`; KOTE·BEEP·Koguard curated intake는 corpus 구성의
+  출처 편향 완화에만 사용하고 그 원문이나 term을 사전에 복사하지 않음
+- 독립 consensus 근거: 기존 92건(positive 62, hard-negative 30)의 이중 검토·조정 결과
+- 변경 전: sentence TP/FP/FN/TN 41/0/21/30, occurrence TP/FP/FN 46/13/64
+- 세 후보 결합: sentence 47/0/15/30, occurrence 61/12/49
+- `.001`: sentence TP +6/FP +0, occurrence TP +12/FP +4로 tuning gate 통과
+- `.002`: sentence TP +0/FP +0, occurrence TP +2/FP -2로 tuning gate 통과
+- `.007`: sentence TP +0/FP +0, occurrence TP +1/FP +1로 gate 실패하여 보류
+- 정책 영향: `.001` 승격에 따라 `새끼손가락`처럼 표면형을 포함한 정상 복합어도 기본
+  `balanced`에서 탐지하며, 이는 문맥 무관 필터링이라는 소유자 정책에 따른 의도된 결과
+- report: `evaluation/results/pf007-balanced-candidates.report.json`
+- 권리: 승격 literal은 고정 MIT source와 기존 독립 판정에서 유래하며 NOTICE의 승인 개수를
+  4개에서 6개로 갱신; 다른 외부 corpus 원문은 배포하지 않음
+- 한계와 rollback: 아직 hidden evaluation 0건이다. hidden 문장 FP 예산 초과 또는 정상
+  복합어 차단 비용이 제품 정책과 맞지 않으면 `.001`을 우선 rollback한다.
+
 ## 변경 기록 template
 
 새 변경은 아래 항목을 복사해 추가한다.

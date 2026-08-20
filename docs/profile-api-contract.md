@@ -64,6 +64,12 @@ matcher 독립 증분 중 Choseong만 TP 3건을 추가하고 FP를 추가하지
 선택은 공개 전 추가 corpus 결과로 재검토할 수 있지만, 결과를 바꿀 때는 같은 ablation과
 변경 근거를 남긴다.
 
+2026-08-19 최종 후보 사전 재측정에서도 profile 간 결론은 유지됐다. strict는 문장
+TP/FP/FN/TN 42/0/20/30, balanced는 45/0/17/30, aggressive는 47/0/15/30이다. occurrence는
+각각 TP/FP/FN 56/11/54, 59/11/51, 60/13/50이다. balanced는 strict 대비 문장·occurrence
+TP를 각각 3건 늘리고 FP를 늘리지 않아 임시 gate를 통과했다. aggressive는 문장 TP 2건을 더
+얻지만 occurrence FP도 2건 늘리므로 기본값으로 승격하지 않는다.
+
 ## 동작 불변 조건
 
 - 모든 profile은 등록된 욕설의 문맥 무관 부분 문자열 Exact 탐지를 보존한다.

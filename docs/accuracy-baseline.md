@@ -16,6 +16,12 @@
 > 0/30을 유지했다. 일반 입력의 불필요한 Alias·초성 work를 제거한 뒤 short-chat p95 0.0719ms,
 > 최대 입력 p95 13.053ms로 기존 15ms 임시 예산도 통과했다.
 
+> 2026-08-19 `새끼`, `병신새끼`를 승격한 최종 후보 사전으로 같은 92건을 다시 측정했다.
+> `balanced`는 문장 TP/FP/FN/TN 45/0/17/30, recall 72.6%이며 occurrence TP/FP/FN
+> 59/11/51, recall 53.6%다. strict 대비 문장·occurrence TP가 각각 3건 늘고 FP 증분은 0이다.
+> 로컬 short-chat p95는 0.0251ms, 최대 입력 p95는 6.1068ms로 임시 gate를 통과했다. 이는
+> 92건 tuning 표본의 최신 스냅샷일 뿐 hidden 또는 실서비스 정확도가 아니다.
+
 측정일: 2026-07-28
 
 대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성·Alias·
@@ -117,7 +123,9 @@ MIT 라이선스 Korcen의 고정 revision에서 명시적 표현을 소량 선�
 `tests/corpus/fuzzy_cases.json`의 직접 작성한 12개 문장과 기대 탐지 occurrence 7개를
 `EngineConfig(fuzzy_matching=True)`와 3개 사전어로 검증했다. 한 글자 치환·삭제·삽입,
 다중 매치, Exact 우선순위와 함께 `새끼손가락`, `돌아오는`, 토큰 내부 삭제형, 구분자 입력,
-정상 문장을 오탐 방지 사례로 포함한다.
+정상 문장을 오탐 방지 사례로 포함한다. 이 fixture는 `개새끼` 등 3개 단어만 주입한 Fuzzy
+matcher 단위 기준선이다. 2026-08-19 이후 기본 사전은 별도 정책 결정으로 `새끼` literal을
+포함하므로 기본 `balanced`에서는 `새끼손가락`도 Exact Match로 탐지한다.
 
 - False Positive: 0
 - False Negative: 0
