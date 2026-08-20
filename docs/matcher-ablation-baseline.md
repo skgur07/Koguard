@@ -91,5 +91,7 @@ uv run python -m evaluation.ablation_runner `
 5. 2026-08-19에는 2,500건 다중 출처 intake에 기존 확정 92건을 보존한 상태로 최종 후보
    사전을 재측정했다. balanced 문장 TP/FP/FN/TN은 45/0/17/30이고 occurrence TP/FP/FN은
    59/11/51이다.
-6. 다음 결정은 남은 2,408건의 독립 판정과 hidden 평가이며, 그 전에는 현재 profile 수치를
-   실서비스 전체로 일반화하지 않는다.
+6. 2026-08-20 추가 500건을 독립 이중 판정하고 불일치 387건을 제3 판정해 총 536건을 확정했다.
+   balanced 문장 TP/FP/FN/TN은 141/1/123/271이고 occurrence TP/FP/FN은 197/32/283이다.
+7. 다음 결정은 남은 1,964건의 독립 판정, balanced FP 증분 검토와 hidden 평가이며, 그 전에는
+   현재 profile 수치를 실서비스 전체로 일반화하지 않는다.

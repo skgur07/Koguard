@@ -23,6 +23,12 @@ from evaluation.corpus_validator import validate_corpus_paths
 _PUBLISHED_ADJUDICATION_REPORT_PATH = (
     Path(__file__).parents[1] / "evaluation" / "results" / "pf005-batch-001-adjudicated.report.json"
 )
+_PUBLISHED_BALANCED_ADJUDICATION_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-balanced-batch-001-adjudicated.report.json"
+)
 
 
 def test_annotation_schemas_are_versioned_and_closed() -> None:
@@ -51,6 +57,39 @@ def test_published_adjudication_report_is_aggregate_only() -> None:
         "unresolved": 2,
         "privacy_excluded": 0,
     }
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_balanced_adjudication_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_BALANCED_ADJUDICATION_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["batch_case_count"] == 500
+    assert report["batch_counts"] == {
+        "positive": 202,
+        "hard-negative": 242,
+        "review": 56,
+    }
+    assert report["corpus_counts"] == {
+        "positive": 264,
+        "hard-negative": 272,
+        "review": 1964,
+    }
+    assert report["quality_counts"] == {
+        "double_reviewed": 500,
+        "consensus": 113,
+        "disagreement": 387,
+        "privacy_excluded": 0,
+        "pending_privacy": 0,
+    }
+    assert report["adjudication_counts"] == {
+        "eligible": 387,
+        "resolved": 334,
+        "unresolved": 53,
+        "privacy_excluded": 0,
+    }
+    assert report["gold_ready"] is False
     serialized = json.dumps(report, ensure_ascii=False)
     for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
         assert f'"{forbidden}"' not in serialized

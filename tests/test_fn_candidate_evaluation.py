@@ -15,6 +15,12 @@ from evaluation.fn_candidate_evaluation import (
 _PUBLISHED_REPORT_PATH = (
     Path(__file__).parents[1] / "evaluation" / "results" / "pf007-top-candidates.report.json"
 )
+_PUBLISHED_BALANCED_BATCH_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf007-balanced-batch-001-candidates.report.json"
+)
 
 
 def test_schema_is_versioned_closed_and_aggregate_only() -> None:
@@ -129,6 +135,44 @@ def test_published_report_and_cli_expose_only_aggregate_candidate_ids(
         assert raw_value not in captured.out
         assert raw_value not in output_path.read_text(encoding="utf-8")
     assert captured.err == ""
+
+
+def test_published_balanced_batch_candidate_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_BALANCED_BATCH_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["corpus"] == {
+        "case_count": 536,
+        "positive_count": 264,
+        "hard_negative_count": 272,
+        "excluded_review_count": 1964,
+    }
+    assert report["combined_candidate"]["sentence_delta"] == {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+    }
+    assert report["combined_candidate"]["occurrence_delta"] == {
+        "tp": 2,
+        "fp": -2,
+        "fn": -2,
+    }
+    assert report["combined_candidate"]["tuning_gate_passed"] is True
+    assert report["candidates"] == [
+        {
+            "candidate_id": "core.literal.pf007.007",
+            "positive_case_support": 3,
+            "hard_negative_case_support": 272,
+            "sentence_tp_delta": 0,
+            "sentence_fp_delta": 0,
+            "occurrence_tp_delta": 2,
+            "occurrence_fp_delta": -2,
+            "tuning_gate_passed": True,
+        }
+    ]
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("surface", "canonical_term", "case_id", "text"):
+        assert f'"{forbidden}"' not in serialized
 
 
 def test_cli_refuses_to_overwrite_an_input(tmp_path: Path, capsys: Any) -> None:

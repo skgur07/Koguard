@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-pf005-balanced-review-intake-v1",
+  "source_corpus_sha256": "06f578a49e6a39fb1932df0e5e43408b937e475fdb898580b006a97b8c59c250",
+  "batch_case_count": 500,
+  "batch_counts": {
+    "positive": 202,
+    "hard-negative": 242,
+    "review": 56
+  },
+  "corpus_counts": {
+    "positive": 264,
+    "hard-negative": 272,
+    "review": 1964
+  },
+  "quality_counts": {
+    "double_reviewed": 500,
+    "consensus": 113,
+    "disagreement": 387,
+    "privacy_excluded": 0,
+    "pending_privacy": 0
+  },
+  "adjudication_counts": {
+    "eligible": 387,
+    "resolved": 334,
+    "unresolved": 53,
+    "privacy_excluded": 0
+  },
+  "slice_counts": {
+    "abbreviation": 14,
+    "benign-substring": 28,
+    "direct": 337,
+    "domain-term": 11,
+    "educational-context": 12,
+    "game-term": 13,
+    "jamo": 1,
+    "multiple-matches": 64,
+    "quoted-context": 12,
+    "repeated": 3,
+    "separator": 3,
+    "spelling-variant": 26,
+    "suffix": 5,
+    "username": 17,
+    "whitespace": 1
+  },
+  "gold_ready": false
+}

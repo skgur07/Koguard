@@ -1,13 +1,14 @@
 # PF-005 초기 corpus 구축 상태
 
-- 기준일: 2026-08-12
-- 상태: 다중 출처 balanced intake 완료, 첫 100건 독립 판정·제3 판정 완료, 전체 gold corpus 미완료
+- 기준일: 2026-08-20
+- 상태: 다중 출처 balanced intake 완료, 기존 100건과 추가 500건 독립 판정·제3 판정 완료,
+  전체 gold corpus 미완료
 - annotation workflow: 이중 판정·불일치 제3 판정 구현 및 실제 batch 검증 완료
 - 로컬 source별 tuning 후보: 4,250건
 - balanced tuning composition: 2,500건
-- 확정 positive: 62건
-- 확정 hard-negative: 30건
-- 판정 대기: 2,408건
+- 확정 positive: 264건
+- 확정 hard-negative: 272건
+- 판정 대기: 1,964건
 - hidden evaluation: 0건
 
 ## 현재 결과
@@ -25,8 +26,8 @@ MIT로 재배포 가능한 `2runo/Curse-detection-data`의 고정 commit과 arti
 | direct/normalized leaks | 0 |
 | 자동 민감 패턴 제외 | 25/5,825 |
 | 재배포 권한 확인 | 2,500/2,500 |
-| Koguard-policy finalized | 92/2,500 |
-| exact span annotated positive | 62건, 110 occurrence |
+| Koguard-policy finalized | 536/2,500 |
+| exact span annotated positive | 264건, 480 occurrence |
 
 2026-08-19에는 공개 재배포 조건을 확인한 독립 원출처 두 개와 Koguard 직접 작성 정책 slice를
 추가했다. `searle-j/KOTE` train 40,000건 중 750건, `kocohub/korean-hate-speech` train
@@ -37,7 +38,7 @@ spec v2에 기록했다. 원문은 수동 privacy review 전까지 계속 Git·s
 최종 review composition은 첫 batch 확정 92건을 보존한 2runo 750건, KOTE 750건, Korean Hate
 Speech 750건, Koguard curated 250건으로 총 2,500건이다. 출처별 비중은 `30%/30%/30%/10%`,
 직접·NFKC+casefold 중복은 0건이며 30% 상한을 통과했다. 이 수치는 source 편향 gate만 통과한
-것이고, 판정 대기 2,408건을 gold로 승격하거나 실서비스 분포를 보장하지 않는다.
+것이고, 독립 판정 뒤에도 남은 1,964건을 gold로 승격하거나 실서비스 분포를 보장하지 않는다.
 
 ## 재현성
 
@@ -102,9 +103,9 @@ balanced composition은 어느 한 source도 30%를 넘지 않아 이슈의 수�
 시기·annotation 목적이 Koguard lexical 정책과 다르므로 실서비스 대표성을 보장하지 않는다.
 Koguard 직접 작성 250건도 정책 경계와 slice를 보강하는 합성 자료이지 실사용 댓글이 아니다.
 
-`unadjudicated-intake`는 실제 평가 slice가 아니라 판정 대기 상태다. 현재는 direct, 변형, 우회,
-정상 substring 같은 slice별 TP·FP·FN을 계산할 수 없다. runner가 `review`를 자동 제외하므로 이
-자료로 허위 정확도 수치가 생성되지는 않는다.
+`unadjudicated-intake`는 실제 평가 slice가 아니라 판정 대기 상태다. 확정 536건은 실제 slice별
+TP·FP·FN을 계산할 수 있지만, 남은 1,964건은 runner가 자동 제외한다. 따라서 현재 집계는
+확정된 provisional tuning 일부만 설명하며 2,500건 전체나 실서비스 gold 수치가 아니다.
 
 선택 전 전체 5,825건에서 이메일·URL·전화번호·주민번호형·IP·6자리 이상 숫자·@handle 후보
 25건을 자동 제외했다. 이 검사는 명백한 패턴의 방어선일 뿐 이름이나 간접 식별자를 보장하지
@@ -172,10 +173,41 @@ case ID, canonical term, reviewer ID와 전체 ablation case 결과는 Git·배�
 이 결과는 단일 출처의 첫 100건이며 `gold_ready=false`다. PF-005의 500 positive·2,000 negative,
 출처 편향 완화와 hidden evaluation 완료를 의미하지 않는다.
 
+## 2026-08-20 balanced 500건 독립 판정 결과
+
+서로 결과를 보지 않은 Primary와 Secondary가 balanced composition의 다음 500건을 판정했다.
+두 검토자의 label은 464/500에서 일치했지만 span·canonical term·slice까지 같은 완전 합의는
+113/500이었다. 공개 workflow는 세부 annotation 차이도 불일치로 취급했고, 제3 검토자가
+불일치 387건을 이전 결과 없이 독립 판정했다.
+
+| 항목 | 값 |
+| --- | ---: |
+| privacy 이중 검토 완료 | 500 |
+| 최초 완전 consensus | 113 |
+| 제3 판정 대상 | 387 |
+| 제3 판정 확정 | 334 |
+| 제3 판정 후 review 유지 | 53 |
+| 최종 positive | 202 |
+| 최종 hard-negative | 242 |
+| 최종 review | 56 |
+
+기존 확정 92건과 합친 protected tuning corpus는 positive 264건, hard-negative 272건,
+review 1,964건이며 positive 정답 occurrence는 480개다. 공개 집계는
+`evaluation/results/pf005-balanced-batch-001-adjudicated.report.json`에 저장했고 원문, case ID,
+canonical term, reviewer ID는 포함하지 않았다.
+
+확정 536건의 profile 재측정에서 `strict` 문장 recall은 51.1%(FP 0/272), `balanced`는
+53.4%(FP 1/272), `aggressive`는 56.4%(FP 2/272)였다. `balanced`는 strict 대비 문장 TP 6건을
+추가했지만 FP도 1건 늘어 현재의 FP 증분 0 gate를 통과하지 못했다. 이 결과는 hidden 평가가
+아니며 기본 profile을 즉시 바꾸는 근거로 사용하지 않는다.
+
+보류 중인 PF-007 literal 1개는 새 tuning에서 문장 TP/FP 변화 없이 occurrence TP +2, FP -2로
+gate를 통과했다. 다만 hidden 검증 전에는 packaged data로 승격하지 않고 candidate 상태를 유지한다.
+
 ## PF-005 종료 전 남은 작업
 
-1. balanced composition의 판정 대기 2,408건을 primary/secondary batch로 나눠 같은 독립 판정 절차 반복
-2. 첫 batch의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
+1. balanced composition의 판정 대기 1,964건을 primary/secondary batch로 나눠 같은 독립 판정 절차 반복
+2. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
    등록 표현·승인 변형이 없는 hard-negative 2건 이상 고정
 3. 핵심 positive slice별 30건, 등록 표현을 포함한 정상 substring·인용/설명·사용자명/게임
    문맥 positive와 등록 표현이 없는 철자 유사 negative 확보
