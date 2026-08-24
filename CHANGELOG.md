@@ -16,12 +16,15 @@ Semantic Versioning after the first public release.
 - Aggregate-only hidden evaluation attestation and PF-014 release decision report tooling.
 - TestPyPI evidence contract that binds installation smoke results to audited artifact hashes.
 - License-pinned KOTE and BEEP review intakes plus a duplicate-free, 30%-capped PF-005 composition.
+- Aggregate-only evidence for a second 500-case blinded PF-005 review and third-review adjudication.
 
 ### Changed
 
 - The no-argument engine now uses the measured `balanced` profile instead of the legacy all-enabled config.
 - Public API exports are limited to implemented core contracts required for `0.1.0`.
 - Wheel ZIP creator metadata is canonicalized before audit so supported OS builds are byte-identical.
+- Profile limitations now report the measured hard-negative and false-positive counts instead of stale
+  hard-coded sample values.
 
 ### Security
 

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "inputs": {
+    "corpus_sha256": "840987624e6ba2c06e091816938c3666f851b995693365408cf66382348701f7",
+    "candidate_manifest_sha256": "339c5f530e29c15c315b04fbd0c57a5baa0d762507576e2205eab3fcd65f317c"
+  },
+  "corpus": {
+    "case_count": 536,
+    "positive_count": 264,
+    "hard_negative_count": 272,
+    "excluded_review_count": 1964
+  },
+  "baseline": {
+    "sentence_counts": {
+      "tp": 149,
+      "fp": 2,
+      "fn": 115,
+      "tn": 270
+    },
+    "occurrence_counts": {
+      "tp": 200,
+      "fp": 43,
+      "fn": 280
+    }
+  },
+  "combined_candidate": {
+    "sentence_counts": {
+      "tp": 149,
+      "fp": 2,
+      "fn": 115,
+      "tn": 270
+    },
+    "occurrence_counts": {
+      "tp": 202,
+      "fp": 41,
+      "fn": 278
+    },
+    "sentence_delta": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "tn": 0
+    },
+    "occurrence_delta": {
+      "tp": 2,
+      "fp": -2,
+      "fn": -2
+    },
+    "positive_case_support": 3,
+    "hard_negative_case_support": 272,
+    "tuning_gate_passed": true
+  },
+  "candidates": [
+    {
+      "candidate_id": "core.literal.pf007.007",
+      "positive_case_support": 3,
+      "hard_negative_case_support": 272,
+      "sentence_tp_delta": 0,
+      "sentence_fp_delta": 0,
+      "occurrence_tp_delta": 2,
+      "occurrence_fp_delta": -2,
+      "tuning_gate_passed": true
+    }
+  ]
+}

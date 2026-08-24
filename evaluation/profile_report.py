@@ -299,7 +299,10 @@ def build_profile_report(source: Mapping[str, Any], *, source_sha256: str) -> di
         "limitations": [
             f"다중 출처 intake 중 독립 검토로 확정된 {case_count}건만 평가한 tuning 결과다.",
             f"gold_ready가 아니며 {excluded_review_count}건은 review로 자동 평가에서 제외됐다.",
-            "hard-negative 30건의 FP 0은 실서비스 전체 FP rate를 일반화하기에 부족하다.",
+            (
+                f"hard-negative {hard_negative_count}건에서 balanced 문장 FP "
+                f"{sentence_fp}건으로 측정됐으나 실서비스 전체 FP rate를 일반화할 수 없다."
+            ),
             "성능은 단일 Windows 로컬 환경 측정이며 지원 OS별 CI 기준선이 아니다.",
         ],
     }

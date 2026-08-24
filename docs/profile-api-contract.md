@@ -70,6 +70,12 @@ TP/FP/FN/TN 42/0/20/30, balanced는 45/0/17/30, aggressive는 47/0/15/30이다. 
 TP를 각각 3건 늘리고 FP를 늘리지 않아 임시 gate를 통과했다. aggressive는 문장 TP 2건을 더
 얻지만 occurrence FP도 2건 늘리므로 기본값으로 승격하지 않는다.
 
+2026-08-20 추가 독립 판정으로 표본을 536건까지 늘리자 strict는 문장 TP/FP/FN/TN
+135/0/129/272, balanced는 141/1/123/271, aggressive는 149/2/115/270이었다. balanced는
+strict보다 문장 TP 6건을 더 찾지만 FP도 1건 늘어 현재의 FP 증분 0 gate는 실패한다. 이 결과는
+`balanced` 공개 계약을 즉시 변경하지 않지만, hidden 평가 전 기본값을 재검토해야 하는 근거로
+기록한다.
+
 ## 동작 불변 조건
 
 - 모든 profile은 등록된 욕설의 문맥 무관 부분 문자열 Exact 탐지를 보존한다.

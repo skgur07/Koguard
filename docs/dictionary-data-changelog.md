@@ -84,6 +84,22 @@ support 1건 이상, 독립 hard-negative 2건 이상, occurrence TP 순증가�
 - 한계와 rollback: 아직 hidden evaluation 0건이다. hidden 문장 FP 예산 초과 또는 정상
   복합어 차단 비용이 제품 정책과 맞지 않으면 `.001`을 우선 rollback한다.
 
+## v4/2026-08-20 — balanced 500건 추가 판정 후 보류 후보 재평가
+
+- candidate: `core.literal.pf007.007`
+- 상태: `candidate` 유지, packaged data 변경 없음
+- 독립 tuning 근거: 총 536건(positive 264, hard-negative 272), review 1,964건 제외
+- baseline: sentence TP/FP/FN/TN 149/2/115/270, occurrence TP/FP/FN 200/43/280
+- 후보 적용: sentence 변화 없음, occurrence TP +2·FP -2
+- support: positive 3건, hard-negative 272건
+- 판정: 확장 tuning gate는 통과했지만 hidden evaluation 전에는 승격하지 않음
+- report: `evaluation/results/pf007-balanced-batch-001-candidates.report.json`
+- 권리: 기존 고정 MIT source의 candidate이며 새 외부 term이나 원문을 복사하지 않음
+
+같은 536건에서 현재 기본 `balanced`는 strict보다 문장 TP 6건을 추가하지만 FP도 1건 늘어
+profile의 FP 증분 0 gate는 실패했다. 이는 candidate `.007`의 개별 gate와 별개이며, 기본 profile
+정책은 추가 tuning 및 hidden 평가에서 재검토한다.
+
 ## 변경 기록 template
 
 새 변경은 아래 항목을 복사해 추가한다.
