@@ -31,6 +31,8 @@ upstream label은 Koguard gold가 아니므로 새 source case는 모두 tuning 
 span이나 실제 평가 slice를 갖지 않는다. source별 report는 `gold_ready=false`를 고정한다.
 `curated_policy_intake.py`는 100개 positive-target 정책 문맥과 150개 hard-negative-target
 유사 표기를 직접 작성하지만, 설계 의도가 gold를 대신하지 않도록 역시 blinded review로 만든다.
+`--kind hard-negative-buffer`는 기존 curated intake와 겹치지 않는 hard-negative-target 100건을
+추가로 만든다.
 
 `corpus_composer.py`는 첫 batch 확정 92건을 우선 보존하고 2runo/KOTE/Korean Hate Speech/
 Koguard curated를 `750/750/750/250`으로 선택한다. 직접·NFKC+casefold 중복을 제거하고 source
@@ -46,6 +48,21 @@ uv run python -m evaluation.corpus_composer `
   evaluation\compositions\pf005-balanced-review-intake.v1.json `
   --output evaluation\corpus\tuning\pf005-balanced-review-intake-v1.json `
   --report evaluation\results\pf005-balanced-review-intake-v1.report.json
+```
+
+기존 2,500건의 unresolved 여유를 확보하려면 고정 source artifact에서 더 큰 intake를 생성한 뒤
+`review_buffer_planner.py`로 기존 source intake를 제외한다. PF-005 buffer v1은 Curse/KOTE/BEEP/
+Koguard curated를 `300/300/300/100`으로 선택하고 direct·NFKC+casefold 기존 overlap 0건과
+source 30% 상한을 강제한다. Curse `0`, BEEP `none`, curated 설계는 hard-negative 가능성이 높은
+후보 targeting일 뿐이며 모든 생성 label은 `review`, `upstream_labels_are_gold=false`다.
+
+```powershell
+uv run python -m evaluation.curated_policy_intake --kind hard-negative-buffer
+
+uv run python -m evaluation.review_buffer_planner `
+  evaluation\compositions\pf005-hard-negative-buffer.v1.json `
+  --output evaluation\annotation-work\pf005-hard-negative-buffer-v1.json `
+  --report evaluation\results\pf005-hard-negative-buffer-v1.report.json
 ```
 
 ## PF-005 rights-pending quarantine intake

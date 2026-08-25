@@ -24,7 +24,9 @@ Phase 4~6은 삭제하지 않는다. 아래 품질 게이트와 재개 조건을
 API를 구현했고 인자 없는 `KoguardEngine()`은 Exact+Alias+Choseong의 `balanced`를 사용한다.
 2026-08-25까지 독립 tuning 972건을 확정했다. `balanced`는 strict 대비 문장 TP +10·FP +0,
 occurrence TP +12·FP +4를 기록해 문장 gate는 개선됐지만 전체 FP 증분 0 gate는 아직 실패한다.
-따라서 추가 corpus와 hidden 평가 전까지 공개 전 재조정 가능성을 유지한다.
+같은 날 기존 intake와 direct/NFKC+casefold 중복이 없는 1,000건 review buffer도
+`300/300/300/100` 출처 비중으로 확보했다. 따라서 추가 독립 판정과 hidden 평가 전까지 공개 전
+재조정 가능성을 유지한다.
 
 ### 1.1 Core 판정 정책 보완
 
@@ -312,6 +314,9 @@ positive의 30%를 넘으면 별도 보고하고 편향을 줄인다.
 허용할 수 없다. 따라서 PF-005는 기존 2,500건 판정과 별도로 최소 1,000건의 hard-negative 중심
 review buffer를 추가 확보한다. buffer는 목표 label로 자동 확정하지 않으며, 일반 문장·게임·
 도메인·철자 및 Unicode 유사 표면을 여러 출처에서 수집해 동일한 독립 판정을 거친다.
+
+2026-08-25 buffer v1은 기존 intake overlap 0건, 출처별 `300/300/300/100`, 최대 share 30%로
+1,000건을 확보했다. 모든 label은 `review`이며 다음 단계는 이중 판정과 불일치 제3 판정이다.
 
 ### 6.8 완료 조건
 

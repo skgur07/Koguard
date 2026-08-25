@@ -5,8 +5,9 @@
   독립 판정·제3 판정 완료,
   전체 gold corpus 미완료
 - annotation workflow: 이중 판정·불일치 제3 판정 구현 및 실제 batch 검증 완료
-- 로컬 source별 tuning 후보: 4,250건
+- 로컬 source별 tuning 후보: 5,250건(기존 4,250건 + 중복 없는 buffer 1,000건)
 - balanced tuning composition: 2,500건
+- hard-negative 중심 review buffer: 1,000건
 - 확정 positive: 377건
 - 확정 hard-negative: 595건
 - 판정 대기: 1,528건
@@ -230,17 +231,34 @@ PF-007의 보류 literal 1개는 같은 972건에서 문장 TP/FP 변화 없이 
 `evaluation/results/pf007-balanced-batch-002-candidates.report.json`에 기록했으며 hidden 검증
 전에는 candidate 상태를 유지한다.
 
+## 2026-08-25 hard-negative 중심 review buffer
+
+기존 2,500건만으로는 unresolved를 허용하면서 positive 500·hard-negative 2,000건 목표를
+동시에 달성할 여유가 없었다. 같은 고정 artifact와 라이선스를 사용해 Curse label `0`의 다음
+300건, BEEP `none`의 다음 300건, label이 없는 KOTE의 다음 300건을 확장 intake로 만들고,
+Koguard가 직접 작성한 hard-negative-target 100건을 추가했다. upstream label과 설계 의도는
+review 후보 targeting에만 사용하며 생성 label은 전부 `review`다.
+
+`evaluation.review_buffer_planner`는 각 확장 intake에서 기존 source intake와 direct 및
+NFKC+casefold 중복을 제거했다. 최종 buffer는 Curse 300, KOTE 300, BEEP 300, Koguard curated
+100으로 총 1,000건이며 최대 출처 비중 30%, 기존 intake overlap 0건이다. 원문 corpus는
+`evaluation/annotation-work/`와 ignored tuning 경로에만 두고, 공개 집계는
+`evaluation/results/pf005-hard-negative-buffer-v1.report.json`에 저장했다.
+
+이 buffer는 hard-negative gold 1,000건이 아니다. hard-negative-target 근거가 있는 700건과
+label 없는 독립 분포 KOTE 300건으로 구성된 blinded review pool이며, 모든 사례는 이중 판정과
+불일치 제3 판정을 거쳐야 한다.
+
 ## PF-005 종료 전 남은 작업
 
-1. 정확히 2,500건인 기존 intake만으로는 unresolved 여유가 없으므로 hard-negative 중심 review
-   buffer를 최소 1,000건 추가 확보
-2. 판정 대기 1,528건을 같은 독립 이중 판정·불일치 제3 판정 절차로 계속 확정
-3. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
+1. 기존 intake 판정 대기 1,528건과 새 buffer 1,000건을 같은 독립 이중 판정·불일치 제3 판정
+   절차로 계속 확정
+2. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
    등록 표현·승인 변형이 없는 hard-negative 2건 이상 고정
-4. 핵심 positive slice별 30건, 등록 표현을 포함한 정상 substring·인용/설명·사용자명/게임
+3. 핵심 positive slice별 30건, 등록 표현을 포함한 정상 substring·인용/설명·사용자명/게임
    문맥 positive와 등록 표현이 없는 철자 유사 negative 확보
-5. KOTE·Korean Hate Speech 원문의 수동 privacy 검토와 CC-BY-SA attribution 경계 확정
-6. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
-7. 확정 positive 500건·hard-negative 2,000건으로 전체 및 slice별 지표 재생성
+4. KOTE·Korean Hate Speech 원문의 수동 privacy 검토와 CC-BY-SA attribution 경계 확정
+5. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
+6. 확정 positive 500건·hard-negative 2,000건으로 전체 및 slice별 지표 재생성
 
 이 조건 전에는 #7을 완료로 닫거나 2,500건을 실서비스 gold corpus라고 부르지 않는다.

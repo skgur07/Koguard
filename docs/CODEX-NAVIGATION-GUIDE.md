@@ -17,6 +17,7 @@
 | `evaluation/curated_policy_intake.py` | 프로젝트 작성 정책 경계 사례를 blinded review로 생성 |
 | `evaluation/corpus_composer.py` | source quota·중복·30% 상한을 검증해 balanced tuning 구성 |
 | `evaluation/review_queue_planner.py` | 남은 review를 출처별로 균형 있게 선택하는 보호 queue 구성 |
+| `evaluation/review_buffer_planner.py` | 기존 intake와 중복 없는 다중 출처 review buffer 구성 |
 | `evaluation/reaudit_workflow.py` | matcher FP 사례의 blinded 재감사 준비와 판정 결과 안전 반영 |
 | `tests/` | 공개 계약과 회귀 테스트 |
 | `tests/corpus/` | 정확도 기준 corpus |

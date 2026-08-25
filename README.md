@@ -14,8 +14,9 @@ Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy
 > `balanced` 기본값은 구현했으며, 변경 근거와 남은 품질 게이트는
 > [제품 집중 계획](https://github.com/skgur07/Koguard/blob/dev/docs/product-focus-plan.md)에 기록되어 있습니다.
 
-실서비스 corpus는 라이선스가 고정된 2,500건 tuning review intake까지 확보했고 이 중 972건을
-독립 판정으로 확정했지만, 아직 전체 gold나 hidden evaluation이 아닙니다. 현재 상태와 완료 전 blocker는
+실서비스 corpus는 라이선스가 고정된 2,500건 tuning intake와 기존 자료와 중복 없는 1,000건
+review buffer까지 확보했고, 기존 intake 중 972건을 독립 판정으로 확정했습니다. 아직 전체 gold나
+hidden evaluation은 아닙니다. 현재 상태와 완료 전 blocker는
 [PF-005 corpus 상태](https://github.com/skgur07/Koguard/blob/dev/docs/corpus-intake-status.md)를 참고하세요.
 
 `0.1.0`은 아직 PyPI에 공개하지 않았습니다. PF-013의 MIT·CI·artifact hardening은 완료했고

@@ -145,6 +145,13 @@ case를 보존해도 나머지 `review` case의 upstream label이나 설계 의�
 않는다. balanced 원문과 annotation 작업 파일은 모두 보호 경로에 두고 aggregate report만
 공개한다.
 
+완료 목표의 unresolved 여유를 위한 추가 buffer는 `evaluation.review_buffer_planner`로 만든다.
+각 확장 source는 기존 intake를 명시적으로 연결하며 direct 및 NFKC+casefold 중복을 제거한다.
+외부 source label은 hard-negative 가능성이 높은 review 대상을 찾는 strata로만 사용할 수 있고,
+reviewer 입력·Koguard label·expected span에는 복사하지 않는다. report의
+`upstream_labels_are_gold=false`와 `selected_existing_overlap_count=0`을 모두 확인한 뒤 판정을
+시작한다.
+
 `evaluation.annotation_workflow`는 원문 review queue를 stable ID 순서의 batch로 나눈다. 한
 batch는 최대 500건이며 같은 `offset`과 `limit`으로 서로 다른 두 reviewer용 파일을 만든다.
 reviewer ID는 이름이나 이메일 대신 `reviewer-a`처럼 별도 관리되는 opaque ID를 사용한다.

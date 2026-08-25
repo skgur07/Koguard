@@ -19,8 +19,16 @@ DEFAULT_OUTPUT_PATH = (
     Path(__file__).with_name("corpus") / "tuning" / "curated-policy-slices-v1.json"
 )
 DEFAULT_REPORT_PATH = Path(__file__).with_name("results") / "curated-policy-slices-v1.report.json"
+DEFAULT_BUFFER_OUTPUT_PATH = (
+    Path(__file__).with_name("corpus") / "tuning" / "curated-hard-negative-buffer-v1.json"
+)
+DEFAULT_BUFFER_REPORT_PATH = (
+    Path(__file__).with_name("results") / "curated-hard-negative-buffer-v1.report.json"
+)
 _CORPUS_ID = "koguard-curated-policy-slices-v1"
 _SOURCE_REVISION = "curated-policy-v1"
+_BUFFER_CORPUS_ID = "koguard-curated-hard-negative-buffer-v1"
+_BUFFER_SOURCE_REVISION = "curated-policy-buffer-v1"
 _POSITIVE_TERMS = (
     "시발",
     "씨발",
@@ -75,6 +83,28 @@ _HARD_NEGATIVE_SURFACES = (
     "틀니",
     "따뜻",
 )
+_BUFFER_HARD_NEGATIVE_SURFACES = (
+    "사과",
+    "바나나",
+    "학교",
+    "도서관",
+    "컴퓨터",
+    "강아지",
+    "고양이",
+    "자전거",
+    "비행기",
+    "지하철",
+    "우산",
+    "연필",
+    "가방",
+    "시계",
+    "달력",
+    "사진",
+    "음악",
+    "공원",
+    "바다",
+    "하늘",
+)
 _POSITIVE_TEMPLATES = (
     ("benign-substring", "{surface}이 포함된 복합 문자열을 차단 정책 예시로 기록합니다."),
     ("quoted-context", "문서에 인용된 표현은 '{surface}'입니다."),
@@ -113,19 +143,87 @@ def build_curated_policy_intake(
 ) -> CuratedIntakeResult:
     """Create deterministic review-only cases without exposing design intent to reviewers."""
 
-    designed = _designed_cases()
-    cases = [_blinded_case(item) for item in designed]
+    return _build_intake(
+        _designed_cases(),
+        corpus_id=_CORPUS_ID,
+        source_revision=_SOURCE_REVISION,
+        source_name="Koguard curated policy slices",
+        case_prefix="koguard-curated-review",
+        notes="Unadjudicated project-authored policy slice.",
+        output_path=output_path,
+        report_path=report_path,
+    )
+
+
+def build_curated_policy_buffer_intake(
+    *,
+    output_path: Path | None = None,
+    report_path: Path | None = None,
+) -> CuratedIntakeResult:
+    """Create 100 new project-authored hard-negative-target review cases."""
+
+    designed = tuple(
+        _DesignedCase(
+            text=template.format(surface=surface),
+            design_label="hard_negative_target",
+            design_slice=slice_name,
+        )
+        for surface in _BUFFER_HARD_NEGATIVE_SURFACES
+        for slice_name, template in _HARD_NEGATIVE_TEMPLATES
+    )
+    if len(designed) != 100 or len({item.text for item in designed}) != 100:
+        raise RuntimeError("curated buffer design count changed unexpectedly")
+    dictionary = KoguardDictionary.default()
+    forbidden_surfaces = dictionary.blacklist | frozenset(rule.alias for rule in dictionary.aliases)
+    if any(forbidden in item.text for item in designed for forbidden in forbidden_surfaces):
+        raise RuntimeError("curated buffer contains a packaged surface")
+    if {item.text for item in designed} & {item.text for item in _designed_cases()}:
+        raise RuntimeError("curated buffer overlaps the existing policy intake")
+    return _build_intake(
+        designed,
+        corpus_id=_BUFFER_CORPUS_ID,
+        source_revision=_BUFFER_SOURCE_REVISION,
+        source_name="Koguard curated hard-negative buffer",
+        case_prefix="koguard-curated-buffer-review",
+        notes="Unadjudicated project-authored hard-negative buffer.",
+        output_path=output_path,
+        report_path=report_path,
+    )
+
+
+def _build_intake(
+    designed: Sequence[_DesignedCase],
+    *,
+    corpus_id: str,
+    source_revision: str,
+    source_name: str,
+    case_prefix: str,
+    notes: str,
+    output_path: Path | None,
+    report_path: Path | None,
+) -> CuratedIntakeResult:
+    cases = [
+        _blinded_case(
+            item,
+            corpus_id=corpus_id,
+            source_revision=source_revision,
+            source_name=source_name,
+            case_prefix=case_prefix,
+            notes=notes,
+        )
+        for item in designed
+    ]
     cases.sort(key=lambda case: str(case["id"]))
     design_counts = Counter(item.design_label for item in designed)
     slice_counts = Counter(item.design_slice for item in designed)
     corpus: dict[str, Any] = {
         "schema_version": 1,
-        "corpus_id": _CORPUS_ID,
+        "corpus_id": corpus_id,
         "cases": cases,
     }
     report: dict[str, Any] = {
         "schema_version": 1,
-        "corpus_id": _CORPUS_ID,
+        "corpus_id": corpus_id,
         "case_count": len(cases),
         "design_counts": {
             "positive_target": design_counts["positive_target"],
@@ -196,26 +294,34 @@ def _designed_cases() -> tuple[_DesignedCase, ...]:
     return designed
 
 
-def _blinded_case(item: _DesignedCase) -> dict[str, Any]:
+def _blinded_case(
+    item: _DesignedCase,
+    *,
+    corpus_id: str,
+    source_revision: str,
+    source_name: str,
+    case_prefix: str,
+    notes: str,
+) -> dict[str, Any]:
     identity = hashlib.sha256(
-        f"{_CORPUS_ID}\0{item.design_label}\0{item.design_slice}\0{item.text}".encode()
+        f"{corpus_id}\0{item.design_label}\0{item.design_slice}\0{item.text}".encode()
     ).hexdigest()
     return {
-        "id": f"koguard-curated-review-{identity[:20]}",
+        "id": f"{case_prefix}-{identity[:20]}",
         "text": item.text,
         "label": "review",
         "expected_matches": [],
         "slices": ["unadjudicated-intake"],
         "source": {
             "kind": "curated",
-            "name": "Koguard curated policy slices",
+            "name": source_name,
             "reference": "https://github.com/skgur07/Koguard",
-            "revision": _SOURCE_REVISION,
+            "revision": source_revision,
             "redistribution_allowed": True,
         },
         "license": "MIT",
         "split": "tuning",
-        "notes": "Unadjudicated project-authored policy slice.",
+        "notes": notes,
     }
 
 
@@ -226,8 +332,13 @@ def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
-    parser.add_argument("--report", type=Path, default=DEFAULT_REPORT_PATH)
+    parser.add_argument(
+        "--kind",
+        choices=("base", "hard-negative-buffer"),
+        default="base",
+    )
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--report", type=Path)
     return parser
 
 
@@ -235,10 +346,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     """Generate the curated review intake and print aggregate counts only."""
 
     arguments = _parser().parse_args(argv)
-    result = build_curated_policy_intake(
-        output_path=arguments.output,
-        report_path=arguments.report,
-    )
+    if arguments.kind == "hard-negative-buffer":
+        result = build_curated_policy_buffer_intake(
+            output_path=arguments.output or DEFAULT_BUFFER_OUTPUT_PATH,
+            report_path=arguments.report or DEFAULT_BUFFER_REPORT_PATH,
+        )
+    else:
+        result = build_curated_policy_intake(
+            output_path=arguments.output or DEFAULT_OUTPUT_PATH,
+            report_path=arguments.report or DEFAULT_REPORT_PATH,
+        )
     print(f"cases={result.report['case_count']}; gold_ready=false")
     return 0
 

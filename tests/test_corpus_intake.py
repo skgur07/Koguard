@@ -50,6 +50,40 @@ _ADDITIONAL_REPORTS = {
         "sensitive_pattern_excluded_count": 9,
     },
 }
+_BUFFER_SOURCE_SPECS = {
+    Path("evaluation/sources/curse-detection-data.buffer-v1.json"): {
+        "base_path": Path("evaluation/sources/curse-detection-data.v1.json"),
+        "corpus_id": "koguard-curse-buffer-source-v1",
+        "target_count": None,
+        "target_by_source_label": {"0": 800, "1": 2000},
+    },
+    Path("evaluation/sources/kote.buffer-v1.json"): {
+        "base_path": Path("evaluation/sources/kote.v1.json"),
+        "corpus_id": "koguard-kote-buffer-source-v1",
+        "target_count": 1050,
+        "target_by_source_label": None,
+    },
+    Path("evaluation/sources/beep-korean-hate-speech.buffer-v1.json"): {
+        "base_path": Path("evaluation/sources/beep-korean-hate-speech.v1.json"),
+        "corpus_id": "koguard-beep-buffer-source-v1",
+        "target_count": None,
+        "target_by_source_label": {"hate": 250, "none": 550, "offensive": 250},
+    },
+}
+_BUFFER_REPORTS = {
+    Path("evaluation/results/curse-buffer-source-v1.report.json"): {
+        "selected_count": 2800,
+        "selected_source_label_counts": {"0": 800, "1": 2000},
+    },
+    Path("evaluation/results/kote-buffer-source-v1.report.json"): {
+        "selected_count": 1050,
+        "selected_source_label_counts": {"__all__": 1050},
+    },
+    Path("evaluation/results/beep-buffer-source-v1.report.json"): {
+        "selected_count": 1050,
+        "selected_source_label_counts": {"hate": 250, "none": 550, "offensive": 250},
+    },
+}
 
 
 def _canonical_lf_sha256(content: bytes) -> str:
@@ -127,6 +161,51 @@ def test_additional_pf005_intake_reports_are_non_sensitive_and_pending_review(
     }
     assert report["adjudication_quality"]["pending_review"] == 750
     assert report["gold_ready"] is False
+
+
+@pytest.mark.parametrize(("source_path", "expected"), _BUFFER_SOURCE_SPECS.items())
+def test_buffer_source_specs_extend_pinned_intakes_without_changing_rights(
+    source_path: Path,
+    expected: dict[str, Any],
+) -> None:
+    spec = json.loads(source_path.read_text(encoding="utf-8"))
+    base = json.loads(expected["base_path"].read_text(encoding="utf-8"))
+
+    assert spec["schema_version"] == 2
+    for field in (
+        "source_id",
+        "source_name",
+        "repository",
+        "revision",
+        "artifact",
+        "license",
+        "format",
+    ):
+        assert spec[field] == base[field]
+    assert spec["intake"]["corpus_id"] == expected["corpus_id"]
+    assert spec["intake"]["target_count"] == expected["target_count"]
+    assert spec["intake"]["target_by_source_label"] == expected["target_by_source_label"]
+    assert spec["license"]["redistribution_allowed"] is True
+
+
+@pytest.mark.parametrize(("report_path", "expected"), _BUFFER_REPORTS.items())
+def test_buffer_source_reports_are_aggregate_review_only(
+    report_path: Path,
+    expected: dict[str, Any],
+) -> None:
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+
+    assert report["selected_count"] == expected["selected_count"]
+    assert report["selected_source_label_counts"] == expected["selected_source_label_counts"]
+    assert report["generated_label_counts"] == {
+        "positive": 0,
+        "hard-negative": 0,
+        "review": expected["selected_count"],
+    }
+    assert report["gold_ready"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
 
 
 def test_generic_tsv_intake_supports_headers_and_non_mit_sources(tmp_path: Path) -> None:

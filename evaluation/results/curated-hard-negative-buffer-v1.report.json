@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-curated-hard-negative-buffer-v1",
+  "case_count": 100,
+  "design_counts": {
+    "positive_target": 0,
+    "hard_negative_target": 100
+  },
+  "design_slice_counts": {
+    "benign-substring": 20,
+    "educational-context": 20,
+    "game-term": 20,
+    "token-boundary": 20,
+    "username": 20
+  },
+  "source_statistics": [
+    {
+      "source_id": "koguard-curated-policy",
+      "selected_count": 100,
+      "share": 1.0
+    }
+  ],
+  "privacy_status": {
+    "synthetic": 100,
+    "approved": 100
+  },
+  "generated_label_counts": {
+    "positive": 0,
+    "hard-negative": 0,
+    "review": 100
+  },
+  "gold_ready": false,
+  "completion_blockers": [
+    "Independent double annotation and disagreement adjudication are still required.",
+    "Design intent is not a substitute for Koguard-policy gold annotation."
+  ]
+}

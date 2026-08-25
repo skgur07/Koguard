@@ -9,9 +9,65 @@ import pytest
 from evaluation.corpus_validator import validate_corpus_paths
 from evaluation.curated_policy_intake import (
     CURATED_REPORT_SCHEMA_PATH,
+    build_curated_policy_buffer_intake,
     build_curated_policy_intake,
     main,
 )
+
+_PUBLISHED_BUFFER_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "curated-hard-negative-buffer-v1.report.json"
+)
+
+
+def test_curated_policy_buffer_adds_100_disjoint_hard_negative_targets(
+    tmp_path: Path,
+) -> None:
+    base = build_curated_policy_intake()
+    corpus_path = tmp_path / "buffer.json"
+    report_path = tmp_path / "buffer.report.json"
+
+    first = build_curated_policy_buffer_intake(
+        output_path=corpus_path,
+        report_path=report_path,
+    )
+    second = build_curated_policy_buffer_intake()
+
+    assert first == second
+    assert first.report["case_count"] == 100
+    assert first.report["design_counts"] == {
+        "positive_target": 0,
+        "hard_negative_target": 100,
+    }
+    assert {case["text"] for case in first.corpus["cases"]}.isdisjoint(
+        case["text"] for case in base.corpus["cases"]
+    )
+    assert all(case["label"] == "review" for case in first.corpus["cases"])
+    assert all(
+        case["source"]["revision"] == "curated-policy-buffer-v1" for case in first.corpus["cases"]
+    )
+    assert validate_corpus_paths([corpus_path]).review_case_count == 100
+
+
+def test_published_curated_buffer_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_BUFFER_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["case_count"] == 100
+    assert report["design_counts"] == {
+        "positive_target": 0,
+        "hard_negative_target": 100,
+    }
+    assert report["generated_label_counts"] == {
+        "positive": 0,
+        "hard-negative": 0,
+        "review": 100,
+    }
+    assert report["gold_ready"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
 
 
 def test_curated_policy_intake_is_deterministic_blinded_and_validator_compatible(
@@ -93,3 +149,28 @@ def test_curated_cli_writes_only_aggregate_output(
     assert exit_code == 0
     assert captured.out == "cases=250; gold_ready=false\n"
     assert captured.err == ""
+
+
+def test_curated_buffer_cli_writes_only_aggregate_output(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    corpus_path = tmp_path / "buffer.json"
+    report_path = tmp_path / "buffer.report.json"
+
+    exit_code = main(
+        [
+            "--kind",
+            "hard-negative-buffer",
+            "--output",
+            str(corpus_path),
+            "--report",
+            str(report_path),
+        ]
+    )
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert captured.out == "cases=100; gold_ready=false\n"
+    assert captured.err == ""
+    assert validate_corpus_paths([corpus_path]).review_case_count == 100

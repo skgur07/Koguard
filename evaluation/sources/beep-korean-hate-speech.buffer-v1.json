@@ -1,0 +1,35 @@
+{
+  "schema_version": 2,
+  "source_id": "beep-korean-hate-speech",
+  "source_name": "kocohub/korean-hate-speech",
+  "repository": "https://github.com/kocohub/korean-hate-speech",
+  "revision": "f8d05dce2b22007bb149e5139c0060c68ad8f94b",
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/kocohub/korean-hate-speech/f8d05dce2b22007bb149e5139c0060c68ad8f94b/labeled/train.tsv",
+    "sha256": "ebebacdcd023af2c4acc8c0a37695fb6433ac04fc009feff8f222724e303a5a9",
+    "size_bytes": 913546,
+    "line_count": 7897
+  },
+  "license": {
+    "spdx": "CC-BY-SA-4.0",
+    "url": "https://raw.githubusercontent.com/kocohub/korean-hate-speech/f8d05dce2b22007bb149e5139c0060c68ad8f94b/LICENSE.md",
+    "sha256": "87a816969906840bf7af8d4d01cdfad4741b18946365e1f286007935509f2edb",
+    "redistribution_allowed": true
+  },
+  "format": {
+    "kind": "delimited",
+    "delimiter": "\t",
+    "encoding": "utf-8",
+    "header_rows": 1,
+    "text_column": 0,
+    "label_column": 3,
+    "allowed_labels": ["hate", "offensive", "none"]
+  },
+  "intake": {
+    "corpus_id": "koguard-beep-buffer-source-v1",
+    "split": "tuning",
+    "selection": "stable-sha256-rank-v1",
+    "target_count": null,
+    "target_by_source_label": {"hate": 250, "offensive": 250, "none": 550}
+  }
+}

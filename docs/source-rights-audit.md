@@ -66,6 +66,13 @@ false-negative canonical cluster 7개를 provenance manifest의 `candidate`로 �
 확정 92건을 보존해 재평가한 2026-08-19에 2개를 `badwords.txt`로 승격했다. 나머지 1개는
 문장 TP 증가 없이 occurrence FP가 증가해 candidate로 보류한다.
 
+2026-08-25 PF-005 review buffer는 새 외부 source를 추가하지 않았다. 기존에 고정한
+`2runo/Curse-detection-data` MIT, `searle-j/KOTE` MIT,
+`kocohub/korean-hate-speech` CC-BY-SA-4.0의 같은 revision·artifact·license hash에서 다음
+rank만 선택했고, Koguard 직접 작성 100건은 프로젝트 MIT로 관리한다. 외부 원문은 계속
+Git·wheel·sdist에 포함하지 않으며 CC-BY-SA 자료의 최종 공개·파생물 attribution 경계는 수동
+검토가 끝날 때까지 완료 blocker로 유지한다.
+
 ## ZIZUN 고정 근거
 
 - repository: <https://github.com/ZIZUN/korean-malicious-comments-dataset>
