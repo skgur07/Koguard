@@ -93,5 +93,10 @@ uv run python -m evaluation.ablation_runner `
    59/11/51이다.
 6. 2026-08-20 추가 500건을 독립 이중 판정하고 불일치 387건을 제3 판정해 총 536건을 확정했다.
    balanced 문장 TP/FP/FN/TN은 141/1/123/271이고 occurrence TP/FP/FN은 197/32/283이다.
-7. 다음 결정은 남은 1,964건의 독립 판정, balanced FP 증분 검토와 hidden 평가이며, 그 전에는
+7. 2026-08-25 정책 재감사 3건과 다음 500건을 독립 판정하고 불일치 3건·293건을 제3 판정해
+   총 972건을 확정했다. balanced 문장 TP/FP/FN/TN은 241/0/136/595이고 occurrence
+   TP/FP/FN은 314/41/320이다. strict 대비 문장 FP 증분은 0으로 개선됐지만 occurrence FP
+   증분 4건 때문에 전체 gate는 실패한다.
+8. 다음 결정은 남은 1,528건의 독립 판정, hard-negative review buffer 확장과 hidden 평가이며,
+   그 전에는
    현재 profile 수치를 실서비스 전체로 일반화하지 않는다.

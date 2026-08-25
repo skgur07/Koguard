@@ -15,6 +15,13 @@ from evaluation.reaudit_workflow import (
     prepare_matcher_fp_reaudit,
 )
 
+_PUBLISHED_POLICY_REAUDIT_APPLY_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-policy-reaudit-v1-apply.report.json"
+)
+
 
 def test_prepare_matcher_fp_reaudit_blinds_prior_decisions_and_is_aggregate_only(
     tmp_path: Path,
@@ -193,6 +200,30 @@ def test_apply_reaudit_corpus_rejects_unbound_adjudication_report(tmp_path: Path
             adjudicated_path,
             report_path,
         )
+
+
+def test_published_policy_reaudit_apply_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_POLICY_REAUDIT_APPLY_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["applied_count"] == 3
+    assert report["source_corpus_counts"] == {
+        "positive": 264,
+        "hard-negative": 272,
+        "review": 1964,
+    }
+    assert report["updated_corpus_counts"] == {
+        "positive": 265,
+        "hard-negative": 271,
+        "review": 1964,
+    }
+    assert report["label_transition_counts"] == {
+        "hard-negative->positive": 1,
+        "positive->positive": 2,
+    }
+    assert report["gold_ready"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
 
 
 def _ablation(corpus_path: Path) -> dict[str, Any]:

@@ -76,6 +76,12 @@ strict보다 문장 TP 6건을 더 찾지만 FP도 1건 늘어 현재의 FP 증�
 `balanced` 공개 계약을 즉시 변경하지 않지만, hidden 평가 전 기본값을 재검토해야 하는 근거로
 기록한다.
 
+2026-08-25 정책 재감사와 source-balanced batch-002를 반영해 표본을 972건으로 늘렸다. strict는
+문장 TP/FP/FN/TN 231/0/146/595, balanced는 241/0/136/595, aggressive는
+250/10/127/585다. balanced는 strict보다 문장 TP 10건을 더 찾고 FP 증분은 0건이지만,
+occurrence는 TP +12와 함께 FP +4가 발생한다. 문장 오탐 gate 개선만으로 전체 gate를 통과한
+것은 아니며 hidden 평가 전 기본 profile 계약은 유지한다.
+
 ## 동작 불변 조건
 
 - 모든 profile은 등록된 욕설의 문맥 무관 부분 문자열 Exact 탐지를 보존한다.

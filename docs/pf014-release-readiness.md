@@ -108,7 +108,8 @@ TestPyPI 업로드는 이번 준비 변경에 포함하지 않는다. trusted pu
 | TestPyPI | 대기 | 게시 권한 설정 후 동일 artifact 설치 smoke |
 | `main`·PyPI 승인 | 대기 | 모든 evidence 확인 후 소유자 명시 승인 |
 
-현재 tuning 536건 결과와 공개 synthetic regression은 구현 근거이며 hidden 품질 수치를 대체하지
-않는다. balanced가 strict 대비 FP 증분 0 gate를 통과하지 못한 상태도 최종 release report에서
+현재 tuning 972건 결과와 공개 synthetic regression은 구현 근거이며 hidden 품질 수치를 대체하지
+않는다. balanced는 strict 대비 문장 FP 증분 0을 회복했지만 occurrence FP가 4건 늘어 전체
+FP 증분 0 gate를 통과하지 못했다. 이 상태도 최종 release report에서
 차단 근거로 유지한다. hidden 준비가 지연되더라도 이를 최종 실서비스 정확도로 바꾸어 표현하지
 않는다.

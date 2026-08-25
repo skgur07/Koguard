@@ -37,5 +37,7 @@
 - 출처별 선택: Koguard curated, KOTE, Curse-detection-data, Korean Hate Speech 각 125건
 - 원문·case ID·canonical term은 공개 산출물과 CLI 출력에서 제외
 
-이 단계는 판정 준비만 완료한다. reviewer 역할이 실제 독립 판정을 끝내기 전에는 corpus 수치나
-balanced gate를 변경하지 않는다.
+후속 독립 판정·제3 판정·보호 corpus 적용과 재측정은
+[`pf005-balanced-batch-002.tdd.md`](pf005-balanced-batch-002.tdd.md)에 기록했다. 최종 재감사
+3건은 모두 positive였고, 실제 label 전이는 `hard-negative->positive` 1건과
+`positive->positive` 2건이었다.

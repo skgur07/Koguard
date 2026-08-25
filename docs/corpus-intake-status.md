@@ -1,14 +1,15 @@
 # PF-005 초기 corpus 구축 상태
 
-- 기준일: 2026-08-20
-- 상태: 다중 출처 balanced intake 완료, 기존 100건과 추가 500건 독립 판정·제3 판정 완료,
+- 기준일: 2026-08-25
+- 상태: 다중 출처 balanced intake 완료, 기존 100건과 500건 batch 두 개 및 정책 재감사
+  독립 판정·제3 판정 완료,
   전체 gold corpus 미완료
 - annotation workflow: 이중 판정·불일치 제3 판정 구현 및 실제 batch 검증 완료
 - 로컬 source별 tuning 후보: 4,250건
 - balanced tuning composition: 2,500건
-- 확정 positive: 264건
-- 확정 hard-negative: 272건
-- 판정 대기: 1,964건
+- 확정 positive: 377건
+- 확정 hard-negative: 595건
+- 판정 대기: 1,528건
 - hidden evaluation: 0건
 
 ## 현재 결과
@@ -26,8 +27,8 @@ MIT로 재배포 가능한 `2runo/Curse-detection-data`의 고정 commit과 arti
 | direct/normalized leaks | 0 |
 | 자동 민감 패턴 제외 | 25/5,825 |
 | 재배포 권한 확인 | 2,500/2,500 |
-| Koguard-policy finalized | 536/2,500 |
-| exact span annotated positive | 264건, 480 occurrence |
+| Koguard-policy finalized | 972/2,500 |
+| exact span annotated positive | 377건, 634 occurrence |
 
 2026-08-19에는 공개 재배포 조건을 확인한 독립 원출처 두 개와 Koguard 직접 작성 정책 slice를
 추가했다. `searle-j/KOTE` train 40,000건 중 750건, `kocohub/korean-hate-speech` train
@@ -38,7 +39,7 @@ spec v2에 기록했다. 원문은 수동 privacy review 전까지 계속 Git·s
 최종 review composition은 첫 batch 확정 92건을 보존한 2runo 750건, KOTE 750건, Korean Hate
 Speech 750건, Koguard curated 250건으로 총 2,500건이다. 출처별 비중은 `30%/30%/30%/10%`,
 직접·NFKC+casefold 중복은 0건이며 30% 상한을 통과했다. 이 수치는 source 편향 gate만 통과한
-것이고, 독립 판정 뒤에도 남은 1,964건을 gold로 승격하거나 실서비스 분포를 보장하지 않는다.
+것이고, 독립 판정 뒤에도 남은 1,528건을 gold로 승격하거나 실서비스 분포를 보장하지 않는다.
 
 ## 재현성
 
@@ -103,8 +104,8 @@ balanced composition은 어느 한 source도 30%를 넘지 않아 이슈의 수�
 시기·annotation 목적이 Koguard lexical 정책과 다르므로 실서비스 대표성을 보장하지 않는다.
 Koguard 직접 작성 250건도 정책 경계와 slice를 보강하는 합성 자료이지 실사용 댓글이 아니다.
 
-`unadjudicated-intake`는 실제 평가 slice가 아니라 판정 대기 상태다. 확정 536건은 실제 slice별
-TP·FP·FN을 계산할 수 있지만, 남은 1,964건은 runner가 자동 제외한다. 따라서 현재 집계는
+`unadjudicated-intake`는 실제 평가 slice가 아니라 판정 대기 상태다. 확정 972건은 실제 slice별
+TP·FP·FN을 계산할 수 있지만, 남은 1,528건은 runner가 자동 제외한다. 따라서 현재 집계는
 확정된 provisional tuning 일부만 설명하며 2,500건 전체나 실서비스 gold 수치가 아니다.
 
 선택 전 전체 5,825건에서 이메일·URL·전화번호·주민번호형·IP·6자리 이상 숫자·@handle 후보
@@ -204,19 +205,42 @@ canonical term, reviewer ID는 포함하지 않았다.
 보류 중인 PF-007 literal 1개는 새 tuning에서 문장 TP/FP 변화 없이 occurrence TP +2, FP -2로
 gate를 통과했다. 다만 hidden 검증 전에는 packaged data로 승격하지 않고 candidate 상태를 유지한다.
 
+## 2026-08-25 정책 재감사와 balanced batch-002
+
+Choseong 증분 FP로 분류됐던 3건은 기존 label·detector 결과를 제거한 상태에서 두 역할이 각각
+검토했고 세부 span·slice 불일치 3건을 제3 역할이 판정했다. 최종 3건은 모두 positive였으며,
+보호 corpus 적용 전이는 `positive->positive` 2건과 `hard-negative->positive` 1건이다. 공개
+집계는 `evaluation/results/pf005-policy-reaudit-v1-adjudicated.report.json`과
+`evaluation/results/pf005-policy-reaudit-v1-apply.report.json`에 저장했다.
+
+다음 500건은 네 출처에서 각각 125건을 detector·upstream label 없이 결정적으로 선택했다.
+두 역할의 완전 consensus는 207건, 불일치는 293건이었고 제3 판정으로 281건을 확정하고 12건을
+review로 유보했다. 최종 batch는 positive 112건, hard-negative 324건, review 64건이며 privacy
+제외는 0건이다. 전체 protected tuning corpus는 positive 377건, hard-negative 595건, review
+1,528건이다. 공개 집계는
+`evaluation/results/pf005-balanced-batch-002-adjudicated.report.json`에 저장했다.
+
+확정 972건 재측정에서 `strict` 문장 TP/FP/FN/TN은 231/0/146/595, `balanced`는
+241/0/136/595, `aggressive`는 250/10/127/585다. balanced 문장 recall은 63.9%이고 strict 대비
+TP +10·FP +0이다. occurrence는 balanced 314/41/320, recall 49.5%이며 strict 대비
+TP +12·FP +4라서 전체 FP 증분 0 gate는 실패한다.
+
+PF-007의 보류 literal 1개는 같은 972건에서 문장 TP/FP 변화 없이 occurrence TP +2·FP -2로
+다시 gate를 통과했다. 결과는
+`evaluation/results/pf007-balanced-batch-002-candidates.report.json`에 기록했으며 hidden 검증
+전에는 candidate 상태를 유지한다.
+
 ## PF-005 종료 전 남은 작업
 
-1. Choseong 증분 FP로 집계된 보호 사례를 기존 판정과 detector 결과 없이 독립 재감사
-2. 판정 대기 1,964건 중 다음 500건을 네 출처에서 125건씩 결정적으로 선택해 이중 판정하고
-   불일치만 제3 판정
-3. 정확히 2,500건인 기존 intake만으로는 unresolved 여유가 없으므로 hard-negative 중심 review
+1. 정확히 2,500건인 기존 intake만으로는 unresolved 여유가 없으므로 hard-negative 중심 review
    buffer를 최소 1,000건 추가 확보
-4. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
+2. 판정 대기 1,528건을 같은 독립 이중 판정·불일치 제3 판정 절차로 계속 확정
+3. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
    등록 표현·승인 변형이 없는 hard-negative 2건 이상 고정
-5. 핵심 positive slice별 30건, 등록 표현을 포함한 정상 substring·인용/설명·사용자명/게임
+4. 핵심 positive slice별 30건, 등록 표현을 포함한 정상 substring·인용/설명·사용자명/게임
    문맥 positive와 등록 표현이 없는 철자 유사 negative 확보
-6. KOTE·Korean Hate Speech 원문의 수동 privacy 검토와 CC-BY-SA attribution 경계 확정
-7. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
-8. 확정 positive 500건·hard-negative 2,000건으로 전체 및 slice별 지표 재생성
+5. KOTE·Korean Hate Speech 원문의 수동 privacy 검토와 CC-BY-SA attribution 경계 확정
+6. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
+7. 확정 positive 500건·hard-negative 2,000건으로 전체 및 slice별 지표 재생성
 
 이 조건 전에는 #7을 완료로 닫거나 2,500건을 실서비스 gold corpus라고 부르지 않는다.
