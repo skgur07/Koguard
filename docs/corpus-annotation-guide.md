@@ -38,6 +38,12 @@ annotation한다. 기계 검증 계약은 [`evaluation/corpus.schema.json`](../e
 복합어, 인용·설명, 사용자명, 게임·도메인 문맥도 예외가 아니며 `시발점`의 `시발`도 span으로
 기록한다.
 
+승인된 변형의 **표면 동일성**도 같은 원칙을 따른다. 등록된 두 음절 이상 한글 표현에서 파생한
+완전한 독립 초성 토큰은 다른 약어·도메인 용어로 해석될 수 있어도 core positive다. lexical
+core는 작성자의 의도나 약어의 확장형을 추론하지 않으므로 동일한 초성 표면을 문장별 의미에 따라
+positive와 hard-negative로 나누지 않는다. 영숫자·한글 음절에 붙은 부분 초성 토큰처럼 지원
+변형 계약을 충족하지 않는 표면만 hard-negative 후보가 될 수 있다.
+
 ### hard-negative
 
 등록 욕설이나 승인된 변형이 실제로는 없는 정상 문장이다. 철자가 비슷한 다른 표현, term의
@@ -124,6 +130,11 @@ hidden evaluation과 private 원문은 이 공개 저장소, PR 첨부, CI 로�
 6. 불일치는 `review`로 분리하고 합의 과정과 결과를 notes에 남긴다.
 7. validator를 통과한 뒤에만 corpus version에 포함한다.
 
+검토자는 탐지 결과나 upstream label을 보지 않지만, label·canonical term을 일관되게 적용하기
+위한 versioned annotation 정책과 승인 표현 기준은 제공받아야 한다. 구현이 반환한 canonical을
+정답으로 복사하지 않으며, 정책 기준에 없는 표현은 억지로 hard-negative 처리하지 않고
+`review`로 남긴다.
+
 ## 8. 독립 판정 workflow
 
 외부 source별 review intake는 `evaluation.corpus_intake`, 프로젝트 작성 정책 slice는
@@ -188,6 +199,16 @@ uv run python -m evaluation.annotation_workflow adjudicate `
 `evaluation/annotation-work/`에는 원문과 판정자 작업 내용이 있으므로 Git과 sdist에서 제외한다.
 보호 저장소로 옮길 때도 PF-004 접근·보존 정책을 적용한다. aggregate report만 공개할 때는 stable
 case ID, 원문, canonical term, reviewer ID가 없는지 다시 확인한다.
+
+기존 확정 사례가 새 matcher 근거와 충돌하면 `evaluation.reaudit_workflow`로 matcher가 추가한 FP
+case만 별도 corpus에 복사하고, 이전 label·span·slice를 제거한 뒤 일반 annotation workflow로
+다시 판정한다. 재판정 완료 후에는 `apply` 단계가 원문·출처·라이선스·split 불변성을 확인하고
+결정 필드만 원래 보호 corpus에 반영한다. 기존 판정을 직접 수정하거나 detector 결과를 reviewer
+입력에 넣지 않는다.
+
+남은 review에서 다음 500건을 고를 때는 `evaluation.review_queue_planner`의
+`source-round-robin-sha256-v1`을 사용한다. 이 선택은 detector prediction, upstream label, 기존
+확정 label을 사용하지 않고 출처별 review pool을 결정적으로 순회한다.
 
 ## 9. 검증 명령
 

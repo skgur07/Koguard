@@ -84,6 +84,36 @@ annotation 필드만 있으며 upstream label, Koguard/Korcen prediction, 기존
 batch·merge 결과 원문은 `evaluation/annotation-work/` 또는 저장소 밖의 보호 경로에 두며 이
 디렉터리는 Git과 sdist에서 제외된다. report에는 원문과 canonical term 대신 집계만 저장한다.
 
+남은 review를 단순 ID 순서로 자르지 않고 출처별로 균형 있게 선택하려면 보호 corpus에서 다음
+명령을 실행한다. 선택은 source별 stable SHA-256 rank를 round-robin하며 detector prediction,
+upstream label, 기존 확정 label을 사용하지 않는다. 현재 보호 corpus에서는 네 출처에서 125건씩
+총 500건을 선택한다. 이는 reviewer 구성 편향을 줄이는 queue일 뿐 hard-negative label을
+보장하지 않는다.
+
+```powershell
+uv run python -m evaluation.review_queue_planner <protected-corpus> `
+  --queue-id pf005-balanced-batch-002 `
+  --corpus-id koguard-pf005-balanced-batch-002-review-queue `
+  --limit 500 --output <protected-queue> --report <protected-report>
+```
+
+matcher 증분 FP가 annotation 정책과 충돌할 가능성이 있으면 해당 case만 이전 판정값 없이
+재감사한다. `prepare`는 report의 corpus ID와 canonical SHA-256 결속을 확인하고 이전
+label·span·slice를 제거한다. `apply`는 원문·출처·라이선스·split이 바뀌지 않았는지 검증하고
+독립 판정의 결정 필드만 반영한다. 두 명의 reviewer와 제3 adjudicator 절차는 기존 annotation
+workflow를 그대로 사용한다.
+
+```powershell
+uv run python -m evaluation.reaudit_workflow prepare <protected-corpus> <protected-ablation> `
+  --matcher choseong --corpus-id koguard-pf005-choseong-fp-reaudit-v1 `
+  --output <protected-reaudit-corpus> --report <protected-report>
+
+uv run python -m evaluation.reaudit_workflow apply <protected-corpus> `
+  <protected-prepared-reaudit> <protected-adjudicated-reaudit> `
+  <protected-adjudication-report> --output <protected-updated-corpus> `
+  --report <protected-apply-report>
+```
+
 ```powershell
 uv run python -m evaluation.annotation_workflow export `
   evaluation\corpus\tuning\pf005-balanced-review-intake-v1.json `

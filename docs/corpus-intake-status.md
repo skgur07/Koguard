@@ -206,13 +206,17 @@ gate를 통과했다. 다만 hidden 검증 전에는 packaged data로 승격하�
 
 ## PF-005 종료 전 남은 작업
 
-1. balanced composition의 판정 대기 1,964건을 primary/secondary batch로 나눠 같은 독립 판정 절차 반복
-2. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
+1. Choseong 증분 FP로 집계된 보호 사례를 기존 판정과 detector 결과 없이 독립 재감사
+2. 판정 대기 1,964건 중 다음 500건을 네 출처에서 125건씩 결정적으로 선택해 이중 판정하고
+   불일치만 제3 판정
+3. 정확히 2,500건인 기존 intake만으로는 unresolved 여유가 없으므로 hard-negative 중심 review
+   buffer를 최소 1,000건 추가 확보
+4. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
    등록 표현·승인 변형이 없는 hard-negative 2건 이상 고정
-3. 핵심 positive slice별 30건, 등록 표현을 포함한 정상 substring·인용/설명·사용자명/게임
+5. 핵심 positive slice별 30건, 등록 표현을 포함한 정상 substring·인용/설명·사용자명/게임
    문맥 positive와 등록 표현이 없는 철자 유사 negative 확보
-4. KOTE·Korean Hate Speech 원문의 수동 privacy 검토와 CC-BY-SA attribution 경계 확정
-5. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
-6. 확정 positive 500건·hard-negative 2,000건으로 전체 및 slice별 지표 재생성
+6. KOTE·Korean Hate Speech 원문의 수동 privacy 검토와 CC-BY-SA attribution 경계 확정
+7. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
+8. 확정 positive 500건·hard-negative 2,000건으로 전체 및 slice별 지표 재생성
 
 이 조건 전에는 #7을 완료로 닫거나 2,500건을 실서비스 gold corpus라고 부르지 않는다.

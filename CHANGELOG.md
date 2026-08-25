@@ -17,6 +17,7 @@ Semantic Versioning after the first public release.
 - TestPyPI evidence contract that binds installation smoke results to audited artifact hashes.
 - License-pinned KOTE and BEEP review intakes plus a duplicate-free, 30%-capped PF-005 composition.
 - Aggregate-only evidence for a second 500-case blinded PF-005 review and third-review adjudication.
+- Blinded matcher re-audit and source-balanced review queue tooling for the next PF-005 batches.
 
 ### Changed
 
