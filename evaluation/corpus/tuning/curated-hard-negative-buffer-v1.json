@@ -1,0 +1,1906 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-curated-hard-negative-buffer-v1",
+  "cases": [
+    {
+      "id": "koguard-curated-buffer-review-011c44d22ea5b71762ab",
+      "text": "시계 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-0c9ca83b5cfbecba3d1c",
+      "text": "게임 아이템 비행기 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-0fd1bc72a035a40d487f",
+      "text": "교육 문서에서 가방 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-130757bcf8fc222626b6",
+      "text": "검토할 사용자명은 자전거연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-14c89b7ba16e8b29c67a",
+      "text": "검토할 사용자명은 지하철연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-1710ce51c9a9c9e78335",
+      "text": "교육 문서에서 사과 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-17c6d20e7e18611aca8b",
+      "text": "게임 아이템 연필 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-1ed21ec63e6b3919eafa",
+      "text": "검토할 사용자명은 도서관연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-1faa3735bf8b06ca92c1",
+      "text": "게임 아이템 음악 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-20ecb87c365d56d03412",
+      "text": "교육 문서에서 달력 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-24bf4efac0da2eea8929",
+      "text": "검토할 사용자명은 학교연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-2ab8c76c9ba3198942db",
+      "text": "검토할 사용자명은 컴퓨터연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-2b7ec5d3ed3ab82829bd",
+      "text": "하늘 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-2c2b812b220e58c461ae",
+      "text": "검토할 사용자명은 연필연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-32f802c307ce8824360e",
+      "text": "지하철 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-353565d4dab7383000e6",
+      "text": "비행기 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-36dd4ce5efaef634cab3",
+      "text": "하늘 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-37e267a930cd1e62978e",
+      "text": "음악 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-3a6a88fd593fea90311f",
+      "text": "고양이 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-3c406b28afc24a6e187b",
+      "text": "검토할 사용자명은 바나나연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-3dc4ed4630bb098619e5",
+      "text": "학교 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-3efdb00f0d2e9bb9e2f3",
+      "text": "사과 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-40850ae1d68863af387e",
+      "text": "검토할 사용자명은 시계연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-4103cd3995072b32a0f9",
+      "text": "공원 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-41f409fa72deef17a0fe",
+      "text": "검토할 사용자명은 강아지연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-43a6f7496d8f766a5fb5",
+      "text": "도서관 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-440189c7f9efe930ba3f",
+      "text": "교육 문서에서 비행기 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-45f7c9ab691c36f41d12",
+      "text": "달력 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-4cedaffc129f7eb0e75a",
+      "text": "게임 아이템 고양이 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-4d70c16c2239c5acfd90",
+      "text": "교육 문서에서 사진 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-4f492156d55e488355cb",
+      "text": "자전거 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-54bacbd362327aa3dbbd",
+      "text": "검토할 사용자명은 사과연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-55e4afa8d8e4b6e7876f",
+      "text": "바다 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-5606d5f8b6ea3c845e40",
+      "text": "검토할 사용자명은 바다연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-5682b3b3e20fe9ba5762",
+      "text": "지하철 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-56ffc1dc45c128f7876c",
+      "text": "교육 문서에서 컴퓨터 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-58529a60afaa30a7301d",
+      "text": "공원 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-5a9bb1ed8be9823284f8",
+      "text": "컴퓨터 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-5b1d8b1f123f7f08b0c1",
+      "text": "게임 아이템 달력 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-5f62da6f48ee7f770cb5",
+      "text": "게임 아이템 사진 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-62c4e40c66d50b3a821f",
+      "text": "게임 아이템 바다 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-6306d60fb86fb7c3d29a",
+      "text": "게임 아이템 컴퓨터 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-649194eb7dd295686efa",
+      "text": "교육 문서에서 시계 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-6b6051560fd24e462fda",
+      "text": "사진 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-77e5a8992cda9dbe75be",
+      "text": "교육 문서에서 고양이 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-784bcbe2b600ed4c6654",
+      "text": "바나나 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-7a3d13709284856bce05",
+      "text": "가방 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-7b413d5aa38c3b6bb344",
+      "text": "바나나 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-7ef8f7fac97981641317",
+      "text": "게임 아이템 도서관 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-7fd2b61b2697893b5dcb",
+      "text": "게임 아이템 공원 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-810def670280c250dddc",
+      "text": "게임 아이템 지하철 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-8244b7091b3d54105e82",
+      "text": "검토할 사용자명은 가방연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-86e0d688c4fa086f258b",
+      "text": "연필 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-8881c7d40a0c1db9b682",
+      "text": "교육 문서에서 바나나 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-8adfd5cb7933b3281adf",
+      "text": "가방 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-8b5cf74d920d024ade96",
+      "text": "게임 아이템 자전거 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-91a90a10800ad87ce2e2",
+      "text": "교육 문서에서 하늘 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-92b33fca6a5d56fd94c1",
+      "text": "사과 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-9392cb6afd7a816ce083",
+      "text": "검토할 사용자명은 우산연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-96ef840944ea92b17620",
+      "text": "시계 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-9758eaa1739af5eb2a50",
+      "text": "사진 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-9914a5ca41f204e907e2",
+      "text": "검토할 사용자명은 공원연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-9d86c2f240356470034a",
+      "text": "교육 문서에서 우산 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-9eccff900aa0a5f9573f",
+      "text": "교육 문서에서 공원 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-9f5849f7fbbe6567642b",
+      "text": "검토할 사용자명은 비행기연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-a041b15147aaf2306a22",
+      "text": "바다 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-a139c858c22eb768ff0d",
+      "text": "교육 문서에서 자전거 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-a448619a0fd55971b800",
+      "text": "게임 아이템 학교 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-a4b43df28d66eb70f6e0",
+      "text": "검토할 사용자명은 고양이연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-a4c94a7e24971eb7b23d",
+      "text": "게임 아이템 강아지 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-a59fba20b2e21e4618de",
+      "text": "우산 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-a76a3413c1ef14606f98",
+      "text": "게임 아이템 사과 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-a7e7a91cf0a07cdbde37",
+      "text": "컴퓨터 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-a926c1de5ece9ed0c932",
+      "text": "게임 아이템 시계 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-a9999d3b80d99b381e16",
+      "text": "음악 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-aa33759610b9b0b70a0a",
+      "text": "교육 문서에서 강아지 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-af2275590ff836dafc0e",
+      "text": "비행기 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-b3e48b2eb9eb7aa65c95",
+      "text": "게임 아이템 하늘 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-b4ba64f5665d67c74d01",
+      "text": "도서관 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-b813b200f4fab1a5f790",
+      "text": "교육 문서에서 학교 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-b9380833d7d16c47f950",
+      "text": "검토할 사용자명은 하늘연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-bc727aec3da1f66f3fd1",
+      "text": "강아지 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-c19900f7a5f41ce27717",
+      "text": "검토할 사용자명은 음악연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-c65a9f9eb93c5e8f97f6",
+      "text": "교육 문서에서 연필 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-c6e43b7eafb1d0d04d04",
+      "text": "달력 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-d0d4e5b729592ce2d6cc",
+      "text": "교육 문서에서 바다 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-d45e228897de639d4f66",
+      "text": "교육 문서에서 음악 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-d4d8d8548d8f9cc34cd4",
+      "text": "자전거 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-d7a67bb19f0ed16710b2",
+      "text": "게임 아이템 우산 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-d97f01074741be4a6d45",
+      "text": "고양이 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-dcf596297b0c5282be65",
+      "text": "강아지 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-ec26886617f71a48a2d3",
+      "text": "교육 문서에서 도서관 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-ef963e4f8a66da6eee86",
+      "text": "검토할 사용자명은 사진연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-f030ca45ce0b5fdd2ab4",
+      "text": "교육 문서에서 지하철 항목을 설명합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-f2401181f27b803b628a",
+      "text": "학교 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-f409a8d52cdddf06807c",
+      "text": "우산 관련 정상 복합어를 기록합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-f4ab2ec08b4642cf43b3",
+      "text": "연필 표기를 경계 비교 대상으로 확인합니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-f674cadf5edf266a0158",
+      "text": "검토할 사용자명은 달력연구소입니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-fc7e4ecb1a60b62d124b",
+      "text": "게임 아이템 바나나 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    },
+    {
+      "id": "koguard-curated-buffer-review-fd7c54ccd8ba872fd1d4",
+      "text": "게임 아이템 가방 조각을 획득했습니다.",
+      "label": "review",
+      "expected_matches": [],
+      "slices": [
+        "unadjudicated-intake"
+      ],
+      "source": {
+        "kind": "curated",
+        "name": "Koguard curated hard-negative buffer",
+        "reference": "https://github.com/skgur07/Koguard",
+        "revision": "curated-policy-buffer-v1",
+        "redistribution_allowed": true
+      },
+      "license": "MIT",
+      "split": "tuning",
+      "notes": "Unadjudicated project-authored hard-negative buffer."
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "buffer_id": "pf005-hard-negative-buffer-v1",
+  "corpus_id": "koguard-pf005-hard-negative-buffer-v1",
+  "selection": "incremental-source-sha256-v1",
+  "selected_count": 1000,
+  "configured_max_source_share": 0.3,
+  "maximum_observed_source_share": 0.3,
+  "source_bias_gate_passed": true,
+  "source_statistics": [
+    {
+      "source_id": "curse-detection-data",
+      "available_count": 2800,
+      "existing_excluded_count": 2500,
+      "duplicate_excluded_count": 0,
+      "eligible_count": 300,
+      "selected_count": 300,
+      "share": 0.3
+    },
+    {
+      "source_id": "kote",
+      "available_count": 1050,
+      "existing_excluded_count": 750,
+      "duplicate_excluded_count": 0,
+      "eligible_count": 300,
+      "selected_count": 300,
+      "share": 0.3
+    },
+    {
+      "source_id": "beep-korean-hate-speech",
+      "available_count": 1050,
+      "existing_excluded_count": 750,
+      "duplicate_excluded_count": 0,
+      "eligible_count": 300,
+      "selected_count": 300,
+      "share": 0.3
+    },
+    {
+      "source_id": "koguard-curated-policy",
+      "available_count": 100,
+      "existing_excluded_count": 0,
+      "duplicate_excluded_count": 0,
+      "eligible_count": 100,
+      "selected_count": 100,
+      "share": 0.1
+    }
+  ],
+  "selection_uses_upstream_labels_for_targeting": true,
+  "upstream_labels_are_gold": false,
+  "generated_label_counts": {
+    "positive": 0,
+    "hard-negative": 0,
+    "review": 1000
+  },
+  "selected_existing_overlap_count": 0,
+  "gold_ready": false,
+  "completion_blockers": [
+    "Every selected case still requires independent double annotation.",
+    "Upstream labels are targeting hints and must not become Koguard gold.",
+    "Disagreements require an independent third reviewer.",
+    "Independent hidden evaluation is not part of this tuning buffer."
+  ]
+}

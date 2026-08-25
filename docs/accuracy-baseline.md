@@ -28,6 +28,13 @@
 > 197/32/283, recall 41.0%다. strict 대비 문장 TP +6, FP +1이어서 현재 FP 증분 0 gate는
 > 실패했다. 표본이 커지며 이전 92건 수치가 하향 조정됐고, 여전히 hidden 평가는 아니다.
 
+> 2026-08-25 정책 재감사 3건과 source-balanced 추가 500건을 각각 독립 이중 판정하고,
+> 불일치 3건과 293건을 제3 판정했다. 평가 가능 표본은 972건(positive 377,
+> hard-negative 595)이며 review 1,528건은 제외했다. `balanced` 문장 TP/FP/FN/TN은
+> 241/0/136/595, recall 63.9%이고 occurrence TP/FP/FN은 314/41/320, recall 49.5%다.
+> strict 대비 문장 TP +10·FP +0이지만 occurrence TP +12·FP +4여서 전체 FP 증분 0 gate는
+> 계속 실패한다. 이는 tuning 결과이며 hidden 또는 실서비스 정확도가 아니다.
+
 측정일: 2026-07-28
 
 대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성·Alias·

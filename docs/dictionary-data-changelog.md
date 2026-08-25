@@ -100,6 +100,22 @@ support 1건 이상, 독립 hard-negative 2건 이상, occurrence TP 순증가�
 profile의 FP 증분 0 gate는 실패했다. 이는 candidate `.007`의 개별 gate와 별개이며, 기본 profile
 정책은 추가 tuning 및 hidden 평가에서 재검토한다.
 
+## v5/2026-08-25 — 정책 재감사·balanced batch-002 후 보류 후보 재평가
+
+- candidate: `core.literal.pf007.007`
+- 상태: `candidate` 유지, packaged data 변경 없음
+- 독립 tuning 근거: 총 972건(positive 377, hard-negative 595), review 1,528건 제외
+- baseline: sentence TP/FP/FN/TN 250/10/127/585, occurrence TP/FP/FN 318/63/316
+- 후보 적용: sentence 변화 없음, occurrence TP +2·FP -2
+- support: positive 3건, hard-negative 595건
+- 판정: 확장 tuning gate를 다시 통과했지만 hidden evaluation 전에는 승격하지 않음
+- report: `evaluation/results/pf007-balanced-batch-002-candidates.report.json`
+- 권리: 기존 고정 MIT source의 candidate이며 새 외부 term이나 원문을 복사하지 않음
+
+같은 972건에서 현재 기본 `balanced`는 strict보다 문장 TP +10·FP +0이지만 occurrence
+TP +12·FP +4다. 문장 FP 개선만으로 전체 FP 증분 0 gate를 통과한 것은 아니며, candidate
+`.007`의 개별 gate와 profile gate는 계속 분리한다.
+
 ## 변경 기록 template
 
 새 변경은 아래 항목을 복사해 추가한다.

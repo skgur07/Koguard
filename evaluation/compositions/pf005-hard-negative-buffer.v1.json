@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "buffer_id": "pf005-hard-negative-buffer-v1",
+  "corpus_id": "koguard-pf005-hard-negative-buffer-v1",
+  "split": "tuning",
+  "selection": "incremental-source-sha256-v1",
+  "max_source_share": 0.3,
+  "selection_uses_upstream_labels_for_targeting": true,
+  "sources": [
+    {
+      "source_id": "curse-detection-data",
+      "corpus_path": "../annotation-work/curse-buffer-source-v1.json",
+      "expected_corpus_id": "koguard-curse-buffer-source-v1",
+      "existing_corpus_path": "../corpus/tuning/curse-review-intake-v1.json",
+      "expected_existing_corpus_id": "koguard-curse-review-intake-v1",
+      "quota": 300
+    },
+    {
+      "source_id": "kote",
+      "corpus_path": "../annotation-work/kote-buffer-source-v1.json",
+      "expected_corpus_id": "koguard-kote-buffer-source-v1",
+      "existing_corpus_path": "../corpus/tuning/kote-review-intake-v1.json",
+      "expected_existing_corpus_id": "koguard-kote-review-intake-v1",
+      "quota": 300
+    },
+    {
+      "source_id": "beep-korean-hate-speech",
+      "corpus_path": "../annotation-work/beep-buffer-source-v1.json",
+      "expected_corpus_id": "koguard-beep-buffer-source-v1",
+      "existing_corpus_path": "../corpus/tuning/beep-review-intake-v1.json",
+      "expected_existing_corpus_id": "koguard-beep-review-intake-v1",
+      "quota": 300
+    },
+    {
+      "source_id": "koguard-curated-policy",
+      "corpus_path": "../corpus/tuning/curated-hard-negative-buffer-v1.json",
+      "expected_corpus_id": "koguard-curated-hard-negative-buffer-v1",
+      "existing_corpus_path": "../corpus/tuning/curated-policy-slices-v1.json",
+      "expected_existing_corpus_id": "koguard-curated-policy-slices-v1",
+      "quota": 100
+    }
+  ]
+}

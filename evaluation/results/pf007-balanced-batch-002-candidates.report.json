@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "inputs": {
+    "corpus_sha256": "b297e7fc1e89c838621fe4d6ee72bbfd20a12db9886cb99bccb24489a85910f2",
+    "candidate_manifest_sha256": "4e2f6d7d67f87c7069e3bddc9851284e8b28332c4e11d5d73d99e862e97577d9"
+  },
+  "corpus": {
+    "case_count": 972,
+    "positive_count": 377,
+    "hard_negative_count": 595,
+    "excluded_review_count": 1528
+  },
+  "baseline": {
+    "sentence_counts": {
+      "tp": 250,
+      "fp": 10,
+      "fn": 127,
+      "tn": 585
+    },
+    "occurrence_counts": {
+      "tp": 318,
+      "fp": 63,
+      "fn": 316
+    }
+  },
+  "combined_candidate": {
+    "sentence_counts": {
+      "tp": 250,
+      "fp": 10,
+      "fn": 127,
+      "tn": 585
+    },
+    "occurrence_counts": {
+      "tp": 320,
+      "fp": 61,
+      "fn": 314
+    },
+    "sentence_delta": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "tn": 0
+    },
+    "occurrence_delta": {
+      "tp": 2,
+      "fp": -2,
+      "fn": -2
+    },
+    "positive_case_support": 3,
+    "hard_negative_case_support": 595,
+    "tuning_gate_passed": true
+  },
+  "candidates": [
+    {
+      "candidate_id": "core.literal.pf007.007",
+      "positive_case_support": 3,
+      "hard_negative_case_support": 595,
+      "sentence_tp_delta": 0,
+      "sentence_fp_delta": 0,
+      "occurrence_tp_delta": 2,
+      "occurrence_fp_delta": -2,
+      "tuning_gate_passed": true
+    }
+  ]
+}

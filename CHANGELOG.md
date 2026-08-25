@@ -17,6 +17,11 @@ Semantic Versioning after the first public release.
 - TestPyPI evidence contract that binds installation smoke results to audited artifact hashes.
 - License-pinned KOTE and BEEP review intakes plus a duplicate-free, 30%-capped PF-005 composition.
 - Aggregate-only evidence for a second 500-case blinded PF-005 review and third-review adjudication.
+- Blinded matcher re-audit and source-balanced review queue tooling for the next PF-005 batches.
+- Aggregate-only policy re-audit, balanced batch-002, profile, and PF-007 candidate evidence for 972
+  independently finalized tuning cases.
+- A disjoint 1,000-case PF-005 review buffer with 30% per-source cap, pinned source expansion, and
+  project-authored hard-negative targets.
 
 ### Changed
 
@@ -25,6 +30,8 @@ Semantic Versioning after the first public release.
 - Wheel ZIP creator metadata is canonicalized before audit so supported OS builds are byte-identical.
 - Profile limitations now report the measured hard-negative and false-positive counts instead of stale
   hard-coded sample values.
+- The Choseong policy re-audit corrected one prior hard-negative, and balanced tuning now has zero sentence
+  false positives while retaining a documented occurrence FP delta of four versus strict.
 
 ### Security
 

@@ -29,6 +29,18 @@ _PUBLISHED_BALANCED_ADJUDICATION_REPORT_PATH = (
     / "results"
     / "pf005-balanced-batch-001-adjudicated.report.json"
 )
+_PUBLISHED_BALANCED_BATCH_002_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-balanced-batch-002-adjudicated.report.json"
+)
+_PUBLISHED_POLICY_REAUDIT_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-policy-reaudit-v1-adjudicated.report.json"
+)
 
 
 def test_annotation_schemas_are_versioned_and_closed() -> None:
@@ -87,6 +99,67 @@ def test_published_balanced_adjudication_report_is_aggregate_only() -> None:
         "eligible": 387,
         "resolved": 334,
         "unresolved": 53,
+        "privacy_excluded": 0,
+    }
+    assert report["gold_ready"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_balanced_batch_002_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_BALANCED_BATCH_002_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["batch_case_count"] == 500
+    assert report["batch_counts"] == {
+        "positive": 112,
+        "hard-negative": 324,
+        "review": 64,
+    }
+    assert report["corpus_counts"] == {
+        "positive": 377,
+        "hard-negative": 595,
+        "review": 1528,
+    }
+    assert report["quality_counts"] == {
+        "double_reviewed": 500,
+        "consensus": 207,
+        "disagreement": 293,
+        "privacy_excluded": 0,
+        "pending_privacy": 0,
+    }
+    assert report["adjudication_counts"] == {
+        "eligible": 293,
+        "resolved": 281,
+        "unresolved": 12,
+        "privacy_excluded": 0,
+    }
+    assert report["gold_ready"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_policy_reaudit_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_POLICY_REAUDIT_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["batch_case_count"] == 3
+    assert report["batch_counts"] == {
+        "positive": 3,
+        "hard-negative": 0,
+        "review": 0,
+    }
+    assert report["quality_counts"] == {
+        "double_reviewed": 3,
+        "consensus": 0,
+        "disagreement": 3,
+        "privacy_excluded": 0,
+        "pending_privacy": 0,
+    }
+    assert report["adjudication_counts"] == {
+        "eligible": 3,
+        "resolved": 3,
+        "unresolved": 0,
         "privacy_excluded": 0,
     }
     assert report["gold_ready"] is False

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-pf005-policy-reaudit-v1",
+  "source_corpus_sha256": "4918c4c9d1719a8bf052557ae6bf3feaf9f277b792b81a37aa0659bc2966ec73",
+  "batch_case_count": 3,
+  "batch_counts": {
+    "positive": 3,
+    "hard-negative": 0,
+    "review": 0
+  },
+  "corpus_counts": {
+    "positive": 3,
+    "hard-negative": 0,
+    "review": 0
+  },
+  "quality_counts": {
+    "double_reviewed": 3,
+    "consensus": 0,
+    "disagreement": 3,
+    "privacy_excluded": 0,
+    "pending_privacy": 0
+  },
+  "adjudication_counts": {
+    "eligible": 3,
+    "resolved": 3,
+    "unresolved": 0,
+    "privacy_excluded": 0
+  },
+  "slice_counts": {
+    "choseong": 3,
+    "direct": 2,
+    "domain-term": 1,
+    "multiple-matches": 2
+  },
+  "gold_ready": false
+}

@@ -22,7 +22,10 @@ Phase 4~6은 삭제하지 않는다. 아래 품질 게이트와 재개 조건을
 
 직접 `EngineConfig()`를 만들 때의 all-enabled 호환성은 유지한다. PF-009에서 공개 profile
 API를 구현했고 인자 없는 `KoguardEngine()`은 Exact+Alias+Choseong의 `balanced`를 사용한다.
-현재 수치는 첫 독립 tuning batch 근거이므로 추가 corpus와 hidden 평가 전까지 공개 전
+2026-08-25까지 독립 tuning 972건을 확정했다. `balanced`는 strict 대비 문장 TP +10·FP +0,
+occurrence TP +12·FP +4를 기록해 문장 gate는 개선됐지만 전체 FP 증분 0 gate는 아직 실패한다.
+같은 날 기존 intake와 direct/NFKC+casefold 중복이 없는 1,000건 review buffer도
+`300/300/300/100` 출처 비중으로 확보했다. 따라서 추가 독립 판정과 hidden 평가 전까지 공개 전
 재조정 가능성을 유지한다.
 
 ### 1.1 Core 판정 정책 보완
@@ -31,6 +34,11 @@ Koguard의 deterministic core는 **문맥과 무관한 lexical 차단기**로 �
 승인된 변형이 원문 일부에 존재하면 독립 단어, 정상 복합어, 인용·설명, 사용자명 여부와
 관계없이 positive다. 예를 들어 `시발점` 안의 `시발`도 core 차단 대상이다. 문맥을 이유로 core
 탐지를 자동 해제하지 않는다.
+
+이 규칙은 초성처럼 의미가 중의적인 표면에도 적용한다. 등록된 두 음절 이상 한글 표현에서 파생한
+완전한 독립 초성 토큰은 다른 약어 또는 도메인 용어로 읽힐 수 있어도 같은 lexical 표면이면
+positive다. 같은 표면을 의도에 따라 서로 다른 label로 나누려면 문맥 모델이 필요하므로 core
+gold와 balanced gate에서는 허용하지 않는다.
 
 `hard-negative`는 등록 표현이 실제로 포함됐지만 문맥이 정상인 사례가 아니다. 등록 표현과
 닮았으나 동일한 표현·승인 변형은 아닌 문자열, 또는 정책 대상 표현이 전혀 없는 문장만 해당한다.
@@ -301,6 +309,14 @@ Q1의 첫 비교 가능한 기준선은 최소 다음을 목표로 한다.
 
 이 수치는 공개 품질의 종착점이 아니라 첫 통계적 비교 단위다. 한 출처나 한 표현 계열이 전체
 positive의 30%를 넘으면 별도 보고하고 편향을 줄인다.
+
+최소 목표 합계가 2,500건이므로 intake도 정확히 2,500건이면 unresolved·privacy 제외를 한 건도
+허용할 수 없다. 따라서 PF-005는 기존 2,500건 판정과 별도로 최소 1,000건의 hard-negative 중심
+review buffer를 추가 확보한다. buffer는 목표 label로 자동 확정하지 않으며, 일반 문장·게임·
+도메인·철자 및 Unicode 유사 표면을 여러 출처에서 수집해 동일한 독립 판정을 거친다.
+
+2026-08-25 buffer v1은 기존 intake overlap 0건, 출처별 `300/300/300/100`, 최대 share 30%로
+1,000건을 확보했다. 모든 label은 `review`이며 다음 단계는 이중 판정과 불일치 제3 판정이다.
 
 ### 6.8 완료 조건
 

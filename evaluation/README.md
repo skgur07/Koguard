@@ -31,6 +31,8 @@ upstream label은 Koguard gold가 아니므로 새 source case는 모두 tuning 
 span이나 실제 평가 slice를 갖지 않는다. source별 report는 `gold_ready=false`를 고정한다.
 `curated_policy_intake.py`는 100개 positive-target 정책 문맥과 150개 hard-negative-target
 유사 표기를 직접 작성하지만, 설계 의도가 gold를 대신하지 않도록 역시 blinded review로 만든다.
+`--kind hard-negative-buffer`는 기존 curated intake와 겹치지 않는 hard-negative-target 100건을
+추가로 만든다.
 
 `corpus_composer.py`는 첫 batch 확정 92건을 우선 보존하고 2runo/KOTE/Korean Hate Speech/
 Koguard curated를 `750/750/750/250`으로 선택한다. 직접·NFKC+casefold 중복을 제거하고 source
@@ -46,6 +48,21 @@ uv run python -m evaluation.corpus_composer `
   evaluation\compositions\pf005-balanced-review-intake.v1.json `
   --output evaluation\corpus\tuning\pf005-balanced-review-intake-v1.json `
   --report evaluation\results\pf005-balanced-review-intake-v1.report.json
+```
+
+기존 2,500건의 unresolved 여유를 확보하려면 고정 source artifact에서 더 큰 intake를 생성한 뒤
+`review_buffer_planner.py`로 기존 source intake를 제외한다. PF-005 buffer v1은 Curse/KOTE/BEEP/
+Koguard curated를 `300/300/300/100`으로 선택하고 direct·NFKC+casefold 기존 overlap 0건과
+source 30% 상한을 강제한다. Curse `0`, BEEP `none`, curated 설계는 hard-negative 가능성이 높은
+후보 targeting일 뿐이며 모든 생성 label은 `review`, `upstream_labels_are_gold=false`다.
+
+```powershell
+uv run python -m evaluation.curated_policy_intake --kind hard-negative-buffer
+
+uv run python -m evaluation.review_buffer_planner `
+  evaluation\compositions\pf005-hard-negative-buffer.v1.json `
+  --output evaluation\annotation-work\pf005-hard-negative-buffer-v1.json `
+  --report evaluation\results\pf005-hard-negative-buffer-v1.report.json
 ```
 
 ## PF-005 rights-pending quarantine intake
@@ -83,6 +100,36 @@ annotation 필드만 있으며 upstream label, Koguard/Korcen prediction, 기존
 일치한 case만 승격한다. 불일치, privacy `pending` 또는 `exclude`는 계속 `review`로 남는다.
 batch·merge 결과 원문은 `evaluation/annotation-work/` 또는 저장소 밖의 보호 경로에 두며 이
 디렉터리는 Git과 sdist에서 제외된다. report에는 원문과 canonical term 대신 집계만 저장한다.
+
+남은 review를 단순 ID 순서로 자르지 않고 출처별로 균형 있게 선택하려면 보호 corpus에서 다음
+명령을 실행한다. 선택은 source별 stable SHA-256 rank를 round-robin하며 detector prediction,
+upstream label, 기존 확정 label을 사용하지 않는다. 현재 보호 corpus에서는 네 출처에서 125건씩
+총 500건을 선택한다. 이는 reviewer 구성 편향을 줄이는 queue일 뿐 hard-negative label을
+보장하지 않는다.
+
+```powershell
+uv run python -m evaluation.review_queue_planner <protected-corpus> `
+  --queue-id pf005-balanced-batch-002 `
+  --corpus-id koguard-pf005-balanced-batch-002-review-queue `
+  --limit 500 --output <protected-queue> --report <protected-report>
+```
+
+matcher 증분 FP가 annotation 정책과 충돌할 가능성이 있으면 해당 case만 이전 판정값 없이
+재감사한다. `prepare`는 report의 corpus ID와 canonical SHA-256 결속을 확인하고 이전
+label·span·slice를 제거한다. `apply`는 원문·출처·라이선스·split이 바뀌지 않았는지 검증하고
+독립 판정의 결정 필드만 반영한다. 두 명의 reviewer와 제3 adjudicator 절차는 기존 annotation
+workflow를 그대로 사용한다.
+
+```powershell
+uv run python -m evaluation.reaudit_workflow prepare <protected-corpus> <protected-ablation> `
+  --matcher choseong --corpus-id koguard-pf005-choseong-fp-reaudit-v1 `
+  --output <protected-reaudit-corpus> --report <protected-report>
+
+uv run python -m evaluation.reaudit_workflow apply <protected-corpus> `
+  <protected-prepared-reaudit> <protected-adjudicated-reaudit> `
+  <protected-adjudication-report> --output <protected-updated-corpus> `
+  --report <protected-apply-report>
+```
 
 ```powershell
 uv run python -m evaluation.annotation_workflow export `
@@ -233,12 +280,13 @@ uv run python -m evaluation.profile_report `
 ```
 
 공개 보고서는 원본 ablation과 corpus SHA-256, 환경, 세 profile 집계, balanced 증분과 임시
-FP·p95 게이트를 기록한다. 2026-08-20 추가 독립 판정 뒤 확정 표본은 536건(positive 264,
-hard-negative 272)이다. balanced는 strict보다 문장 TP 6건과 occurrence TP 7건을 더 찾았지만
-문장 FP 1건과 occurrence FP 3건도 늘었다. balanced 문장 recall은 53.4%, occurrence recall은
-41.0%이며 FP 증분 0 gate는 실패했다. short-chat p95는 0.0226ms, 최대 입력 p95는 6.9517ms로
-성능 예산은 통과했다. review 1,964건이 남은 tuning 결과이므로 실서비스 FP나 최종 recall로
-일반화할 수 없고, 성능은 세 OS CI에서 다시 확인해야 한다. 계약은
+FP·p95 게이트를 기록한다. 2026-08-25 정책 재감사와 추가 독립 판정 뒤 확정 표본은
+972건(positive 377, hard-negative 595)이다. balanced는 strict보다 문장 TP 10건과
+occurrence TP 12건을 더 찾았고 문장 FP 증분은 0건이지만 occurrence FP가 4건 늘었다.
+balanced 문장 recall은 63.9%, occurrence recall은 49.5%이며 전체 FP 증분 0 gate는 실패했다.
+short-chat p95는 0.0365ms, 최대 입력 p95는 9.9735ms로 성능 예산은 통과했다. review 1,528건이
+남은 tuning 결과이므로 실서비스 FP나 최종 recall로 일반화할 수 없고, 성능은 세 OS CI에서
+다시 확인해야 한다. 계약은
 `profile-report.schema.json` version 1이다.
 
 ## 비교 계약
