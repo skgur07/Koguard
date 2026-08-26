@@ -22,6 +22,8 @@ Semantic Versioning after the first public release.
   independently finalized tuning cases.
 - A disjoint 1,000-case PF-005 review buffer with 30% per-source cap, pinned source expansion, and
   project-authored hard-negative targets.
+- Independent double review and third-review adjudication evidence for the first 500-case hard-negative
+  buffer batch, expanding finalized tuning evidence to 1,455 cases.
 
 ### Changed
 

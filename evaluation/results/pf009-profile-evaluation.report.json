@@ -2,15 +2,15 @@
   "schema_version": 1,
   "profile_contract_version": 1,
   "source": {
-    "ablation_report_sha256": "745ba4b756fd475904e18f001d6eaeb09b5831e0fd83313d4398810424d1cdf6",
-    "measured_at": "2026-08-25T06:59:04.562839+00:00",
+    "ablation_report_sha256": "466e88047bd7efa33e4df70733082eb9e1d6bd4b8f1f0e49dd7889f1c85cedcc",
+    "measured_at": "2026-08-26T00:47:21.674146+00:00",
     "corpus": {
       "classification": "independent-tuning-provisional",
-      "sha256": "40dc5ea7fe18c1bcbf1f2c400a9fcc1ef32d00f6b465acdddd6d1a0ac1ec751f",
-      "case_count": 972,
-      "positive_count": 377,
-      "hard_negative_count": 595,
-      "excluded_review_count": 1528,
+      "sha256": "a52324de7cb086d951f029f855cf816525d73948d099a001b3d96977bf89ac5b",
+      "case_count": 1455,
+      "positive_count": 389,
+      "hard_negative_count": 1066,
+      "excluded_review_count": 1545,
       "gold_ready": false
     },
     "environment": {
@@ -51,38 +51,38 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 231,
+          "tp": 233,
           "fp": 0,
-          "fn": 146,
-          "tn": 595
+          "fn": 156,
+          "tn": 1066
         },
         "precision": 1.0,
-        "recall": 0.6127320954907162,
-        "f1": 0.7598684210526316,
-        "accuracy": 0.8497942386831275
+        "recall": 0.5989717223650386,
+        "f1": 0.7491961414790997,
+        "accuracy": 0.8927835051546392
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 302,
+          "tp": 304,
           "fp": 37,
-          "fn": 332
+          "fn": 344
         },
-        "precision": 0.8908554572271387,
-        "recall": 0.47634069400630913,
-        "f1": 0.6207605344295991
+        "precision": 0.8914956011730205,
+        "recall": 0.4691358024691358,
+        "f1": 0.614762386248736
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.025,
-          "p95_ms": 0.0295
+          "p50_ms": 0.0202,
+          "p95_ms": 0.0486
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 5.0277,
-          "p95_ms": 6.0077
+          "p50_ms": 4.3625,
+          "p95_ms": 5.3172
         },
-        "engine_retained_memory_bytes": 81122
+        "engine_retained_memory_bytes": 81189
       }
     },
     {
@@ -114,36 +114,36 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 241,
+          "tp": 243,
           "fp": 0,
-          "fn": 136,
-          "tn": 595
+          "fn": 146,
+          "tn": 1066
         },
         "precision": 1.0,
-        "recall": 0.6392572944297082,
-        "f1": 0.7799352750809061,
-        "accuracy": 0.8600823045267489
+        "recall": 0.6246786632390745,
+        "f1": 0.7689873417721518,
+        "accuracy": 0.8996563573883162
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 314,
+          "tp": 316,
           "fp": 41,
-          "fn": 320
+          "fn": 332
         },
-        "precision": 0.8845070422535212,
-        "recall": 0.4952681388012618,
-        "f1": 0.6349848331648129
+        "precision": 0.8851540616246498,
+        "recall": 0.4876543209876543,
+        "f1": 0.6288557213930348
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0227,
-          "p95_ms": 0.0365
+          "p50_ms": 0.0204,
+          "p95_ms": 0.0226
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 5.1961,
-          "p95_ms": 9.9735
+          "p50_ms": 4.6509,
+          "p95_ms": 6.9432
         },
         "engine_retained_memory_bytes": 124675
       }
@@ -177,36 +177,36 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 250,
-          "fp": 10,
-          "fn": 127,
-          "tn": 585
+          "tp": 253,
+          "fp": 15,
+          "fn": 136,
+          "tn": 1051
         },
-        "precision": 0.9615384615384616,
-        "recall": 0.6631299734748011,
-        "f1": 0.7849293563579278,
-        "accuracy": 0.8590534979423868
+        "precision": 0.9440298507462687,
+        "recall": 0.6503856041131105,
+        "f1": 0.7701674277016742,
+        "accuracy": 0.8962199312714777
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 318,
-          "fp": 63,
-          "fn": 316
+          "tp": 320,
+          "fp": 70,
+          "fn": 328
         },
-        "precision": 0.8346456692913385,
-        "recall": 0.501577287066246,
-        "f1": 0.626600985221675
+        "precision": 0.8205128205128205,
+        "recall": 0.49382716049382713,
+        "f1": 0.6165703275529865
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0886,
-          "p95_ms": 0.1492
+          "p50_ms": 0.0747,
+          "p95_ms": 0.1146
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 7.8689,
-          "p95_ms": 10.1614
+          "p50_ms": 7.4353,
+          "p95_ms": 8.7679
         },
         "engine_retained_memory_bytes": 230954
       }
@@ -221,16 +221,16 @@
   "balanced_gates": {
     "normal_sentence_fp_rate": 0.0,
     "normal_sentence_fp_rate_limit": 0.005,
-    "short_chat_p95_ms": 0.0365,
+    "short_chat_p95_ms": 0.0226,
     "short_chat_p95_ms_limit": 1.0,
-    "maximum_input_p95_ms": 9.9735,
+    "maximum_input_p95_ms": 6.9432,
     "maximum_input_p95_ms_limit": 15.0,
     "passed": false
   },
   "limitations": [
-    "다중 출처 intake 중 독립 검토로 확정된 972건만 평가한 tuning 결과다.",
-    "gold_ready가 아니며 1528건은 review로 자동 평가에서 제외됐다.",
-    "hard-negative 595건에서 balanced 문장 FP 0건으로 측정됐으나 실서비스 전체 FP rate를 일반화할 수 없다.",
+    "다중 출처 intake 중 독립 검토로 확정된 1455건만 평가한 tuning 결과다.",
+    "gold_ready가 아니며 1545건은 review로 자동 평가에서 제외됐다.",
+    "hard-negative 1066건에서 balanced 문장 FP 0건으로 측정됐으나 실서비스 전체 FP rate를 일반화할 수 없다.",
     "성능은 단일 Windows 로컬 환경 측정이며 지원 OS별 CI 기준선이 아니다."
   ]
 }

@@ -1,6 +1,6 @@
 # 외부 평가 자료 사용·권리 감사 대장
 
-- 기준일: 2026-08-14
+- 기준일: 2026-08-26
 - 원칙: 권리 검토가 끝나지 않은 원문은 로컬 quarantine 분석에만 사용하고 Git, wheel,
   sdist와 공개 corpus에 포함하지 않는다.
 - 승인 방식: 저장소 단위 선언만 보지 않고 원출처, 파생 관계, 행 단위 provenance, 재배포와
@@ -72,6 +72,12 @@ false-negative canonical cluster 7개를 provenance manifest의 `candidate`로 �
 rank만 선택했고, Koguard 직접 작성 100건은 프로젝트 MIT로 관리한다. 외부 원문은 계속
 Git·wheel·sdist에 포함하지 않으며 CC-BY-SA 자료의 최종 공개·파생물 attribution 경계는 수동
 검토가 끝날 때까지 완료 blocker로 유지한다.
+
+2026-08-26 buffer batch-001에서는 KOTE 134건과 Korean Hate Speech 133건을 포함한 500건을
+독립 이중 판정·제3 판정하면서 case-level privacy 검토를 완료했고 exclude/pending은 0건이었다.
+이는 해당 500건의 보호 환경 사용 근거이며, CC-BY-SA 원문·파생 annotation을 Git이나 공개
+artifact에 재배포할 권리 승인은 아니다. 나머지 원문의 privacy 검토와 공개 대상별 attribution·
+share-alike 경계는 계속 blocker로 유지한다.
 
 ## ZIZUN 고정 근거
 

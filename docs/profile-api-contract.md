@@ -82,6 +82,12 @@ strict보다 문장 TP 6건을 더 찾지만 FP도 1건 늘어 현재의 FP 증�
 occurrence는 TP +12와 함께 FP +4가 발생한다. 문장 오탐 gate 개선만으로 전체 gate를 통과한
 것은 아니며 hidden 평가 전 기본 profile 계약은 유지한다.
 
+2026-08-26 hard-negative buffer의 첫 500건 판정을 더해 표본을 1,455건으로 늘렸다. strict는
+문장 TP/FP/FN/TN 233/0/156/1,066, balanced는 243/0/146/1,066, aggressive는
+253/15/136/1,051이다. balanced의 strict 대비 문장 TP +10·FP +0, occurrence TP +12·FP +4는
+유지됐다. hard-negative 표본 확대에도 문장 FP는 0건이지만 occurrence gate와 hidden 검증이
+남아 있어 기본 profile 계약은 바꾸지 않는다.
+
 ## 동작 불변 조건
 
 - 모든 profile은 등록된 욕설의 문맥 무관 부분 문자열 Exact 탐지를 보존한다.
