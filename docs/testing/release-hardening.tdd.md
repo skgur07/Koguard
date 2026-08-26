@@ -83,3 +83,14 @@ wheel SHA-256이 달라졌다. RED 테스트는 이 두 wheel이 정규화 후 b
 보존하면서 `create_system=3`으로 다시 쓴다. 실패 run에서 내려받은 세 실제 wheel에 적용했을 때
 모두 `dbea839233d38b7d65c8769843478e0dfef3f4e5796417e72eee82e737314231`로 수렴했다. CI는
 정규화 뒤에만 artifact audit, clean-install, upload와 byte 비교를 수행한다.
+
+## 2026-08-26 tuning corpus sdist 제외 강화
+
+CI run `32824642090`의 세 OS job은 새로 추가된
+`evaluation/corpus/tuning/curated-hard-negative-buffer-v1.json`이 sdist에 포함돼 artifact
+audit에서 실패했다. 기존 Hatch 설정은 당시 존재하던 tuning 파일만 하나씩 제외해 새 파일이
+추가될 때마다 공개 artifact 누출이 재발할 수 있었다.
+
+RED 테스트는 sdist 설정이 개별 파일 목록이 아니라 `/evaluation/corpus/tuning` 전체를 제외할
+것을 먼저 요구했다. 구현은 기존 다섯 파일별 예외를 디렉터리 경계 하나로 교체했다. 공개 가능한
+source spec, schema와 aggregate report는 tuning 원문 경로 밖에 있으므로 계속 sdist에 포함된다.

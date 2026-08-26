@@ -32,6 +32,8 @@ Semantic Versioning after the first public release.
   hard-coded sample values.
 - The Choseong policy re-audit corrected one prior hard-negative, and balanced tuning now has zero sentence
   false positives while retaining a documented occurrence FP delta of four versus strict.
+- Source distributions exclude the complete tuning corpus directory so newly added review buffers cannot
+  enter public artifacts through an outdated per-file exclusion list.
 
 ### Security
 

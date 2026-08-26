@@ -55,8 +55,4 @@ def test_sdist_includes_evaluation_contracts_and_corpus_policies() -> None:
     assert "/.mailmap" in sdist_includes
     assert "/evaluation/annotation-work" in sdist_excludes
     assert "/evaluation/quarantine" in sdist_excludes
-    assert "/evaluation/corpus/tuning/curse-review-intake-v1.json" in sdist_excludes
-    assert "/evaluation/corpus/tuning/kote-review-intake-v1.json" in sdist_excludes
-    assert "/evaluation/corpus/tuning/beep-review-intake-v1.json" in sdist_excludes
-    assert "/evaluation/corpus/tuning/pf005-balanced-review-intake-v1.json" in sdist_excludes
-    assert "/evaluation/corpus/tuning/curated-policy-slices-v1.json" in sdist_excludes
+    assert "/evaluation/corpus/tuning" in sdist_excludes
