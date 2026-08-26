@@ -41,6 +41,12 @@ _PUBLISHED_HARD_NEGATIVE_BATCH_001_REPORT_PATH = (
     / "results"
     / "pf005-hard-negative-batch-001-adjudicated.report.json"
 )
+_PUBLISHED_HARD_NEGATIVE_BATCH_002_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-hard-negative-batch-002-adjudicated.report.json"
+)
 _PUBLISHED_POLICY_REAUDIT_REPORT_PATH = (
     Path(__file__).parents[1]
     / "evaluation"
@@ -166,6 +172,34 @@ def test_published_hard_negative_batch_001_report_is_aggregate_only() -> None:
         "eligible": 452,
         "resolved": 442,
         "unresolved": 10,
+        "privacy_excluded": 0,
+    }
+    assert report["gold_ready"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_hard_negative_batch_002_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_HARD_NEGATIVE_BATCH_002_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["batch_case_count"] == 500
+    assert report["batch_counts"] == {
+        "positive": 29,
+        "hard-negative": 451,
+        "review": 20,
+    }
+    assert report["quality_counts"] == {
+        "double_reviewed": 500,
+        "consensus": 16,
+        "disagreement": 484,
+        "privacy_excluded": 0,
+        "pending_privacy": 0,
+    }
+    assert report["adjudication_counts"] == {
+        "eligible": 484,
+        "resolved": 473,
+        "unresolved": 11,
         "privacy_excluded": 0,
     }
     assert report["gold_ready"] is False

@@ -103,14 +103,16 @@ batch·merge 결과 원문은 `evaluation/annotation-work/` 또는 저장소 밖
 
 남은 review를 단순 ID 순서로 자르지 않고 출처별로 균형 있게 선택하려면 보호 corpus에서 다음
 명령을 실행한다. 선택은 source별 stable SHA-256 rank를 round-robin하며 detector prediction,
-upstream label, 기존 확정 label을 사용하지 않는다. 현재 보호 corpus에서는 네 출처에서 125건씩
-총 500건을 선택한다. 이는 reviewer 구성 편향을 줄이는 queue일 뿐 hard-negative label을
+upstream label, 기존 확정 label을 사용하지 않는다. 후속 batch는 이전 queue를 반복 가능한
+`--exclude-corpus`로 전달해 stable ID와 원문·출처·라이선스·split 일치를 확인하고 이미 판정한
+case를 제외한다. 이는 reviewer 구성 편향과 중복을 줄이는 queue일 뿐 hard-negative label을
 보장하지 않는다.
 
 ```powershell
 uv run python -m evaluation.review_queue_planner <protected-corpus> `
   --queue-id pf005-balanced-batch-002 `
   --corpus-id koguard-pf005-balanced-batch-002-review-queue `
+  --exclude-corpus <previous-protected-queue> `
   --limit 500 --output <protected-queue> --report <protected-report>
 ```
 
@@ -280,13 +282,13 @@ uv run python -m evaluation.profile_report `
 ```
 
 공개 보고서는 원본 ablation과 corpus SHA-256, 환경, 세 profile 집계, balanced 증분과 임시
-FP·p95 게이트를 기록한다. 2026-08-26 hard-negative buffer 첫 batch까지 반영한 확정 표본은
-1,455건(positive 389, hard-negative 1,066)이다. balanced는 strict보다 문장 TP 10건과
-occurrence TP 12건을 더 찾았고 문장 FP 증분은 0건이지만 occurrence FP가 4건 늘었다.
-balanced 문장 recall은 62.5%, occurrence recall은 48.8%이며 전체 FP 증분 0 gate는 실패했다.
-short-chat p95는 0.0226ms, 최대 입력 p95는 6.9432ms로 성능 예산은 통과했다. 평가 입력에서
-review 1,545건을 제외했고 미선택 buffer 500건도 남은 tuning 결과이므로 실서비스 FP나 최종 recall로 일반화할 수 없고, 성능은 세 OS CI에서
-다시 확인해야 한다. 계약은
+FP·p95 게이트를 기록한다. 2026-08-26 hard-negative buffer 두 batch까지 반영한 확정 표본은
+1,935건(positive 418, hard-negative 1,517)이다. balanced는 strict보다 문장 TP 13건과
+occurrence TP 13건을 더 찾았고 문장 FP 증분은 0건이지만 occurrence FP가 6건 늘었다. strict와
+balanced 모두 같은 문장 2건을 오탐했다. balanced 문장 recall은 60.8%, occurrence recall은
+47.9%이며 전체 FP 증분 0 gate는 실패했다. short-chat p95는 0.0256ms, 최대 입력 p95는
+6.1505ms로 로컬 성능 예산은 통과했다. 평가 입력에서 review 1,565건을 제외했으므로 실서비스
+FP나 최종 recall로 일반화할 수 없고, 성능은 세 OS CI에서 다시 확인해야 한다. 계약은
 `profile-report.schema.json` version 1이다.
 
 ## 비교 계약

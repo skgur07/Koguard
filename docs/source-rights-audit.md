@@ -73,10 +73,10 @@ rank만 선택했고, Koguard 직접 작성 100건은 프로젝트 MIT로 관리
 Git·wheel·sdist에 포함하지 않으며 CC-BY-SA 자료의 최종 공개·파생물 attribution 경계는 수동
 검토가 끝날 때까지 완료 blocker로 유지한다.
 
-2026-08-26 buffer batch-001에서는 KOTE 134건과 Korean Hate Speech 133건을 포함한 500건을
+2026-08-26 buffer 두 batch에서는 KOTE 300건과 Korean Hate Speech 300건을 포함한 1,000건을
 독립 이중 판정·제3 판정하면서 case-level privacy 검토를 완료했고 exclude/pending은 0건이었다.
-이는 해당 500건의 보호 환경 사용 근거이며, CC-BY-SA 원문·파생 annotation을 Git이나 공개
-artifact에 재배포할 권리 승인은 아니다. 나머지 원문의 privacy 검토와 공개 대상별 attribution·
+이는 해당 1,000건의 보호 환경 사용 근거이며, CC-BY-SA 원문·파생 annotation을 Git이나 공개
+artifact에 재배포할 권리 승인은 아니다. 기존 intake 원문의 privacy 검토와 공개 대상별 attribution·
 share-alike 경계는 계속 blocker로 유지한다.
 
 ## ZIZUN 고정 근거

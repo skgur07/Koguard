@@ -41,6 +41,13 @@
 > TP/FP/FN/TN은 243/0/146/1,066, recall 62.5%이고 occurrence TP/FP/FN은 316/41/332,
 > recall 48.8%다. strict 대비 문장 TP +10·FP +0, occurrence TP +12·FP +4라는 결론은
 > 유지된다. 추가 hard-negative에서 문장 FP가 없었지만 여전히 tuning이며 hidden 평가가 아니다.
+>
+> 2026-08-26 나머지 hard-negative buffer 500건도 이전 queue와 중복 없이 독립 이중 판정하고
+> 불일치 484건을 제3 판정했다. 새 batch는 positive 29건, hard-negative 451건, review 20건이며
+> 누적 평가 가능 표본은 1,935건(positive 418, hard-negative 1,517)이다. `balanced` 문장
+> TP/FP/FN/TN은 254/2/164/1,515, recall 60.8%이고 occurrence TP/FP/FN은 326/45/355,
+> recall 47.9%다. strict 대비 문장 TP +13·FP +0, occurrence TP +13·FP +6이다. 두 profile에
+> 공통인 문장 FP 2건과 occurrence gate 실패가 남아 있으며 hidden 평가가 아니다.
 
 측정일: 2026-07-28
 
