@@ -22,10 +22,12 @@ Phase 4~6은 삭제하지 않는다. 아래 품질 게이트와 재개 조건을
 
 직접 `EngineConfig()`를 만들 때의 all-enabled 호환성은 유지한다. PF-009에서 공개 profile
 API를 구현했고 인자 없는 `KoguardEngine()`은 Exact+Alias+Choseong의 `balanced`를 사용한다.
-2026-08-26까지 독립 tuning 1,935건을 확정했다. `balanced`는 strict 대비 문장 TP +13·FP +0,
+2026-08-26까지 독립 tuning 1,935건을 확정했다. 공통 FP 2건을 블라인드 재감사해 모두 문맥 무관
+정책의 positive로 바로잡았고, `balanced`는 strict 대비 문장 TP +13·FP +0,
 occurrence TP +13·FP +6을 기록해 문장 gate는 개선됐지만 전체 FP 증분 0 gate는 아직 실패한다.
 기존 intake와 direct/NFKC+casefold 중복이 없는 1,000건 review buffer도 `300/300/300/100`
-출처 비중으로 확보했고 전량을 독립 검토해 positive 41건, hard-negative 922건, review 37건으로
+출처 비중으로 확보했고 전량을 독립 검토·재감사해 positive 43건, hard-negative 920건,
+review 37건으로
 판정했다. 따라서 남은 intake 판정과 hidden 평가 전까지 공개 전 재조정 가능성을 유지한다.
 
 ### 1.1 Core 판정 정책 보완

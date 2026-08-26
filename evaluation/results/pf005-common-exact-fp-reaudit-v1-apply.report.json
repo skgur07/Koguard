@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "source_corpus_sha256": "420ff4bb5f1dc3b31db9fc17da3c3df1e4a505931985d15e29ca60255320d36f",
+  "prepared_reaudit_sha256": "a140663bdf4015c896c60acaff6642d2a91067d619e67a466fa2a9c8ba19ae78",
+  "adjudicated_reaudit_sha256": "d36657c22cab4fae5b0d8b078ee95e6f32ec00e4e4ed98c28e955e854931a1c0",
+  "adjudication_report_sha256": "98369114b40e94f96eaff05bcd6d3e493bf5930532841039153093f90ad1dbff",
+  "applied_count": 2,
+  "source_corpus_counts": {
+    "positive": 29,
+    "hard-negative": 451,
+    "review": 20
+  },
+  "updated_corpus_counts": {
+    "positive": 31,
+    "hard-negative": 449,
+    "review": 20
+  },
+  "label_transition_counts": {
+    "hard-negative->positive": 2
+  },
+  "gold_ready": false
+}

@@ -48,6 +48,11 @@
 > TP/FP/FN/TN은 254/2/164/1,515, recall 60.8%이고 occurrence TP/FP/FN은 326/45/355,
 > recall 47.9%다. strict 대비 문장 TP +13·FP +0, occurrence TP +13·FP +6이다. 두 profile에
 > 공통인 문장 FP 2건과 occurrence gate 실패가 남아 있으며 hidden 평가가 아니다.
+>
+> 같은 날 공통 FP 2건을 이전 판정 없이 재감사했고 두 reviewer가 모두 문맥 무관 policy
+> positive로 합의했다. 수정 후 표본은 positive 420건, hard-negative 1,515건이며 `balanced`
+> 문장 TP/FP/FN/TN은 256/0/164/1,515, recall 61.0%다. occurrence TP/FP/FN은
+> 328/43/355, recall 48.0%이며 strict 대비 occurrence FP +6 gate와 hidden 검증은 남아 있다.
 
 측정일: 2026-07-28
 
