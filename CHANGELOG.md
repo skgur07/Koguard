@@ -26,6 +26,8 @@ Semantic Versioning after the first public release.
   buffer batch, expanding finalized tuning evidence to 1,455 cases.
 - Independent review of the disjoint second 500-case hard-negative buffer batch, expanding finalized
   tuning evidence to 1,935 cases and completing case-level review of the full 1,000-case buffer.
+- Profile-level blinded re-audit evidence for two shared Exact/Alias false positives, both independently
+  confirmed as policy positives without exposing protected case data.
 
 ### Changed
 
@@ -34,8 +36,8 @@ Semantic Versioning after the first public release.
 - Wheel ZIP creator metadata is canonicalized before audit so supported OS builds are byte-identical.
 - Profile limitations now report the measured hard-negative and false-positive counts instead of stale
   hard-coded sample values.
-- Expanded hard-negative evidence now records two sentence false positives shared by strict and balanced;
-  balanced adds no sentence false positives versus strict but has an occurrence FP delta of six.
+- Two apparent sentence false positives shared by strict and balanced were corrected as annotation-policy
+  positives after independent re-audit; balanced retains an occurrence FP delta of six versus strict.
 - Source distributions exclude the complete tuning corpus directory so newly added review buffers cannot
   enter public artifacts through an outdated per-file exclusion list.
 - Review queue planning accepts validated prior queues as exclusions so later annotation batches cannot

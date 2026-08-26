@@ -51,4 +51,11 @@ hard-negative 1,517건으로 총 1,935건이다. review 1,565건은 자동 평�
 - positive 500건 목표까지 82건, hard-negative 2,000건 목표까지 483건을 추가 확정한다.
 - 기존 intake review 1,528건과 buffer review 37건을 독립 판정한다.
 - 문장 FP 2건의 원인을 별도 hard-negative 분석으로 분류하고 회귀 테스트 후보를 만든다.
+
+## 후속 재감사
+
+위 문장 FP 2건은 `docs/testing/pf005-common-exact-fp-reaudit.tdd.md` 절차로 다시 판정했다. 두
+reviewer가 모두 문맥 무관 core positive로 합의해 `hard-negative->positive` 2건을 적용했고,
+수정 후 strict와 balanced의 문장 FP는 0건이다. 이 절의 최초 batch 수치는 재감사 전 역사적
+측정으로 보존한다.
 - 별도 custodian이 누출되지 않은 hidden corpus를 구축해 동일 profile 계약으로 재평가한다.

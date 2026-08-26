@@ -63,8 +63,9 @@ aggressive = KoguardEngine(profile="aggressive")
 | `aggressive` | 현재 구현된 모든 matcher | 반복·구분자·공백·자판·자모·Fuzzy 우회까지 검사 |
 
 독립 tuning 1,935건에서 `balanced`는 strict보다 문장 TP 13건을 더 찾고 문장 FP 증분은 0건을
-유지했습니다. 두 profile 모두 hard-negative 1,517건 중 같은 문장 2건을 오탐했고,
-occurrence FP는 balanced가 6건 더 많아 전체 증분 gate는 아직 실패합니다. 따라서
+유지했습니다. 공통 FP로 보였던 2건은 블라인드 재감사에서 모두 정책상 positive로 확정되어
+hard-negative 1,515건의 문장 FP는 0건입니다. 다만 occurrence FP는 balanced가 6건 더 많아
+전체 증분 gate는 아직 실패합니다. 따라서
 `balanced` 기본값은 공개 전 hidden 평가와 함께 재검토 대상이며, 최소 오탐이 우선이면 현재도
 `strict`를 선택할 수 있습니다.
 

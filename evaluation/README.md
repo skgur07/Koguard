@@ -116,7 +116,8 @@ uv run python -m evaluation.review_queue_planner <protected-corpus> `
   --limit 500 --output <protected-queue> --report <protected-report>
 ```
 
-matcher 증분 FP가 annotation 정책과 충돌할 가능성이 있으면 해당 case만 이전 판정값 없이
+matcher 증분 또는 특정 profile의 문장 FP가 annotation 정책과 충돌할 가능성이 있으면 해당
+case만 이전 판정값 없이
 재감사한다. `prepare`는 report의 corpus ID와 canonical SHA-256 결속을 확인하고 이전
 label·span·slice를 제거한다. `apply`는 원문·출처·라이선스·split이 바뀌지 않았는지 검증하고
 독립 판정의 결정 필드만 반영한다. 두 명의 reviewer와 제3 adjudicator 절차는 기존 annotation
@@ -125,6 +126,10 @@ workflow를 그대로 사용한다.
 ```powershell
 uv run python -m evaluation.reaudit_workflow prepare <protected-corpus> <protected-ablation> `
   --matcher choseong --corpus-id koguard-pf005-choseong-fp-reaudit-v1 `
+  --output <protected-reaudit-corpus> --report <protected-report>
+
+uv run python -m evaluation.reaudit_workflow prepare <protected-corpus> <protected-ablation> `
+  --profile exact-alias --corpus-id koguard-pf005-common-exact-fp-reaudit-v1 `
   --output <protected-reaudit-corpus> --report <protected-report>
 
 uv run python -m evaluation.reaudit_workflow apply <protected-corpus> `
@@ -283,11 +288,12 @@ uv run python -m evaluation.profile_report `
 
 공개 보고서는 원본 ablation과 corpus SHA-256, 환경, 세 profile 집계, balanced 증분과 임시
 FP·p95 게이트를 기록한다. 2026-08-26 hard-negative buffer 두 batch까지 반영한 확정 표본은
-1,935건(positive 418, hard-negative 1,517)이다. balanced는 strict보다 문장 TP 13건과
+1,935건(positive 420, hard-negative 1,515)이다. balanced는 strict보다 문장 TP 13건과
 occurrence TP 13건을 더 찾았고 문장 FP 증분은 0건이지만 occurrence FP가 6건 늘었다. strict와
-balanced 모두 같은 문장 2건을 오탐했다. balanced 문장 recall은 60.8%, occurrence recall은
-47.9%이며 전체 FP 증분 0 gate는 실패했다. short-chat p95는 0.0256ms, 최대 입력 p95는
-6.1505ms로 로컬 성능 예산은 통과했다. 평가 입력에서 review 1,565건을 제외했으므로 실서비스
+balanced 공통 FP 2건은 블라인드 재감사에서 모두 정책 positive로 확정돼 문장 FP는 0건이다.
+balanced 문장 recall은 61.0%, occurrence recall은 48.0%이며 전체 FP 증분 0 gate는 실패했다.
+short-chat p95는 0.0258ms, 최대 입력 p95는 6.1941ms로 로컬 성능 예산은 통과했다. 평가
+입력에서 review 1,565건을 제외했으므로 실서비스
 FP나 최종 recall로 일반화할 수 없고, 성능은 세 OS CI에서 다시 확인해야 한다. 계약은
 `profile-report.schema.json` version 1이다.
 

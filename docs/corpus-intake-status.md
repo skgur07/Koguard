@@ -8,8 +8,8 @@
 - 로컬 source별 tuning 후보: 5,250건(기존 4,250건 + 중복 없는 buffer 1,000건)
 - balanced tuning composition: 2,500건
 - hard-negative 중심 review buffer: 1,000건
-- 확정 positive: 418건
-- 확정 hard-negative: 1,517건
+- 확정 positive: 420건
+- 확정 hard-negative: 1,515건
 - 판정 대기: 1,565건(기존 intake 1,528건, buffer 두 batch 37건)
 - hidden evaluation: 0건
 
@@ -29,7 +29,7 @@ MIT로 재배포 가능한 `2runo/Curse-detection-data`의 고정 commit과 arti
 | 자동 민감 패턴 제외 | 25/5,825 |
 | 재배포 권한 확인 | 2,500/2,500 |
 | Koguard-policy finalized | 1,935/3,500 |
-| exact span annotated positive | 418건, 681 occurrence |
+| exact span annotated positive | 420건, 683 occurrence |
 
 2026-08-19에는 공개 재배포 조건을 확인한 독립 원출처 두 개와 Koguard 직접 작성 정책 slice를
 추가했다. `searle-j/KOTE` train 40,000건 중 750건, `kocohub/korean-hate-speech` train
@@ -277,6 +277,19 @@ positive 29건, hard-negative 451건, review 20건이며 privacy 제외·대기�
 recall 47.9%다. strict 대비 문장 TP +13·FP +0, occurrence TP +13·FP +6이다. hard-negative
 문장 FP 2건은 strict와 balanced에 공통이며 전체 occurrence FP 증분 0 gate는 실패한다. 목표까지
 positive 82건과 hard-negative 483건이 더 필요하다.
+
+## 2026-08-26 공통 Exact/Alias FP 재감사
+
+strict와 balanced에 공통으로 나타난 `benign-substring` 문장 FP 2건을 이전 label·span·slice 없이
+별도 queue로 만들었다. 두 독립 reviewer는 모두 2건을 positive로 판정했고 privacy 승인에도
+합의했으며 불일치는 없었다. 이는 matcher 오탐이 아니라 등록 표현을 정상 복합어 문맥 때문에
+hard-negative로 둔 이전 annotation이 문맥 무관 core 정책과 충돌한 것이다. 공개 consensus·적용
+집계는 `evaluation/results/pf005-common-exact-fp-reaudit-v1-*.report.json`에 저장했다.
+
+재감사 뒤 누적 표본은 positive 420건, hard-negative 1,515건, review 1,565건이다. balanced 문장
+TP/FP/FN/TN은 256/0/164/1,515, recall 61.0%이고 occurrence TP/FP/FN은 328/43/355,
+recall 48.0%다. strict 대비 문장 TP +13·FP +0, occurrence TP +13·FP +6이다. 목표까지
+positive 80건과 hard-negative 485건이 더 필요하다.
 
 ## PF-005 종료 전 남은 작업
 

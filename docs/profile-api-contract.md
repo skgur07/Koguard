@@ -93,6 +93,11 @@ hard-negative 1,517)으로 늘었다. strict 문장 TP/FP/FN/TN은 241/2/177/1,5
 254/2/164/1,515다. balanced의 strict 대비 문장 TP +13·FP +0, occurrence TP +13·FP +6으로
 문장 FP 증분은 없지만 두 profile 공통 FP 2건과 occurrence gate 실패가 확인됐다.
 
+공통 FP 2건을 이전 판정 없이 재감사한 결과 두 reviewer가 모두 문맥 무관 core positive로
+합의했다. 수정 후 strict 문장 TP/FP/FN/TN은 243/0/177/1,515, balanced는
+256/0/164/1,515다. balanced 문장 recall은 61.0%이고 occurrence TP/FP/FN은 328/43/355다.
+strict 대비 occurrence FP +6이 남으므로 profile 계약과 전체 gate 실패 상태는 유지한다.
+
 ## 동작 불변 조건
 
 - 모든 profile은 등록된 욕설의 문맥 무관 부분 문자열 Exact 탐지를 보존한다.

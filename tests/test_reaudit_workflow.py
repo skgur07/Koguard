@@ -11,8 +11,10 @@ import pytest
 from evaluation.reaudit_workflow import (
     ReauditWorkflowError,
     apply_reaudit_corpus,
+    canonical_corpus_sha256,
     main,
     prepare_matcher_fp_reaudit,
+    prepare_profile_fp_reaudit,
 )
 
 _PUBLISHED_POLICY_REAUDIT_APPLY_REPORT_PATH = (
@@ -20,6 +22,18 @@ _PUBLISHED_POLICY_REAUDIT_APPLY_REPORT_PATH = (
     / "evaluation"
     / "results"
     / "pf005-policy-reaudit-v1-apply.report.json"
+)
+_PUBLISHED_COMMON_FP_CONSENSUS_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-common-exact-fp-reaudit-v1-consensus.report.json"
+)
+_PUBLISHED_COMMON_FP_APPLY_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-common-exact-fp-reaudit-v1-apply.report.json"
 )
 
 
@@ -73,6 +87,62 @@ def test_prepare_matcher_fp_reaudit_rejects_mismatched_corpus_evidence(tmp_path:
         )
 
 
+def test_prepare_profile_fp_reaudit_selects_only_profile_sentence_false_positives(
+    tmp_path: Path,
+) -> None:
+    corpus_path = _write_json(tmp_path / "corpus.json", _corpus())
+    report_path = _write_json(tmp_path / "ablation.json", _profile_ablation(corpus_path))
+
+    result = prepare_profile_fp_reaudit(
+        corpus_path,
+        report_path,
+        profile="exact-alias",
+        corpus_id="unit-exact-alias-reaudit-v1",
+    )
+
+    assert [case["id"] for case in result.corpus["cases"]] == ["case-a"]
+    assert result.corpus["cases"][0]["label"] == "review"
+    assert result.corpus["cases"][0]["expected_matches"] == []
+    assert result.report["profile"] == "exact-alias"
+    assert result.report["selected_count"] == 1
+    assert result.report["prior_label_counts"] == {
+        "positive": 0,
+        "hard-negative": 1,
+        "review": 0,
+    }
+    serialized = json.dumps(result.report, ensure_ascii=False)
+    for forbidden in ("case-a", "보호 원문", "canonical_term"):
+        assert forbidden not in serialized
+
+
+@pytest.mark.parametrize(
+    "change", ["missing-profile", "duplicate-case", "missing-case", "invalid-outcome"]
+)
+def test_prepare_profile_fp_reaudit_rejects_invalid_case_evidence(
+    tmp_path: Path,
+    change: str,
+) -> None:
+    corpus_path = _write_json(tmp_path / "corpus.json", _corpus())
+    payload = _profile_ablation(corpus_path)
+    if change == "missing-profile":
+        payload["case_results"][0]["profiles"] = []
+    elif change == "duplicate-case":
+        payload["case_results"].append(payload["case_results"][0])
+    elif change == "missing-case":
+        payload["case_results"].pop()
+    else:
+        payload["case_results"][0]["profiles"][0]["sentence_outcome"] = "unknown"
+    report_path = _write_json(tmp_path / "ablation.json", payload)
+
+    with pytest.raises(ReauditWorkflowError, match="profile false-positive evidence is invalid"):
+        prepare_profile_fp_reaudit(
+            corpus_path,
+            report_path,
+            profile="exact-alias",
+            corpus_id="unit-exact-alias-reaudit-v1",
+        )
+
+
 def test_prepare_cli_prints_only_aggregate_counts(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
@@ -103,6 +173,40 @@ def test_prepare_cli_prints_only_aggregate_counts(
     assert "selected=2" in captured.out
     assert captured.err == ""
     for forbidden in ("case-a", "case-b", "보호 원문", "canonical_term"):
+        assert forbidden not in captured.out
+        assert forbidden not in report_path.read_text(encoding="utf-8")
+
+
+def test_prepare_cli_accepts_profile_selector_and_prints_only_aggregates(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    corpus_path = _write_json(tmp_path / "corpus.json", _corpus())
+    ablation_path = _write_json(tmp_path / "ablation.json", _profile_ablation(corpus_path))
+    output_path = tmp_path / "protected.json"
+    report_path = tmp_path / "aggregate.json"
+
+    exit_code = main(
+        [
+            "prepare",
+            str(corpus_path),
+            str(ablation_path),
+            "--profile",
+            "exact-alias",
+            "--corpus-id",
+            "unit-exact-alias-reaudit-v1",
+            "--output",
+            str(output_path),
+            "--report",
+            str(report_path),
+        ]
+    )
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert "selected=1" in captured.out
+    assert captured.err == ""
+    for forbidden in ("case-a", "보호 원문", "canonical_term"):
         assert forbidden not in captured.out
         assert forbidden not in report_path.read_text(encoding="utf-8")
 
@@ -226,9 +330,35 @@ def test_published_policy_reaudit_apply_report_is_aggregate_only() -> None:
         assert f'"{forbidden}"' not in serialized
 
 
-def _ablation(corpus_path: Path) -> dict[str, Any]:
-    from evaluation.reaudit_workflow import canonical_corpus_sha256
+def test_published_common_fp_reaudit_reports_are_aggregate_only() -> None:
+    consensus = json.loads(_PUBLISHED_COMMON_FP_CONSENSUS_REPORT_PATH.read_text(encoding="utf-8"))
+    applied = json.loads(_PUBLISHED_COMMON_FP_APPLY_REPORT_PATH.read_text(encoding="utf-8"))
 
+    assert consensus["batch_counts"] == {
+        "positive": 2,
+        "hard-negative": 0,
+        "review": 0,
+    }
+    assert consensus["quality_counts"] == {
+        "double_reviewed": 2,
+        "consensus": 2,
+        "disagreement": 0,
+        "privacy_excluded": 0,
+        "pending_privacy": 0,
+    }
+    assert applied["applied_count"] == 2
+    assert applied["label_transition_counts"] == {"hard-negative->positive": 2}
+    assert applied["updated_corpus_counts"] == {
+        "positive": 31,
+        "hard-negative": 449,
+        "review": 20,
+    }
+    serialized = json.dumps([consensus, applied], ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def _ablation(corpus_path: Path) -> dict[str, Any]:
     corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
     return {
         "schema_version": 1,
@@ -241,6 +371,30 @@ def _ablation(corpus_path: Path) -> dict[str, Any]:
                 "matcher": "choseong",
                 "new_false_positive_case_ids": ["case-b", "case-a"],
             }
+        ],
+    }
+
+
+def _profile_ablation(corpus_path: Path) -> dict[str, Any]:
+    corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
+    outcomes = {"case-a": "fp", "case-b": "tp", "case-c": "tn"}
+    return {
+        "schema_version": 1,
+        "corpus": {
+            "corpus_ids": [corpus["corpus_id"]],
+            "sha256": canonical_corpus_sha256(corpus),
+        },
+        "case_results": [
+            {
+                "case_id": case_id,
+                "profiles": [
+                    {
+                        "profile_id": "exact-alias",
+                        "sentence_outcome": sentence_outcome,
+                    }
+                ],
+            }
+            for case_id, sentence_outcome in outcomes.items()
         ],
     }
 

@@ -158,14 +158,14 @@ def test_committed_profile_report_is_aggregate_only_and_tracks_balanced_gates() 
 
     assert report["schema_version"] == 1
     assert report["source"]["ablation_report_sha256"] == (
-        "c492f9dddb043c3a1ed0f40e26ea872bfd507cd98e92a1ea224dab74949e6dea"
+        "71d5bda5fbd9654da6fe1fb9c3601c4b948de66741288f55c8872e7914bfa4b7"
     )
     assert report["source"]["corpus"] == {
         "classification": "independent-tuning-provisional",
-        "sha256": "b16467657c5a8bf71bb6968524a6fbf778d5658c576b87d42eeb9a0a4303e395",
+        "sha256": "28de23b1f7b1cd3df950e8e030fdb8d1d2a27e40738cadf2920dca503d4a8bc3",
         "case_count": 1935,
-        "positive_count": 418,
-        "hard_negative_count": 1517,
+        "positive_count": 420,
+        "hard_negative_count": 1515,
         "excluded_review_count": 1565,
         "gold_ready": False,
     }
@@ -179,7 +179,7 @@ def test_committed_profile_report_is_aggregate_only_and_tracks_balanced_gates() 
     assert report["limitations"][:3] == [
         "다중 출처 intake 중 독립 검토로 확정된 1935건만 평가한 tuning 결과다.",
         "gold_ready가 아니며 1565건은 review로 자동 평가에서 제외됐다.",
-        "hard-negative 1517건에서 balanced 문장 FP 2건으로 측정됐으나 "
+        "hard-negative 1515건에서 balanced 문장 FP 0건으로 측정됐으나 "
         "실서비스 전체 FP rate를 일반화할 수 없다.",
     ]
     assert {profile["profile"]: profile["settings"] for profile in report["profiles"]} == {
