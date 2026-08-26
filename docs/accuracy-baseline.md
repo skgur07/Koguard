@@ -35,6 +35,13 @@
 > strict 대비 문장 TP +10·FP +0이지만 occurrence TP +12·FP +4여서 전체 FP 증분 0 gate는
 > 계속 실패한다. 이는 tuning 결과이며 hidden 또는 실서비스 정확도가 아니다.
 
+> 2026-08-26 hard-negative 중심 buffer의 첫 500건을 독립 이중 판정하고 불일치 452건을 제3
+> 판정했다. 새 batch는 positive 12건, hard-negative 471건, review 17건이며 기존 결과와 합친
+> 평가 가능 표본은 1,455건(positive 389, hard-negative 1,066)이다. `balanced` 문장
+> TP/FP/FN/TN은 243/0/146/1,066, recall 62.5%이고 occurrence TP/FP/FN은 316/41/332,
+> recall 48.8%다. strict 대비 문장 TP +10·FP +0, occurrence TP +12·FP +4라는 결론은
+> 유지된다. 추가 hard-negative에서 문장 FP가 없었지만 여전히 tuning이며 hidden 평가가 아니다.
+
 측정일: 2026-07-28
 
 대상: Koguard Exact Match + 반복 모음/특수문자 view + 기본 활성화된 공백·혼합·초성·Alias·
