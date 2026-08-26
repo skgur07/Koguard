@@ -73,11 +73,7 @@ include = [
 exclude = [
     "/evaluation/annotation-work",
     "/evaluation/quarantine",
-    "/evaluation/corpus/tuning/curse-review-intake-v1.json",
-    "/evaluation/corpus/tuning/kote-review-intake-v1.json",
-    "/evaluation/corpus/tuning/beep-review-intake-v1.json",
-    "/evaluation/corpus/tuning/pf005-balanced-review-intake-v1.json",
-    "/evaluation/corpus/tuning/curated-policy-slices-v1.json",
+    "/evaluation/corpus/tuning",
 ]
 
 [tool.ruff]
