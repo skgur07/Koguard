@@ -63,6 +63,59 @@ def prepare_matcher_fp_reaudit(
     ablation = _read_object(ablation_report_path, "ablation report")
     _validate_ablation_source(ablation, source)
     selected_ids = _matcher_false_positive_ids(ablation, matcher)
+    return _prepare_fp_reaudit(
+        source,
+        ablation,
+        selected_ids,
+        corpus_id=corpus_id,
+        selector={"matcher": matcher},
+        output_path=output_path,
+        report_path=report_path,
+    )
+
+
+def prepare_profile_fp_reaudit(
+    corpus_path: Path,
+    ablation_report_path: Path,
+    *,
+    profile: str,
+    corpus_id: str,
+    output_path: Path | None = None,
+    report_path: Path | None = None,
+) -> ReauditResult:
+    """Reset a profile's sentence false positives to blinded review."""
+
+    _validate_output_paths((corpus_path, ablation_report_path), output_path, report_path)
+    profile = _require_identifier(profile, "profile")
+    corpus_id = _require_identifier(corpus_id, "corpus_id")
+    source = _load_corpus(corpus_path, "source corpus")
+    ablation = _read_object(ablation_report_path, "ablation report")
+    _validate_ablation_source(ablation, source)
+    source_case_ids = {
+        cast(str, case["id"]) for case in cast(list[dict[str, Any]], source["cases"])
+    }
+    selected_ids = _profile_false_positive_ids(ablation, profile, source_case_ids)
+    return _prepare_fp_reaudit(
+        source,
+        ablation,
+        selected_ids,
+        corpus_id=corpus_id,
+        selector={"profile": profile},
+        output_path=output_path,
+        report_path=report_path,
+    )
+
+
+def _prepare_fp_reaudit(
+    source: Mapping[str, Any],
+    ablation: Mapping[str, Any],
+    selected_ids: set[str],
+    *,
+    corpus_id: str,
+    selector: Mapping[str, str],
+    output_path: Path | None,
+    report_path: Path | None,
+) -> ReauditResult:
     source_cases = cast(list[dict[str, Any]], source["cases"])
     source_by_id = {cast(str, case["id"]): case for case in source_cases}
     missing = selected_ids - source_by_id.keys()
@@ -83,7 +136,7 @@ def prepare_matcher_fp_reaudit(
     corpus = {"schema_version": 1, "corpus_id": corpus_id, "cases": selected}
     report = {
         "schema_version": 1,
-        "matcher": matcher,
+        **selector,
         "source_corpus_sha256": canonical_corpus_sha256(source),
         "ablation_report_sha256": _canonical_sha256(ablation),
         "selected_count": len(selected),
@@ -246,6 +299,39 @@ def _matcher_false_positive_ids(ablation: Mapping[str, Any], matcher: str) -> se
     return set(cast(list[str], raw_ids))
 
 
+def _profile_false_positive_ids(
+    ablation: Mapping[str, Any], profile: str, expected_case_ids: set[str]
+) -> set[str]:
+    rows = ablation.get("case_results")
+    if not isinstance(rows, list) or not rows:
+        raise ReauditWorkflowError("profile false-positive evidence is invalid")
+    case_ids: set[str] = set()
+    false_positive_ids: set[str] = set()
+    for row in rows:
+        if not isinstance(row, dict) or not isinstance(row.get("case_id"), str):
+            raise ReauditWorkflowError("profile false-positive evidence is invalid")
+        case_id = cast(str, row["case_id"])
+        profiles = row.get("profiles")
+        matches = (
+            [
+                item
+                for item in profiles
+                if isinstance(item, dict) and item.get("profile_id") == profile
+            ]
+            if isinstance(profiles, list)
+            else []
+        )
+        outcome = matches[0].get("sentence_outcome") if len(matches) == 1 else None
+        if case_id in case_ids or outcome not in {"tp", "fp", "fn", "tn"}:
+            raise ReauditWorkflowError("profile false-positive evidence is invalid")
+        case_ids.add(case_id)
+        if outcome == "fp":
+            false_positive_ids.add(case_id)
+    if case_ids != expected_case_ids or not false_positive_ids:
+        raise ReauditWorkflowError("profile false-positive evidence is invalid")
+    return false_positive_ids
+
+
 def _load_corpus(path: Path, description: str) -> dict[str, Any]:
     try:
         validate_corpus_paths([path])
@@ -304,10 +390,12 @@ def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    prepare = subparsers.add_parser("prepare", help="prepare a blinded matcher FP re-audit")
+    prepare = subparsers.add_parser("prepare", help="prepare a blinded FP re-audit")
     prepare.add_argument("corpus", type=Path)
     prepare.add_argument("ablation", type=Path)
-    prepare.add_argument("--matcher", required=True)
+    selector = prepare.add_mutually_exclusive_group(required=True)
+    selector.add_argument("--matcher")
+    selector.add_argument("--profile")
     prepare.add_argument("--corpus-id", required=True)
     prepare.add_argument("--output", required=True, type=Path)
     prepare.add_argument("--report", required=True, type=Path)
@@ -327,14 +415,24 @@ def main(argv: Sequence[str] | None = None) -> int:
     arguments = _parser().parse_args(argv)
     try:
         if arguments.command == "prepare":
-            result = prepare_matcher_fp_reaudit(
-                arguments.corpus,
-                arguments.ablation,
-                matcher=arguments.matcher,
-                corpus_id=arguments.corpus_id,
-                output_path=arguments.output,
-                report_path=arguments.report,
-            )
+            if arguments.matcher is not None:
+                result = prepare_matcher_fp_reaudit(
+                    arguments.corpus,
+                    arguments.ablation,
+                    matcher=arguments.matcher,
+                    corpus_id=arguments.corpus_id,
+                    output_path=arguments.output,
+                    report_path=arguments.report,
+                )
+            else:
+                result = prepare_profile_fp_reaudit(
+                    arguments.corpus,
+                    arguments.ablation,
+                    profile=arguments.profile,
+                    corpus_id=arguments.corpus_id,
+                    output_path=arguments.output,
+                    report_path=arguments.report,
+                )
             print(f"selected={result.report['selected_count']}; blinded=true; gold_ready=false")
         else:
             result = apply_reaudit_corpus(
