@@ -88,6 +88,11 @@ occurrence는 TP +12와 함께 FP +4가 발생한다. 문장 오탐 gate 개선�
 유지됐다. hard-negative 표본 확대에도 문장 FP는 0건이지만 occurrence gate와 hidden 검증이
 남아 있어 기본 profile 계약은 바꾸지 않는다.
 
+같은 날 이전 queue를 제외한 나머지 500건 판정을 더해 표본은 1,935건(positive 418,
+hard-negative 1,517)으로 늘었다. strict 문장 TP/FP/FN/TN은 241/2/177/1,515, balanced는
+254/2/164/1,515다. balanced의 strict 대비 문장 TP +13·FP +0, occurrence TP +13·FP +6으로
+문장 FP 증분은 없지만 두 profile 공통 FP 2건과 occurrence gate 실패가 확인됐다.
+
 ## 동작 불변 조건
 
 - 모든 profile은 등록된 욕설의 문맥 무관 부분 문자열 Exact 탐지를 보존한다.

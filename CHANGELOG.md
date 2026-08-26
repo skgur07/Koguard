@@ -24,6 +24,8 @@ Semantic Versioning after the first public release.
   project-authored hard-negative targets.
 - Independent double review and third-review adjudication evidence for the first 500-case hard-negative
   buffer batch, expanding finalized tuning evidence to 1,455 cases.
+- Independent review of the disjoint second 500-case hard-negative buffer batch, expanding finalized
+  tuning evidence to 1,935 cases and completing case-level review of the full 1,000-case buffer.
 
 ### Changed
 
@@ -32,8 +34,8 @@ Semantic Versioning after the first public release.
 - Wheel ZIP creator metadata is canonicalized before audit so supported OS builds are byte-identical.
 - Profile limitations now report the measured hard-negative and false-positive counts instead of stale
   hard-coded sample values.
-- The Choseong policy re-audit corrected one prior hard-negative, and balanced tuning now has zero sentence
-  false positives while retaining a documented occurrence FP delta of four versus strict.
+- Expanded hard-negative evidence now records two sentence false positives shared by strict and balanced;
+  balanced adds no sentence false positives versus strict but has an occurrence FP delta of six.
 - Source distributions exclude the complete tuning corpus directory so newly added review buffers cannot
   enter public artifacts through an outdated per-file exclusion list.
 - Review queue planning accepts validated prior queues as exclusions so later annotation batches cannot

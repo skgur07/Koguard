@@ -100,6 +100,10 @@ uv run python -m evaluation.ablation_runner `
 8. 2026-08-26 hard-negative buffer의 첫 500건을 독립 판정해 12 positive, 471 hard-negative를
    확정했다. 총 1,455건에서 balanced 문장 TP/FP/FN/TN은 243/0/146/1,066이고 occurrence
    TP/FP/FN은 316/41/332다. strict 대비 문장 TP +10·FP +0, occurrence TP +12·FP +4다.
-9. 다음 결정은 남은 2,045건의 독립 판정과 hidden 평가이며,
+9. 같은 날 이전 queue와 겹치지 않는 나머지 500건을 독립 판정해 29 positive,
+   451 hard-negative를 확정했다. 총 1,935건에서 balanced 문장 TP/FP/FN/TN은
+   254/2/164/1,515이고 occurrence TP/FP/FN은 326/45/355다. strict 대비 문장 TP +13·FP +0,
+   occurrence TP +13·FP +6이다.
+10. 다음 결정은 남은 1,565건의 독립 판정, 공통 문장 FP 2건 분석과 hidden 평가이며,
    그 전에는
    현재 profile 수치를 실서비스 전체로 일반화하지 않는다.
