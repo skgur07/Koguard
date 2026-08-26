@@ -103,14 +103,16 @@ batch·merge 결과 원문은 `evaluation/annotation-work/` 또는 저장소 밖
 
 남은 review를 단순 ID 순서로 자르지 않고 출처별로 균형 있게 선택하려면 보호 corpus에서 다음
 명령을 실행한다. 선택은 source별 stable SHA-256 rank를 round-robin하며 detector prediction,
-upstream label, 기존 확정 label을 사용하지 않는다. 현재 보호 corpus에서는 네 출처에서 125건씩
-총 500건을 선택한다. 이는 reviewer 구성 편향을 줄이는 queue일 뿐 hard-negative label을
+upstream label, 기존 확정 label을 사용하지 않는다. 후속 batch는 이전 queue를 반복 가능한
+`--exclude-corpus`로 전달해 stable ID와 원문·출처·라이선스·split 일치를 확인하고 이미 판정한
+case를 제외한다. 이는 reviewer 구성 편향과 중복을 줄이는 queue일 뿐 hard-negative label을
 보장하지 않는다.
 
 ```powershell
 uv run python -m evaluation.review_queue_planner <protected-corpus> `
   --queue-id pf005-balanced-batch-002 `
   --corpus-id koguard-pf005-balanced-batch-002-review-queue `
+  --exclude-corpus <previous-protected-queue> `
   --limit 500 --output <protected-queue> --report <protected-report>
 ```
 

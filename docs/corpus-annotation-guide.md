@@ -215,7 +215,10 @@ case만 별도 corpus에 복사하고, 이전 label·span·slice를 제거한 �
 
 남은 review에서 다음 500건을 고를 때는 `evaluation.review_queue_planner`의
 `source-round-robin-sha256-v1`을 사용한다. 이 선택은 detector prediction, upstream label, 기존
-확정 label을 사용하지 않고 출처별 review pool을 결정적으로 순회한다.
+확정 label을 사용하지 않고 출처별 review pool을 결정적으로 순회한다. 같은 source buffer에서
+후속 queue를 만들 때는 이전 보호 queue를 `--exclude-corpus`로 반복 전달한다. planner는 이전
+case의 stable ID와 원문·출처·라이선스·split이 source와 같은지 확인하고 선택 overlap 0건을
+aggregate report에 기록한다.
 
 ## 9. 검증 명령
 

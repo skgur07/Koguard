@@ -36,6 +36,8 @@ Semantic Versioning after the first public release.
   false positives while retaining a documented occurrence FP delta of four versus strict.
 - Source distributions exclude the complete tuning corpus directory so newly added review buffers cannot
   enter public artifacts through an outdated per-file exclusion list.
+- Review queue planning accepts validated prior queues as exclusions so later annotation batches cannot
+  select an already reviewed case.
 
 ### Security
 

@@ -38,26 +38,31 @@ def prepare_review_queue(
     queue_id: str,
     corpus_id: str,
     limit: int = 500,
+    exclude_corpus_paths: Sequence[Path] = (),
     output_path: Path | None = None,
     report_path: Path | None = None,
 ) -> ReviewQueueResult:
     """Select a deterministic round-robin queue without using labels or predictions."""
 
-    _validate_output_paths(corpus_path, output_path, report_path)
+    _validate_output_paths(corpus_path, exclude_corpus_paths, output_path, report_path)
     queue_id = _require_identifier(queue_id, "queue_id")
     corpus_id = _require_identifier(corpus_id, "corpus_id")
     if type(limit) is not int or not 1 <= limit <= _MAX_BATCH_SIZE:
         raise ReviewQueueError(f"limit must be between 1 and {_MAX_BATCH_SIZE}")
     source = _load_corpus(corpus_path)
-    review_cases = [
-        case for case in cast(list[dict[str, Any]], source["cases"]) if case["label"] == "review"
-    ]
+    source_cases = cast(list[dict[str, Any]], source["cases"])
+    source_by_id = {cast(str, case["id"]): case for case in source_cases}
+    excluded_ids = _load_excluded_case_ids(exclude_corpus_paths, source_by_id)
+    review_cases = [case for case in source_cases if case["label"] == "review"]
     if not review_cases:
         raise ReviewQueueError("source corpus contains no review cases")
+    eligible_cases = [case for case in review_cases if case["id"] not in excluded_ids]
+    if not eligible_cases:
+        raise ReviewQueueError("no eligible review cases remain after exclusions")
 
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     source_details: dict[str, dict[str, Any]] = {}
-    for case in review_cases:
+    for case in eligible_cases:
         source_data = cast(dict[str, Any], case["source"])
         source_key = _canonical_sha256(source_data)
         grouped[source_key].append(case)
@@ -73,7 +78,7 @@ def prepare_review_queue(
     selected: list[dict[str, Any]] = []
     selected_by_source: dict[str, int] = defaultdict(int)
     source_keys = sorted(grouped)
-    while len(selected) < min(limit, len(review_cases)):
+    while len(selected) < min(limit, len(eligible_cases)):
         advanced = False
         for source_key in source_keys:
             index = selected_by_source[source_key]
@@ -83,7 +88,7 @@ def prepare_review_queue(
             selected.append(copy.deepcopy(cases[index]))
             selected_by_source[source_key] += 1
             advanced = True
-            if len(selected) == min(limit, len(review_cases)):
+            if len(selected) == min(limit, len(eligible_cases)):
                 break
         if not advanced:
             break
@@ -104,7 +109,12 @@ def prepare_review_queue(
         "queue_id": queue_id,
         "selection": "source-round-robin-sha256-v1",
         "available_review_count": len(review_cases),
+        "excluded_case_count": len(excluded_ids),
+        "eligible_review_count": len(eligible_cases),
         "selected_count": len(selected),
+        "selected_existing_overlap_count": len(
+            {cast(str, case["id"]) for case in selected} & excluded_ids
+        ),
         "source_statistics": statistics,
         "uses_detector_predictions": False,
         "uses_upstream_labels": False,
@@ -132,6 +142,29 @@ def _load_corpus(path: Path) -> dict[str, Any]:
     return cast(dict[str, Any], payload)
 
 
+def _load_excluded_case_ids(
+    paths: Sequence[Path],
+    source_by_id: Mapping[str, dict[str, Any]],
+) -> set[str]:
+    excluded_ids: set[str] = set()
+    for path in paths:
+        excluded = _load_corpus(path)
+        for case in cast(list[dict[str, Any]], excluded["cases"]):
+            case_id = cast(str, case["id"])
+            source_case = source_by_id.get(case_id)
+            if source_case is None or not _same_case_identity(source_case, case):
+                raise ReviewQueueError("exclusion corpus does not match source corpus")
+            if case_id in excluded_ids:
+                raise ReviewQueueError("exclusion corpora contain overlapping cases")
+            excluded_ids.add(case_id)
+    return excluded_ids
+
+
+def _same_case_identity(source: Mapping[str, Any], excluded: Mapping[str, Any]) -> bool:
+    identity_fields = ("id", "text", "source", "license", "split")
+    return all(source.get(field) == excluded.get(field) for field in identity_fields)
+
+
 def _canonical_sha256(payload: object) -> str:
     serialized = json.dumps(
         payload,
@@ -149,11 +182,14 @@ def _require_identifier(value: object, name: str) -> str:
 
 
 def _validate_output_paths(
-    input_path: Path, output_path: Path | None, report_path: Path | None
+    input_path: Path,
+    exclude_corpus_paths: Sequence[Path],
+    output_path: Path | None,
+    report_path: Path | None,
 ) -> None:
-    resolved_input = input_path.resolve()
+    inputs = {input_path.resolve(), *(path.resolve() for path in exclude_corpus_paths)}
     outputs = [path.resolve() for path in (output_path, report_path) if path is not None]
-    if resolved_input in outputs or len(set(outputs)) != len(outputs):
+    if any(path in inputs for path in outputs) or len(set(outputs)) != len(outputs):
         raise ReviewQueueError("queue outputs must not overwrite inputs or each other")
 
 
@@ -171,6 +207,13 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--queue-id", required=True)
     parser.add_argument("--corpus-id", required=True)
     parser.add_argument("--limit", type=int, default=500)
+    parser.add_argument(
+        "--exclude-corpus",
+        action="append",
+        default=[],
+        type=Path,
+        help="previous protected queue to exclude; repeat for multiple queues",
+    )
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--report", required=True, type=Path)
     return parser
@@ -186,6 +229,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             queue_id=arguments.queue_id,
             corpus_id=arguments.corpus_id,
             limit=arguments.limit,
+            exclude_corpus_paths=arguments.exclude_corpus,
             output_path=arguments.output,
             report_path=arguments.report,
         )
@@ -194,6 +238,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 1
     print(
         f"available={result.report['available_review_count']}; "
+        f"excluded={result.report['excluded_case_count']}; "
+        f"eligible={result.report['eligible_review_count']}; "
         f"selected={result.report['selected_count']}; gold_ready=false"
     )
     return 0

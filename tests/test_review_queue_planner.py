@@ -71,6 +71,66 @@ def test_prepare_review_queue_rejects_limit_above_annotation_contract(tmp_path: 
         )
 
 
+def test_prepare_review_queue_excludes_prior_queue_without_overlap(tmp_path: Path) -> None:
+    source = _corpus()
+    corpus_path = _write_json(tmp_path / "corpus.json", source)
+    prior_path = _write_json(
+        tmp_path / "prior.json",
+        {
+            "schema_version": 1,
+            "corpus_id": "unit-prior-queue",
+            "cases": copy.deepcopy(source["cases"][:2]),
+        },
+    )
+
+    result = prepare_review_queue(
+        corpus_path,
+        queue_id="unit-queue-v2",
+        corpus_id="unit-review-queue-v2",
+        limit=4,
+        exclude_corpus_paths=[prior_path],
+    )
+
+    prior_ids = {case["id"] for case in source["cases"][:2]}
+    selected_ids = {case["id"] for case in result.corpus["cases"]}
+    assert selected_ids.isdisjoint(prior_ids)
+    assert len(selected_ids) == 4
+    assert result.report["available_review_count"] == 6
+    assert result.report["excluded_case_count"] == 2
+    assert result.report["eligible_review_count"] == 4
+    assert result.report["selected_existing_overlap_count"] == 0
+
+
+@pytest.mark.parametrize("change", ["unknown-id", "changed-text"])
+def test_prepare_review_queue_rejects_exclusion_not_matching_source(
+    tmp_path: Path,
+    change: str,
+) -> None:
+    source = _corpus()
+    excluded_case = copy.deepcopy(source["cases"][0])
+    if change == "unknown-id":
+        excluded_case["id"] = "unknown-case"
+    else:
+        excluded_case["text"] = "변조된 원문"
+    corpus_path = _write_json(tmp_path / "corpus.json", source)
+    prior_path = _write_json(
+        tmp_path / "prior.json",
+        {
+            "schema_version": 1,
+            "corpus_id": "unit-prior-queue",
+            "cases": [excluded_case],
+        },
+    )
+
+    with pytest.raises(ReviewQueueError, match="exclusion corpus does not match source corpus"):
+        prepare_review_queue(
+            corpus_path,
+            queue_id="unit-queue-v2",
+            corpus_id="unit-review-queue-v2",
+            exclude_corpus_paths=[prior_path],
+        )
+
+
 def test_review_queue_cli_prints_only_aggregate_counts(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
@@ -97,7 +157,7 @@ def test_review_queue_cli_prints_only_aggregate_counts(
 
     captured = capsys.readouterr()
     assert exit_code == 0
-    assert "available=6; selected=5" in captured.out
+    assert "available=6; excluded=0; eligible=6; selected=5" in captured.out
     assert captured.err == ""
     for forbidden in ("case-a", "원문 A", "text", "case_id"):
         assert forbidden not in captured.out
