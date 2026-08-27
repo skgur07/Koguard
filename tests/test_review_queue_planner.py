@@ -101,6 +101,91 @@ def test_prepare_review_queue_excludes_prior_queue_without_overlap(tmp_path: Pat
     assert result.report["selected_existing_overlap_count"] == 0
 
 
+def test_prepare_review_queue_excludes_prior_annotation_batch_without_overlap(
+    tmp_path: Path,
+) -> None:
+    source = _corpus()
+    corpus_path = _write_json(tmp_path / "corpus.json", source)
+    prior_path = _write_json(
+        tmp_path / "prior-annotations.json",
+        _annotation_batch(source, source["cases"][:2]),
+    )
+
+    result = prepare_review_queue(
+        corpus_path,
+        queue_id="unit-queue-v2",
+        corpus_id="unit-review-queue-v2",
+        limit=4,
+        exclude_annotation_batch_paths=[prior_path],
+    )
+
+    prior_ids = {case["id"] for case in source["cases"][:2]}
+    selected_ids = {case["id"] for case in result.corpus["cases"]}
+    assert selected_ids.isdisjoint(prior_ids)
+    assert len(selected_ids) == 4
+    assert result.report["excluded_case_count"] == 2
+    assert result.report["excluded_annotation_case_count"] == 2
+    assert result.report["excluded_review_case_count"] == 2
+    assert result.report["selected_existing_overlap_count"] == 0
+
+
+def test_prepare_review_queue_unions_cross_format_exclusions_and_reports_overlap(
+    tmp_path: Path,
+) -> None:
+    source = _corpus()
+    corpus_path = _write_json(tmp_path / "corpus.json", source)
+    prior_corpus_path = _write_json(
+        tmp_path / "prior.json",
+        {
+            "schema_version": 1,
+            "corpus_id": "unit-prior-queue",
+            "cases": copy.deepcopy(source["cases"][:2]),
+        },
+    )
+    prior_annotations_path = _write_json(
+        tmp_path / "prior-annotations.json",
+        _annotation_batch(source, source["cases"][1:3]),
+    )
+
+    result = prepare_review_queue(
+        corpus_path,
+        queue_id="unit-queue-v2",
+        corpus_id="unit-review-queue-v2",
+        limit=3,
+        exclude_corpus_paths=[prior_corpus_path],
+        exclude_annotation_batch_paths=[prior_annotations_path],
+    )
+
+    assert result.report["excluded_case_count"] == 3
+    assert result.report["excluded_input_overlap_count"] == 1
+    assert result.report["selected_existing_overlap_count"] == 0
+
+
+@pytest.mark.parametrize("change", ["wrong-corpus", "unknown-id", "changed-text"])
+def test_prepare_review_queue_rejects_annotation_batch_not_matching_source(
+    tmp_path: Path,
+    change: str,
+) -> None:
+    source = _corpus()
+    batch = _annotation_batch(source, source["cases"][:1])
+    if change == "wrong-corpus":
+        batch["corpus_id"] = "another-corpus"
+    elif change == "unknown-id":
+        batch["cases"][0]["case_id"] = "unknown-case"
+    else:
+        batch["cases"][0]["text"] = "변조된 원문"
+    corpus_path = _write_json(tmp_path / "corpus.json", source)
+    prior_path = _write_json(tmp_path / "prior-annotations.json", batch)
+
+    with pytest.raises(ReviewQueueError, match="annotation exclusion does not match source corpus"):
+        prepare_review_queue(
+            corpus_path,
+            queue_id="unit-queue-v2",
+            corpus_id="unit-review-queue-v2",
+            exclude_annotation_batch_paths=[prior_path],
+        )
+
+
 @pytest.mark.parametrize("change", ["unknown-id", "changed-text"])
 def test_prepare_review_queue_rejects_exclusion_not_matching_source(
     tmp_path: Path,
@@ -164,6 +249,43 @@ def test_review_queue_cli_prints_only_aggregate_counts(
         assert forbidden not in report_path.read_text(encoding="utf-8")
 
 
+def test_review_queue_cli_accepts_annotation_batch_exclusion(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    source = _corpus()
+    corpus_path = _write_json(tmp_path / "corpus.json", source)
+    prior_path = _write_json(
+        tmp_path / "prior-annotations.json",
+        _annotation_batch(source, source["cases"][:2]),
+    )
+    output_path = tmp_path / "protected.json"
+    report_path = tmp_path / "aggregate.json"
+
+    exit_code = main(
+        [
+            str(corpus_path),
+            "--queue-id",
+            "unit-queue-v2",
+            "--corpus-id",
+            "unit-review-queue-v2",
+            "--limit",
+            "4",
+            "--exclude-annotation-batch",
+            str(prior_path),
+            "--output",
+            str(output_path),
+            "--report",
+            str(report_path),
+        ]
+    )
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert "available=6; excluded=2; eligible=4; selected=4" in captured.out
+    assert captured.err == ""
+
+
 def _corpus() -> dict[str, Any]:
     cases = [
         _case("case-a", "원문 A", "Source A"),
@@ -201,6 +323,28 @@ def _case(case_id: str, text: str, source_name: str) -> dict[str, Any]:
         "license": "MIT",
         "split": "tuning",
         "notes": "Pending.",
+    }
+
+
+def _annotation_batch(source: dict[str, Any], cases: list[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        "schema_version": 1,
+        "annotation_set_id": "unit-prior-annotations",
+        "reviewer_id": "opaque-reviewer",
+        "corpus_id": source["corpus_id"],
+        "corpus_sha256": "0" * 64,
+        "cases": [
+            {
+                "case_id": case["id"],
+                "text": case["text"],
+                "privacy_status": "approved",
+                "label": "review",
+                "expected_matches": [],
+                "slices": ["unadjudicated-intake"],
+                "notes": "Prior review.",
+            }
+            for case in cases
+        ],
     }
 
 

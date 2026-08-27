@@ -17,7 +17,25 @@ from typing import Any, cast
 from evaluation.corpus_validator import CorpusValidationError, validate_corpus_paths
 
 _ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._-]{0,127}$")
+_SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 _MAX_BATCH_SIZE = 500
+_ANNOTATION_BATCH_FIELDS = {
+    "schema_version",
+    "annotation_set_id",
+    "reviewer_id",
+    "corpus_id",
+    "corpus_sha256",
+    "cases",
+}
+_ANNOTATION_FIELDS = {
+    "case_id",
+    "text",
+    "privacy_status",
+    "label",
+    "expected_matches",
+    "slices",
+    "notes",
+}
 
 
 class ReviewQueueError(ValueError):
@@ -39,12 +57,18 @@ def prepare_review_queue(
     corpus_id: str,
     limit: int = 500,
     exclude_corpus_paths: Sequence[Path] = (),
+    exclude_annotation_batch_paths: Sequence[Path] = (),
     output_path: Path | None = None,
     report_path: Path | None = None,
 ) -> ReviewQueueResult:
     """Select a deterministic round-robin queue without using labels or predictions."""
 
-    _validate_output_paths(corpus_path, exclude_corpus_paths, output_path, report_path)
+    _validate_output_paths(
+        corpus_path,
+        (*exclude_corpus_paths, *exclude_annotation_batch_paths),
+        output_path,
+        report_path,
+    )
     queue_id = _require_identifier(queue_id, "queue_id")
     corpus_id = _require_identifier(corpus_id, "corpus_id")
     if type(limit) is not int or not 1 <= limit <= _MAX_BATCH_SIZE:
@@ -52,10 +76,20 @@ def prepare_review_queue(
     source = _load_corpus(corpus_path)
     source_cases = cast(list[dict[str, Any]], source["cases"])
     source_by_id = {cast(str, case["id"]): case for case in source_cases}
-    excluded_ids = _load_excluded_case_ids(exclude_corpus_paths, source_by_id)
+    excluded_corpus_ids = _load_excluded_case_ids(exclude_corpus_paths, source_by_id)
+    excluded_annotation_ids = _load_annotation_excluded_case_ids(
+        exclude_annotation_batch_paths,
+        source_corpus_id=cast(str, source["corpus_id"]),
+        source_by_id=source_by_id,
+    )
+    exclusion_input_overlap_count = len(excluded_corpus_ids & excluded_annotation_ids)
+    excluded_ids = excluded_corpus_ids | excluded_annotation_ids
     review_cases = [case for case in source_cases if case["label"] == "review"]
     if not review_cases:
         raise ReviewQueueError("source corpus contains no review cases")
+    excluded_review_case_count = len(
+        {cast(str, case["id"]) for case in review_cases} & excluded_ids
+    )
     eligible_cases = [case for case in review_cases if case["id"] not in excluded_ids]
     if not eligible_cases:
         raise ReviewQueueError("no eligible review cases remain after exclusions")
@@ -110,6 +144,10 @@ def prepare_review_queue(
         "selection": "source-round-robin-sha256-v1",
         "available_review_count": len(review_cases),
         "excluded_case_count": len(excluded_ids),
+        "excluded_corpus_case_count": len(excluded_corpus_ids),
+        "excluded_annotation_case_count": len(excluded_annotation_ids),
+        "excluded_input_overlap_count": exclusion_input_overlap_count,
+        "excluded_review_case_count": excluded_review_case_count,
         "eligible_review_count": len(eligible_cases),
         "selected_count": len(selected),
         "selected_existing_overlap_count": len(
@@ -165,6 +203,39 @@ def _same_case_identity(source: Mapping[str, Any], excluded: Mapping[str, Any]) 
     return all(source.get(field) == excluded.get(field) for field in identity_fields)
 
 
+def _load_annotation_excluded_case_ids(
+    paths: Sequence[Path],
+    *,
+    source_corpus_id: str,
+    source_by_id: Mapping[str, dict[str, Any]],
+) -> set[str]:
+    excluded_ids: set[str] = set()
+    for path in paths:
+        batch = _read_object(path, "annotation exclusion")
+        cases = batch.get("cases")
+        if (
+            set(batch) != _ANNOTATION_BATCH_FIELDS
+            or batch.get("schema_version") != 1
+            or batch.get("corpus_id") != source_corpus_id
+            or _ID_PATTERN.fullmatch(str(batch.get("annotation_set_id"))) is None
+            or _ID_PATTERN.fullmatch(str(batch.get("reviewer_id"))) is None
+            or _SHA256_PATTERN.fullmatch(str(batch.get("corpus_sha256"))) is None
+            or not isinstance(cases, list)
+            or not 1 <= len(cases) <= _MAX_BATCH_SIZE
+        ):
+            raise ReviewQueueError("annotation exclusion does not match source corpus")
+        for annotation in cases:
+            if not isinstance(annotation, dict) or set(annotation) != _ANNOTATION_FIELDS:
+                raise ReviewQueueError("annotation exclusion does not match source corpus")
+            case_id = annotation.get("case_id")
+            text = annotation.get("text")
+            source_case = source_by_id.get(case_id) if isinstance(case_id, str) else None
+            if source_case is None or text != source_case["text"] or case_id in excluded_ids:
+                raise ReviewQueueError("annotation exclusion does not match source corpus")
+            excluded_ids.add(cast(str, case_id))
+    return excluded_ids
+
+
 def _canonical_sha256(payload: object) -> str:
     serialized = json.dumps(
         payload,
@@ -173,6 +244,16 @@ def _canonical_sha256(payload: object) -> str:
         separators=(",", ":"),
     ).encode("utf-8")
     return hashlib.sha256(serialized).hexdigest()
+
+
+def _read_object(path: Path, description: str) -> dict[str, Any]:
+    try:
+        payload: object = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ReviewQueueError(f"failed to read {description}") from exc
+    if not isinstance(payload, dict):
+        raise ReviewQueueError(f"{description} root must be an object")
+    return cast(dict[str, Any], payload)
 
 
 def _require_identifier(value: object, name: str) -> str:
@@ -214,6 +295,13 @@ def _parser() -> argparse.ArgumentParser:
         type=Path,
         help="previous protected queue to exclude; repeat for multiple queues",
     )
+    parser.add_argument(
+        "--exclude-annotation-batch",
+        action="append",
+        default=[],
+        type=Path,
+        help="previous protected annotation batch to exclude; repeat for multiple batches",
+    )
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--report", required=True, type=Path)
     return parser
@@ -230,6 +318,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             corpus_id=arguments.corpus_id,
             limit=arguments.limit,
             exclude_corpus_paths=arguments.exclude_corpus,
+            exclude_annotation_batch_paths=arguments.exclude_annotation_batch,
             output_path=arguments.output,
             report_path=arguments.report,
         )

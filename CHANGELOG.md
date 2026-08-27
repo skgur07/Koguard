@@ -42,6 +42,8 @@ Semantic Versioning after the first public release.
   enter public artifacts through an outdated per-file exclusion list.
 - Review queue planning accepts validated prior queues as exclusions so later annotation batches cannot
   select an already reviewed case.
+- Review queue planning also accepts prior annotation batches, reports historical cross-format overlap,
+  and excludes the union before selecting a new batch.
 
 ### Security
 
