@@ -1,16 +1,16 @@
 # PF-005 초기 corpus 구축 상태
 
-- 기준일: 2026-08-26
+- 기준일: 2026-08-27
 - 상태: 다중 출처 balanced intake 완료, 기존 100건과 500건 batch 두 개, 정책 재감사 및
-  hard-negative buffer 1,000건 전체 독립 판정·제3 판정 완료,
+  hard-negative buffer 1,000건 전체와 중복 없는 balanced batch-003 500건 독립 판정·제3 판정 완료,
   전체 gold corpus 미완료
 - annotation workflow: 이중 판정·불일치 제3 판정 구현 및 실제 batch 검증 완료
 - 로컬 source별 tuning 후보: 5,250건(기존 4,250건 + 중복 없는 buffer 1,000건)
 - balanced tuning composition: 2,500건
 - hard-negative 중심 review buffer: 1,000건
-- 확정 positive: 420건
-- 확정 hard-negative: 1,515건
-- 판정 대기: 1,565건(기존 intake 1,528건, buffer 두 batch 37건)
+- 확정 positive: 538건
+- 확정 hard-negative: 1,825건
+- 판정 대기: 1,137건(기존 intake 1,100건, buffer 두 batch 37건)
 - hidden evaluation: 0건
 
 ## 현재 결과
@@ -28,8 +28,8 @@ MIT로 재배포 가능한 `2runo/Curse-detection-data`의 고정 commit과 arti
 | direct/normalized leaks | 0 |
 | 자동 민감 패턴 제외 | 25/5,825 |
 | 재배포 권한 확인 | 2,500/2,500 |
-| Koguard-policy finalized | 1,935/3,500 |
-| exact span annotated positive | 420건, 683 occurrence |
+| Koguard-policy finalized | 2,363/3,500 |
+| exact span annotated positive | 538건, 832 occurrence |
 
 2026-08-19에는 공개 재배포 조건을 확인한 독립 원출처 두 개와 Koguard 직접 작성 정책 slice를
 추가했다. `searle-j/KOTE` train 40,000건 중 750건, `kocohub/korean-hate-speech` train
@@ -40,7 +40,7 @@ spec v2에 기록했다. 원문은 수동 privacy review 전까지 계속 Git·s
 최종 review composition은 첫 batch 확정 92건을 보존한 2runo 750건, KOTE 750건, Korean Hate
 Speech 750건, Koguard curated 250건으로 총 2,500건이다. 출처별 비중은 `30%/30%/30%/10%`,
 직접·NFKC+casefold 중복은 0건이며 30% 상한을 통과했다. 이 수치는 source 편향 gate만 통과한
-것이고, 독립 판정 뒤에도 남은 1,565건을 gold로 승격하거나 실서비스 분포를 보장하지 않는다.
+것이고, 독립 판정 뒤에도 남은 1,137건을 gold로 승격하거나 실서비스 분포를 보장하지 않는다.
 
 ## 재현성
 
@@ -105,8 +105,8 @@ balanced composition은 어느 한 source도 30%를 넘지 않아 이슈의 수�
 시기·annotation 목적이 Koguard lexical 정책과 다르므로 실서비스 대표성을 보장하지 않는다.
 Koguard 직접 작성 250건도 정책 경계와 slice를 보강하는 합성 자료이지 실사용 댓글이 아니다.
 
-`unadjudicated-intake`는 실제 평가 slice가 아니라 판정 대기 상태다. 확정 1,935건은 실제 slice별
-TP·FP·FN을 계산할 수 있지만, review 1,565건은 runner가 자동 평가하지 않는다. 따라서 현재
+`unadjudicated-intake`는 실제 평가 slice가 아니라 판정 대기 상태다. 확정 2,363건은 실제 slice별
+TP·FP·FN을 계산할 수 있지만, review 1,137건은 runner가 자동 평가하지 않는다. 따라서 현재
 집계는 확정된 provisional tuning 일부만 설명하며
 3,500건 전체나 실서비스 gold 수치가 아니다.
 
@@ -291,9 +291,25 @@ TP/FP/FN/TN은 256/0/164/1,515, recall 61.0%이고 occurrence TP/FP/FN은 328/43
 recall 48.0%다. strict 대비 문장 TP +13·FP +0, occurrence TP +13·FP +6이다. 목표까지
 positive 80건과 hard-negative 485건이 더 필요하다.
 
+## 2026-08-27 balanced batch-003
+
+과거 balanced batch-001 annotation 500건과 batch-002 queue 500건의 교집합 11건을 확인하고,
+고유 989건의 합집합을 제외했다. 현재 review 중 과거 검토 사례는 109건이었고 아직 검토하지
+않은 1,419건에서 500건을 source round-robin으로 선택했다. 새 queue의 과거 overlap은 0건이며
+출처 구성은 Koguard 65건, KOTE·Curse·Korean Hate Speech 각 145건이다.
+
+두 reviewer의 완전 consensus는 136건이고 불일치 364건을 제3 reviewer가 판정했다. 최종 batch는
+positive 118건, hard-negative 310건, review 72건이며 privacy 제외·대기는 0건이다. 공개 판정·적용
+집계는 `evaluation/results/pf005-balanced-batch-003-*.report.json`에 저장했다.
+
+누적 평가 가능 표본은 positive 538건, hard-negative 1,825건으로 총 2,363건이다. balanced 문장
+TP/FP/FN/TN은 351/0/187/1,825, recall 65.2%이고 occurrence TP/FP/FN은 452/43/380,
+recall 54.3%다. strict 대비 문장 TP +17·FP +0, occurrence TP +18·FP +6이다. positive 목표는
+충족했고 hard-negative 목표까지 175건이 더 필요하다.
+
 ## PF-005 종료 전 남은 작업
 
-1. 기존 intake 판정 대기 1,528건과 buffer 두 batch의 review 37건을 같은 독립 이중 판정·불일치
+1. 기존 intake 판정 대기 1,100건과 buffer 두 batch의 review 37건을 같은 독립 이중 판정·불일치
    제3 판정 절차로 계속 확정
 2. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
    등록 표현·승인 변형이 없는 hard-negative 2건 이상 고정

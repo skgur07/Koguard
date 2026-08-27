@@ -158,28 +158,28 @@ def test_committed_profile_report_is_aggregate_only_and_tracks_balanced_gates() 
 
     assert report["schema_version"] == 1
     assert report["source"]["ablation_report_sha256"] == (
-        "71d5bda5fbd9654da6fe1fb9c3601c4b948de66741288f55c8872e7914bfa4b7"
+        "c78310dadbd9d2dd08aa2cfbf4f8f4795d78feaadd6889adb7a4ab73742c7104"
     )
     assert report["source"]["corpus"] == {
         "classification": "independent-tuning-provisional",
-        "sha256": "28de23b1f7b1cd3df950e8e030fdb8d1d2a27e40738cadf2920dca503d4a8bc3",
-        "case_count": 1935,
-        "positive_count": 420,
-        "hard_negative_count": 1515,
-        "excluded_review_count": 1565,
+        "sha256": "e5ac8fc6e611da6c3a202226b5c20288bc5a3e2c0fdf24973dd73a2764eb52c0",
+        "case_count": 2363,
+        "positive_count": 538,
+        "hard_negative_count": 1825,
+        "excluded_review_count": 1137,
         "gold_ready": False,
     }
     assert report["balanced_evidence"] == {
-        "sentence_tp_delta_vs_strict": 13,
+        "sentence_tp_delta_vs_strict": 17,
         "sentence_fp_delta_vs_strict": 0,
-        "occurrence_tp_delta_vs_strict": 13,
+        "occurrence_tp_delta_vs_strict": 18,
         "occurrence_fp_delta_vs_strict": 6,
     }
     assert report["balanced_gates"]["passed"] is False
     assert report["limitations"][:3] == [
-        "다중 출처 intake 중 독립 검토로 확정된 1935건만 평가한 tuning 결과다.",
-        "gold_ready가 아니며 1565건은 review로 자동 평가에서 제외됐다.",
-        "hard-negative 1515건에서 balanced 문장 FP 0건으로 측정됐으나 "
+        "다중 출처 intake 중 독립 검토로 확정된 2363건만 평가한 tuning 결과다.",
+        "gold_ready가 아니며 1137건은 review로 자동 평가에서 제외됐다.",
+        "hard-negative 1825건에서 balanced 문장 FP 0건으로 측정됐으나 "
         "실서비스 전체 FP rate를 일반화할 수 없다.",
     ]
     assert {profile["profile"]: profile["settings"] for profile in report["profiles"]} == {

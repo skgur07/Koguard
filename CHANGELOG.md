@@ -28,6 +28,8 @@ Semantic Versioning after the first public release.
   tuning evidence to 1,935 cases and completing case-level review of the full 1,000-case buffer.
 - Profile-level blinded re-audit evidence for two shared Exact/Alias false positives, both independently
   confirmed as policy positives without exposing protected case data.
+- A third disjoint 500-case balanced review batch with independent double review and adjudication,
+  expanding finalized tuning evidence to 2,363 cases.
 
 ### Changed
 

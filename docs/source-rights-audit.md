@@ -79,6 +79,11 @@ Git·wheel·sdist에 포함하지 않으며 CC-BY-SA 자료의 최종 공개·�
 artifact에 재배포할 권리 승인은 아니다. 기존 intake 원문의 privacy 검토와 공개 대상별 attribution·
 share-alike 경계는 계속 blocker로 유지한다.
 
+2026-08-27 balanced batch-003에서는 과거 고유 검토 사례 989건을 제외한 새 500건을 판정했고,
+KOTE 145건과 Korean Hate Speech 145건을 포함한 전 사례의 case-level privacy가 approved였다.
+exclude·pending은 0건이다. 이 결과도 보호 환경의 tuning 사용 근거일 뿐 외부 원문이나 파생
+annotation의 공개 재배포 권리 승인은 아니며 CC-BY-SA attribution blocker는 유지한다.
+
 ## ZIZUN 고정 근거
 
 - repository: <https://github.com/ZIZUN/korean-malicious-comments-dataset>

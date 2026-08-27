@@ -53,6 +53,12 @@
 > positive로 합의했다. 수정 후 표본은 positive 420건, hard-negative 1,515건이며 `balanced`
 > 문장 TP/FP/FN/TN은 256/0/164/1,515, recall 61.0%다. occurrence TP/FP/FN은
 > 328/43/355, recall 48.0%이며 strict 대비 occurrence FP +6 gate와 hidden 검증은 남아 있다.
+>
+> 2026-08-27 과거 두 balanced batch의 고유 검토 사례 989건을 제외하고 새 500건을 독립 이중
+> 판정했다. 불일치 364건을 제3 판정한 최종 batch는 positive 118건, hard-negative 310건,
+> review 72건이다. 누적 평가 표본은 2,363건(positive 538, hard-negative 1,825)이며 balanced
+> 문장 TP/FP/FN/TN은 351/0/187/1,825, recall 65.2%다. occurrence TP/FP/FN은
+> 452/43/380, recall 54.3%이고 strict 대비 occurrence FP +6과 hidden 검증은 남아 있다.
 
 측정일: 2026-07-28
 

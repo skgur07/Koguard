@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-pf005-balanced-batch-003-review-queue",
+  "source_corpus_sha256": "3ab4ba15f5734067ac56d00f5fee09fdfca8714c99f5d7ad21106b1e3a72fc98",
+  "batch_case_count": 500,
+  "batch_counts": {
+    "positive": 118,
+    "hard-negative": 310,
+    "review": 72
+  },
+  "corpus_counts": {
+    "positive": 118,
+    "hard-negative": 310,
+    "review": 72
+  },
+  "quality_counts": {
+    "double_reviewed": 500,
+    "consensus": 136,
+    "disagreement": 364,
+    "privacy_excluded": 0,
+    "pending_privacy": 0
+  },
+  "adjudication_counts": {
+    "eligible": 364,
+    "resolved": 349,
+    "unresolved": 15,
+    "privacy_excluded": 0
+  },
+  "slice_counts": {
+    "benign-substring": 251,
+    "choseong": 5,
+    "direct": 109,
+    "educational-context": 23,
+    "game-term": 10,
+    "jamo": 49,
+    "multiple-matches": 15,
+    "quoted-context": 6,
+    "spelling-variant": 5,
+    "suffix": 11,
+    "token-boundary": 2,
+    "username": 10
+  },
+  "gold_ready": false
+}
