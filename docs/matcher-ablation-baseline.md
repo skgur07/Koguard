@@ -107,6 +107,11 @@ uv run python -m evaluation.ablation_runner `
 10. 공통 문장 FP 2건을 블라인드 재감사해 두 reviewer가 모두 policy positive로 합의했다. 수정한
    총 1,935건에서 balanced 문장 TP/FP/FN/TN은 256/0/164/1,515이고 occurrence TP/FP/FN은
    328/43/355다.
-11. 다음 결정은 남은 1,565건의 독립 판정과 hidden 평가이며,
+11. 2026-08-27 과거 고유 검토 사례 989건과 겹치지 않는 새 500건을 판정해 positive 118,
+   hard-negative 310건을 확정했다. 총 2,363건에서 balanced 문장 TP/FP/FN/TN은
+   351/0/187/1,825이고 occurrence TP/FP/FN은 452/43/380이다. strict 대비 문장 TP +17·FP +0,
+   occurrence TP +18·FP +6이다.
+12. 다음 결정은 남은 review 1,137건에서 hard-negative 175건을 추가 확정하는 작업과 hidden
+   평가이며,
    그 전에는
    현재 profile 수치를 실서비스 전체로 일반화하지 않는다.

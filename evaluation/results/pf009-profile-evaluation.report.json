@@ -2,15 +2,15 @@
   "schema_version": 1,
   "profile_contract_version": 1,
   "source": {
-    "ablation_report_sha256": "71d5bda5fbd9654da6fe1fb9c3601c4b948de66741288f55c8872e7914bfa4b7",
-    "measured_at": "2026-08-26T05:41:33.077594+00:00",
+    "ablation_report_sha256": "c78310dadbd9d2dd08aa2cfbf4f8f4795d78feaadd6889adb7a4ab73742c7104",
+    "measured_at": "2026-08-27T05:28:57.053180+00:00",
     "corpus": {
       "classification": "independent-tuning-provisional",
-      "sha256": "28de23b1f7b1cd3df950e8e030fdb8d1d2a27e40738cadf2920dca503d4a8bc3",
-      "case_count": 1935,
-      "positive_count": 420,
-      "hard_negative_count": 1515,
-      "excluded_review_count": 1565,
+      "sha256": "e5ac8fc6e611da6c3a202226b5c20288bc5a3e2c0fdf24973dd73a2764eb52c0",
+      "case_count": 2363,
+      "positive_count": 538,
+      "hard_negative_count": 1825,
+      "excluded_review_count": 1137,
       "gold_ready": false
     },
     "environment": {
@@ -51,36 +51,36 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 243,
+          "tp": 334,
           "fp": 0,
-          "fn": 177,
-          "tn": 1515
+          "fn": 204,
+          "tn": 1825
         },
         "precision": 1.0,
-        "recall": 0.5785714285714286,
-        "f1": 0.7330316742081447,
-        "accuracy": 0.9085271317829458
+        "recall": 0.620817843866171,
+        "f1": 0.7660550458715597,
+        "accuracy": 0.9136690647482014
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 315,
+          "tp": 434,
           "fp": 37,
-          "fn": 368
+          "fn": 398
         },
-        "precision": 0.8948863636363636,
-        "recall": 0.4612005856515373,
-        "f1": 0.608695652173913
+        "precision": 0.921443736730361,
+        "recall": 0.5216346153846154,
+        "f1": 0.6661550268610897
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0215,
-          "p95_ms": 0.0233
+          "p50_ms": 0.047,
+          "p95_ms": 0.0612
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 4.5555,
-          "p95_ms": 5.5064
+          "p50_ms": 5.4247,
+          "p95_ms": 12.8633
         },
         "engine_retained_memory_bytes": 81189
       }
@@ -114,36 +114,36 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 256,
+          "tp": 351,
           "fp": 0,
-          "fn": 164,
-          "tn": 1515
+          "fn": 187,
+          "tn": 1825
         },
         "precision": 1.0,
-        "recall": 0.6095238095238096,
-        "f1": 0.7573964497041421,
-        "accuracy": 0.9152454780361757
+        "recall": 0.6524163568773235,
+        "f1": 0.7896512935883016,
+        "accuracy": 0.920863309352518
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 328,
+          "tp": 452,
           "fp": 43,
-          "fn": 355
+          "fn": 380
         },
-        "precision": 0.8840970350404312,
-        "recall": 0.4802342606149341,
-        "f1": 0.6223908918406071
+        "precision": 0.9131313131313131,
+        "recall": 0.5432692307692307,
+        "f1": 0.6812358703843255
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0244,
-          "p95_ms": 0.0258
+          "p50_ms": 0.0213,
+          "p95_ms": 0.1096
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 4.9033,
-          "p95_ms": 6.1941
+          "p50_ms": 8.2551,
+          "p95_ms": 12.0319
         },
         "engine_retained_memory_bytes": 124675
       }
@@ -177,60 +177,60 @@
       },
       "sentence_metrics": {
         "counts": {
-          "tp": 268,
-          "fp": 19,
-          "fn": 152,
-          "tn": 1496
+          "tp": 364,
+          "fp": 26,
+          "fn": 174,
+          "tn": 1799
         },
-        "precision": 0.9337979094076655,
-        "recall": 0.638095238095238,
-        "f1": 0.7581329561527581,
-        "accuracy": 0.9116279069767442
+        "precision": 0.9333333333333333,
+        "recall": 0.6765799256505576,
+        "f1": 0.7844827586206897,
+        "accuracy": 0.9153618281845112
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 332,
-          "fp": 79,
-          "fn": 351
+          "tp": 456,
+          "fp": 91,
+          "fn": 376
         },
-        "precision": 0.8077858880778589,
-        "recall": 0.486090775988287,
-        "f1": 0.6069469835466179
+        "precision": 0.8336380255941499,
+        "recall": 0.5480769230769231,
+        "f1": 0.6613488034807833
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0791,
-          "p95_ms": 0.0883
+          "p50_ms": 0.083,
+          "p95_ms": 0.1819
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 7.5293,
-          "p95_ms": 8.4486
+          "p50_ms": 12.9775,
+          "p95_ms": 17.6674
         },
-        "engine_retained_memory_bytes": 230954
+        "engine_retained_memory_bytes": 230887
       }
     }
   ],
   "balanced_evidence": {
-    "sentence_tp_delta_vs_strict": 13,
+    "sentence_tp_delta_vs_strict": 17,
     "sentence_fp_delta_vs_strict": 0,
-    "occurrence_tp_delta_vs_strict": 13,
+    "occurrence_tp_delta_vs_strict": 18,
     "occurrence_fp_delta_vs_strict": 6
   },
   "balanced_gates": {
     "normal_sentence_fp_rate": 0.0,
     "normal_sentence_fp_rate_limit": 0.005,
-    "short_chat_p95_ms": 0.0258,
+    "short_chat_p95_ms": 0.1096,
     "short_chat_p95_ms_limit": 1.0,
-    "maximum_input_p95_ms": 6.1941,
+    "maximum_input_p95_ms": 12.0319,
     "maximum_input_p95_ms_limit": 15.0,
     "passed": false
   },
   "limitations": [
-    "다중 출처 intake 중 독립 검토로 확정된 1935건만 평가한 tuning 결과다.",
-    "gold_ready가 아니며 1565건은 review로 자동 평가에서 제외됐다.",
-    "hard-negative 1515건에서 balanced 문장 FP 0건으로 측정됐으나 실서비스 전체 FP rate를 일반화할 수 없다.",
+    "다중 출처 intake 중 독립 검토로 확정된 2363건만 평가한 tuning 결과다.",
+    "gold_ready가 아니며 1137건은 review로 자동 평가에서 제외됐다.",
+    "hard-negative 1825건에서 balanced 문장 FP 0건으로 측정됐으나 실서비스 전체 FP rate를 일반화할 수 없다.",
     "성능은 단일 Windows 로컬 환경 측정이며 지원 OS별 CI 기준선이 아니다."
   ]
 }

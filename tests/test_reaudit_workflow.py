@@ -35,6 +35,12 @@ _PUBLISHED_COMMON_FP_APPLY_REPORT_PATH = (
     / "results"
     / "pf005-common-exact-fp-reaudit-v1-apply.report.json"
 )
+_PUBLISHED_BALANCED_BATCH_003_APPLY_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-balanced-batch-003-apply.report.json"
+)
 
 
 def test_prepare_matcher_fp_reaudit_blinds_prior_decisions_and_is_aggregate_only(
@@ -354,6 +360,25 @@ def test_published_common_fp_reaudit_reports_are_aggregate_only() -> None:
         "review": 20,
     }
     serialized = json.dumps([consensus, applied], ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_balanced_batch_003_apply_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_BALANCED_BATCH_003_APPLY_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["applied_count"] == 500
+    assert report["updated_corpus_counts"] == {
+        "positive": 495,
+        "hard-negative": 905,
+        "review": 1100,
+    }
+    assert report["label_transition_counts"] == {
+        "review->hard-negative": 310,
+        "review->positive": 118,
+        "review->review": 72,
+    }
+    serialized = json.dumps(report, ensure_ascii=False)
     for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
         assert f'"{forbidden}"' not in serialized
 
