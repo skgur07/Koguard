@@ -41,6 +41,18 @@ _PUBLISHED_BALANCED_BATCH_003_REPORT_PATH = (
     / "results"
     / "pf005-balanced-batch-003-adjudicated.report.json"
 )
+_PUBLISHED_BALANCED_BATCH_004_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-balanced-batch-004-adjudicated.report.json"
+)
+_PUBLISHED_BATCH_004_COMMON_FP_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-batch-004-common-exact-fp-reaudit-adjudicated.report.json"
+)
 _PUBLISHED_HARD_NEGATIVE_BATCH_001_REPORT_PATH = (
     Path(__file__).parents[1]
     / "evaluation"
@@ -182,6 +194,43 @@ def test_published_balanced_batch_003_report_is_aggregate_only() -> None:
     }
     assert report["gold_ready"] is False
     serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_balanced_batch_004_reports_are_aggregate_only() -> None:
+    batch = json.loads(_PUBLISHED_BALANCED_BATCH_004_REPORT_PATH.read_text(encoding="utf-8"))
+    reaudit = json.loads(_PUBLISHED_BATCH_004_COMMON_FP_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert batch["batch_case_count"] == 500
+    assert batch["batch_counts"] == {
+        "positive": 100,
+        "hard-negative": 300,
+        "review": 100,
+    }
+    assert batch["quality_counts"] == {
+        "double_reviewed": 500,
+        "consensus": 174,
+        "disagreement": 326,
+        "privacy_excluded": 0,
+        "pending_privacy": 0,
+    }
+    assert batch["adjudication_counts"] == {
+        "eligible": 326,
+        "resolved": 316,
+        "unresolved": 10,
+        "privacy_excluded": 0,
+    }
+    assert reaudit["batch_counts"] == {
+        "positive": 1,
+        "hard-negative": 0,
+        "review": 0,
+    }
+    assert reaudit["quality_counts"]["double_reviewed"] == 1
+    assert reaudit["adjudication_counts"]["resolved"] == 1
+    assert batch["gold_ready"] is False
+    assert reaudit["gold_ready"] is False
+    serialized = json.dumps([batch, reaudit], ensure_ascii=False)
     for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
         assert f'"{forbidden}"' not in serialized
 

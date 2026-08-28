@@ -41,6 +41,18 @@ _PUBLISHED_BALANCED_BATCH_003_APPLY_REPORT_PATH = (
     / "results"
     / "pf005-balanced-batch-003-apply.report.json"
 )
+_PUBLISHED_BALANCED_BATCH_004_APPLY_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-balanced-batch-004-apply.report.json"
+)
+_PUBLISHED_BATCH_004_COMMON_FP_APPLY_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-batch-004-common-exact-fp-reaudit-apply.report.json"
+)
 
 
 def test_prepare_matcher_fp_reaudit_blinds_prior_decisions_and_is_aggregate_only(
@@ -119,6 +131,34 @@ def test_prepare_profile_fp_reaudit_selects_only_profile_sentence_false_positive
     serialized = json.dumps(result.report, ensure_ascii=False)
     for forbidden in ("case-a", "보호 원문", "canonical_term"):
         assert forbidden not in serialized
+
+
+def test_prepare_profile_fp_reaudit_ignores_review_cases_omitted_from_ablation(
+    tmp_path: Path,
+) -> None:
+    corpus = _corpus()
+    corpus["cases"].append(
+        {
+            **corpus["cases"][2],
+            "id": "case-d",
+            "text": "평가 제외 문장",
+            "label": "review",
+            "slices": ["unadjudicated-intake"],
+            "notes": "Pending review.",
+        }
+    )
+    corpus_path = _write_json(tmp_path / "corpus.json", corpus)
+    report_path = _write_json(tmp_path / "ablation.json", _profile_ablation(corpus_path))
+
+    result = prepare_profile_fp_reaudit(
+        corpus_path,
+        report_path,
+        profile="exact-alias",
+        corpus_id="unit-exact-alias-reaudit-v1",
+    )
+
+    assert [case["id"] for case in result.corpus["cases"]] == ["case-a"]
+    assert result.report["selected_count"] == 1
 
 
 @pytest.mark.parametrize(
@@ -379,6 +419,35 @@ def test_published_balanced_batch_003_apply_report_is_aggregate_only() -> None:
         "review->review": 72,
     }
     serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_balanced_batch_004_apply_reports_are_aggregate_only() -> None:
+    batch = json.loads(_PUBLISHED_BALANCED_BATCH_004_APPLY_REPORT_PATH.read_text(encoding="utf-8"))
+    reaudit = json.loads(
+        _PUBLISHED_BATCH_004_COMMON_FP_APPLY_REPORT_PATH.read_text(encoding="utf-8")
+    )
+
+    assert batch["applied_count"] == 500
+    assert batch["updated_corpus_counts"] == {
+        "positive": 595,
+        "hard-negative": 1205,
+        "review": 700,
+    }
+    assert batch["label_transition_counts"] == {
+        "review->hard-negative": 300,
+        "review->positive": 100,
+        "review->review": 100,
+    }
+    assert reaudit["applied_count"] == 1
+    assert reaudit["label_transition_counts"] == {"hard-negative->positive": 1}
+    assert reaudit["updated_corpus_counts"] == {
+        "positive": 596,
+        "hard-negative": 1204,
+        "review": 700,
+    }
+    serialized = json.dumps([batch, reaudit], ensure_ascii=False)
     for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
         assert f'"{forbidden}"' not in serialized
 

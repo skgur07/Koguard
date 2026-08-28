@@ -30,6 +30,8 @@ Semantic Versioning after the first public release.
   confirmed as policy positives without exposing protected case data.
 - A third disjoint 500-case balanced review batch with independent double review and adjudication,
   expanding finalized tuning evidence to 2,363 cases.
+- A fourth disjoint 500-case balanced review batch and blinded common-FP re-audit, completing the
+  provisional PF-005 quantity target with 639 positive and 2,124 hard-negative cases.
 
 ### Changed
 
@@ -46,6 +48,8 @@ Semantic Versioning after the first public release.
   select an already reviewed case.
 - Review queue planning also accepts prior annotation batches, reports historical cross-format overlap,
   and excludes the union before selecting a new batch.
+- Profile false-positive re-audit now validates against evaluated non-review cases, allowing protected
+  corpora to retain unresolved review cases without breaking evidence validation.
 
 ### Security
 

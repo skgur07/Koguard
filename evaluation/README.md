@@ -290,15 +290,14 @@ uv run python -m evaluation.profile_report `
 ```
 
 공개 보고서는 원본 ablation과 corpus SHA-256, 환경, 세 profile 집계, balanced 증분과 임시
-FP·p95 게이트를 기록한다. 2026-08-27 balanced batch-003과 hard-negative buffer 두 batch를
-반영한 확정 표본은
-2,363건(positive 538, hard-negative 1,825)이다. balanced는 strict보다 문장 TP 17건과
-occurrence TP 18건을 더 찾았고 문장 FP 증분은 0건이지만 occurrence FP가 6건 늘었다. strict와
-balanced 공통 FP 2건은 블라인드 재감사에서 모두 정책 positive로 확정돼 문장 FP는 0건이다.
-balanced 문장 recall은 65.2%, occurrence recall은 54.3%이며 전체 FP 증분 0 gate는 실패했다.
-short-chat p95는 0.1096ms, 최대 입력 p95는 12.0319ms로 로컬 성능 예산은 통과했다. 평가
-입력에서 review 1,137건을 제외했으므로 실서비스
-FP나 최종 recall로 일반화할 수 없고, 성능은 세 OS CI에서 다시 확인해야 한다. 계약은
+FP·p95 게이트를 기록한다. 2026-08-28 중복 없는 batch-004와 공통 Exact/Alias FP 1건의
+블라인드 재감사를 반영한 최종
+수량 기준 표본은 2,763건(positive 639, hard-negative 2,124)이다. strict와 balanced의 문장
+TP/FP/FN/TN은 각각 416/0/223/2,124와 440/0/199/2,124이며 balanced 문장 recall은 68.9%다.
+balanced occurrence TP/FP/FN은 579/44/396, recall 59.4%로 strict보다 TP 25건과 FP 7건이
+늘어 전체 FP 증분 0 gate는 계속 실패한다. short-chat p95는 0.0212ms, 최대 입력 p95는
+6.7711ms였다. 입력에서 review 737건을 제외했으므로 실서비스 FP나 최종 recall로 일반화할 수
+없고, 성능은 세 OS CI에서 다시 확인해야 한다. 계약은
 `profile-report.schema.json` version 1이다.
 
 ## 비교 계약

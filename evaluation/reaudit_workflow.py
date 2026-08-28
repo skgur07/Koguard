@@ -91,10 +91,12 @@ def prepare_profile_fp_reaudit(
     source = _load_corpus(corpus_path, "source corpus")
     ablation = _read_object(ablation_report_path, "ablation report")
     _validate_ablation_source(ablation, source)
-    source_case_ids = {
-        cast(str, case["id"]) for case in cast(list[dict[str, Any]], source["cases"])
+    evaluated_case_ids = {
+        cast(str, case["id"])
+        for case in cast(list[dict[str, Any]], source["cases"])
+        if case["label"] != "review"
     }
-    selected_ids = _profile_false_positive_ids(ablation, profile, source_case_ids)
+    selected_ids = _profile_false_positive_ids(ablation, profile, evaluated_case_ids)
     return _prepare_fp_reaudit(
         source,
         ablation,

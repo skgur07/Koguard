@@ -84,6 +84,12 @@ KOTE 145건과 Korean Hate Speech 145건을 포함한 전 사례의 case-level p
 exclude·pending은 0건이다. 이 결과도 보호 환경의 tuning 사용 근거일 뿐 외부 원문이나 파생
 annotation의 공개 재배포 권리 승인은 아니며 CC-BY-SA attribution blocker는 유지한다.
 
+2026-08-28 balanced batch-004는 KOTE 167건, Curse 167건, Korean Hate Speech 166건을
+독립 이중 판정·제3 판정했고 전 사례의 case-level privacy가 approved였다. exclude·pending은
+0건이다. 이로써 PF-005의 수량 기준은 충족했지만 보호 환경의 tuning 사용 근거만 추가된 것이며,
+외부 원문·파생 annotation의 공개 재배포와 CC-BY-SA attribution 경계는 여전히 별도 승인
+대상이다.
+
 ## ZIZUN 고정 근거
 
 - repository: <https://github.com/ZIZUN/korean-malicious-comments-dataset>
