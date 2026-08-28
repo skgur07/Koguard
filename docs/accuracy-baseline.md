@@ -59,6 +59,12 @@
 > review 72건이다. 누적 평가 표본은 2,363건(positive 538, hard-negative 1,825)이며 balanced
 > 문장 TP/FP/FN/TN은 351/0/187/1,825, recall 65.2%다. occurrence TP/FP/FN은
 > 452/43/380, recall 54.3%이고 strict 대비 occurrence FP +6과 hidden 검증은 남아 있다.
+>
+> 2026-08-28 과거 세 batch의 고유 1,489건과 겹치지 않는 500건을 추가 판정했다. 최종 batch는
+> positive 100건, hard-negative 300건, review 100건이며, 새 공통 FP 1건은 블라인드 재감사에서
+> policy positive로 확정했다. 누적 평가 표본은 2,763건(positive 639, hard-negative 2,124)이고
+> balanced 문장 TP/FP/FN/TN은 440/0/199/2,124, recall 68.9%다. occurrence TP/FP/FN은
+> 579/44/396, recall 59.4%이며 strict 대비 occurrence FP +7과 hidden 검증은 남아 있다.
 
 측정일: 2026-07-28
 

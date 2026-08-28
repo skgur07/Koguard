@@ -111,7 +111,10 @@ uv run python -m evaluation.ablation_runner `
    hard-negative 310건을 확정했다. 총 2,363건에서 balanced 문장 TP/FP/FN/TN은
    351/0/187/1,825이고 occurrence TP/FP/FN은 452/43/380이다. strict 대비 문장 TP +17·FP +0,
    occurrence TP +18·FP +6이다.
-12. 다음 결정은 남은 review 1,137건에서 hard-negative 175건을 추가 확정하는 작업과 hidden
-   평가이며,
-   그 전에는
-   현재 profile 수치를 실서비스 전체로 일반화하지 않는다.
+12. 2026-08-28 과거 세 batch와 겹치지 않는 500건을 판정해 positive 100, hard-negative 300건을
+   확정했다. 공통 문장 FP 1건을 policy positive로 재감사한 뒤 총 2,763건에서 balanced 문장
+   TP/FP/FN/TN은 440/0/199/2,124이고 occurrence TP/FP/FN은 579/44/396이다. strict 대비
+   문장 TP +24·FP +0, occurrence TP +25·FP +7이다.
+13. PF-005의 positive 500·hard-negative 2,000 수량 기준은 충족했다. 다음 결정은 hidden 평가,
+   출처 재배포 권리, slice 품질과 occurrence FP gate이며 그 전에는 현재 profile 수치를 실서비스
+   전체로 일반화하지 않는다.

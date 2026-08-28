@@ -104,6 +104,13 @@ hard-negative 1,825)으로 늘었다. strict 문장 TP/FP/FN/TN은 334/0/204/1,8
 recall은 54.3%다. strict 대비 문장 TP +17·FP +0, occurrence TP +18·FP +6이므로 기본 profile
 계약과 전체 gate 실패 상태는 유지한다.
 
+2026-08-28 중복 없는 balanced batch-004 500건과 공통 Exact/Alias FP 재감사를 반영해 표본은
+2,763건(positive 639, hard-negative 2,124)이다. strict 문장 TP/FP/FN/TN은
+416/0/223/2,124, balanced는 440/0/199/2,124이며 balanced recall은 68.9%다. balanced
+occurrence TP/FP/FN은 579/44/396, recall 59.4%로 strict보다 TP 25건과 FP 7건이 늘었다.
+문장 FP 0과 로컬 성능 예산은 통과하지만 occurrence FP 증분 때문에 전체 gate 실패 상태를
+유지한다.
+
 ## 동작 불변 조건
 
 - 모든 profile은 등록된 욕설의 문맥 무관 부분 문자열 Exact 탐지를 보존한다.
