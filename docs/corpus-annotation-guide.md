@@ -156,6 +156,12 @@ reviewer 입력·Koguard label·expected span에는 복사하지 않는다. repo
 batch는 최대 500건이며 같은 `offset`과 `limit`으로 서로 다른 두 reviewer용 파일을 만든다.
 reviewer ID는 이름이나 이메일 대신 `reviewer-a`처럼 별도 관리되는 opaque ID를 사용한다.
 
+부족 slice 후보를 찾는 targeted queue에는 `review_queue_planner --surface-priority`를 사용할 수
+있다. 이 선택은 detector prediction·upstream label·기존 annotation을 읽지 않고 텍스트의 형태만
+분류한다. 표면 신호 우선순위 뒤에도 source별 round-robin과 stable hash를 유지한다. 이 queue의
+결과를 unbiased tuning/hidden 표본으로 재해석하지 않으며 공개 보고서에는 신호별 후보·선택
+건수와 source별 건수만 기록한다.
+
 ```powershell
 uv run python -m evaluation.annotation_workflow export `
   evaluation\corpus\tuning\curse-review-intake-v1.json `

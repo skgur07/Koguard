@@ -10,6 +10,13 @@ from typing import Any
 import pytest
 from evaluation.review_queue_planner import ReviewQueueError, main, prepare_review_queue
 
+_PUBLISHED_SLICE_PRIORITY_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-slice-priority-batch-001.report.json"
+)
+
 
 def test_prepare_review_queue_is_deterministic_source_balanced_and_blinded(
     tmp_path: Path,
@@ -37,6 +44,73 @@ def test_prepare_review_queue_is_deterministic_source_balanced_and_blinded(
     serialized = json.dumps(first.report, ensure_ascii=False)
     for forbidden in ("case-a", "원문 A", "text", "case_id"):
         assert forbidden not in serialized
+
+
+def test_prepare_review_queue_prioritizes_detector_blind_surface_signals(
+    tmp_path: Path,
+) -> None:
+    corpus = _corpus()
+    signal_texts = {
+        "case-a": "표면 ㅅㅂ 신호",
+        "case-b": "한.글 separator",
+        "case-c": "반복ㅋㅋㅋㅋ",
+        "case-d": "ASCII token sample",
+        "case-e": "한 글",
+        "case-f": "일반 문장",
+    }
+    for case in corpus["cases"]:
+        if case["id"] in signal_texts:
+            case["text"] = signal_texts[case["id"]]
+    corpus_path = _write_json(tmp_path / "corpus.json", corpus)
+
+    first = prepare_review_queue(
+        corpus_path,
+        queue_id="unit-surface-priority-v1",
+        corpus_id="unit-surface-priority-v1",
+        limit=4,
+        surface_priority=True,
+    )
+    second = prepare_review_queue(
+        corpus_path,
+        queue_id="unit-surface-priority-v1",
+        corpus_id="unit-surface-priority-v1",
+        limit=4,
+        surface_priority=True,
+    )
+
+    assert first == second
+    assert first.report["selection"] == "surface-signal-source-round-robin-sha256-v1"
+    assert first.report["selected_with_surface_signal_count"] == 4
+    assert first.report["surface_signal_candidate_counts"] == {
+        "ascii-token": 2,
+        "choseong-run": 2,
+        "compat-jamo": 2,
+        "hangul-separator": 1,
+        "repeated-character": 1,
+        "single-hangul-gap": 1,
+    }
+    assert sum(first.report["surface_signal_selected_counts"].values()) >= 4
+    assert first.report["uses_detector_predictions"] is False
+    assert first.report["uses_upstream_labels"] is False
+    serialized = json.dumps(first.report, ensure_ascii=False)
+    for forbidden in ("case-a", "ㅅㅂ", "text", "case_id"):
+        assert forbidden not in serialized
+
+
+def test_published_slice_priority_queue_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_SLICE_PRIORITY_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["selection"] == "surface-signal-source-round-robin-sha256-v1"
+    assert report["eligible_review_count"] == 419
+    assert report["selected_count"] == 120
+    assert report["selected_existing_overlap_count"] == 0
+    assert [row["selected_count"] for row in report["source_statistics"]] == [40, 40, 40]
+    assert report["selected_with_surface_signal_count"] == 107
+    assert report["uses_detector_predictions"] is False
+    assert report["uses_upstream_labels"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
 
 
 def test_prepare_review_queue_excludes_finalized_cases_and_caps_annotation_batch(

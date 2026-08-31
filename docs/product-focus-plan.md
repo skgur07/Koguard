@@ -24,12 +24,17 @@ Phase 4~6은 삭제하지 않는다. 아래 품질 게이트와 재개 조건을
 API를 구현했고 인자 없는 `KoguardEngine()`은 Exact+Alias+Choseong의 `balanced`를 사용한다.
 2026-08-28까지 독립 tuning 2,763건(positive 639, hard-negative 2,124)을 확정해 PF-005 수량
 기준을 충족했다. 공통 FP 3건을 각각 블라인드 재감사해 모두 문맥 무관 정책의 positive로
-바로잡았고, `balanced`는 strict 대비 문장 TP +24·FP +0, occurrence TP +25·FP +7을 기록해
+바로잡았다. 초성 occurrence FP 후보 7건도 재감사해 `balanced`는 strict 대비 문장 TP +24·FP +0,
+occurrence TP +30·FP +2를 기록해
 문장 gate는 개선됐지만 전체 FP 증분 0 gate는 아직 실패한다.
 기존 intake와 direct/NFKC+casefold 중복이 없는 1,000건 review buffer도 `300/300/300/100`
 출처 비중으로 확보했고 전량을 독립 검토·재감사해 positive 43건, hard-negative 920건,
 review 37건으로 판정했다. 따라서 hidden 평가와 출처 권리 확인 전까지 공개 전 재조정 가능성을
 유지한다.
+
+부족 slice 탐색용 surface-priority 120건도 detector 출력이나 upstream label 없이 별도로
+선택·검토했다. positive 26건과 hard-negative 63건을 확정하고 review 31건을 유지했다. 이
+표적 표본은 slice 후보 발굴에만 쓰며 2,763건 tuning 성능이나 hidden 성능으로 합치지 않는다.
 
 ### 1.1 Core 판정 정책 보완
 

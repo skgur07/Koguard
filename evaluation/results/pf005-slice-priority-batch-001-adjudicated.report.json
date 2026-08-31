@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-pf005-slice-priority-batch-001",
+  "source_corpus_sha256": "d8a0d81d2b8d9ddd25889b185ba3aeba62e7f2dd1b2c8619904eddad46314011",
+  "batch_case_count": 120,
+  "batch_counts": {
+    "positive": 26,
+    "hard-negative": 63,
+    "review": 31
+  },
+  "corpus_counts": {
+    "positive": 26,
+    "hard-negative": 63,
+    "review": 31
+  },
+  "quality_counts": {
+    "double_reviewed": 120,
+    "consensus": 27,
+    "disagreement": 93,
+    "privacy_excluded": 0,
+    "pending_privacy": 0
+  },
+  "adjudication_counts": {
+    "eligible": 93,
+    "resolved": 80,
+    "unresolved": 13,
+    "privacy_excluded": 0
+  },
+  "slice_counts": {
+    "benign-substring": 10,
+    "choseong": 6,
+    "direct": 9,
+    "jamo": 7,
+    "multiple-matches": 4,
+    "repeated": 38,
+    "separator": 14,
+    "spelling-variant": 2,
+    "suffix": 11,
+    "unicode": 1,
+    "whitespace": 4
+  },
+  "gold_ready": false
+}

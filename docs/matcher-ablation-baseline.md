@@ -118,3 +118,6 @@ uv run python -m evaluation.ablation_runner `
 13. PF-005의 positive 500·hard-negative 2,000 수량 기준은 충족했다. 다음 결정은 hidden 평가,
    출처 재배포 권리, slice 품질과 occurrence FP gate이며 그 전에는 현재 profile 수치를 실서비스
    전체로 일반화하지 않는다.
+14. 초성 occurrence FP 후보 7건을 블라인드 재감사해 span annotation을 수정했다. balanced
+   occurrence TP/FP/FN은 584/39/390으로 바뀌었고 strict 대비 TP +30·FP +2다. 남은 FP 2건은
+   재감사 후에도 기대 occurrence가 아니므로 matcher 증분으로 유지한다.
