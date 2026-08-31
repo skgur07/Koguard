@@ -110,7 +110,8 @@ TestPyPI 업로드는 이번 준비 변경에 포함하지 않는다. trusted pu
 
 현재 tuning 2,763건 결과와 공개 synthetic regression은 구현 근거이며 hidden 품질 수치를 대체하지
 않는다. 두 profile 공통 FP 누적 3건은 블라인드 재감사에서 정책 positive로 바로잡아 문장 FP 0건을
-회복했다. 하지만 balanced는 strict보다 occurrence FP가 7건 늘어 전체 FP 증분 0 gate를
+회복했다. 초성 occurrence FP 후보 7건의 블라인드 재감사 후에도 balanced는 strict보다
+occurrence FP가 2건 늘어 전체 FP 증분 0 gate를
 통과하지 못했다. 이 상태도 최종 release report에서
 차단 근거로 유지한다. hidden 준비가 지연되더라도 이를 최종 실서비스 정확도로 바꾸어 표현하지
 않는다.

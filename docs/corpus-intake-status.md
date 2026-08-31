@@ -318,13 +318,32 @@ source round-robin으로 선택했다. 새 queue와 과거 검토 사례의 교�
 재감사했다. 두 reviewer 모두 positive로 판정했지만 span 세부 불일치를 제3 reviewer가 해소했고,
 정책 positive 누락으로 바로잡았다. 최종 누적 평가 가능 표본은 positive 639건, hard-negative
 2,124건으로 총 2,763건이며 review 737건은 제외했다. balanced 문장 TP/FP/FN/TN은
-440/0/199/2,124, recall 68.9%이고 occurrence TP/FP/FN은 579/44/396, recall 59.4%다. strict
-대비 문장 TP +24·FP +0, occurrence TP +25·FP +7이다. PF-005의 500/2,000 수량 기준은
+440/0/199/2,124, recall 68.9%다. PF-005의 500/2,000 수량 기준은
 충족했지만 `gold_ready=false`와 occurrence gate 실패는 유지한다.
+
+## 2026-08-28 초성 occurrence 재감사와 slice 우선 queue
+
+balanced가 strict보다 추가한 occurrence FP 7건은 모두 policy positive 문장에 있었다. prior
+label·span·slice를 제거해 5건과 2건으로 나누고 독립 이중 검토했으며, span 불일치 2건만 제3
+판정했다. 수정 후 balanced occurrence TP/FP/FN은 584/39/390, recall 60.0%이고 strict 대비
+TP +30·FP +2다. 문장 지표는 440/0/199/2,124로 변하지 않았다. 남은 2건은 완전 재감사 뒤에도
+기대 occurrence가 아니므로 초성 matcher의 실제 추가 FP로 유지한다.
+
+확정 corpus의 slice별 30 positive·2 hard-negative 목표를 다시 집계했다. Alias·Keyboard·
+Mixed-gap은 positive가 각 1건, Jamo·Repeated·Separator는 각 3건, Whitespace 2건,
+Token-boundary 9건으로 부족하다. Choseong positive는 30건을 충족하지만 hard-negative가 0건이다.
+미검토 419건에서 detector 비의존 표면 신호를 우선한 120건을 선택했고 KOTE·Curse·Korean Hate
+Speech가 각 40건이다. 107건이 하나 이상의 표면 신호를 가지며 과거 queue overlap은 0건이다.
+독립 이중 검토와 제3 재심 뒤 positive 26건, hard-negative 63건을 확정했고 31건은 review로
+남겼다. 최초 합의 27건·불일치 93건 중 제3 재심은 80건을 해결하고 13건을 유보했다. 확정 89건은
+targeted discovery이므로 기존 2,763건 tuning 정확도 수치에는 합치지 않는다. 별도 slice 근거로
+Separator·Repeated·Whitespace hard-negative 목표는 충족했지만 해당 positive는 여전히 각각
+4·3·2건뿐이다.
 
 ## PF-005 종료 전 남은 작업
 
-1. 남은 review 737건은 수량 목표와 별개로 slice 보강이나 판정 품질 개선에 필요한 사례부터 확정
+1. surface-priority의 남은 review 31건은 정책 명확화 뒤 별도 재검토하고, targeted 결과를
+   정확도 추정에 섞지 않은 채 positive 변형 slice를 우선 보강
 2. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
    등록 표현·승인 변형이 없는 hard-negative 2건 이상 고정
 3. 핵심 positive slice별 30건, 등록 표현을 포함한 substring·인용/설명·사용자명/게임

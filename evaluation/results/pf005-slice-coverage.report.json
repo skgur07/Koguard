@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "source_ablation_sha256": "8e6feb87bd2293c69caef02492fa415072750d55a88de78b647fe8f15883851b",
+  "targets": {
+    "positive_per_slice": 30,
+    "hard_negative_per_slice": 2
+  },
+  "slice_coverage": [
+    {"slice": "abbreviation", "positive": 13, "hard_negative": 1, "positive_gap": 17, "hard_negative_gap": 1},
+    {"slice": "alias", "positive": 1, "hard_negative": 0, "positive_gap": 29, "hard_negative_gap": 2},
+    {"slice": "benign-substring", "positive": 28, "hard_negative": 1536, "positive_gap": 2, "hard_negative_gap": 0},
+    {"slice": "choseong", "positive": 30, "hard_negative": 0, "positive_gap": 0, "hard_negative_gap": 2},
+    {"slice": "direct", "positive": 493, "hard_negative": 188, "positive_gap": 0, "hard_negative_gap": 0},
+    {"slice": "domain-term", "positive": 3, "hard_negative": 25, "positive_gap": 27, "hard_negative_gap": 0},
+    {"slice": "educational-context", "positive": 40, "hard_negative": 48, "positive_gap": 0, "hard_negative_gap": 0},
+    {"slice": "game-term", "positive": 20, "hard_negative": 51, "positive_gap": 10, "hard_negative_gap": 0},
+    {"slice": "jamo", "positive": 3, "hard_negative": 225, "positive_gap": 27, "hard_negative_gap": 0},
+    {"slice": "keyboard", "positive": 1, "hard_negative": 0, "positive_gap": 29, "hard_negative_gap": 2},
+    {"slice": "mixed-gap", "positive": 1, "hard_negative": 0, "positive_gap": 29, "hard_negative_gap": 2},
+    {"slice": "multiple-matches", "positive": 157, "hard_negative": 0, "positive_gap": 0, "hard_negative_gap": 2},
+    {"slice": "phonetic-variant", "positive": 2, "hard_negative": 0, "positive_gap": 28, "hard_negative_gap": 2},
+    {"slice": "quoted-context", "positive": 28, "hard_negative": 2, "positive_gap": 2, "hard_negative_gap": 0},
+    {"slice": "repeated", "positive": 3, "hard_negative": 0, "positive_gap": 27, "hard_negative_gap": 2},
+    {"slice": "separator", "positive": 3, "hard_negative": 0, "positive_gap": 27, "hard_negative_gap": 2},
+    {"slice": "spelling-variant", "positive": 60, "hard_negative": 0, "positive_gap": 0, "hard_negative_gap": 2},
+    {"slice": "suffix", "positive": 60, "hard_negative": 0, "positive_gap": 0, "hard_negative_gap": 2},
+    {"slice": "token-boundary", "positive": 9, "hard_negative": 0, "positive_gap": 21, "hard_negative_gap": 2},
+    {"slice": "unicode", "positive": 0, "hard_negative": 1, "positive_gap": 30, "hard_negative_gap": 1},
+    {"slice": "username", "positive": 20, "hard_negative": 52, "positive_gap": 10, "hard_negative_gap": 0},
+    {"slice": "whitespace", "positive": 2, "hard_negative": 0, "positive_gap": 28, "hard_negative_gap": 2}
+  ],
+  "targeted_supplement": {
+    "report": "pf005-slice-priority-batch-001-adjudicated.report.json",
+    "classification": "targeted-slice-discovery-only",
+    "case_count": 120,
+    "finalized_count": 89,
+    "positive_count": 26,
+    "hard_negative_count": 63,
+    "review_count": 31,
+    "positive_slice_counts": {
+      "choseong": 6,
+      "direct": 9,
+      "multiple-matches": 4,
+      "separator": 1,
+      "spelling-variant": 2,
+      "suffix": 11
+    },
+    "hard_negative_slice_counts": {
+      "benign-substring": 10,
+      "jamo": 7,
+      "repeated": 38,
+      "separator": 13,
+      "unicode": 1,
+      "whitespace": 4
+    }
+  },
+  "combined_slice_coverage": [
+    {"slice": "abbreviation", "positive": 13, "hard_negative": 1, "positive_gap": 17, "hard_negative_gap": 1},
+    {"slice": "alias", "positive": 1, "hard_negative": 0, "positive_gap": 29, "hard_negative_gap": 2},
+    {"slice": "benign-substring", "positive": 28, "hard_negative": 1546, "positive_gap": 2, "hard_negative_gap": 0},
+    {"slice": "choseong", "positive": 36, "hard_negative": 0, "positive_gap": 0, "hard_negative_gap": 2},
+    {"slice": "direct", "positive": 502, "hard_negative": 188, "positive_gap": 0, "hard_negative_gap": 0},
+    {"slice": "domain-term", "positive": 3, "hard_negative": 25, "positive_gap": 27, "hard_negative_gap": 0},
+    {"slice": "educational-context", "positive": 40, "hard_negative": 48, "positive_gap": 0, "hard_negative_gap": 0},
+    {"slice": "game-term", "positive": 20, "hard_negative": 51, "positive_gap": 10, "hard_negative_gap": 0},
+    {"slice": "jamo", "positive": 3, "hard_negative": 232, "positive_gap": 27, "hard_negative_gap": 0},
+    {"slice": "keyboard", "positive": 1, "hard_negative": 0, "positive_gap": 29, "hard_negative_gap": 2},
+    {"slice": "mixed-gap", "positive": 1, "hard_negative": 0, "positive_gap": 29, "hard_negative_gap": 2},
+    {"slice": "multiple-matches", "positive": 161, "hard_negative": 0, "positive_gap": 0, "hard_negative_gap": 2},
+    {"slice": "phonetic-variant", "positive": 2, "hard_negative": 0, "positive_gap": 28, "hard_negative_gap": 2},
+    {"slice": "quoted-context", "positive": 28, "hard_negative": 2, "positive_gap": 2, "hard_negative_gap": 0},
+    {"slice": "repeated", "positive": 3, "hard_negative": 38, "positive_gap": 27, "hard_negative_gap": 0},
+    {"slice": "separator", "positive": 4, "hard_negative": 13, "positive_gap": 26, "hard_negative_gap": 0},
+    {"slice": "spelling-variant", "positive": 62, "hard_negative": 0, "positive_gap": 0, "hard_negative_gap": 2},
+    {"slice": "suffix", "positive": 71, "hard_negative": 0, "positive_gap": 0, "hard_negative_gap": 2},
+    {"slice": "token-boundary", "positive": 9, "hard_negative": 0, "positive_gap": 21, "hard_negative_gap": 2},
+    {"slice": "unicode", "positive": 0, "hard_negative": 2, "positive_gap": 30, "hard_negative_gap": 0},
+    {"slice": "username", "positive": 20, "hard_negative": 52, "positive_gap": 10, "hard_negative_gap": 0},
+    {"slice": "whitespace", "positive": 2, "hard_negative": 4, "positive_gap": 28, "hard_negative_gap": 0}
+  ],
+  "balanced_choseong_increment": {
+    "sentence_tp_delta_vs_strict": 24,
+    "sentence_fp_delta_vs_strict": 0,
+    "occurrence_tp_delta_vs_strict": 30,
+    "occurrence_fp_delta_vs_strict": 2
+  },
+  "limitations": [
+    "하나의 사례가 여러 slice에 포함될 수 있어 slice 건수 합은 전체 사례 수와 같지 않다.",
+    "현재 표본은 tuning이며 hidden evaluation과 실서비스 분포를 대체하지 않는다.",
+    "표면 신호 우선 queue는 부족 slice 후보 발굴용이며 편향 없는 정확도 추정에 사용하지 않는다.",
+    "combined_slice_coverage는 targeted supplement를 더한 보강 현황이며 2,763건 tuning profile의 정확도 수치를 변경하지 않는다.",
+    "targeted supplement의 review 31건은 combined slice coverage에서 제외한다."
+  ],
+  "gold_ready": false
+}

@@ -53,6 +53,22 @@ _PUBLISHED_BATCH_004_COMMON_FP_REPORT_PATH = (
     / "results"
     / "pf005-batch-004-common-exact-fp-reaudit-adjudicated.report.json"
 )
+_PUBLISHED_CHOSEONG_OCCURRENCE_REPORT_PATHS = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-choseong-occurrence-fp-base-adjudicated.report.json",
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-choseong-occurrence-fp-buffer-002-adjudicated.report.json",
+)
+_PUBLISHED_SLICE_PRIORITY_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-slice-priority-batch-001-adjudicated.report.json"
+)
 _PUBLISHED_HARD_NEGATIVE_BATCH_001_REPORT_PATH = (
     Path(__file__).parents[1]
     / "evaluation"
@@ -231,6 +247,63 @@ def test_published_balanced_batch_004_reports_are_aggregate_only() -> None:
     assert batch["gold_ready"] is False
     assert reaudit["gold_ready"] is False
     serialized = json.dumps([batch, reaudit], ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_choseong_occurrence_reaudit_reports_are_aggregate_only() -> None:
+    base, buffer = (
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in _PUBLISHED_CHOSEONG_OCCURRENCE_REPORT_PATHS
+    )
+
+    assert base["batch_counts"] == {
+        "positive": 5,
+        "hard-negative": 0,
+        "review": 0,
+    }
+    assert base["quality_counts"]["double_reviewed"] == 5
+    assert base["adjudication_counts"] == {
+        "eligible": 2,
+        "resolved": 2,
+        "unresolved": 0,
+        "privacy_excluded": 0,
+    }
+    assert buffer["batch_counts"] == {
+        "positive": 2,
+        "hard-negative": 0,
+        "review": 0,
+    }
+    assert buffer["quality_counts"]["double_reviewed"] == 2
+    assert buffer["quality_counts"]["disagreement"] == 0
+    serialized = json.dumps([base, buffer], ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_slice_priority_adjudication_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_SLICE_PRIORITY_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["batch_counts"] == {
+        "positive": 26,
+        "hard-negative": 63,
+        "review": 31,
+    }
+    assert report["quality_counts"] == {
+        "double_reviewed": 120,
+        "consensus": 27,
+        "disagreement": 93,
+        "privacy_excluded": 0,
+        "pending_privacy": 0,
+    }
+    assert report["adjudication_counts"] == {
+        "eligible": 93,
+        "resolved": 80,
+        "unresolved": 13,
+        "privacy_excluded": 0,
+    }
+    assert report["gold_ready"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
     for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
         assert f'"{forbidden}"' not in serialized
 

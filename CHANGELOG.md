@@ -32,6 +32,8 @@ Semantic Versioning after the first public release.
   expanding finalized tuning evidence to 2,363 cases.
 - A fourth disjoint 500-case balanced review batch and blinded common-FP re-audit, completing the
   provisional PF-005 quantity target with 639 positive and 2,124 hard-negative cases.
+- Blinded Choseong occurrence re-audit evidence and a detector-independent surface-signal queue for
+  targeted PF-005 slice expansion.
 
 ### Changed
 
@@ -50,6 +52,8 @@ Semantic Versioning after the first public release.
   and excludes the union before selecting a new batch.
 - Profile false-positive re-audit now validates against evaluated non-review cases, allowing protected
   corpora to retain unresolved review cases without breaking evidence validation.
+- Review queue planning can prioritize text-shape signals while retaining per-source round-robin selection
+  and explicit no-prediction/no-upstream-label evidence.
 
 ### Security
 

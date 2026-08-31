@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "queue_id": "pf005-slice-priority-batch-001",
+  "selection": "surface-signal-source-round-robin-sha256-v1",
+  "available_review_count": 700,
+  "excluded_case_count": 1989,
+  "excluded_corpus_case_count": 1500,
+  "excluded_annotation_case_count": 500,
+  "excluded_input_overlap_count": 11,
+  "excluded_review_case_count": 281,
+  "eligible_review_count": 419,
+  "selected_count": 120,
+  "selected_existing_overlap_count": 0,
+  "source_statistics": [
+    {
+      "source_fingerprint": "84782678044b971dd1711fbdcd2c03a16dbacf8bb48a6a2c4a20f6d2b3dfa0d3",
+      "source_name": "searle-j/KOTE",
+      "available_count": 161,
+      "selected_count": 40
+    },
+    {
+      "source_fingerprint": "e9921c690810387df70857f30dd0b30938cc4f5a402f050f03f08d474c972df4",
+      "source_name": "2runo/Curse-detection-data",
+      "available_count": 70,
+      "selected_count": 40
+    },
+    {
+      "source_fingerprint": "e9c792a182ef95b96aafe29dee7b13555e4876282110c370ab97fd5a91db0872",
+      "source_name": "kocohub/korean-hate-speech",
+      "available_count": 188,
+      "selected_count": 40
+    }
+  ],
+  "uses_detector_predictions": false,
+  "uses_upstream_labels": false,
+  "gold_ready": false,
+  "surface_signal_candidate_counts": {
+    "ascii-token": 4,
+    "choseong-run": 72,
+    "compat-jamo": 102,
+    "hangul-separator": 45,
+    "modern-jamo": 1,
+    "quoted-marker": 2,
+    "repeated-character": 129,
+    "single-hangul-gap": 15
+  },
+  "surface_signal_selected_counts": {
+    "ascii-token": 4,
+    "choseong-run": 66,
+    "compat-jamo": 74,
+    "hangul-separator": 25,
+    "modern-jamo": 1,
+    "quoted-marker": 1,
+    "repeated-character": 76,
+    "single-hangul-gap": 12
+  },
+  "selected_with_surface_signal_count": 107
+}

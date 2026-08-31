@@ -2,11 +2,11 @@
   "schema_version": 1,
   "profile_contract_version": 1,
   "source": {
-    "ablation_report_sha256": "3f86bdb9ccbf6296f5251f3f374002b71b745b0e8bbf1986b99d441dc8864303",
-    "measured_at": "2026-08-28T04:24:49.048391+00:00",
+    "ablation_report_sha256": "8e6feb87bd2293c69caef02492fa415072750d55a88de78b647fe8f15883851b",
+    "measured_at": "2026-08-28T05:33:52.052866+00:00",
     "corpus": {
       "classification": "independent-tuning-provisional",
-      "sha256": "a0e1fe8f4d1ed0adae18508f59f1811d725e8b6a270997fb0066161c9d00b37d",
+      "sha256": "f499e1fa304a63a6dbc5eac102264d0997aa6caf41c7e4ffd30dadfd010e16b3",
       "case_count": 2763,
       "positive_count": 639,
       "hard_negative_count": 2124,
@@ -65,22 +65,22 @@
         "counts": {
           "tp": 554,
           "fp": 37,
-          "fn": 421
+          "fn": 420
         },
         "precision": 0.937394247038917,
-        "recall": 0.5682051282051283,
-        "f1": 0.7075351213282248
+        "recall": 0.5687885010266941,
+        "f1": 0.7079872204472843
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0211,
-          "p95_ms": 0.0327
+          "p50_ms": 0.0228,
+          "p95_ms": 0.0239
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 4.1241,
-          "p95_ms": 5.9169
+          "p50_ms": 4.5513,
+          "p95_ms": 5.8816
         },
         "engine_retained_memory_bytes": 81189
       }
@@ -126,24 +126,24 @@
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 579,
-          "fp": 44,
-          "fn": 396
+          "tp": 584,
+          "fp": 39,
+          "fn": 390
         },
-        "precision": 0.9293739967897271,
-        "recall": 0.5938461538461538,
-        "f1": 0.7246558197747184
+        "precision": 0.9373996789727127,
+        "recall": 0.5995893223819302,
+        "f1": 0.7313713212273012
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0203,
-          "p95_ms": 0.0212
+          "p50_ms": 0.023,
+          "p95_ms": 0.0242
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 4.3967,
-          "p95_ms": 6.7711
+          "p50_ms": 4.6538,
+          "p95_ms": 5.2255
         },
         "engine_retained_memory_bytes": 124675
       }
@@ -189,24 +189,24 @@
       },
       "occurrence_metrics": {
         "counts": {
-          "tp": 583,
-          "fp": 101,
-          "fn": 392
+          "tp": 588,
+          "fp": 96,
+          "fn": 386
         },
-        "precision": 0.8523391812865497,
-        "recall": 0.597948717948718,
-        "f1": 0.702833031946956
+        "precision": 0.8596491228070176,
+        "recall": 0.6036960985626283,
+        "f1": 0.7092882991556091
       },
       "performance": {
         "short_chat": {
           "input_length": 15,
-          "p50_ms": 0.0706,
-          "p95_ms": 0.1424
+          "p50_ms": 0.0798,
+          "p95_ms": 0.1099
         },
         "maximum_input": {
           "input_length": 4096,
-          "p50_ms": 7.4062,
-          "p95_ms": 11.7671
+          "p50_ms": 7.353,
+          "p95_ms": 11.2281
         },
         "engine_retained_memory_bytes": 230954
       }
@@ -215,15 +215,15 @@
   "balanced_evidence": {
     "sentence_tp_delta_vs_strict": 24,
     "sentence_fp_delta_vs_strict": 0,
-    "occurrence_tp_delta_vs_strict": 25,
-    "occurrence_fp_delta_vs_strict": 7
+    "occurrence_tp_delta_vs_strict": 30,
+    "occurrence_fp_delta_vs_strict": 2
   },
   "balanced_gates": {
     "normal_sentence_fp_rate": 0.0,
     "normal_sentence_fp_rate_limit": 0.005,
-    "short_chat_p95_ms": 0.0212,
+    "short_chat_p95_ms": 0.0242,
     "short_chat_p95_ms_limit": 1.0,
-    "maximum_input_p95_ms": 6.7711,
+    "maximum_input_p95_ms": 5.2255,
     "maximum_input_p95_ms_limit": 15.0,
     "passed": false
   },

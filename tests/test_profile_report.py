@@ -10,6 +10,7 @@ from evaluation.profile_report import ProfileReportError, build_profile_report, 
 from koguard import KoguardEngine
 
 _PUBLIC_REPORT = Path("evaluation/results/pf009-profile-evaluation.report.json")
+_SLICE_COVERAGE_REPORT = Path("evaluation/results/pf005-slice-coverage.report.json")
 _REPORT_SCHEMA = Path("evaluation/profile-report.schema.json")
 
 
@@ -130,6 +131,48 @@ def test_build_profile_report_maps_configs_and_omits_protected_case_data() -> No
     )
 
 
+def test_committed_slice_coverage_report_is_aggregate_only() -> None:
+    report = json.loads(_SLICE_COVERAGE_REPORT.read_text(encoding="utf-8"))
+
+    assert report["targets"] == {
+        "positive_per_slice": 30,
+        "hard_negative_per_slice": 2,
+    }
+    assert report["balanced_choseong_increment"] == {
+        "sentence_tp_delta_vs_strict": 24,
+        "sentence_fp_delta_vs_strict": 0,
+        "occurrence_tp_delta_vs_strict": 30,
+        "occurrence_fp_delta_vs_strict": 2,
+    }
+    by_slice = {row["slice"]: row for row in report["slice_coverage"]}
+    assert by_slice["choseong"] == {
+        "slice": "choseong",
+        "positive": 30,
+        "hard_negative": 0,
+        "positive_gap": 0,
+        "hard_negative_gap": 2,
+    }
+    assert by_slice["separator"]["positive_gap"] == 27
+    assert by_slice["whitespace"]["positive_gap"] == 28
+    assert report["targeted_supplement"]["finalized_count"] == 89
+    assert report["targeted_supplement"]["review_count"] == 31
+    combined_by_slice = {row["slice"]: row for row in report["combined_slice_coverage"]}
+    assert combined_by_slice["choseong"]["positive"] == 36
+    assert combined_by_slice["repeated"]["hard_negative"] == 38
+    assert combined_by_slice["separator"] == {
+        "slice": "separator",
+        "positive": 4,
+        "hard_negative": 13,
+        "positive_gap": 26,
+        "hard_negative_gap": 0,
+    }
+    assert combined_by_slice["whitespace"]["hard_negative_gap"] == 0
+    assert report["gold_ready"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
 def test_build_profile_report_rejects_profile_settings_drift() -> None:
     source = _source()
     source["profiles"][1]["settings"]["fuzzy_matching"] = True
@@ -158,11 +201,11 @@ def test_committed_profile_report_is_aggregate_only_and_tracks_balanced_gates() 
 
     assert report["schema_version"] == 1
     assert report["source"]["ablation_report_sha256"] == (
-        "3f86bdb9ccbf6296f5251f3f374002b71b745b0e8bbf1986b99d441dc8864303"
+        "8e6feb87bd2293c69caef02492fa415072750d55a88de78b647fe8f15883851b"
     )
     assert report["source"]["corpus"] == {
         "classification": "independent-tuning-provisional",
-        "sha256": "a0e1fe8f4d1ed0adae18508f59f1811d725e8b6a270997fb0066161c9d00b37d",
+        "sha256": "f499e1fa304a63a6dbc5eac102264d0997aa6caf41c7e4ffd30dadfd010e16b3",
         "case_count": 2763,
         "positive_count": 639,
         "hard_negative_count": 2124,
@@ -172,8 +215,8 @@ def test_committed_profile_report_is_aggregate_only_and_tracks_balanced_gates() 
     assert report["balanced_evidence"] == {
         "sentence_tp_delta_vs_strict": 24,
         "sentence_fp_delta_vs_strict": 0,
-        "occurrence_tp_delta_vs_strict": 25,
-        "occurrence_fp_delta_vs_strict": 7,
+        "occurrence_tp_delta_vs_strict": 30,
+        "occurrence_fp_delta_vs_strict": 2,
     }
     assert report["balanced_gates"]["passed"] is False
     assert report["limitations"][:3] == [

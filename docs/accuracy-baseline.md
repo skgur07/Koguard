@@ -65,6 +65,11 @@
 > policy positive로 확정했다. 누적 평가 표본은 2,763건(positive 639, hard-negative 2,124)이고
 > balanced 문장 TP/FP/FN/TN은 440/0/199/2,124, recall 68.9%다. occurrence TP/FP/FN은
 > 579/44/396, recall 59.4%이며 strict 대비 occurrence FP +7과 hidden 검증은 남아 있다.
+>
+> 같은 날 초성 occurrence FP 후보 7건을 prior annotation 없이 다시 이중 검토하고 span 불일치
+> 2건을 제3 판정했다. 수정 후 balanced occurrence TP/FP/FN은 584/39/390, recall 60.0%이며
+> strict 대비 occurrence TP +30·FP +2다. 문장 지표는 440/0/199/2,124로 유지된다. 남은 FP
+> 증분 2와 hidden 검증 부재 때문에 전체 gate는 계속 실패한다.
 
 측정일: 2026-07-28
 

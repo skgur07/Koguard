@@ -53,6 +53,16 @@ _PUBLISHED_BATCH_004_COMMON_FP_APPLY_REPORT_PATH = (
     / "results"
     / "pf005-batch-004-common-exact-fp-reaudit-apply.report.json"
 )
+_PUBLISHED_CHOSEONG_OCCURRENCE_APPLY_REPORT_PATHS = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-choseong-occurrence-fp-base-apply.report.json",
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-choseong-occurrence-fp-buffer-002-apply.report.json",
+)
 
 
 def test_prepare_matcher_fp_reaudit_blinds_prior_decisions_and_is_aggregate_only(
@@ -448,6 +458,23 @@ def test_published_balanced_batch_004_apply_reports_are_aggregate_only() -> None
         "review": 700,
     }
     serialized = json.dumps([batch, reaudit], ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_choseong_occurrence_apply_reports_are_aggregate_only() -> None:
+    base, buffer = (
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in _PUBLISHED_CHOSEONG_OCCURRENCE_APPLY_REPORT_PATHS
+    )
+
+    assert base["applied_count"] == 5
+    assert base["label_transition_counts"] == {"positive->positive": 5}
+    assert base["source_corpus_counts"] == base["updated_corpus_counts"]
+    assert buffer["applied_count"] == 2
+    assert buffer["label_transition_counts"] == {"positive->positive": 2}
+    assert buffer["source_corpus_counts"] == buffer["updated_corpus_counts"]
+    serialized = json.dumps([base, buffer], ensure_ascii=False)
     for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
         assert f'"{forbidden}"' not in serialized
 

@@ -107,9 +107,9 @@ recall은 54.3%다. strict 대비 문장 TP +17·FP +0, occurrence TP +18·FP +6
 2026-08-28 중복 없는 balanced batch-004 500건과 공통 Exact/Alias FP 재감사를 반영해 표본은
 2,763건(positive 639, hard-negative 2,124)이다. strict 문장 TP/FP/FN/TN은
 416/0/223/2,124, balanced는 440/0/199/2,124이며 balanced recall은 68.9%다. balanced
-occurrence TP/FP/FN은 579/44/396, recall 59.4%로 strict보다 TP 25건과 FP 7건이 늘었다.
-문장 FP 0과 로컬 성능 예산은 통과하지만 occurrence FP 증분 때문에 전체 gate 실패 상태를
-유지한다.
+초성 occurrence FP 후보 7건의 블라인드 재감사 후 occurrence TP/FP/FN은 584/39/390,
+recall 60.0%로 strict보다 TP 30건과 FP 2건이 늘었다. 문장 FP 0과 로컬 성능 예산은 통과하지만
+occurrence FP 증분 때문에 전체 gate 실패 상태를 유지한다.
 
 ## 동작 불변 조건
 

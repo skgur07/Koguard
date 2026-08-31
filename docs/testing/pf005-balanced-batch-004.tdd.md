@@ -42,3 +42,7 @@ PF-005의 positive 500·hard-negative 2,000 수량 기준은 충족했다. 그�
 - `evaluation/results/pf005-balanced-batch-004-apply.report.json`
 - `evaluation/results/pf005-batch-004-common-exact-fp-reaudit-adjudicated.report.json`
 - `evaluation/results/pf005-batch-004-common-exact-fp-reaudit-apply.report.json`
+
+이 문서의 occurrence 수치는 batch-004 직후 기준이다. 후속 초성 occurrence 블라인드 재감사로
+balanced TP/FP/FN은 584/39/390, strict 대비 TP +30·FP +2로 수정됐다. 최신 근거는
+[`pf005-slice-priority.tdd.md`](pf005-slice-priority.tdd.md)를 따른다.

@@ -294,11 +294,24 @@ FP·p95 게이트를 기록한다. 2026-08-28 중복 없는 batch-004와 공통 
 블라인드 재감사를 반영한 최종
 수량 기준 표본은 2,763건(positive 639, hard-negative 2,124)이다. strict와 balanced의 문장
 TP/FP/FN/TN은 각각 416/0/223/2,124와 440/0/199/2,124이며 balanced 문장 recall은 68.9%다.
-balanced occurrence TP/FP/FN은 579/44/396, recall 59.4%로 strict보다 TP 25건과 FP 7건이
-늘어 전체 FP 증분 0 gate는 계속 실패한다. short-chat p95는 0.0212ms, 최대 입력 p95는
-6.7711ms였다. 입력에서 review 737건을 제외했으므로 실서비스 FP나 최종 recall로 일반화할 수
+초성 occurrence FP 후보 7건을 다시 이중 검토한 뒤 balanced occurrence TP/FP/FN은
+584/39/390, recall 60.0%로 strict보다 TP 30건과 FP 2건이 늘었다. 전체 FP 증분 0 gate는 계속
+실패한다. short-chat p95는 0.0242ms, 최대 입력 p95는 5.2255ms였다. 입력에서 review 737건을
+제외했으므로 실서비스 FP나 최종 recall로 일반화할 수
 없고, 성능은 세 OS CI에서 다시 확인해야 한다. 계약은
 `profile-report.schema.json` version 1이다.
+
+남은 review를 편향 없는 정확도 표본으로 가장하지 않고 부족 slice 후보만 우선 확인하려면
+`review_queue_planner.py`에 `--surface-priority`를 지정한다. 이 모드는 detector prediction,
+upstream label, 기존 판정을 사용하지 않고 Jamo·초성 연속·반복 문자·한글 사이 separator/gap·
+ASCII token 같은 표면 신호를 source round-robin 안에서 먼저 배치한다. 생성 queue는 targeted
+slice discovery 전용이며 일반 정확도 추정에는 사용하지 않는다.
+
+첫 surface-priority 120건은 독립 이중 검토와 제3 재심 뒤 positive 26건, hard-negative 63건,
+review 31건으로 남았다. 초기 합의는 27건, 불일치는 93건이었고 재심은 그중 80건을 해결했다.
+확정 89건은 `pf005-slice-coverage.report.json`의 `targeted_supplement`와
+`combined_slice_coverage`에서만 보강 근거로 표시한다. profile의 corpus 건수·정확도 지표는
+바꾸지 않으며 공개 annotation 리포트에도 원문·case ID·canonical·reviewer ID를 넣지 않는다.
 
 ## 비교 계약
 

@@ -8,7 +8,7 @@ import hashlib
 import json
 import re
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -36,6 +36,30 @@ _ANNOTATION_FIELDS = {
     "slices",
     "notes",
 }
+_SURFACE_SIGNAL_PATTERNS = {
+    "modern-jamo": re.compile(r"[\u1100-\u11ff]"),
+    "ascii-token": re.compile(r"[A-Za-z]{3,}"),
+    "single-hangul-gap": re.compile(r"(?<![가-힣])[가-힣] {1,3}[가-힣](?![가-힣])"),
+    "hangul-separator": re.compile(r"[가-힣][!#$%&*+,.=@^_~·-]+[가-힣]"),
+    "choseong-run": re.compile(r"[ㄱ-ㅎ]{2,}"),
+    "repeated-character": re.compile(r"(.)\1{2,}"),
+    "quoted-marker": re.compile(r"[\"'“”‘’「」『』]"),
+    "username-marker": re.compile(r"[@#][^\s]{2,}"),
+    "non-bmp-unicode": re.compile(r"[\U00010000-\U0010ffff]"),
+    "compat-jamo": re.compile(r"[ㄱ-ㅎㅏ-ㅣ]"),
+}
+_SURFACE_SIGNAL_WEIGHTS = {
+    "modern-jamo": 100,
+    "ascii-token": 90,
+    "single-hangul-gap": 80,
+    "hangul-separator": 70,
+    "choseong-run": 60,
+    "repeated-character": 50,
+    "quoted-marker": 40,
+    "username-marker": 35,
+    "non-bmp-unicode": 30,
+    "compat-jamo": 20,
+}
 
 
 class ReviewQueueError(ValueError):
@@ -56,6 +80,7 @@ def prepare_review_queue(
     queue_id: str,
     corpus_id: str,
     limit: int = 500,
+    surface_priority: bool = False,
     exclude_corpus_paths: Sequence[Path] = (),
     exclude_annotation_batch_paths: Sequence[Path] = (),
     output_path: Path | None = None,
@@ -101,11 +126,23 @@ def prepare_review_queue(
         source_key = _canonical_sha256(source_data)
         grouped[source_key].append(case)
         source_details[source_key] = source_data
+    signal_cache = {
+        cast(str, case["id"]): _surface_signals(cast(str, case["text"])) for case in eligible_cases
+    }
     for cases in grouped.values():
         cases.sort(
             key=lambda case: (
-                hashlib.sha256(f"{queue_id}\0{cast(str, case['id'])}".encode()).hexdigest(),
-                cast(str, case["id"]),
+                (
+                    -_surface_priority_score(signal_cache[cast(str, case["id"])]),
+                    -len(signal_cache[cast(str, case["id"])]),
+                    hashlib.sha256(f"{queue_id}\0{cast(str, case['id'])}".encode()).hexdigest(),
+                    cast(str, case["id"]),
+                )
+                if surface_priority
+                else (
+                    hashlib.sha256(f"{queue_id}\0{cast(str, case['id'])}".encode()).hexdigest(),
+                    cast(str, case["id"]),
+                )
             )
         )
 
@@ -141,7 +178,11 @@ def prepare_review_queue(
     report = {
         "schema_version": 1,
         "queue_id": queue_id,
-        "selection": "source-round-robin-sha256-v1",
+        "selection": (
+            "surface-signal-source-round-robin-sha256-v1"
+            if surface_priority
+            else "source-round-robin-sha256-v1"
+        ),
         "available_review_count": len(review_cases),
         "excluded_case_count": len(excluded_ids),
         "excluded_corpus_case_count": len(excluded_corpus_ids),
@@ -158,6 +199,23 @@ def prepare_review_queue(
         "uses_upstream_labels": False,
         "gold_ready": False,
     }
+    if surface_priority:
+        candidate_signal_counts = Counter(
+            signal for signals in signal_cache.values() for signal in signals
+        )
+        selected_signals = [signal_cache[cast(str, case["id"])] for case in selected]
+        selected_signal_counts = Counter(
+            signal for signals in selected_signals for signal in signals
+        )
+        report.update(
+            {
+                "surface_signal_candidate_counts": dict(sorted(candidate_signal_counts.items())),
+                "surface_signal_selected_counts": dict(sorted(selected_signal_counts.items())),
+                "selected_with_surface_signal_count": sum(
+                    bool(signals) for signals in selected_signals
+                ),
+            }
+        )
     result = ReviewQueueResult(corpus, report)
     if output_path is not None:
         _write_json(output_path, corpus)
@@ -246,6 +304,18 @@ def _canonical_sha256(payload: object) -> str:
     return hashlib.sha256(serialized).hexdigest()
 
 
+def _surface_signals(text: str) -> tuple[str, ...]:
+    return tuple(
+        name
+        for name, pattern in _SURFACE_SIGNAL_PATTERNS.items()
+        if pattern.search(text) is not None
+    )
+
+
+def _surface_priority_score(signals: Sequence[str]) -> int:
+    return sum(_SURFACE_SIGNAL_WEIGHTS[signal] for signal in signals)
+
+
 def _read_object(path: Path, description: str) -> dict[str, Any]:
     try:
         payload: object = json.loads(path.read_text(encoding="utf-8"))
@@ -289,6 +359,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--corpus-id", required=True)
     parser.add_argument("--limit", type=int, default=500)
     parser.add_argument(
+        "--surface-priority",
+        action="store_true",
+        help="rank detector-blind text-shape signals before the per-source stable hash",
+    )
+    parser.add_argument(
         "--exclude-corpus",
         action="append",
         default=[],
@@ -317,6 +392,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             queue_id=arguments.queue_id,
             corpus_id=arguments.corpus_id,
             limit=arguments.limit,
+            surface_priority=arguments.surface_priority,
             exclude_corpus_paths=arguments.exclude_corpus,
             exclude_annotation_batch_paths=arguments.exclude_annotation_batch,
             output_path=arguments.output,
