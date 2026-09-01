@@ -340,17 +340,37 @@ targeted discovery이므로 기존 2,763건 tuning 정확도 수치에는 합치
 Separator·Repeated·Whitespace hard-negative 목표는 충족했지만 해당 positive는 여전히 각각
 4·3·2건뿐이다.
 
+## 2026-09-01 positive 변형 slice buffer
+
+외부 댓글 원문과 detector 예측에 의존하지 않고 Koguard가 직접 작성한 positive-target 240건과
+정상 decoy 240건을 추가했다. Alias, Keyboard, Jamo, Unicode, Repeated, Separator, Whitespace,
+Mixed-gap마다 positive-target 30건·decoy 30건을 설계했고 기존 curated 350건과 direct 문장
+및 NFKC+casefold 중복은 0건이다. corpus에는 설계 label과
+slice를 노출하지 않고 전부 `review/unadjudicated-intake`로 유지하며, source는 Koguard MIT
+project-authored 자료로 고정한다.
+
+이 buffer는 부족 positive 변형의 독립 판정 입력이지 기존 2,763건 tuning 정확도나 hidden
+성능의 추가분이 아니다. 독립 이중 판정·불일치 재심 전까지 기존 slice coverage의 확정 건수도
+바꾸지 않는다.
+
+생성·선택 완료 뒤 실행한 비-gold 진단에서는 positive-target 240건 중 balanced 63건,
+aggressive 180건을 탐지했고 정상 decoy 240건은 두 profile 모두 탐지 0건이었다. aggressive가
+놓친 60건은 한글 조사가 붙은 Whitespace 30건과 Mixed-gap 30건이다. 이 결과는 다음 matcher
+경계 수정 후보일 뿐 독립 annotation이나 hidden 정확도 수치로 사용하지 않는다.
+
 ## PF-005 종료 전 남은 작업
 
-1. surface-priority의 남은 review 31건은 정책 명확화 뒤 별도 재검토하고, targeted 결과를
-   정확도 추정에 섞지 않은 채 positive 변형 slice를 우선 보강
-2. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
+1. positive 변형·decoy buffer 480건을 detector 결과 없이 독립 이중 판정하고 불일치를 재심한 뒤,
+   확정 사례만 targeted slice coverage에 반영
+2. surface-priority의 남은 review 31건은 정책 명확화 뒤 별도 재검토하고 targeted 결과를
+   정확도 추정에 섞지 않음
+3. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
    등록 표현·승인 변형이 없는 hard-negative 2건 이상 고정
-3. 핵심 positive slice별 30건, 등록 표현을 포함한 substring·인용/설명·사용자명/게임
+4. 핵심 positive slice별 30건, 등록 표현을 포함한 substring·인용/설명·사용자명/게임
    문맥 positive와 등록 표현이 없는 철자 유사 negative 확보
-4. KOTE·Korean Hate Speech 원문의 수동 privacy 검토와 CC-BY-SA attribution 경계 확정
-5. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
-6. hidden aggregate로 tuning 수치와 독립된 전체·slice별 지표 생성
+5. KOTE·Korean Hate Speech 원문의 수동 privacy 검토와 CC-BY-SA attribution 경계 확정
+6. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
+7. hidden aggregate로 tuning 수치와 독립된 전체·slice별 지표 생성
 
 수량 기준은 충족했지만 이 조건 전에는 #7을 완료로 닫거나 현재 corpus를 실서비스 gold라고
 부르지 않는다.

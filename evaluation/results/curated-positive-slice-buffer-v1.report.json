@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-curated-positive-slice-buffer-v1",
+  "case_count": 480,
+  "design_counts": {
+    "positive_target": 240,
+    "hard_negative_target": 240
+  },
+  "design_slice_counts": {
+    "alias": 60,
+    "jamo": 60,
+    "keyboard": 60,
+    "mixed-gap": 60,
+    "repeated": 60,
+    "separator": 60,
+    "unicode": 60,
+    "whitespace": 60
+  },
+  "source_statistics": [
+    {
+      "source_id": "koguard-curated-policy",
+      "selected_count": 480,
+      "share": 1.0
+    }
+  ],
+  "privacy_status": {
+    "synthetic": 480,
+    "approved": 480
+  },
+  "generated_label_counts": {
+    "positive": 0,
+    "hard-negative": 0,
+    "review": 480
+  },
+  "gold_ready": false,
+  "completion_blockers": [
+    "Independent double annotation and disagreement adjudication are still required.",
+    "Design intent is not a substitute for Koguard-policy gold annotation."
+  ]
+}

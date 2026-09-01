@@ -35,6 +35,9 @@ review 37건으로 판정했다. 따라서 hidden 평가와 출처 권리 확인
 부족 slice 탐색용 surface-priority 120건도 detector 출력이나 upstream label 없이 별도로
 선택·검토했다. positive 26건과 hard-negative 63건을 확정하고 review 31건을 유지했다. 이
 표적 표본은 slice 후보 발굴에만 쓰며 2,763건 tuning 성능이나 hidden 성능으로 합치지 않는다.
+부족 positive 변형을 직접 보강하기 위해 프로젝트 작성 blinded buffer 480건도 별도로 만들었다.
+8개 변형 slice마다 positive-target 30건과 정상 decoy 30건을 섞었으며, 독립 판정 전에는 모두
+review이고 기존 정확도와 coverage를 변경하지 않는다.
 
 ### 1.1 Core 판정 정책 보완
 

@@ -11,6 +11,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from unicodedata import normalize
 
 from koguard import KoguardDictionary
 
@@ -25,10 +26,18 @@ DEFAULT_BUFFER_OUTPUT_PATH = (
 DEFAULT_BUFFER_REPORT_PATH = (
     Path(__file__).with_name("results") / "curated-hard-negative-buffer-v1.report.json"
 )
+DEFAULT_POSITIVE_SLICE_OUTPUT_PATH = (
+    Path(__file__).with_name("corpus") / "tuning" / "curated-positive-slice-buffer-v1.json"
+)
+DEFAULT_POSITIVE_SLICE_REPORT_PATH = (
+    Path(__file__).with_name("results") / "curated-positive-slice-buffer-v1.report.json"
+)
 _CORPUS_ID = "koguard-curated-policy-slices-v1"
 _SOURCE_REVISION = "curated-policy-v1"
 _BUFFER_CORPUS_ID = "koguard-curated-hard-negative-buffer-v1"
 _BUFFER_SOURCE_REVISION = "curated-policy-buffer-v1"
+_POSITIVE_SLICE_CORPUS_ID = "koguard-curated-positive-slice-buffer-v1"
+_POSITIVE_SLICE_SOURCE_REVISION = "curated-positive-slice-buffer-v1"
 _POSITIVE_TERMS = (
     "시발",
     "씨발",
@@ -119,6 +128,59 @@ _HARD_NEGATIVE_TEMPLATES = (
     ("username", "검토할 사용자명은 {surface}연구소입니다."),
     ("game-term", "게임 아이템 {surface} 조각을 획득했습니다."),
 )
+_VARIANT_CONTEXT_TEMPLATES = (
+    "검토 문자열은 {surface} 입니다.",
+    "채팅에 '{surface}'이라고 적혀 있습니다.",
+    "문서 예시 ({surface})를 확인합니다.",
+)
+_UNICODE_CONTEXT_TEMPLATES = (
+    "Unicode 표기 {surface} 사례를 검토합니다.",
+    "문자 확장 표기 '{surface}'를 확인합니다.",
+    "형식 문자 표기 ({surface})를 기록합니다.",
+)
+_ALIAS_CONTEXT_TEMPLATES = (
+    "검토 표기는 {surface} 입니다.",
+    "채팅 기록: {surface}!",
+    "인용 문자열 '{surface}'을 확인합니다.",
+    "괄호 안 표기 ({surface})를 검토합니다.",
+    "대괄호 표기 [{surface}]를 기록합니다.",
+    "문서의 마지막 표기는 {surface}",
+)
+_ALIAS_SURFACES = ("ㅈ같", "ㅈ됐", "ㅄ", "ㅈㄲ", "ㅅㅄㄲ")
+_ALIAS_DECOY_SURFACES = ("ㅈ갓", "ㅈ댔", "ㅃㅅ", "ㅈㅌ", "ㅅㅃㄲ")
+
+
+@dataclass(frozen=True, slots=True)
+class _VariantTerm:
+    canonical: str
+    keyboard: str
+    jamo: str
+
+
+_VARIANT_TERMS = (
+    _VariantTerm("시발", "tlqkf", "ㅅㅣㅂㅏㄹ"),
+    _VariantTerm("병신", "qudtls", "ㅂㅕㅇㅅㅣㄴ"),
+    _VariantTerm("존나", "whssk", "ㅈㅗㄴㄴㅏ"),
+    _VariantTerm("지랄", "wlfkf", "ㅈㅣㄹㅏㄹ"),
+    _VariantTerm("염병", "duaqud", "ㅇㅕㅁㅂㅕㅇ"),
+    _VariantTerm("미친놈", "alclssha", "ㅁㅣㅊㅣㄴㄴㅗㅁ"),
+    _VariantTerm("개년", "rosus", "ㄱㅐㄴㅕㄴ"),
+    _VariantTerm("개놈", "rosha", "ㄱㅐㄴㅗㅁ"),
+    _VariantTerm("등신", "emdtls", "ㄷㅡㅇㅅㅣㄴ"),
+    _VariantTerm("머저리", "ajwjfl", "ㅁㅓㅈㅓㄹㅣ"),
+)
+_BENIGN_VARIANT_TERMS = (
+    _VariantTerm("한글", "gksrmf", "ㅎㅏㄴㄱㅡㄹ"),
+    _VariantTerm("안녕", "dkssud", "ㅇㅏㄴㄴㅕㅇ"),
+    _VariantTerm("감사", "rkatk", "ㄱㅏㅁㅅㅏ"),
+    _VariantTerm("학교", "gkrry", "ㅎㅏㄱㄱㅛ"),
+    _VariantTerm("친구", "clsrn", "ㅊㅣㄴㄱㅜ"),
+    _VariantTerm("사랑", "tkfkd", "ㅅㅏㄹㅏㅇ"),
+    _VariantTerm("오늘", "dhsmf", "ㅇㅗㄴㅡㄹ"),
+    _VariantTerm("내일", "sodlf", "ㄴㅐㅇㅣㄹ"),
+    _VariantTerm("행복", "godqhr", "ㅎㅐㅇㅂㅗㄱ"),
+    _VariantTerm("미소", "alth", "ㅁㅣㅅㅗ"),
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -162,15 +224,7 @@ def build_curated_policy_buffer_intake(
 ) -> CuratedIntakeResult:
     """Create 100 new project-authored hard-negative-target review cases."""
 
-    designed = tuple(
-        _DesignedCase(
-            text=template.format(surface=surface),
-            design_label="hard_negative_target",
-            design_slice=slice_name,
-        )
-        for surface in _BUFFER_HARD_NEGATIVE_SURFACES
-        for slice_name, template in _HARD_NEGATIVE_TEMPLATES
-    )
+    designed = _hard_negative_buffer_designed_cases()
     if len(designed) != 100 or len({item.text for item in designed}) != 100:
         raise RuntimeError("curated buffer design count changed unexpectedly")
     dictionary = KoguardDictionary.default()
@@ -186,6 +240,39 @@ def build_curated_policy_buffer_intake(
         source_name="Koguard curated hard-negative buffer",
         case_prefix="koguard-curated-buffer-review",
         notes="Unadjudicated project-authored hard-negative buffer.",
+        output_path=output_path,
+        report_path=report_path,
+    )
+
+
+def build_curated_positive_slice_intake(
+    *,
+    output_path: Path | None = None,
+    report_path: Path | None = None,
+) -> CuratedIntakeResult:
+    """Create 240 positive targets mixed with 240 blinded transformation decoys."""
+
+    designed = _positive_slice_designed_cases()
+    prior_texts = {
+        item.text
+        for item in (
+            *_designed_cases(),
+            *_hard_negative_buffer_designed_cases(),
+        )
+    }
+    if {item.text for item in designed} & prior_texts:
+        raise RuntimeError("curated positive slice buffer overlaps an existing curated intake")
+    normalized_texts = {_normalized_text_key(item.text) for item in designed}
+    prior_normalized_texts = {_normalized_text_key(text) for text in prior_texts}
+    if len(normalized_texts) != len(designed) or normalized_texts & prior_normalized_texts:
+        raise RuntimeError("curated positive slice buffer has an NFKC+casefold normalized overlap")
+    return _build_intake(
+        designed,
+        corpus_id=_POSITIVE_SLICE_CORPUS_ID,
+        source_revision=_POSITIVE_SLICE_SOURCE_REVISION,
+        source_name="Koguard curated transformation slice buffer",
+        case_prefix="koguard-curated-slice-review",
+        notes="Unadjudicated project-authored transformation slice.",
         output_path=output_path,
         report_path=report_path,
     )
@@ -294,6 +381,171 @@ def _designed_cases() -> tuple[_DesignedCase, ...]:
     return designed
 
 
+def _hard_negative_buffer_designed_cases() -> tuple[_DesignedCase, ...]:
+    return tuple(
+        _DesignedCase(
+            text=template.format(surface=surface),
+            design_label="hard_negative_target",
+            design_slice=slice_name,
+        )
+        for surface in _BUFFER_HARD_NEGATIVE_SURFACES
+        for slice_name, template in _HARD_NEGATIVE_TEMPLATES
+    )
+
+
+def _positive_slice_designed_cases() -> tuple[_DesignedCase, ...]:
+    designed = _variant_slice_cases(
+        terms=_VARIANT_TERMS,
+        alias_surfaces=_ALIAS_SURFACES,
+        design_label="positive_target",
+    )
+    designed.extend(
+        _variant_slice_cases(
+            terms=_BENIGN_VARIANT_TERMS,
+            alias_surfaces=_ALIAS_DECOY_SURFACES,
+            design_label="hard_negative_target",
+        )
+    )
+
+    counts = Counter(item.design_slice for item in designed)
+    expected_counts = {
+        "alias": 60,
+        "jamo": 60,
+        "keyboard": 60,
+        "mixed-gap": 60,
+        "repeated": 60,
+        "separator": 60,
+        "unicode": 60,
+        "whitespace": 60,
+    }
+    label_counts = Counter(item.design_label for item in designed)
+    if counts != expected_counts or label_counts != {
+        "positive_target": 240,
+        "hard_negative_target": 240,
+    }:
+        raise RuntimeError("curated positive slice design count changed unexpectedly")
+    if len(designed) != 480 or len({item.text for item in designed}) != len(designed):
+        raise RuntimeError("curated positive slice design contains duplicate text")
+    dictionary = KoguardDictionary.default()
+    forbidden_surfaces = dictionary.blacklist | frozenset(rule.alias for rule in dictionary.aliases)
+    if any(
+        forbidden in item.text
+        for item in designed
+        if item.design_label == "hard_negative_target"
+        for forbidden in forbidden_surfaces
+    ):
+        raise RuntimeError("curated transformation decoy contains a packaged surface")
+    return tuple(designed)
+
+
+def _variant_slice_cases(
+    *,
+    terms: Sequence[_VariantTerm],
+    alias_surfaces: Sequence[str],
+    design_label: str,
+) -> list[_DesignedCase]:
+    designed: list[_DesignedCase] = []
+    designed.extend(
+        _DesignedCase(
+            text=template.format(surface=surface),
+            design_label=design_label,
+            design_slice="alias",
+        )
+        for surface in alias_surfaces
+        for template in _ALIAS_CONTEXT_TEMPLATES
+    )
+    for term in terms:
+        for template in _VARIANT_CONTEXT_TEMPLATES:
+            designed.append(
+                _DesignedCase(
+                    text=template.format(surface=term.keyboard),
+                    design_label=design_label,
+                    design_slice="keyboard",
+                )
+            )
+            designed.append(
+                _DesignedCase(
+                    text=template.format(surface=term.jamo),
+                    design_label=design_label,
+                    design_slice="jamo",
+                )
+            )
+            designed.append(
+                _DesignedCase(
+                    text=template.format(surface=_repeated_surface(term.canonical)),
+                    design_label=design_label,
+                    design_slice="repeated",
+                )
+            )
+        for separator in ("*!", "@_", "·-"):
+            separated = _insert_after_first(term.canonical, separator)
+            designed.append(
+                _DesignedCase(
+                    text=f"구분자 표기 {separated}를 검토합니다.",
+                    design_label=design_label,
+                    design_slice="separator",
+                )
+            )
+        for gap_size in (1, 2, 3):
+            designed.append(
+                _DesignedCase(
+                    text=(
+                        "공백 표기 "
+                        f"{_insert_after_first(term.canonical, ' ' * gap_size)}를 검토합니다."
+                    ),
+                    design_label=design_label,
+                    design_slice="whitespace",
+                )
+            )
+        for separator in ("*", "@", "·"):
+            designed.append(
+                _DesignedCase(
+                    text=(
+                        "혼합 표기 "
+                        f"{_insert_after_first(term.canonical, f' {separator} ')}를 검토합니다."
+                    ),
+                    design_label=design_label,
+                    design_slice="mixed-gap",
+                )
+            )
+        unicode_surfaces = (
+            normalize("NFD", term.canonical),
+            _insert_after_first(term.canonical, "\ufe0f"),
+            _insert_after_first(term.canonical, "\u200b"),
+        )
+        for surface, template in zip(
+            unicode_surfaces,
+            _UNICODE_CONTEXT_TEMPLATES,
+            strict=True,
+        ):
+            designed.append(
+                _DesignedCase(
+                    text=template.format(surface=surface),
+                    design_label=design_label,
+                    design_slice="unicode",
+                )
+            )
+
+    return designed
+
+
+def _insert_after_first(text: str, insertion: str) -> str:
+    return f"{text[0]}{insertion}{text[1:]}"
+
+
+def _normalized_text_key(text: str) -> str:
+    return normalize("NFKC", text).casefold()
+
+
+def _repeated_surface(term: str) -> str:
+    syllable_index = ord(term[0]) - 0xAC00
+    if not 0 <= syllable_index < 11172:
+        raise RuntimeError("repeated target must start with a Hangul syllable")
+    vowel_index = (syllable_index % 588) // 28
+    extension = chr(0xAC00 + (11 * 21 + vowel_index) * 28)
+    return _insert_after_first(term, extension * 2)
+
+
 def _blinded_case(
     item: _DesignedCase,
     *,
@@ -334,7 +586,7 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--kind",
-        choices=("base", "hard-negative-buffer"),
+        choices=("base", "hard-negative-buffer", "positive-slice-buffer"),
         default="base",
     )
     parser.add_argument("--output", type=Path)
@@ -346,7 +598,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     """Generate the curated review intake and print aggregate counts only."""
 
     arguments = _parser().parse_args(argv)
-    if arguments.kind == "hard-negative-buffer":
+    if arguments.kind == "positive-slice-buffer":
+        result = build_curated_positive_slice_intake(
+            output_path=arguments.output or DEFAULT_POSITIVE_SLICE_OUTPUT_PATH,
+            report_path=arguments.report or DEFAULT_POSITIVE_SLICE_REPORT_PATH,
+        )
+    elif arguments.kind == "hard-negative-buffer":
         result = build_curated_policy_buffer_intake(
             output_path=arguments.output or DEFAULT_BUFFER_OUTPUT_PATH,
             report_path=arguments.report or DEFAULT_BUFFER_REPORT_PATH,

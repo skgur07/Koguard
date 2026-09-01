@@ -34,6 +34,9 @@ Semantic Versioning after the first public release.
   provisional PF-005 quantity target with 639 positive and 2,124 hard-negative cases.
 - Blinded Choseong occurrence re-audit evidence and a detector-independent surface-signal queue for
   targeted PF-005 slice expansion.
+- A 480-case project-authored, blinded transformation buffer pairing 240 positive targets with 240
+  decoys across eight underrepresented Alias, keyboard, Jamo, Unicode, repeated, separator, whitespace,
+  and mixed-gap slices.
 
 ### Changed
 

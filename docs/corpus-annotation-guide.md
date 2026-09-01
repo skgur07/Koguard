@@ -162,6 +162,12 @@ reviewer ID는 이름이나 이메일 대신 `reviewer-a`처럼 별도 관리되
 결과를 unbiased tuning/hidden 표본으로 재해석하지 않으며 공개 보고서에는 신호별 후보·선택
 건수와 source별 건수만 기록한다.
 
+외부 댓글에서 positive 변형을 우연히 찾는 방식만으로 부족 slice를 채우지 않는다.
+`curated_policy_intake --kind positive-slice-buffer`는 Koguard가 직접 작성한 변형 사례를 각
+설계 slice별 positive-target 30건과 정상 decoy 30건씩 생성하지만, 설계 의도는 정답이 아니므로
+corpus에는 넣지 않는다. 두 독립
+reviewer와 불일치 재심이 끝날 때까지 모든 사례는 `review/unadjudicated-intake`를 유지한다.
+
 ```powershell
 uv run python -m evaluation.annotation_workflow export `
   evaluation\corpus\tuning\curse-review-intake-v1.json `
