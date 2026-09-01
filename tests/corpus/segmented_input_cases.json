@@ -15,6 +15,11 @@
     "expected_terms": ["시발"]
   },
   {
+    "id": "spaced-choseong-particle-suffix",
+    "text": "ㅅ ㅂ이",
+    "expected_terms": ["시발"]
+  },
+  {
     "id": "spaced-jamo",
     "text": "ㅅㅣ ㅂㅏㄹ",
     "expected_terms": ["시발"]

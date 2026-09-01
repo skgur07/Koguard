@@ -178,6 +178,31 @@ def test_whitespace_gap_matcher_returns_full_original_span() -> None:
     assert matches[0].method is MatchMethod.WHITESPACE
 
 
+@pytest.mark.parametrize(
+    ("text", "matched_text"),
+    [
+        ("시  발은", "시  발"),
+        ("개 새끼를", "개 새끼"),
+    ],
+)
+def test_whitespace_gap_matcher_allows_korean_particle_suffix(
+    text: str,
+    matched_text: str,
+) -> None:
+    matcher = make_matcher(blacklist=["시발", "개새끼"])
+
+    matches = matcher.find_with_whitespace_gaps(
+        text,
+        normalize_text(text, "NFKC"),
+        max_whitespace_gap=3,
+    )
+
+    assert len(matches) == 1
+    assert matches[0].matched_text == matched_text
+    assert (matches[0].start, matches[0].end) == (0, len(matched_text))
+    assert matches[0].method is MatchMethod.WHITESPACE
+
+
 @pytest.mark.parametrize("text", ["시 발표", "도시 발"])
 def test_whitespace_gap_matcher_rejects_partial_alphanumeric_tokens(text: str) -> None:
     matcher = make_matcher(blacklist=["시발"])
@@ -271,6 +296,23 @@ def test_mixed_gap_matcher_returns_full_original_span() -> None:
     assert matches[0].term == "시발"
     assert matches[0].matched_text == "시\t-*발"
     assert (matches[0].start, matches[0].end) == (3, 8)
+    assert matches[0].method is MatchMethod.MIXED
+
+
+def test_mixed_gap_matcher_allows_korean_particle_suffix() -> None:
+    matcher = make_matcher(blacklist=["시발"])
+    text = "시 * 발은"
+
+    matches = matcher.find_with_mixed_gaps(
+        text,
+        normalize_text(text, "NFKC"),
+        max_whitespace_gap=1,
+        separators=frozenset({"*"}),
+    )
+
+    assert len(matches) == 1
+    assert matches[0].matched_text == "시 * 발"
+    assert (matches[0].start, matches[0].end) == (0, 5)
     assert matches[0].method is MatchMethod.MIXED
 
 

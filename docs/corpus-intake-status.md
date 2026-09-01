@@ -354,9 +354,12 @@ project-authored 자료로 고정한다.
 바꾸지 않는다.
 
 생성·선택 완료 뒤 실행한 비-gold 진단에서는 positive-target 240건 중 balanced 63건,
-aggressive 180건을 탐지했고 정상 decoy 240건은 두 profile 모두 탐지 0건이었다. aggressive가
-놓친 60건은 한글 조사가 붙은 Whitespace 30건과 Mixed-gap 30건이다. 이 결과는 다음 matcher
-경계 수정 후보일 뿐 독립 annotation이나 hidden 정확도 수치로 사용하지 않는다.
+aggressive 180건을 탐지했고 정상 decoy 240건은 두 profile 모두 탐지 0건이었다. 한글 조사
+경계를 보강한 뒤 balanced는 63건으로 유지되고 aggressive는 240건을 모두 탐지했으며 decoy
+탐지는 계속 0건이다. 보호된 기존 tuning 2,763건 재측정에서는 strict·balanced의 문장·occurrence
+수치가 유지됐고, aggressive는 문장 TP 454→455와 occurrence TP 588→589로 각각 1건 늘면서
+문장 FP 30·occurrence FP 96은 증가하지 않았다. 이 결과는 독립 annotation 전 설계 진단과
+provisional tuning 근거이며 hidden 정확도 수치가 아니다.
 
 ## PF-005 종료 전 남은 작업
 

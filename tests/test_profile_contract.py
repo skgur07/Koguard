@@ -199,6 +199,36 @@ def test_profile_scope_is_visible_through_public_detection_behavior(
     assert actual == expected
 
 
+@pytest.mark.parametrize(
+    ("profile", "expected"),
+    [
+        ("strict", (False, False, False)),
+        ("balanced", (False, False, True)),
+        ("aggressive", (True, True, True)),
+    ],
+)
+def test_profile_scope_preserves_korean_particle_suffix_behavior(
+    profile: ProfileName,
+    expected: tuple[bool, bool, bool],
+) -> None:
+    dictionary = KoguardDictionary.from_sources(
+        blacklist=["시발"],
+        include_defaults=False,
+    )
+    engine = _engine_factory()(profile=profile, dictionary=dictionary)
+
+    actual = tuple(
+        engine.check(text).detected
+        for text in (
+            "시  발은",
+            "ㅅ ㅂ이",
+            "ㅅㅂ이",
+        )
+    )
+
+    assert actual == expected
+
+
 @pytest.mark.parametrize("profile", ["strict", "balanced", "aggressive"])
 def test_profile_results_are_deterministic(profile: ProfileName) -> None:
     engine = _engine_factory()(profile=profile, dictionary=_make_dictionary())

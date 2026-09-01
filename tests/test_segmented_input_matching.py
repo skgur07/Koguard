@@ -51,6 +51,18 @@ def test_segmented_input_detects_profanity_with_original_span(
     assert result.matches[0].method is method
 
 
+def test_segmented_choseong_allows_korean_particle_suffix() -> None:
+    text = "ㅅ ㅂ이"
+
+    result = make_engine().check(text)
+
+    assert len(result.matches) == 1
+    assert result.matches[0].term == "시발"
+    assert result.matches[0].matched_text == "ㅅ ㅂ"
+    assert (result.matches[0].start, result.matches[0].end) == (0, 3)
+    assert result.matches[0].method is MatchMethod.CHOSEONG
+
+
 @pytest.mark.parametrize("text", ["ㅅ ㅂ", "ㅅ*ㅂ", "ㅅㅣ ㅂㅏㄹ", "tl * qkf"])
 def test_segmented_input_matching_can_be_disabled(text: str) -> None:
     engine = make_engine(config=EngineConfig(segmented_input_matching=False))
