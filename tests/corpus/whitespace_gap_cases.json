@@ -35,6 +35,16 @@
     "expected_terms": ["개새끼"]
   },
   {
+    "id": "particle-suffix",
+    "text": "시  발은",
+    "expected_terms": ["시발"]
+  },
+  {
+    "id": "mixed-particle-suffix",
+    "text": "개 * 새끼를",
+    "expected_terms": ["개새끼"]
+  },
+  {
     "id": "right-partial-token",
     "text": "시 발표",
     "expected_terms": []
@@ -62,6 +72,11 @@
   {
     "id": "mixed-compound-word",
     "text": "개 * 새끼손가락",
+    "expected_terms": []
+  },
+  {
+    "id": "non-particle-hangul-suffix",
+    "text": "시 발톱",
     "expected_terms": []
   },
   {

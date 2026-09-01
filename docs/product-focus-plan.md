@@ -41,6 +41,9 @@ review 37건으로 판정했다. 따라서 hidden 평가와 출처 권리 확인
 부족 positive 변형을 직접 보강하기 위해 프로젝트 작성 blinded buffer 480건도 별도로 만들었다.
 8개 변형 slice마다 positive-target 30건과 정상 decoy 30건을 섞었으며, 독립 판정 전에는 모두
 review이고 기존 정확도와 coverage를 변경하지 않는다.
+조사 경계를 보강한 뒤 설계 진단상 aggressive는 기존 180/240에서 240/240으로 늘고 decoy
+탐지는 0/240을 유지했다. 기존 tuning 2,763건에서는 strict·balanced 지표와 FP가 유지되고
+aggressive만 문장·occurrence TP가 각각 1건 늘었지만, 독립 판정 전에는 coverage를 확정하지 않는다.
 
 ### 1.1 Core 판정 정책 보완
 

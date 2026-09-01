@@ -40,6 +40,8 @@ Semantic Versioning after the first public release.
 
 ### Changed
 
+- Whitespace, mixed-gap, and Choseong matches now accept a closed Korean postposition suffix while
+  preserving the profanity-only original span and rejecting unrelated partial tokens.
 - The no-argument engine now uses the measured `balanced` profile instead of the legacy all-enabled config.
 - Public API exports are limited to implemented core contracts required for `0.1.0`.
 - Wheel ZIP creator metadata is canonicalized before audit so supported OS builds are byte-identical.

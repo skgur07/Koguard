@@ -51,6 +51,12 @@ custom_engine = KoguardEngine(config=EngineConfig(fuzzy_matching=False))
 입력 길이, Unicode 정규화, 구분자 집합, Fuzzy 계산량 상한 같은 공통 안전 설정은 profile 간에
 동일한 `EngineConfig` 기본값을 사용한다.
 
+Whitespace·Mixed-gap과 Choseong 후보는 기존 전체 영숫자 토큰 경계를 유지하되, 후보 바로 뒤의
+남은 한글 토큰이 닫힌 한국어 조사 목록과 정확히 같으면 조사 앞도 유효한 끝 경계로 인정한다.
+따라서 `aggressive`는 `시  발은`, `시 * 발은`, `ㅅ ㅂ이`를 탐지하고, Choseong이 켜진
+`balanced`는 연속 표기 `ㅅㅂ이`를 탐지한다. `시 발표`, `개 새끼손가락`, 추가 초성·숫자가
+붙은 토큰은 계속 제외한다.
+
 ## balanced 선택 근거
 
 PF-005의 첫 독립 이중 판정 batch에서 확정된 92건을 평가했을 때 Exact+Alias는 문장 기준

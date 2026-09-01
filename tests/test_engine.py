@@ -830,7 +830,6 @@ def test_balanced_profile_skips_segmented_source_probe() -> None:
         "3ㅅㅂ",
         "ㅅㅂ3",
         "가ㅅㅂ",
-        "ㅅㅂ가",
     ],
 )
 def test_choseong_matching_rejects_partial_alphanumeric_tokens(text: str) -> None:

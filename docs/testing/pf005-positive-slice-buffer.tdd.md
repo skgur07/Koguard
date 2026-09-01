@@ -34,6 +34,10 @@ queue를 고정한 뒤에만 현재 profile을 별도 진단했다. 240개 posit
 붙은 한글 조사까지 포함된 입력을 놓치는 경계를 보여준다. 이 수치는 설계 의도 기준의
 post-generation 진단이며 독립 annotation precision·recall이나 hidden 성능이 아니다.
 
+2026-09-01 조사 경계 보강 후 같은 고정 설계를 다시 진단했다. `balanced`는 63/240으로
+유지됐고 `aggressive`는 240/240으로 늘었으며, 두 profile의 정상 decoy 탐지는 계속 0/240이다.
+이 전후 비교도 독립 판정 전 설계 label 기준 진단이며 gold나 hidden 수치가 아니다.
+
 ## 다음 판정
 
 두 reviewer가 detector 출력을 보지 않고 독립적으로 label·원문 span·canonical·실제 slice를

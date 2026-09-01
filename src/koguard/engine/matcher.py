@@ -19,6 +19,49 @@ _HANGUL_SYLLABLE_BASE = 0xAC00
 _HANGUL_SYLLABLE_LAST = 0xD7A3
 _HANGUL_SYLLABLES_PER_LEADING = 588
 _COMPATIBILITY_CHOSEONG = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
+_KOREAN_POSTPOSITIONS = frozenset(
+    {
+        "가",
+        "까지",
+        "께",
+        "께서",
+        "나",
+        "는",
+        "도",
+        "든",
+        "든지",
+        "라도",
+        "랑",
+        "로",
+        "를",
+        "마다",
+        "마저",
+        "만",
+        "만큼",
+        "밖에",
+        "보다",
+        "부터",
+        "뿐",
+        "에",
+        "에게",
+        "에서",
+        "와",
+        "으로",
+        "은",
+        "을",
+        "의",
+        "이",
+        "이나",
+        "이든",
+        "이든지",
+        "이라도",
+        "이랑",
+        "조차",
+        "처럼",
+        "한테",
+    }
+)
+_MAX_KOREAN_POSTPOSITION_LENGTH = max(map(len, _KOREAN_POSTPOSITIONS))
 
 
 @dataclass(frozen=True, slots=True)
@@ -118,6 +161,7 @@ class _MixedProjection:
     whitespace_prefix: tuple[int, ...]
     separator_prefix: tuple[int, ...]
     source_boundaries: _AlphanumericBoundaries
+    source_postpositions: bytes
     previous_end_boundary: tuple[int, ...]
     extension_ends: tuple[int, ...]
 
@@ -221,6 +265,38 @@ def _build_alphanumeric_boundaries(text: str) -> _AlphanumericBoundaries:
         ends=bytes(ends),
         extension_ends=tuple(extension_ends),
     )
+
+
+def _build_korean_postposition_start_mask(
+    text: str,
+    boundaries: _AlphanumericBoundaries,
+) -> bytes:
+    """Mark token suffixes that consist of one approved Korean postposition."""
+
+    starts = bytearray(len(text) + 1)
+    for start in range(len(text)):
+        maximum_end = min(len(text), start + _MAX_KOREAN_POSTPOSITION_LENGTH)
+        for end in range(start + 1, maximum_end + 1):
+            resolved_end = boundaries.extension_ends[end]
+            if (
+                resolved_end == end
+                and boundaries.ends[resolved_end]
+                and text[start:end] in _KOREAN_POSTPOSITIONS
+            ):
+                starts[start] = 1
+                break
+    return bytes(starts)
+
+
+def _has_token_end_or_korean_postposition(
+    end: int,
+    boundaries: _AlphanumericBoundaries,
+    postpositions: bytes,
+) -> bool:
+    """Accept a token end or the start of one approved Korean postposition."""
+
+    resolved_end = boundaries.extension_ends[end]
+    return bool(boundaries.ends[resolved_end] or postpositions[resolved_end])
 
 
 def _build_term_trie(terms: tuple[str, ...]) -> _TermTrieNode:
@@ -456,10 +532,18 @@ def _build_mixed_projection(
         pending_whitespace = False
         pending_separator = False
 
+    source_postpositions = _build_korean_postposition_start_mask(
+        normalized.text,
+        source_boundaries,
+    )
     previous_end_boundary = [0]
     latest_end_boundary = 0
     for projected_end, source_index in enumerate(source_indexes, start=1):
-        if source_boundaries.ends[source_index + 1]:
+        if _has_token_end_or_korean_postposition(
+            source_index + 1,
+            source_boundaries,
+            source_postpositions,
+        ):
             latest_end_boundary = projected_end
         previous_end_boundary.append(latest_end_boundary)
 
@@ -474,6 +558,7 @@ def _build_mixed_projection(
         whitespace_prefix=tuple(whitespace_prefix),
         separator_prefix=tuple(separator_prefix),
         source_boundaries=source_boundaries,
+        source_postpositions=source_postpositions,
         previous_end_boundary=tuple(previous_end_boundary),
         extension_ends=_build_alphanumeric_boundaries(projected_text).extension_ends,
     )
@@ -513,7 +598,11 @@ def _has_mixed_end_boundary(
     """Return whether a projected candidate ends at a source-view boundary."""
 
     source_end = projection.source_indexes[candidate.end - 1] + 1
-    return bool(projection.source_boundaries.ends[source_end])
+    return _has_token_end_or_korean_postposition(
+        source_end,
+        projection.source_boundaries,
+        projection.source_postpositions,
+    )
 
 
 def _next_mixed_occurrence(
@@ -570,6 +659,7 @@ def _find_longest_whitespace_gap_occurrence(
     root: _TermTrieNode,
     allowed_gap_mask: bytearray,
     boundaries: _AlphanumericBoundaries,
+    postpositions: bytes,
     start: int,
     *,
     shorter_than: int | None = None,
@@ -605,7 +695,7 @@ def _find_longest_whitespace_gap_occurrence(
             node.term is not None
             and used_gap
             and boundaries.starts[start]
-            and boundaries.ends[cursor]
+            and _has_token_end_or_korean_postposition(cursor, boundaries, postpositions)
         ):
             longest_term = node.term
             longest_end = cursor
@@ -1107,6 +1197,7 @@ class ChoseongMatcher:
             return ()
 
         boundaries = _build_alphanumeric_boundaries(normalized.text)
+        postpositions = _build_korean_postposition_start_mask(normalized.text, boundaries)
         selected_normalized = bytearray(len(normalized.text))
         selected_original = bytearray(len(original_text))
         selected: list[_MappedCandidate] = []
@@ -1118,7 +1209,11 @@ class ChoseongMatcher:
         ):
             if not (
                 boundaries.starts[normalized_candidate.start]
-                and boundaries.ends[normalized_candidate.end]
+                and _has_token_end_or_korean_postposition(
+                    normalized_candidate.end,
+                    boundaries,
+                    postpositions,
+                )
             ):
                 continue
             heappush(
@@ -1397,6 +1492,7 @@ class ExactMatcher:
             max_whitespace_gap,
         )
         boundaries = _build_alphanumeric_boundaries(normalized.text)
+        postpositions = _build_korean_postposition_start_mask(normalized.text, boundaries)
 
         for start in range(len(normalized.text)):
             normalized_candidate = _find_longest_whitespace_gap_occurrence(
@@ -1404,6 +1500,7 @@ class ExactMatcher:
                 self._whitespace_trie,
                 allowed_gap_mask,
                 boundaries,
+                postpositions,
                 start,
             )
             if normalized_candidate is not None:
@@ -1451,6 +1548,7 @@ class ExactMatcher:
                 self._whitespace_trie,
                 allowed_gap_mask,
                 boundaries,
+                postpositions,
                 mapped_candidate.normalized.start,
                 shorter_than=mapped_candidate.length,
             )
