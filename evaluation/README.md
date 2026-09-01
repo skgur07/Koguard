@@ -33,6 +33,11 @@ span이나 실제 평가 slice를 갖지 않는다. source별 report는 `gold_re
 유사 표기를 직접 작성하지만, 설계 의도가 gold를 대신하지 않도록 역시 blinded review로 만든다.
 `--kind hard-negative-buffer`는 기존 curated intake와 겹치지 않는 hard-negative-target 100건을
 추가로 만든다.
+`--kind positive-slice-buffer`는 부족한 Alias·Keyboard·Jamo·Unicode·Repeated·Separator·
+Whitespace·Mixed-gap의 positive-target을 각 30건씩 만들고, 같은 slice의 정상 decoy도 각
+30건씩 섞어 총 480건으로 생성한다.
+현재 탐지 결과나 matcher method는 설계·선택에 사용하지 않으며 독립 판정 전에는 모두
+`review`다.
 
 `corpus_composer.py`는 첫 batch 확정 92건을 우선 보존하고 2runo/KOTE/Korean Hate Speech/
 Koguard curated를 `750/750/750/250`으로 선택한다. 직접·NFKC+casefold 중복을 제거하고 source
@@ -43,6 +48,7 @@ review 전까지 Git과 배포물에 포함하지 않는다.
 
 ```powershell
 uv run python -m evaluation.curated_policy_intake
+uv run python -m evaluation.curated_policy_intake --kind positive-slice-buffer
 
 uv run python -m evaluation.corpus_composer `
   evaluation\compositions\pf005-balanced-review-intake.v1.json `

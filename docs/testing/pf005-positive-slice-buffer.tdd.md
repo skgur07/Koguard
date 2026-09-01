@@ -1,0 +1,48 @@
+# PF-005 positive 변형 slice buffer TDD 기록
+
+## 문제
+
+기존 확정·targeted 근거를 합쳐도 Alias·Keyboard·Mixed-gap positive는 각 1건, Jamo·Repeated는
+각 3건, Separator 4건, Whitespace 2건, Unicode 0건이다. 외부 댓글의 남은 review에서 이 변형을
+기다리는 방식은 출처 분포와 우연에 의존하고, detector 결과로 queue를 고르면 평가 편향이 생긴다.
+
+## RED
+
+- 기존 curated base·hard-negative buffer와 direct·NFKC+casefold가 겹치지 않는 480건 생성 테스트
+- 8개 설계 slice마다 positive-target 30건과 정상 decoy 30건인지 확인하는 테스트
+- corpus의 label·span·slice가 판정 의도를 노출하지 않는지 확인하는 테스트
+- 생성 corpus validator, 결정성, stable opaque ID와 MIT source 계약 테스트
+- 공개 report와 CLI 출력에 원문·case ID·canonical·reviewer ID가 없는지 확인하는 테스트
+
+## GREEN
+
+`evaluation.curated_policy_intake --kind positive-slice-buffer`를 추가했다. 명시적 Alias, 두벌식
+ASCII 입력, compatibility Jamo, NFD·format·cluster Unicode, 모음 연장 반복, 설정된 separator,
+1~3칸 공백과 separator+공백 혼합 표면을 프로젝트가 직접 작성한다. 생성에 detector prediction,
+matcher method, upstream label이나 기존 annotation을 사용하지 않는다.
+
+결과는 Alias, Keyboard, Jamo, Unicode, Repeated, Separator, Whitespace, Mixed-gap마다
+positive-target 30건과 정상 decoy 30건으로 총 480건이다. 모든 사례는 `review`, 빈 expected
+matches, `unadjudicated-intake`, tuning으로
+생성된다. 공개 corpus는 MIT project-authored 자료지만 설계 의도를 gold label로 간주하지 않는다.
+
+## 생성 후 진단
+
+queue를 고정한 뒤에만 현재 profile을 별도 진단했다. 240개 positive-target 중 `balanced`는
+63건, `aggressive`는 180건을 탐지했고 정상 decoy 240건의 탐지는 두 profile 모두 0건이었다.
+`aggressive`의 미탐 60건은 Whitespace 30건과 Mixed-gap 30건이다. 현재 gap matcher가 변형 뒤에
+붙은 한글 조사까지 포함된 입력을 놓치는 경계를 보여준다. 이 수치는 설계 의도 기준의
+post-generation 진단이며 독립 annotation precision·recall이나 hidden 성능이 아니다.
+
+## 다음 판정
+
+두 reviewer가 detector 출력을 보지 않고 독립적으로 label·원문 span·canonical·실제 slice를
+판정한다. 최초 불일치만 제3 reviewer가 재심하며, 확정 사례는 targeted slice coverage에만
+더한다. review나 유보 사례를 2,763건 tuning profile 또는 hidden 성능에 합치지 않는다.
+
+```powershell
+uv run python -m evaluation.curated_policy_intake --kind positive-slice-buffer
+uv run python -m evaluation.corpus_validator `
+  evaluation\corpus\tuning\curated-positive-slice-buffer-v1.json
+uv run pytest tests/test_curated_policy_intake.py
+```
