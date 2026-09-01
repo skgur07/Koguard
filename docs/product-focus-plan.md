@@ -4,6 +4,9 @@
 - 상태: 승인된 실행 계획, 2026-08-14 PF-009 profile 기본값 구현
 - 대상 버전: 최초 공개 `0.1.0` 이전
 
+> `0.1.0`까지의 현재 단계, 체크리스트와 blocker는
+> [0.1.0 출시 실행 계획](release-0.1.0-execution-plan.md)을 단일 현황판으로 사용한다.
+
 ## 1. 결정 요약
 
 Koguard는 Phase 4 Adapter, Phase 5 외부 detector, Phase 6 선택적 AI post-core 구현을 즉시

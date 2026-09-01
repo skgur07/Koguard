@@ -31,6 +31,7 @@
 | `evaluation/profile_report.py` | 보호 ablation에서 공개 profile 집계만 추출하는 sanitizer |
 | `docs/matcher-ablation-baseline.md` | matcher별 provisional 정확도·지연·메모리 근거 |
 | `docs/product-focus-plan.md` | 최초 공개 품질 우선순위, Phase 보류와 재개 조건 |
+| `docs/release-0.1.0-execution-plan.md` | 0.1.0까지의 단일 실행 현황, 체크리스트와 blocker |
 | `docs/profile-api-contract.md` | strict·balanced·aggressive 공개 동작과 이동 계약 |
 | `docs/contains-api.md` | boolean 편의 API와 `check()` 동등성·성능 계약 |
 | `docs/public-api-inventory.md` | 0.1.0 공개 심볼과 제거·비지원·확장 경계 |
