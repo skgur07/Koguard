@@ -1,6 +1,6 @@
 # PF-014 `0.1.0` 릴리즈 준비 보고서
 
-- 기준일: 2026-08-19
+- 기준일: 2026-09-02
 - 대상: Koguard `0.1.0`
 - 현재 판정: **blocked — hidden evaluation과 TestPyPI 증거 대기**
 - 공개 상태: `main` 미승격, PyPI 미게시
@@ -115,3 +115,14 @@ occurrence FP가 2건 늘어 전체 FP 증분 0 gate를
 통과하지 못했다. 이 상태도 최종 release report에서
 차단 근거로 유지한다. hidden 준비가 지연되더라도 이를 최종 실서비스 정확도로 바꾸어 표현하지
 않는다.
+
+## 2026-09-02 R3 재측정
+
+최종 tuning 2,763건을 100회 측정해 기존 결과를 재현했다. strict 문장 TP/FP/FN/TN은
+416/0/223/2,124, balanced는 440/0/199/2,124, aggressive는 455/30/184/2,094다.
+occurrence TP/FP/FN은 각각 554/37/420, 584/39/390, 589/96/385다. balanced 최대 입력
+p95는 12.9194ms로 성능 예산을 통과했지만 strict 대비 occurrence FP +2로 전체 gate는 실패한다.
+
+보호용 통합 split manifest로 regression 20건과 확정·targeted tuning 3,980건을 함께 검사해
+direct/normalized leak 0건을 확인했다. hidden corpus가 없으므로 이 결과는 hidden 누출 0건을
+대신하지 않으며, 최종 release candidate 고정과 hidden 1회 평가는 계속 차단한다.

@@ -272,6 +272,12 @@ hard-negative가 모두 있고 review가 0건이며 annotation·privacy·rights�
 
 ## PF-003 matcher ablation
 
+2026-09-02 R3 최종 tuning 재측정은 2,763건에서 strict/balanced/aggressive 문장 TP
+416/440/455, FP 0/0/30을 기록했다. balanced는 strict 대비 occurrence TP +30·FP +2로
+전체 gate를 통과하지 못했다. 별도 targeted 480건에서 aggressive 문장·occurrence TP/FP/FN은
+240/0/0이다. regression 20건과 tuning 3,980건의 보호 통합 manifest 누출은 0건이지만 hidden
+split 검사는 custodian corpus를 기다린다.
+
 `ablation_runner.py`는 Exact+Alias 기준선, matcher별 isolated candidate, Segmented
 prerequisite control, 현재 all-enabled를 같은 gold corpus에서 평가한다. matcher마다
 TP·FP·FN, 다른 matcher와의 중복 및 고유 증분, short/max p50·p95와 Engine retained
