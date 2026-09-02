@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "profile_contract_version": 1,
+  "source": {
+    "ablation_report_sha256": "acd77d93db5f2fb5b02325ab7e7017a42899b178aac21274fa3e00ec6eb95a26",
+    "measured_at": "2026-09-02T01:23:24.373856+00:00",
+    "corpus": {
+      "classification": "independent-tuning-provisional",
+      "sha256": "fbab31118b12a72e9c4fc73f88699b0bb3fed677c3d8a7dca863f5ac995fbf7d",
+      "case_count": 480,
+      "positive_count": 240,
+      "hard_negative_count": 240,
+      "excluded_review_count": 0,
+      "gold_ready": false
+    },
+    "environment": {
+      "koguard_version": "0.1.0",
+      "python_version": "3.11.9",
+      "implementation": "CPython",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel"
+    }
+  },
+  "profiles": [
+    {
+      "profile": "strict",
+      "source_profile_id": "exact-alias",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": false,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": false,
+        "keyboard_matching": false,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 63,
+          "fp": 0,
+          "fn": 177,
+          "tn": 240
+        },
+        "precision": 1.0,
+        "recall": 0.2625,
+        "f1": 0.4158415841584159,
+        "accuracy": 0.63125
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 63,
+          "fp": 0,
+          "fn": 177
+        },
+        "precision": 1.0,
+        "recall": 0.2625,
+        "f1": 0.4158415841584159
+      },
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0207,
+          "p95_ms": 0.0214
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 4.3851,
+          "p95_ms": 8.9566
+        },
+        "engine_retained_memory_bytes": 81189
+      }
+    },
+    {
+      "profile": "balanced",
+      "source_profile_id": "choseong",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": true,
+        "exact_matching": true,
+        "fuzzy_matching": false,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": false,
+        "keyboard_matching": false,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": false,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": false,
+        "segmented_input_matching": false,
+        "separator_matching": false,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 63,
+          "fp": 0,
+          "fn": 177,
+          "tn": 240
+        },
+        "precision": 1.0,
+        "recall": 0.2625,
+        "f1": 0.4158415841584159,
+        "accuracy": 0.63125
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 63,
+          "fp": 0,
+          "fn": 177
+        },
+        "precision": 1.0,
+        "recall": 0.2625,
+        "f1": 0.4158415841584159
+      },
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0213,
+          "p95_ms": 0.0226
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 5.9859,
+          "p95_ms": 10.2849
+        },
+        "engine_retained_memory_bytes": 124608
+      }
+    },
+    {
+      "profile": "aggressive",
+      "source_profile_id": "all-enabled",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": true,
+        "exact_matching": true,
+        "fuzzy_matching": true,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": true,
+        "keyboard_matching": true,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": true,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": true,
+        "segmented_input_matching": true,
+        "separator_matching": true,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": true
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 240,
+          "fp": 0,
+          "fn": 0,
+          "tn": 240
+        },
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0
+      },
+      "occurrence_metrics": {
+        "counts": {
+          "tp": 240,
+          "fp": 0,
+          "fn": 0
+        },
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "performance": {
+        "short_chat": {
+          "input_length": 15,
+          "p50_ms": 0.0866,
+          "p95_ms": 0.0894
+        },
+        "maximum_input": {
+          "input_length": 4096,
+          "p50_ms": 7.0033,
+          "p95_ms": 11.1091
+        },
+        "engine_retained_memory_bytes": 230887
+      }
+    }
+  ],
+  "balanced_evidence": {
+    "sentence_tp_delta_vs_strict": 0,
+    "sentence_fp_delta_vs_strict": 0,
+    "occurrence_tp_delta_vs_strict": 0,
+    "occurrence_fp_delta_vs_strict": 0
+  },
+  "balanced_gates": {
+    "normal_sentence_fp_rate": 0.0,
+    "normal_sentence_fp_rate_limit": 0.005,
+    "short_chat_p95_ms": 0.0226,
+    "short_chat_p95_ms_limit": 1.0,
+    "maximum_input_p95_ms": 10.2849,
+    "maximum_input_p95_ms_limit": 15.0,
+    "passed": false
+  },
+  "limitations": [
+    "다중 출처 intake 중 독립 검토로 확정된 480건만 평가한 tuning 결과다.",
+    "gold_ready가 아니며 0건은 review로 자동 평가에서 제외됐다.",
+    "hard-negative 240건에서 balanced 문장 FP 0건으로 측정됐으나 실서비스 전체 FP rate를 일반화할 수 없다.",
+    "성능은 단일 Windows 로컬 환경 측정이며 지원 OS별 CI 기준선이 아니다."
+  ]
+}

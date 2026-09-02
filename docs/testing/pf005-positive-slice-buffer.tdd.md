@@ -38,11 +38,20 @@ post-generation 진단이며 독립 annotation precision·recall이나 hidden �
 유지됐고 `aggressive`는 240/240으로 늘었으며, 두 profile의 정상 decoy 탐지는 계속 0/240이다.
 이 전후 비교도 독립 판정 전 설계 label 기준 진단이며 gold나 hidden 수치가 아니다.
 
-## 다음 판정
+## 독립 판정 결과
 
-두 reviewer가 detector 출력을 보지 않고 독립적으로 label·원문 span·canonical·실제 slice를
-판정한다. 최초 불일치만 제3 reviewer가 재심하며, 확정 사례는 targeted slice coverage에만
-더한다. review나 유보 사례를 2,763건 tuning profile 또는 hidden 성능에 합치지 않는다.
+2026-09-02 두 reviewer가 detector 출력과 서로의 결과를 보지 않고 480건을 독립 판정했다.
+두 판정은 positive 240건, hard-negative 240건에 전부 합의했고 review·불일치·privacy 제외는
+0건이었다. 따라서 제3 reviewer의 재심 대상은 없었다. 8개 실제 slice는 각각 60건이며 확정본은
+validator를 통과했다.
+
+확정 label로 다시 측정한 문장 기준 strict·balanced는 TP/FP/FN/TN `63/0/177/240`, aggressive는
+`240/0/0/240`이다. R1 전 aggressive TP 180건에서 늘어난 60건은 Whitespace·Mixed-gap 각
+30건이다. 첫 occurrence 집계의 Alias 12건 불일치는 span이나 탐지 결과가 아니라 annotation의
+canonical 선택 차이였다. 두 reviewer가 packaged Alias 매핑으로 Alias positive 30건씩 독립
+재감사해 같은 12건을 교정했고 span·label 오류는 0건이었다. 재측정한 aggressive occurrence
+TP/FP/FN은 `240/0/0`이다. 이 결과는 targeted tuning 근거이며 2,763건 tuning이나 hidden 성능에
+합산하지 않는다.
 
 ```powershell
 uv run python -m evaluation.curated_policy_intake --kind positive-slice-buffer

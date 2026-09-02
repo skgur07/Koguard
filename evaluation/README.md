@@ -39,10 +39,13 @@ Whitespace·Mixed-gap의 positive-target을 각 30건씩 만들고, 같은 slice
 현재 탐지 결과나 matcher method는 설계·선택에 사용하지 않으며 독립 판정 전에는 모두
 `review`다.
 
-2026-09-01 조사 경계 보강 뒤의 비-gold 설계 진단에서 `balanced`는 positive-target 63/240,
-`aggressive`는 240/240을 탐지했고 두 profile의 decoy 탐지는 계속 0/240이었다. 수정 전
-`aggressive` 180/240에서 늘어난 60건은 Whitespace·Mixed-gap 뒤에 `를`이 붙은 사례다. 설계
-label 기준 진단이므로 독립 annotation이나 hidden 정확도로 사용하지 않는다.
+2026-09-02 독립 이중 판정에서 480건 모두 합의되어 positive 240건, hard-negative 240건,
+review·불일치·privacy 제외 0건으로 확정됐다. 확정 label 기준 `balanced` 문장 TP/FP는 63/0,
+`aggressive`는 240/0이다. 수정 전 aggressive TP 180건에서 늘어난 60건은 Whitespace·Mixed-gap
+각 30건이다. 최초 Alias occurrence 12건의 차이는 두 reviewer가 packaged Alias 매핑으로 독립
+재감사해 canonical을 교정했고 span·label 오류는 0건이었다. 최종 aggressive occurrence
+TP/FP/FN은 240/0/0이다. 프로젝트 작성 targeted tuning이고 `gold_ready=false`이므로 hidden
+정확도나 실서비스 전체 성능으로 일반화하지 않는다.
 
 `corpus_composer.py`는 첫 batch 확정 92건을 우선 보존하고 2runo/KOTE/Korean Hate Speech/
 Koguard curated를 `750/750/750/250`으로 선택한다. 직접·NFKC+casefold 중복을 제거하고 source

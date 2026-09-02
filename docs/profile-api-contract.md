@@ -117,6 +117,14 @@ recall은 54.3%다. strict 대비 문장 TP +17·FP +0, occurrence TP +18·FP +6
 recall 60.0%로 strict보다 TP 30건과 FP 2건이 늘었다. 문장 FP 0과 로컬 성능 예산은 통과하지만
 occurrence FP 증분 때문에 전체 gate 실패 상태를 유지한다.
 
+2026-09-02 프로젝트 작성 변형 buffer 480건의 독립 이중 판정에서는 positive 240건과
+hard-negative 240건에 전부 합의했다. strict·balanced 문장 TP/FP/FN/TN은 둘 다
+63/0/177/240이고 aggressive는 240/0/0/240이다. 조사 경계 보강으로 aggressive가 회복한
+60건은 Whitespace·Mixed-gap 각 30건이다. 최초 Alias occurrence 12건 불일치는 두 reviewer가
+packaged Alias 매핑으로 독립 재감사해 canonical을 교정했고 span·label 오류는 0건이었다.
+최종 aggressive occurrence TP/FP/FN은 240/0/0이다. 이 표본은 targeted tuning이며
+`gold_ready=false`다.
+
 ## 동작 불변 조건
 
 - 모든 profile은 등록된 욕설의 문맥 무관 부분 문자열 Exact 탐지를 보존한다.

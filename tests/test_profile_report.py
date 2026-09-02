@@ -10,6 +10,9 @@ from evaluation.profile_report import ProfileReportError, build_profile_report, 
 from koguard import KoguardEngine
 
 _PUBLIC_REPORT = Path("evaluation/results/pf009-profile-evaluation.report.json")
+_POSITIVE_SLICE_REPORT = Path(
+    "evaluation/results/pf005-positive-slice-buffer-v1.profile.report.json"
+)
 _SLICE_COVERAGE_REPORT = Path("evaluation/results/pf005-slice-coverage.report.json")
 _REPORT_SCHEMA = Path("evaluation/profile-report.schema.json")
 
@@ -227,6 +230,46 @@ def test_committed_profile_report_is_aggregate_only_and_tracks_balanced_gates() 
     ]
     assert {profile["profile"]: profile["settings"] for profile in report["profiles"]} == {
         profile: _settings(profile) for profile in ("strict", "balanced", "aggressive")
+    }
+    assert _all_keys(report).isdisjoint(
+        {"case_results", "case_id", "text", "canonical_term", "slice_metrics"}
+    )
+
+
+def test_positive_slice_profile_report_is_aggregate_only() -> None:
+    report = json.loads(_POSITIVE_SLICE_REPORT.read_text(encoding="utf-8"))
+
+    assert report["source"]["corpus"] == {
+        "classification": "independent-tuning-provisional",
+        "sha256": "fbab31118b12a72e9c4fc73f88699b0bb3fed677c3d8a7dca863f5ac995fbf7d",
+        "case_count": 480,
+        "positive_count": 240,
+        "hard_negative_count": 240,
+        "excluded_review_count": 0,
+        "gold_ready": False,
+    }
+    by_profile = {item["profile"]: item for item in report["profiles"]}
+    assert by_profile["strict"]["sentence_metrics"]["counts"] == {
+        "tp": 63,
+        "fp": 0,
+        "fn": 177,
+        "tn": 240,
+    }
+    assert by_profile["balanced"]["occurrence_metrics"]["counts"] == {
+        "tp": 63,
+        "fp": 0,
+        "fn": 177,
+    }
+    assert by_profile["aggressive"]["sentence_metrics"]["counts"] == {
+        "tp": 240,
+        "fp": 0,
+        "fn": 0,
+        "tn": 240,
+    }
+    assert by_profile["aggressive"]["occurrence_metrics"]["counts"] == {
+        "tp": 240,
+        "fp": 0,
+        "fn": 0,
     }
     assert _all_keys(report).isdisjoint(
         {"case_results", "case_id", "text", "canonical_term", "slice_metrics"}

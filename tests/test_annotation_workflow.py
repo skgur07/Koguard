@@ -87,6 +87,12 @@ _PUBLISHED_POLICY_REAUDIT_REPORT_PATH = (
     / "results"
     / "pf005-policy-reaudit-v1-adjudicated.report.json"
 )
+_PUBLISHED_POSITIVE_SLICE_BUFFER_REPORT_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "results"
+    / "pf005-positive-slice-buffer-v1-adjudicated.report.json"
+)
 
 
 def test_annotation_schemas_are_versioned_and_closed() -> None:
@@ -385,6 +391,38 @@ def test_published_policy_reaudit_report_is_aggregate_only() -> None:
         "resolved": 3,
         "unresolved": 0,
         "privacy_excluded": 0,
+    }
+    assert report["gold_ready"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden in ("case_id", "text", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden}"' not in serialized
+
+
+def test_published_positive_slice_buffer_report_is_aggregate_only() -> None:
+    report = json.loads(_PUBLISHED_POSITIVE_SLICE_BUFFER_REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert report["batch_case_count"] == 480
+    assert report["batch_counts"] == {
+        "positive": 240,
+        "hard-negative": 240,
+        "review": 0,
+    }
+    assert report["quality_counts"] == {
+        "double_reviewed": 480,
+        "consensus": 480,
+        "disagreement": 0,
+        "privacy_excluded": 0,
+        "pending_privacy": 0,
+    }
+    assert report["slice_counts"] == {
+        "alias": 60,
+        "jamo": 60,
+        "keyboard": 60,
+        "mixed-gap": 60,
+        "repeated": 60,
+        "separator": 60,
+        "unicode": 60,
+        "whitespace": 60,
     }
     assert report["gold_ready"] is False
     serialized = json.dumps(report, ensure_ascii=False)

@@ -1,7 +1,7 @@
 # Koguard `0.1.0` 출시 실행 계획
 
-- 상태: **실행 중 — 480건 독립 판정 대기**
-- 기준일: 2026-09-01
+- 상태: **실행 중 — R3 최종 품질 평가 대기**
+- 기준일: 2026-09-02
 - 기준 브랜치: `dev`
 - 계획 시작 기능 commit: `bb919046a455b09f75cb69c720b9753973dcf150`
 - 추적 이슈: [PF-005 #7](https://github.com/skgur07/Koguard/issues/7),
@@ -46,17 +46,22 @@
 | 기본 데이터 provenance | 완료 | packaged term 67개, Alias 5개, 미확인 항목 0개 |
 | tuning 기준선 | 완료 | 확정 2,763건: positive 639, hard-negative 2,124 |
 | positive 변형 입력 | 생성 완료 | 8개 slice, positive-target 240 + decoy 240 |
-| positive 변형 판정 | 대기 | 전 항목 `review`, `gold_ready=false` |
-| 패키징·CI | 완료 | [751 tests, coverage 95.58%, 3 OS·재현성 gate 통과](https://github.com/skgur07/Koguard/actions/runs/33470014209) |
+| positive 변형 판정 | 완료 | 독립 합의 480건: positive 240, hard-negative 240, review·불일치 0 |
+| 패키징·CI | 완료 | [757 tests, coverage 95.63%, 3 OS·재현성 gate 통과](https://github.com/skgur07/Koguard/actions/runs/33473481786) |
 | 배포물 격리 | 완료 | tuning 자료는 wheel/sdist에 포함되지 않음 |
 | 최종 hidden 평가 | 대기 | 확정 release candidate에서 1회 실행 |
 | TestPyPI·공개 | 대기 | 최종 artifact와 소유자 승인 필요 |
 
-경계 수정 전 비-gold 진단은 `balanced` 63/240, `aggressive` 180/240, decoy 탐지 0/240이었다.
-R1 수정 후 `balanced`는 63/240으로 유지되고 `aggressive`는 240/240으로 늘었으며 decoy 탐지는
-계속 0/240이다. 이 수치는 480건의 독립 판정 전이므로 제품 정확도나 공개 성능으로 사용하지
-않는다. 기존 tuning 2,763건에서는 strict·balanced 결과와 FP가 유지됐고 aggressive만 문장·
-occurrence TP가 각각 1건 늘었다.
+두 독립 reviewer는 설계 의도와 detector 출력 없이 480건 전부에 합의했다. 확정 label은
+positive 240건, hard-negative 240건이며 review·불일치·privacy 제외는 0건이다. 같은 고정
+표본의 문장 기준으로 R1 전 `strict/balanced/aggressive` TP는 `63/63/180`, FP는 모두 0이었고,
+R1 후에는 `63/63/240`, FP 0으로 바뀌었다. 회복된 60건은 Whitespace 30건과 Mixed-gap 30건이다.
+R1 후 aggressive occurrence도 TP/FP/FN `240/0/0`이다. 최초 집계의 Alias 12건 canonical
+불일치는 두 reviewer가 승인된 Alias 매핑으로 독립 재감사해 같은 12건을 교정했고, 원문 span과
+label 오류는 0건이었다. 이 표본은 독립 tuning
+근거이지만 프로젝트 작성 targeted corpus이며 `gold_ready=false`라 실서비스 전체 성능으로
+일반화하지 않는다. 기존 tuning 2,763건에서는 strict·balanced 결과와 FP가 유지됐고
+aggressive만 문장·occurrence TP가 각각 1건 늘었다.
 
 ## 4. 실행 순서와 체크리스트
 
@@ -88,13 +93,13 @@ occurrence TP가 각각 1건 늘었다.
 - [x] 프로젝트 작성 480건 생성
 - [x] 기존 corpus와 direct/NFKC+casefold 중복 0건 검증
 - [x] primary·secondary·adjudicator 보호 작업본 생성
-- [ ] primary가 480건을 독립 판정
-- [ ] secondary가 같은 480건을 독립 판정
-- [ ] 두 판정의 불일치만 adjudicator가 재심
-- [ ] 미해결 `review`를 0건으로 만들거나, 합의 불가능 사례를 평가 대상에서 명시적으로 제외
-- [ ] 확정본 validator와 privacy 검사를 통과
-- [ ] R1 전후의 profile·slice별 변화를 aggregate로 비교
-- [ ] aggregate만 저장소와 #7에 기록하고 원문별 판정·reviewer 정보는 공개하지 않음
+- [x] primary가 480건을 독립 판정
+- [x] secondary가 같은 480건을 독립 판정
+- [x] 두 판정의 불일치만 adjudicator가 재심 — 불일치 0건으로 재심 대상 없음
+- [x] 미해결 `review`를 0건으로 만들거나, 합의 불가능 사례를 평가 대상에서 명시적으로 제외
+- [x] 확정본 validator와 privacy 검사를 통과
+- [x] R1 전후의 profile·slice별 변화를 aggregate로 비교
+- [x] aggregate만 저장소와 #7에 기록하고 원문별 판정·reviewer 정보는 공개하지 않음
 
 완료 조건:
 
@@ -107,6 +112,7 @@ occurrence TP가 각각 1건 늘었다.
 
 - [ ] 공개 regression·tuning 전체 평가 실행
 - [ ] 최종 `strict`·`balanced`·`aggressive` 전체 및 slice별 지표 기록
+- [x] positive 변형 Alias canonical 불일치 12건 재감사와 release 영향 확정
 - [ ] hidden corpus와 direct/normalized 누출 0건 확인
 - [ ] 고정 commit·wheel로 hidden evaluation 1회 실행
 - [ ] case-level hidden 결과는 보호 환경에 유지하고 aggregate만 반출
@@ -146,8 +152,8 @@ occurrence TP가 각각 1건 늘었다.
 
 | 단계 | 저장소에 남길 것 | 공개하지 않을 것 |
 | --- | --- | --- |
-| R1 | aggregate 판정 보고서, 정책·validator 변경 | case별 reviewer, 보호 annotation 원문 |
-| R2 | 실패 테스트, 최소 구현, 정확도·성능 회귀 | 임시 debug 출력, 실제 사용자 원문 |
+| R1 | 실패 테스트, 최소 구현, 정확도·성능 회귀 | 임시 debug 출력, 실제 사용자 원문 |
+| R2 | aggregate 판정·profile 보고서, 정책 상태 갱신 | case별 reviewer, 보호 annotation 원문 |
 | R3 | aggregate 성능, limitation, corpus·artifact hash | hidden 원문·case ID·canonical 정답 |
 | R4 | release report, artifact hash, changelog | token·credential·보호 환경 경로 |
 
@@ -166,7 +172,8 @@ occurrence TP가 각각 1건 늘었다.
 | ID | 상태 | 내용 | 해제 조건 |
 | --- | --- | --- | --- |
 | B-01 | 해결 | 공백/혼합 우회 뒤 조사 경계 미탐 후보 60건 | R1 정확도·회귀 gate 통과 |
-| B-02 | 열림 | positive 변형 480건이 아직 미판정 | R2 독립 합의·재심 완료 |
+| B-02 | 해결 | positive 변형 480건이 아직 미판정 | R2 독립 합의 480건·불일치 0건으로 완료 |
+| B-02A | 해결 | Alias slice 12건의 occurrence canonical 불일치 | 두 reviewer가 Alias 30건씩 재감사, 같은 12건 canonical 교정·span 오류 0건 확인 |
 | B-03 | 열림 | 최종 hidden aggregate 없음 | R3 보호 평가·attestation 완료 |
 | B-04 | 열림 | TestPyPI 동일 artifact 설치 증거 없음 | R4 TestPyPI smoke 완료 |
 | B-05 | 열림 | `main`·PyPI 공개 승인 전 | B-01~04 해제 후 소유자 명시 승인 |
