@@ -13,6 +13,7 @@ _PUBLIC_REPORT = Path("evaluation/results/pf009-profile-evaluation.report.json")
 _POSITIVE_SLICE_REPORT = Path(
     "evaluation/results/pf005-positive-slice-buffer-v1.profile.report.json"
 )
+_R3_FINAL_TUNING_REPORT = Path("evaluation/results/pf014-r3-final-tuning.profile.report.json")
 _SLICE_COVERAGE_REPORT = Path("evaluation/results/pf005-slice-coverage.report.json")
 _REPORT_SCHEMA = Path("evaluation/profile-report.schema.json")
 
@@ -271,6 +272,24 @@ def test_positive_slice_profile_report_is_aggregate_only() -> None:
         "fp": 0,
         "fn": 0,
     }
+    assert _all_keys(report).isdisjoint(
+        {"case_results", "case_id", "text", "canonical_term", "slice_metrics"}
+    )
+
+
+def test_r3_final_tuning_report_is_aggregate_only_and_keeps_failed_gate() -> None:
+    report = json.loads(_R3_FINAL_TUNING_REPORT.read_text(encoding="utf-8"))
+
+    assert report["source"]["corpus"]["case_count"] == 2763
+    assert report["source"]["corpus"]["positive_count"] == 639
+    assert report["source"]["corpus"]["hard_negative_count"] == 2124
+    assert report["balanced_evidence"] == {
+        "sentence_tp_delta_vs_strict": 24,
+        "sentence_fp_delta_vs_strict": 0,
+        "occurrence_tp_delta_vs_strict": 30,
+        "occurrence_fp_delta_vs_strict": 2,
+    }
+    assert report["balanced_gates"]["passed"] is False
     assert _all_keys(report).isdisjoint(
         {"case_results", "case_id", "text", "canonical_term", "slice_metrics"}
     )

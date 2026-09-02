@@ -62,10 +62,9 @@ aggressive = KoguardEngine(profile="aggressive")
 | `balanced` | Strict + Choseong | 독립 batch에서 증분 TP가 확인된 기본값 |
 | `aggressive` | 현재 구현된 모든 matcher | 반복·구분자·공백·자판·자모·Fuzzy 우회까지 검사 |
 
-독립 tuning 2,363건에서 `balanced`는 strict보다 문장 TP 17건을 더 찾고 문장 FP 증분은 0건을
-유지했습니다. 공통 FP로 보였던 2건은 블라인드 재감사에서 모두 정책상 positive로 확정되어
-hard-negative 1,825건의 문장 FP는 0건입니다. 다만 occurrence FP는 balanced가 6건 더 많아
-전체 증분 gate는 아직 실패합니다. 따라서
+독립 tuning 2,763건에서 `balanced`는 strict보다 문장 TP 24건을 더 찾고 문장 FP 증분은 0건을
+유지했습니다. hard-negative 2,124건의 balanced 문장 FP도 0건입니다. 다만 occurrence TP는
+30건 늘면서 FP도 2건 늘어 전체 증분 gate는 아직 실패합니다. 따라서
 `balanced` 기본값은 공개 전 hidden 평가와 함께 재검토 대상이며, 최소 오탐이 우선이면 현재도
 `strict`를 선택할 수 있습니다.
 
@@ -73,7 +72,7 @@ hard-negative 1,825건의 문장 FP는 0건입니다. 다만 occurrence FP는 ba
 `시발` match를 반환합니다. profile과 직접 `EngineConfig`는 동시에 전달할 수 없습니다.
 해석된 불변 설정은 `engine.config`에서 확인할 수 있습니다. 전체 계약과 첫 독립 평가 수치는
 [profile API 계약](https://github.com/skgur07/Koguard/blob/dev/docs/profile-api-contract.md)과
-[공개 profile 보고서](https://github.com/skgur07/Koguard/blob/dev/evaluation/results/pf009-profile-evaluation.report.json)에 기록합니다.
+[최종 tuning profile 보고서](https://github.com/skgur07/Koguard/blob/dev/evaluation/results/pf014-r3-final-tuning.profile.report.json)에 기록합니다.
 
 기본 사전 대신 직접 만든 사전을 사용할 수도 있습니다.
 

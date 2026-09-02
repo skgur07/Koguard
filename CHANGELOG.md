@@ -39,6 +39,8 @@ Semantic Versioning after the first public release.
   and mixed-gap slices.
 - Aggregate-only evidence for independent double review of all 480 transformation cases, with complete
   consensus on 240 positives and 240 hard negatives and no unresolved or privacy-excluded cases.
+- A final aggregate-only R3 tuning profile report over 2,763 independently finalized cases, retaining
+  the balanced occurrence false-positive delta as an explicit release blocker.
 
 ### Changed
 

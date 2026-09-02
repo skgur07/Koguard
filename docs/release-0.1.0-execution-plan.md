@@ -1,6 +1,6 @@
 # Koguard `0.1.0` 출시 실행 계획
 
-- 상태: **실행 중 — R3 최종 품질 평가 대기**
+- 상태: **차단 — R3 tuning 완료, hidden custodian 입력 대기**
 - 기준일: 2026-09-02
 - 기준 브랜치: `dev`
 - 계획 시작 기능 commit: `bb919046a455b09f75cb69c720b9753973dcf150`
@@ -110,13 +110,13 @@ aggressive만 문장·occurrence TP가 각각 1건 늘었다.
 
 ### R3. 최종 품질 평가와 release candidate 고정
 
-- [ ] 공개 regression·tuning 전체 평가 실행
-- [ ] 최종 `strict`·`balanced`·`aggressive` 전체 및 slice별 지표 기록
+- [x] 공개 regression·tuning 전체 평가 실행
+- [x] 최종 `strict`·`balanced`·`aggressive` 전체 및 slice별 지표 기록
 - [x] positive 변형 Alias canonical 불일치 12건 재감사와 release 영향 확정
 - [ ] hidden corpus와 direct/normalized 누출 0건 확인
 - [ ] 고정 commit·wheel로 hidden evaluation 1회 실행
 - [ ] case-level hidden 결과는 보호 환경에 유지하고 aggregate만 반출
-- [ ] README의 지원 범위·성능·한계가 실제 결과와 일치하는지 검토
+- [x] README의 지원 범위·성능·한계가 실제 결과와 일치하는지 검토
 - [ ] 최종 release candidate commit 고정
 
 완료 조건:
@@ -175,6 +175,7 @@ aggressive만 문장·occurrence TP가 각각 1건 늘었다.
 | B-02 | 해결 | positive 변형 480건이 아직 미판정 | R2 독립 합의 480건·불일치 0건으로 완료 |
 | B-02A | 해결 | Alias slice 12건의 occurrence canonical 불일치 | 두 reviewer가 Alias 30건씩 재감사, 같은 12건 canonical 교정·span 오류 0건 확인 |
 | B-03 | 열림 | 최종 hidden aggregate 없음 | R3 보호 평가·attestation 완료 |
+| B-03A | 열림 | balanced가 strict 대비 occurrence FP +2로 전체 gate 실패 | hidden aggregate에서 합의된 FP 예산 판정, 실패 시 0.1.0 공개 차단 유지 |
 | B-04 | 열림 | TestPyPI 동일 artifact 설치 증거 없음 | R4 TestPyPI smoke 완료 |
 | B-05 | 열림 | `main`·PyPI 공개 승인 전 | B-01~04 해제 후 소유자 명시 승인 |
 
