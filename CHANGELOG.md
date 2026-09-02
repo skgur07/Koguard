@@ -37,6 +37,8 @@ Semantic Versioning after the first public release.
 - A 480-case project-authored, blinded transformation buffer pairing 240 positive targets with 240
   decoys across eight underrepresented Alias, keyboard, Jamo, Unicode, repeated, separator, whitespace,
   and mixed-gap slices.
+- Aggregate-only evidence for independent double review of all 480 transformation cases, with complete
+  consensus on 240 positives and 240 hard negatives and no unresolved or privacy-excluded cases.
 
 ### Changed
 

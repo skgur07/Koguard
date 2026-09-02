@@ -350,8 +350,10 @@ slice를 노출하지 않고 전부 `review/unadjudicated-intake`로 유지하�
 project-authored 자료로 고정한다.
 
 이 buffer는 부족 positive 변형의 독립 판정 입력이지 기존 2,763건 tuning 정확도나 hidden
-성능의 추가분이 아니다. 독립 이중 판정·불일치 재심 전까지 기존 slice coverage의 확정 건수도
-바꾸지 않는다.
+성능의 추가분이 아니다. 2026-09-02 독립 이중 판정에서 480건 모두 합의되어 positive 240건,
+hard-negative 240건, review·불일치·privacy 제외 0건으로 확정됐다. 8개 slice는 각각 60건이며
+제3 재심 대상은 없었다. 프로젝트 작성 targeted tuning이므로 `gold_ready=false`와 기존
+2,763건 기준선의 분리는 유지한다.
 
 생성·선택 완료 뒤 실행한 비-gold 진단에서는 positive-target 240건 중 balanced 63건,
 aggressive 180건을 탐지했고 정상 decoy 240건은 두 profile 모두 탐지 0건이었다. 한글 조사
@@ -359,12 +361,14 @@ aggressive 180건을 탐지했고 정상 decoy 240건은 두 profile 모두 탐�
 탐지는 계속 0건이다. 보호된 기존 tuning 2,763건 재측정에서는 strict·balanced의 문장·occurrence
 수치가 유지됐고, aggressive는 문장 TP 454→455와 occurrence TP 588→589로 각각 1건 늘면서
 문장 FP 30·occurrence FP 96은 증가하지 않았다. 이 결과는 독립 annotation 전 설계 진단과
-provisional tuning 근거이며 hidden 정확도 수치가 아니다.
+provisional tuning 근거이며 hidden 정확도 수치가 아니다. 확정 label 재측정에서도 문장 기준
+strict·balanced TP/FP는 각각 63/0, aggressive는 240/0이었다. 최초 aggressive occurrence의
+Alias 12건 canonical 불일치는 두 reviewer가 Alias positive 30건씩 독립 재감사해 같은 12건을
+교정했고 span·label 오류는 0건이었다. 최종 occurrence TP/FP/FN은 `240/0/0`이다.
 
 ## PF-005 종료 전 남은 작업
 
-1. positive 변형·decoy buffer 480건을 detector 결과 없이 독립 이중 판정하고 불일치를 재심한 뒤,
-   확정 사례만 targeted slice coverage에 반영
+1. ~~positive 변형·decoy buffer 480건 독립 이중 판정·불일치 재심~~ — 480건 합의, 불일치 0건으로 완료
 2. surface-priority의 남은 review 31건은 정책 명확화 뒤 별도 재검토하고 targeted 결과를
    정확도 추정에 섞지 않음
 3. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,

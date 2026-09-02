@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "corpus_id": "koguard-curated-positive-slice-buffer-v1",
+  "source_corpus_sha256": "209e55c391058c10444ded988be5f2a52b4bcd4cdd63f2be524beb2189fab329",
+  "batch_case_count": 480,
+  "batch_counts": {
+    "positive": 240,
+    "hard-negative": 240,
+    "review": 0
+  },
+  "corpus_counts": {
+    "positive": 240,
+    "hard-negative": 240,
+    "review": 0
+  },
+  "quality_counts": {
+    "double_reviewed": 480,
+    "consensus": 480,
+    "disagreement": 0,
+    "privacy_excluded": 0,
+    "pending_privacy": 0
+  },
+  "slice_counts": {
+    "alias": 60,
+    "jamo": 60,
+    "keyboard": 60,
+    "mixed-gap": 60,
+    "repeated": 60,
+    "separator": 60,
+    "unicode": 60,
+    "whitespace": 60
+  },
+  "gold_ready": false
+}

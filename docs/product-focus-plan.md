@@ -39,11 +39,13 @@ review 37건으로 판정했다. 따라서 hidden 평가와 출처 권리 확인
 선택·검토했다. positive 26건과 hard-negative 63건을 확정하고 review 31건을 유지했다. 이
 표적 표본은 slice 후보 발굴에만 쓰며 2,763건 tuning 성능이나 hidden 성능으로 합치지 않는다.
 부족 positive 변형을 직접 보강하기 위해 프로젝트 작성 blinded buffer 480건도 별도로 만들었다.
-8개 변형 slice마다 positive-target 30건과 정상 decoy 30건을 섞었으며, 독립 판정 전에는 모두
-review이고 기존 정확도와 coverage를 변경하지 않는다.
-조사 경계를 보강한 뒤 설계 진단상 aggressive는 기존 180/240에서 240/240으로 늘고 decoy
-탐지는 0/240을 유지했다. 기존 tuning 2,763건에서는 strict·balanced 지표와 FP가 유지되고
-aggressive만 문장·occurrence TP가 각각 1건 늘었지만, 독립 판정 전에는 coverage를 확정하지 않는다.
+2026-09-02 독립 이중 판정에서 positive 240건과 hard-negative 240건에 전부 합의했고
+review·불일치·privacy 제외는 0건이었다. 8개 변형 slice는 각각 60건이다. 조사 경계를 보강한
+뒤 확정 label 기준 aggressive 문장 TP는 180→240, FP는 0을 유지했으며 회복된 60건은
+Whitespace·Mixed-gap 각 30건이다. strict·balanced 문장 TP/FP는 각각 63/0으로 유지됐다.
+기존 tuning 2,763건에서는 strict·balanced 지표와 FP가 유지되고 aggressive만 문장·occurrence
+TP가 각각 1건 늘었다. 프로젝트 작성 targeted tuning이므로 실서비스 전체 성능이나 hidden
+성능으로 일반화하지 않는다.
 
 ### 1.1 Core 판정 정책 보완
 
