@@ -43,6 +43,8 @@ Semantic Versioning after the first public release.
   the balanced occurrence false-positive delta as an explicit release blocker.
 - An aggregate-only hidden evaluation over 424 independently reviewed K-HATERS cases, binding the fixed
   release-candidate wheel, split-leak manifest, review approvals, and passing balanced release gates.
+- A manual OIDC TestPyPI workflow that downloads only the hidden-evaluated CI artifact and verifies its
+  pinned wheel and sdist hashes before publishing.
 
 ### Changed
 

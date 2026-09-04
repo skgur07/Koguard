@@ -285,6 +285,7 @@ def test_project_metadata_and_release_documents_are_publication_complete() -> No
         Path("evaluation/hidden_evaluation_report.py"),
         Path("evaluation/hidden-evaluation-attestation.schema.json"),
         Path("evaluation/hidden-evaluation-report.schema.json"),
+        Path(".github/workflows/publish-testpypi.yml"),
         Path(".mailmap"),
     ):
         assert path.is_file(), path
@@ -341,6 +342,22 @@ def test_ci_matrix_pins_actions_and_runs_complete_release_gate() -> None:
     assert "koguard-0.1.0-release-candidate" in workflow
     assert workflow.index("uv build") < workflow.index("release.normalize_wheel")
     assert workflow.index("release.normalize_wheel") < workflow.index("release.artifact_audit")
+
+
+def test_testpypi_workflow_publishes_only_the_hidden_evaluated_candidate() -> None:
+    workflow = Path(".github/workflows/publish-testpypi.yml").read_text(encoding="utf-8")
+
+    assert "workflow_dispatch:" in workflow
+    assert "id-token: write" in workflow
+    assert "environment:\n      name: testpypi" in workflow
+    assert "run-id: 33581853944" in workflow
+    assert "813fc36c6988a7bdab68027964a206e970ab9f52" in workflow
+    assert "0dd69e7aca1319694fb879ed86be7e4d79ac95d9ff539216416683c6d9a4546e" in workflow
+    assert "02f1fc4e432b5b85e6fc6849d8478a31128fa3c43b2eecae6ed81b94ce1ec9c7" in workflow
+    assert "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c" in workflow
+    assert "pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33" in workflow
+    assert "repository-url: https://test.pypi.org/legacy/" in workflow
+    assert "uv build" not in workflow
 
 
 def test_repository_enforces_canonical_lf_for_text_build_inputs() -> None:

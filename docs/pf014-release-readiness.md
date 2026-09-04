@@ -116,8 +116,14 @@ balanced는 strict 대비 문장 TP +2·FP +0, occurrence TP +2·FP +0이다. �
 
 ## TestPyPI evidence 계약
 
-TestPyPI 업로드는 이번 준비 변경에 포함하지 않는다. trusted publisher 또는 제한된 API token을
-설정한 뒤 최종 wheel과 sdist를 업로드하고, CPython 3.11.9의 새 환경에서 각각 설치한다.
+`.github/workflows/publish-testpypi.yml`은 API token을 저장하지 않는 수동 OIDC 게시 경로다.
+TestPyPI의 pending trusted publisher에 owner `skgur07`, repository `Koguard`, workflow
+`publish-testpypi.yml`, environment `testpypi`, project `koguard`를 한 번 등록한다. 이후 workflow
+입력에 release commit `813fc36c6988a7bdab68027964a206e970ab9f52`를 정확히 넣었을 때만 고정
+CI run `33581853944`의 authoritative artifact를 내려받고 두 SHA-256과 파일 수를 검증한 뒤
+게시한다. 현재 `dev`를 다시 빌드하거나 임의 artifact를 업로드하는 경로는 없다.
+
+게시 뒤 CPython 3.11.9의 새 환경에서 wheel과 sdist를 각각 설치한다.
 `release/testpypi-evidence.schema.json`에는 다음만 기록한다.
 
 - 고정 TestPyPI index와 project URL
