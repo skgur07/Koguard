@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "reviewed_at": "2026-08-19",
+  "reviewed_at": "2026-09-04",
   "project_license": "MIT",
   "artifact_policy": "Only approved payload may enter the wheel or sdist; pending sources remain reference-only or local quarantine.",
   "sources": [
@@ -91,6 +91,17 @@
       "payload_in_artifacts": false,
       "runtime_dependency": false,
       "evidence": "evaluation/sources/kote.v1.json; raw corpus rows remain excluded"
+    },
+    {
+      "source_id": "khaters-hidden-evaluation",
+      "reference": "https://github.com/ssu-humane/K-HATERS",
+      "revision": "ad8d78995b3c7df9d3660ebd0c39b29bcce3eabf; Hugging Face data revision 67b979254f2f5874f3c0f649e0db8ab33d038e0d",
+      "declared_license": "CC-BY-4.0",
+      "rights_status": "approved-reference-only",
+      "allowed_scope": "protected hidden evaluation; aggregate metrics and attribution only",
+      "payload_in_artifacts": false,
+      "runtime_dependency": false,
+      "evidence": "K-HATERS paper attribution; test.jsonl SHA-256 ad79f90775505658257dbebcfe83823634c8d285256e37bf31616fa09ac923e5; raw rows and case-level annotations remain excluded"
     }
   ]
 }

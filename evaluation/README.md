@@ -275,8 +275,15 @@ hard-negative가 모두 있고 review가 0건이며 annotation·privacy·rights�
 2026-09-02 R3 최종 tuning 재측정은 2,763건에서 strict/balanced/aggressive 문장 TP
 416/440/455, FP 0/0/30을 기록했다. balanced는 strict 대비 occurrence TP +30·FP +2로
 전체 gate를 통과하지 못했다. 별도 targeted 480건에서 aggressive 문장·occurrence TP/FP/FN은
-240/0/0이다. regression 20건과 tuning 3,980건의 보호 통합 manifest 누출은 0건이지만 hidden
-split 검사는 custodian corpus를 기다린다.
+240/0/0이다. 이 R3 tuning 시점에는 regression 20건과 tuning 3,980건의 보호 통합 manifest
+누출만 0건이었고 hidden split은 아직 없었다.
+
+2026-09-04에는 release candidate `813fc36`의 audited wheel로 K-HATERS 기반 독립 hidden
+424건을 정확히 한 번 평가했다. 공개 regression 20건·tuning 3,980건과 direct/normalized leak은
+0건이며, balanced 문장 TP/FP/FN/TN은 `14/0/2/408`, occurrence TP/FP/FN은 `15/0/3`이다.
+strict 대비 TP 증분은 문장·occurrence 각각 2건, FP 증분은 모두 0건이고 성능 예산도 통과했다.
+case-level 결과는 보호 환경에 유지하며 공개 집계는
+`results/pf014-hidden-khaters-v1.aggregate.json`에만 기록한다.
 
 `ablation_runner.py`는 Exact+Alias 기준선, matcher별 isolated candidate, Segmented
 prerequisite control, 현재 all-enabled를 같은 gold corpus에서 평가한다. matcher마다

@@ -14,14 +14,15 @@ Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy
 > `balanced` 기본값은 구현했으며, 변경 근거와 남은 품질 게이트는
 > [제품 집중 계획](https://github.com/skgur07/Koguard/blob/dev/docs/product-focus-plan.md)에 기록되어 있습니다.
 
-실서비스 corpus는 라이선스가 고정된 2,500건 tuning intake와 기존 자료와 중복 없는 1,000건
-review buffer까지 확보했고, 이 중 2,363건을 독립 판정으로 확정했습니다. 아직 전체 gold나
-hidden evaluation은 아닙니다. 현재 상태와 완료 전 blocker는
+실서비스 형태의 tuning 자료 2,763건을 독립 판정으로 확정했고, 별도의 K-HATERS 기반 hidden
+424건도 독립 이중 판정·제3 재심과 누출 검사를 거쳐 평가했습니다. hidden positive는 16건으로
+작아 모든 실서비스 분포를 대표하지 않습니다. 현재 상태와 완료 전 blocker는
 [PF-005 corpus 상태](https://github.com/skgur07/Koguard/blob/dev/docs/corpus-intake-status.md)를 참고하세요.
 
 `0.1.0`은 아직 PyPI에 공개하지 않았습니다. PF-013의 MIT·CI·artifact hardening은 완료했고
-비공개 취약점 신고도 활성화했습니다. 남은 공개 gate는 저장소 밖 독립 hidden evaluation과
-TestPyPI 설치 검증이며, 실제 `main` 승격과 PyPI 업로드는 유지관리자의 별도 승인을 요구합니다.
+비공개 취약점 신고도 활성화했습니다. 독립 hidden gate와 최종 release candidate CI는 통과했고
+남은 공개 gate는 TestPyPI 동일 artifact 설치 검증입니다. 실제 `main` 승격과 PyPI 업로드는
+유지관리자의 별도 승인을 요구합니다.
 현재 판정과 안전한 실행 절차는
 [PF-014 릴리즈 준비 보고서](https://github.com/skgur07/Koguard/blob/dev/docs/pf014-release-readiness.md)에 기록합니다.
 
@@ -64,9 +65,10 @@ aggressive = KoguardEngine(profile="aggressive")
 
 독립 tuning 2,763건에서 `balanced`는 strict보다 문장 TP 24건을 더 찾고 문장 FP 증분은 0건을
 유지했습니다. hard-negative 2,124건의 balanced 문장 FP도 0건입니다. 다만 occurrence TP는
-30건 늘면서 FP도 2건 늘어 전체 증분 gate는 아직 실패합니다. 따라서
-`balanced` 기본값은 공개 전 hidden 평가와 함께 재검토 대상이며, 최소 오탐이 우선이면 현재도
-`strict`를 선택할 수 있습니다.
+30건 늘면서 FP도 2건 늘어 tuning 전체 증분 gate는 실패했습니다. 별도 hidden 424건에서는
+balanced가 strict보다 문장·occurrence TP를 각각 2건 더 찾고 FP 증분은 모두 0건이어서 release
+gate를 통과했습니다. 표본과 분포에 따른 차이가 있으므로 최소 오탐이 우선이면 `strict`를
+선택할 수 있습니다.
 
 모든 profile은 사전에 등록된 표현을 문맥과 무관하게 부분 문자열로 탐지하므로 `시발점`도
 `시발` match를 반환합니다. profile과 직접 `EngineConfig`는 동시에 전달할 수 없습니다.

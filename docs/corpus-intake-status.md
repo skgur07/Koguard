@@ -1,6 +1,6 @@
 # PF-005 초기 corpus 구축 상태
 
-- 기준일: 2026-08-28
+- 기준일: 2026-09-04
 - 상태: 다중 출처 balanced intake와 hard-negative buffer 1,000건, 중복 없는 balanced
   batch-003·004 독립 판정·제3 판정 완료, PF-005 수량 기준 충족, 전체 gold corpus 미완료
 - annotation workflow: 이중 판정·불일치 제3 판정 구현 및 실제 batch 검증 완료
@@ -10,7 +10,7 @@
 - 확정 positive: 639건
 - 확정 hard-negative: 2,124건
 - 판정 대기: 737건(기존 intake 700건, buffer 두 batch 37건)
-- hidden evaluation: 0건
+- 독립 hidden evaluation: 424건(positive 16, hard-negative 408, review 제외 76)
 
 ## 현재 결과
 
@@ -366,18 +366,35 @@ strict·balanced TP/FP는 각각 63/0, aggressive는 240/0이었다. 최초 aggr
 Alias 12건 canonical 불일치는 두 reviewer가 Alias positive 30건씩 독립 재감사해 같은 12건을
 교정했고 span·label 오류는 0건이었다. 최종 occurrence TP/FP/FN은 `240/0/0`이다.
 
-## PF-005 종료 전 남은 작업
+## PF-005 release 범위와 후속 작업
 
 1. ~~positive 변형·decoy buffer 480건 독립 이중 판정·불일치 재심~~ — 480건 합의, 불일치 0건으로 완료
-2. surface-priority의 남은 review 31건은 정책 명확화 뒤 별도 재검토하고 targeted 결과를
+2. surface-priority의 남은 review 31건은 `0.1.0` 이후 정책 명확화 뒤 별도 재검토하고 targeted 결과를
    정확도 추정에 섞지 않음
-3. 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
+3. `0.1.0` 이후 확장 corpus의 missing canonical 상위 cluster를 PF-007 후보로 평가하고 candidate별 positive 1건,
    등록 표현·승인 변형이 없는 hard-negative 2건 이상 고정
-4. 핵심 positive slice별 30건, 등록 표현을 포함한 substring·인용/설명·사용자명/게임
+4. `0.1.0` 이후 핵심 positive slice별 30건, 등록 표현을 포함한 substring·인용/설명·사용자명/게임
    문맥 positive와 등록 표현이 없는 철자 유사 negative 확보
-5. KOTE·Korean Hate Speech 원문의 수동 privacy 검토와 CC-BY-SA attribution 경계 확정
-6. corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행
-7. hidden aggregate로 tuning 수치와 독립된 전체·slice별 지표 생성
+5. 외부 원문·annotation을 공개하기 전에 KOTE·Korean Hate Speech의 남은 privacy 검토와
+   CC-BY-SA attribution 경계 확정
+6. ~~corpus custodian이 별도 hidden evaluation을 구축하고 PF-004 누출 검사를 실행~~ —
+   K-HATERS 기반 424건, direct/normalized 누출 0건으로 완료
+7. ~~hidden aggregate로 tuning 수치와 독립된 전체·slice별 지표 생성~~ — balanced 문장
+   TP/FP/FN `14/0/2`, strict 대비 TP +2·FP +0으로 완료
 
-수량 기준은 충족했지만 이 조건 전에는 #7을 완료로 닫거나 현재 corpus를 실서비스 gold라고
-부르지 않는다.
+PF-005의 `0.1.0` release 범위인 수량 기준, 독립 판정 workflow, 독립 hidden 검증은 완료됐다.
+2~5는 corpus 확대·원문 공개를 위한 후속 범위이며 현재 tuning corpus를 실서비스 전체 gold라고
+부를 근거는 아니다.
+
+## 2026-09-04 K-HATERS 독립 hidden evaluation
+
+이전에 tuning·discovery에 사용하지 않은 `ssu-humane/K-HATERS` test split을 보호 환경에 고정했다.
+upstream label과 rationale은 reviewer에게 제공하지 않았고 Koguard의 문맥 무관 lexical 정책으로
+500건을 독립 이중 판정했다. 두 reviewer의 완전 합의는 319건, 불일치 181건은 제3 reviewer가
+모두 재심했다. 두 reviewer가 모두 `review`로 남긴 76건은 정답을 강제하지 않고 최종 평가에서
+제외했다. 최종 424건은 positive 16, hard-negative 408이며 privacy·rights 검토가 완료됐다.
+
+공개 regression·tuning과 direct/normalized 누출은 0건이고, 고정 wheel로 한 번만 평가했다.
+balanced 문장 TP/FP/FN/TN은 `14/0/2/408`, occurrence TP/FP/FN은 `15/0/3`이다. 이 corpus는
+독립 hidden release 근거지만 positive가 16건에 불과하므로 다양한 우회 표현 전체를 대표하지
+않는다. 원문·case ID·정답 span은 공개하지 않고 집계 보고서만 저장한다.

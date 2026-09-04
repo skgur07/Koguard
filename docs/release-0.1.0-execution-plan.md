@@ -1,7 +1,7 @@
 # Koguard `0.1.0` 출시 실행 계획
 
-- 상태: **차단 — R3 tuning 완료, hidden custodian 입력 대기**
-- 기준일: 2026-09-02
+- 상태: **차단 — hidden·최종 CI 통과, TestPyPI 대기**
+- 기준일: 2026-09-04
 - 기준 브랜치: `dev`
 - 계획 시작 기능 commit: `bb919046a455b09f75cb69c720b9753973dcf150`
 - 추적 이슈: [PF-005 #7](https://github.com/skgur07/Koguard/issues/7),
@@ -36,6 +36,8 @@
 5. hidden evaluation은 최종 품질 확인에만 사용하며 결과를 보고 규칙을 다시 튜닝하지 않는다.
 6. 모든 자동 gate가 통과해도 `main` 병합, tag, TestPyPI/PyPI 게시는 소유자의 명시적 승인 뒤에
    실행한다.
+7. hidden aggregate를 기록한 후속 commit에서 패키지를 다시 만들지 않는다. TestPyPI와 실제
+   공개에는 평가된 `813fc36` artifact hash를 그대로 사용한다.
 
 ## 3. 현재까지 완료된 상태
 
@@ -47,9 +49,9 @@
 | tuning 기준선 | 완료 | 확정 2,763건: positive 639, hard-negative 2,124 |
 | positive 변형 입력 | 생성 완료 | 8개 slice, positive-target 240 + decoy 240 |
 | positive 변형 판정 | 완료 | 독립 합의 480건: positive 240, hard-negative 240, review·불일치 0 |
-| 패키징·CI | 완료 | [757 tests, coverage 95.63%, 3 OS·재현성 gate 통과](https://github.com/skgur07/Koguard/actions/runs/33473481786) |
+| 패키징·CI | 완료 | [760 tests, coverage 95.63%, 3 OS·재현성 gate 통과](https://github.com/skgur07/Koguard/actions/runs/33581853944) |
 | 배포물 격리 | 완료 | tuning 자료는 wheel/sdist에 포함되지 않음 |
-| 최종 hidden 평가 | 대기 | 확정 release candidate에서 1회 실행 |
+| 최종 hidden 평가 | 완료 | RC `813fc36`, 독립 424건, balanced 문장 TP/FP/FN `14/0/2`, gate 통과 |
 | TestPyPI·공개 | 대기 | 최종 artifact와 소유자 승인 필요 |
 
 두 독립 reviewer는 설계 의도와 detector 출력 없이 480건 전부에 합의했다. 확정 label은
@@ -113,11 +115,11 @@ aggressive만 문장·occurrence TP가 각각 1건 늘었다.
 - [x] 공개 regression·tuning 전체 평가 실행
 - [x] 최종 `strict`·`balanced`·`aggressive` 전체 및 slice별 지표 기록
 - [x] positive 변형 Alias canonical 불일치 12건 재감사와 release 영향 확정
-- [ ] hidden corpus와 direct/normalized 누출 0건 확인
-- [ ] 고정 commit·wheel로 hidden evaluation 1회 실행
-- [ ] case-level hidden 결과는 보호 환경에 유지하고 aggregate만 반출
+- [x] hidden corpus와 direct/normalized 누출 0건 확인
+- [x] 고정 commit·wheel로 hidden evaluation 1회 실행
+- [x] case-level hidden 결과는 보호 환경에 유지하고 aggregate만 반출
 - [x] README의 지원 범위·성능·한계가 실제 결과와 일치하는지 검토
-- [ ] 최종 release candidate commit 고정
+- [x] 최종 release candidate commit 고정 — `813fc36c6988a7bdab68027964a206e970ab9f52`
 
 완료 조건:
 
@@ -127,16 +129,16 @@ aggressive만 문장·occurrence TP가 각각 1건 늘었다.
 
 ### R4. 패키지 검증과 공개 승인
 
-- [ ] `uv run ruff format --check .`
-- [ ] `uv run ruff check .`
-- [ ] `uv run mypy`
-- [ ] `uv run pytest`
-- [ ] `uv build`
-- [ ] provenance와 wheel/sdist artifact audit 통과
-- [ ] wheel·sdist clean-install smoke 통과
-- [ ] 최종 commit의 Windows·Ubuntu·macOS CI와 byte reproducibility 통과
+- [x] `uv run ruff format --check .`
+- [x] `uv run ruff check .`
+- [x] `uv run mypy`
+- [x] `uv run pytest` — 761 passed, branch coverage 95.63%
+- [x] `uv build`
+- [x] provenance와 wheel/sdist artifact audit 통과
+- [x] wheel·sdist clean-install smoke 통과
+- [x] 최종 release candidate의 Windows·Ubuntu·macOS CI와 byte reproducibility 통과 — run `33581853944`
 - [ ] TestPyPI에 동일 artifact 업로드 후 CPython 3.11.9 설치·quickstart 검증
-- [ ] 권리 manifest, MIT, NOTICE, changelog, 공개 API, 보안 신고 경로 최종 확인
+- [x] 권리 manifest, MIT, NOTICE, changelog, 공개 API, 보안 신고 경로 최종 확인
 - [ ] PF-005 #7 완료 조건 확인 후 종료
 - [ ] PF-014 #16에 최종 release report 기록
 - [ ] 소유자에게 `dev → main`, tag `v0.1.0`, PyPI 게시 승인 요청
@@ -174,8 +176,8 @@ aggressive만 문장·occurrence TP가 각각 1건 늘었다.
 | B-01 | 해결 | 공백/혼합 우회 뒤 조사 경계 미탐 후보 60건 | R1 정확도·회귀 gate 통과 |
 | B-02 | 해결 | positive 변형 480건이 아직 미판정 | R2 독립 합의 480건·불일치 0건으로 완료 |
 | B-02A | 해결 | Alias slice 12건의 occurrence canonical 불일치 | 두 reviewer가 Alias 30건씩 재감사, 같은 12건 canonical 교정·span 오류 0건 확인 |
-| B-03 | 열림 | 최종 hidden aggregate 없음 | R3 보호 평가·attestation 완료 |
-| B-03A | 열림 | balanced가 strict 대비 occurrence FP +2로 전체 gate 실패 | hidden aggregate에서 합의된 FP 예산 판정, 실패 시 0.1.0 공개 차단 유지 |
+| B-03 | 해결 | 최종 hidden aggregate 없음 | 독립 424건 보호 평가·attestation·aggregate 완료 |
+| B-03A | 해결 | tuning에서 balanced가 strict 대비 occurrence FP +2로 전체 gate 실패 | hidden에서 occurrence TP +2·FP +0 및 전체 gate 통과 |
 | B-04 | 열림 | TestPyPI 동일 artifact 설치 증거 없음 | R4 TestPyPI smoke 완료 |
 | B-05 | 열림 | `main`·PyPI 공개 승인 전 | B-01~04 해제 후 소유자 명시 승인 |
 

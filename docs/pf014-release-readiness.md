@@ -1,8 +1,8 @@
 # PF-014 `0.1.0` 릴리즈 준비 보고서
 
-- 기준일: 2026-09-02
+- 기준일: 2026-09-04
 - 대상: Koguard `0.1.0`
-- 현재 판정: **blocked — hidden evaluation과 TestPyPI 증거 대기**
+- 현재 판정: **blocked — hidden evaluation·최종 RC CI 통과, TestPyPI 대기**
 - 공개 상태: `main` 미승격, PyPI 미게시
 
 ## 완료된 선행 근거
@@ -85,6 +85,35 @@ hidden 또는 TestPyPI evidence가 없으면 보고서는 실패로 사라지지
 `ready-for-maintainer-approval`이며 `main_promoted=false`, `pypi_published=false`를 유지한다.
 실제 `dev → main`, tag와 PyPI 업로드는 별도 명시적 승인 없이는 실행하지 않는다.
 
+## 2026-09-04 독립 hidden evaluation
+
+release candidate `813fc36c6988a7bdab68027964a206e970ab9f52`에서 Linux CI가 만든 wheel
+SHA-256 `0dd69e7aca1319694fb879ed86be7e4d79ac95d9ff539216416683c6d9a4546e`을 CPython
+3.11.9 보호 환경에 설치해 hidden evaluation을 정확히 한 번 실행했다. 새 출처 K-HATERS의
+고정 test artifact 10,000건에서 stable SHA-256 층화로 600건을 뽑은 뒤 공개 자료 direct 중복
+1건과 용량 조정 99건을 제외했다. 독립 primary·secondary 판정과 제3 재심 후 `review` 76건은
+label을 강제하지 않고 제외해 positive 16건, hard-negative 408건, 총 424건을 최종 평가했다.
+
+공개 regression 20건·tuning 3,980건·hidden 424건을 manifest version 2로 함께 검사한 결과
+direct/normalized leak은 모두 0건이다. case-level 원문·ID·canonical term·reviewer ID는 보호
+환경에만 남겼고, 공개 가능한 결과는
+`evaluation/results/pf014-hidden-khaters-v1.aggregate.json` 하나뿐이다.
+
+이 aggregate와 문서를 기록한 후속 commit은 측정 증거 보존용이며 새 release candidate가 아니다.
+README metadata가 달라져 후속 commit에서 다시 만든 wheel·sdist hash는 바뀌므로 TestPyPI에는
+반드시 hidden 평가와 artifact audit에 결박된 `813fc36`의 wheel·sdist를 그대로 사용한다.
+
+| profile | 문장 TP/FP/FN/TN | 문장 precision/recall/F1 | occurrence TP/FP/FN |
+| --- | --- | --- | --- |
+| strict | 12/0/4/408 | 100% / 75.0% / 85.7% | 13/0/5 |
+| balanced | 14/0/2/408 | 100% / 87.5% / 93.3% | 15/0/3 |
+| aggressive | 16/6/0/402 | 72.7% / 100% / 84.2% | 18/7/0 |
+
+balanced는 strict 대비 문장 TP +2·FP +0, occurrence TP +2·FP +0이다. 정상 문장 FP rate
+0%, short chat p95 0.0646ms, 최대 4,096자 p95 8.9211ms로 합의된 정확도·성능 gate를 모두
+통과했다. tuning의 occurrence FP +2는 독립 hidden에서 재현되지 않았지만 없던 사실로 지우지
+않고 tuning 한계로 함께 공개한다. 이 결과를 본 뒤 matcher·사전·profile은 변경하지 않았다.
+
 ## TestPyPI evidence 계약
 
 TestPyPI 업로드는 이번 준비 변경에 포함하지 않는다. trusted publisher 또는 제한된 API token을
@@ -102,19 +131,16 @@ TestPyPI 업로드는 이번 준비 변경에 포함하지 않는다. trusted pu
 
 | gate | 상태 | 다음 작업 |
 | --- | --- | --- |
-| PF-013 CI·license·artifact | 완료 | 최종 commit에서 재실행 |
+| PF-013 CI·license·artifact | 완료 | RC `813fc36`, Actions `33581853944` 통과 |
 | 비공개 취약점 신고 | 완료 | 릴리스 후 정책 유지 |
-| hidden evaluation | 대기 | custodian 보호 환경 실행과 aggregate handoff |
+| hidden evaluation | 완료 | 424건 독립 평가, 누출 0건, balanced gate 통과 |
 | TestPyPI | 대기 | 게시 권한 설정 후 동일 artifact 설치 smoke |
 | `main`·PyPI 승인 | 대기 | 모든 evidence 확인 후 소유자 명시 승인 |
 
-현재 tuning 2,763건 결과와 공개 synthetic regression은 구현 근거이며 hidden 품질 수치를 대체하지
-않는다. 두 profile 공통 FP 누적 3건은 블라인드 재감사에서 정책 positive로 바로잡아 문장 FP 0건을
-회복했다. 초성 occurrence FP 후보 7건의 블라인드 재감사 후에도 balanced는 strict보다
-occurrence FP가 2건 늘어 전체 FP 증분 0 gate를
-통과하지 못했다. 이 상태도 최종 release report에서
-차단 근거로 유지한다. hidden 준비가 지연되더라도 이를 최종 실서비스 정확도로 바꾸어 표현하지
-않는다.
+현재 tuning 2,763건에서 balanced는 strict보다 occurrence FP가 2건 늘어 tuning 전체 gate를
+통과하지 못했다. 반면 독립 hidden 424건에서는 문장·occurrence FP 증분이 모두 0이라 hidden
+release gate를 통과했다. 두 분포의 차이를 숨기지 않으며, 16개 positive뿐인 hidden 표본을 모든
+실서비스 정확도로 일반화하지 않는다.
 
 ## 2026-09-02 R3 재측정
 

@@ -152,3 +152,22 @@ label은 Koguard 정책 label이나 exact span annotation이 아니므로 500건
 - 공개하려는 대상별로 원문, stable hash/ID, annotation, 집계 통계의 허용 범위를 구분한다.
 - 승인 근거 문서와 검토자를 기록한 뒤에만 source spec의 별도 승인 버전을 만든다. 기존
   `pending` spec을 제자리에서 승인 상태로 바꾸지 않는다.
+
+## K-HATERS hidden evaluation 고정 근거
+
+- upstream: <https://github.com/ssu-humane/K-HATERS>
+- repository revision: `ad8d78995b3c7df9d3660ebd0c39b29bcce3eabf`
+- data host: <https://huggingface.co/datasets/humane-lab/K-HATERS>
+- data revision: `67b979254f2f5874f3c0f649e0db8ab33d038e0d`
+- artifact: `test.jsonl`, 10,000 rows, 2,768,958 bytes
+- artifact SHA-256: `ad79f90775505658257dbebcfe83823634c8d285256e37bf31616fa09ac923e5`
+- license: CC-BY-4.0
+- attribution: Chaewon Park, Suhwan Kim, Kyubyong Park, Kunwoo Park,
+  “K-HATERS: A Hate Speech Detection Corpus in Korean with Target-Specific Ratings,” Findings of EMNLP 2023
+
+K-HATERS는 2026-09-04 이전 Koguard tuning·사전 discovery에 사용하지 않은 독립 출처로
+선택했다. 원문은 보호 환경에만 저장했고 upstream label·rationale을 Koguard 정답으로 복사하지
+않았다. primary·secondary·adjudicator가 Koguard 정책으로 다시 판정했으며 privacy 승인 사례 중
+review가 아닌 424건만 hidden 평가에 사용했다. 공개 저장소와 wheel/sdist에는 원문, case ID,
+span annotation을 넣지 않고 CC-BY-4.0 출처·고정 revision·artifact hash와 aggregate 지표만
+기록한다.

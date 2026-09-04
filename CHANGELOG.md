@@ -41,6 +41,8 @@ Semantic Versioning after the first public release.
   consensus on 240 positives and 240 hard negatives and no unresolved or privacy-excluded cases.
 - A final aggregate-only R3 tuning profile report over 2,763 independently finalized cases, retaining
   the balanced occurrence false-positive delta as an explicit release blocker.
+- An aggregate-only hidden evaluation over 424 independently reviewed K-HATERS cases, binding the fixed
+  release-candidate wheel, split-leak manifest, review approvals, and passing balanced release gates.
 
 ### Changed
 

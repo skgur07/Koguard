@@ -16,6 +16,7 @@ from evaluation.hidden_evaluation_report import (
 )
 
 _SOURCE_PATH = Path("evaluation/results/provisional-ablation-windows-python311.json")
+_COMMITTED_REPORT_PATH = Path("evaluation/results/pf014-hidden-khaters-v1.aggregate.json")
 _RELEASE_COMMIT = "a" * 40
 _EVALUATED_WHEEL_SHA256 = "c" * 64
 
@@ -180,3 +181,35 @@ def test_hidden_report_requires_distinct_approvals() -> None:
             attestation=attestation,
             attestation_sha256="b" * 64,
         )
+
+
+def test_committed_hidden_report_is_aggregate_only_and_passes_release_gates() -> None:
+    report = json.loads(_COMMITTED_REPORT_PATH.read_text(encoding="utf-8"))
+
+    canonical_report = json.dumps(
+        report, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode()
+    assert hashlib.sha256(canonical_report).hexdigest() == (
+        "92940b0fcc828ef1e80879698d700e826ef9691efbe37dda0e38f65d9379ced9"
+    )
+    assert report["release_commit"] == "813fc36c6988a7bdab68027964a206e970ab9f52"
+    assert report["source"]["corpus"] == {
+        "sha256": "46ea020a06cb0242cf2f0556b34ae5ffb66c8f1119bd0f4eafd50443d6461ff3",
+        "case_count": 424,
+        "positive_count": 16,
+        "hard_negative_count": 408,
+        "excluded_review_count": 0,
+        "classification": "independent-hidden-evaluation",
+        "gold_ready": True,
+    }
+    assert report["balanced_evidence"] == {
+        "sentence_tp_delta_vs_strict": 2,
+        "sentence_fp_delta_vs_strict": 0,
+        "occurrence_tp_delta_vs_strict": 2,
+        "occurrence_fp_delta_vs_strict": 0,
+    }
+    assert report["balanced_gates"]["passed"] is True
+
+    serialized = json.dumps(report, ensure_ascii=False)
+    for forbidden_key in ("case_results", "case_id", "canonical_term", "reviewer_id"):
+        assert f'"{forbidden_key}"' not in serialized
