@@ -1,4 +1,30 @@
-# No default whitelist entries.
+# Koguard 기본 Whitelist
 #
-# Applications can provide domain-specific allow-list terms through
-# KoguardDictionary.from_sources(whitelist=...) or whitelist_path.
+# 여기 등록한 표현과 겹치는 매치 구간만 보호한다. 결과 전체를 통과시키지 않는다.
+#
+# 대상은 금칙어와 형태가 같지만 의미가 전혀 다른 정상 용법이다. 한국어에서 이런
+# 충돌은 대부분 뒤에 붙는 보조용언이나 연결어미로 구분되므로, 낱말이 아니라
+# 그 결합형을 등록한다.
+#
+# 여기에 없는 결합형은 여전히 탐지된다. 서비스별로 필요한 표현은
+# KoguardDictionary.from_sources(whitelist=...) 로 추가한다.
+
+# 꺼지다 - 소등, 전원 차단
+꺼져 있
+꺼져 버
+꺼져 가
+꺼져서
+
+# 닥치다 - 어떤 일이 가까이 옴
+닥쳐올
+닥쳐온
+닥쳐서
+
+# 뒤지다 - 찾아 헤집음
+뒤져 보
+뒤져도
+뒤져서
+
+# 등신 - 사람 크기를 뜻하는 복합명사
+등신대
+등신불

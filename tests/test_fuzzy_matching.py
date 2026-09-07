@@ -23,7 +23,7 @@ def make_engine(
     whitelist: list[str] | None = None,
     config: EngineConfig | None = None,
 ) -> KoguardEngine:
-    resolved_config = config or EngineConfig()
+    resolved_config = config if config is not None else EngineConfig(fuzzy_matching=True)
     dictionary = KoguardDictionary.from_sources(
         blacklist=blacklist,
         whitelist=whitelist or [],
@@ -83,7 +83,7 @@ def test_fuzzy_matching_rejects_candidates_beyond_distance() -> None:
 def test_fuzzy_matching_supports_configured_distance_two() -> None:
     engine = make_engine(
         ["개새끼"],
-        config=EngineConfig(fuzzy_max_distance=2),
+        config=EngineConfig(fuzzy_matching=True, fuzzy_max_distance=2),
     )
 
     result = engine.check("개세기")
@@ -96,11 +96,11 @@ def test_fuzzy_matching_supports_configured_distance_two() -> None:
 def test_fuzzy_matching_honors_minimum_score() -> None:
     strict = make_engine(
         ["개새끼"],
-        config=EngineConfig(fuzzy_min_score=0.7),
+        config=EngineConfig(fuzzy_matching=True, fuzzy_min_score=0.7),
     )
     permissive = make_engine(
         ["개새끼"],
-        config=EngineConfig(fuzzy_min_score=0.6),
+        config=EngineConfig(fuzzy_matching=True, fuzzy_min_score=0.6),
     )
 
     assert strict.check("개세끼").detected is False
@@ -110,7 +110,7 @@ def test_fuzzy_matching_honors_minimum_score() -> None:
 def test_fuzzy_matching_does_not_treat_exact_input_as_fuzzy() -> None:
     engine = make_engine(
         ["개새끼"],
-        config=EngineConfig(exact_matching=False),
+        config=EngineConfig(fuzzy_matching=True, exact_matching=False),
     )
 
     assert engine.check("개새끼").detected is False
@@ -185,7 +185,7 @@ def test_fuzzy_substitution_does_not_match_inside_larger_token() -> None:
 def test_fuzzy_matching_ignores_terms_above_configured_length() -> None:
     engine = make_engine(
         ["가나다라마바사"],
-        config=EngineConfig(fuzzy_max_term_length=4),
+        config=EngineConfig(fuzzy_matching=True, fuzzy_max_term_length=4),
     )
 
     assert engine.check("가나다라마바아").detected is False
@@ -195,14 +195,14 @@ def test_fuzzy_index_rejects_dictionary_above_configured_entry_limit() -> None:
     with pytest.raises(ConfigurationError, match="fuzzy_max_index_entries"):
         make_engine(
             ["가나다"],
-            config=EngineConfig(fuzzy_max_index_entries=1),
+            config=EngineConfig(fuzzy_matching=True, fuzzy_max_index_entries=1),
         )
 
 
 def test_fuzzy_matching_raises_when_operation_budget_is_exhausted() -> None:
     engine = make_engine(
         ["가나다", "가나마"],
-        config=EngineConfig(fuzzy_max_operations=1),
+        config=EngineConfig(fuzzy_matching=True, fuzzy_max_operations=1),
     )
 
     with pytest.raises(FuzzyOperationLimitError) as exc_info:

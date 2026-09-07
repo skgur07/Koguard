@@ -26,7 +26,7 @@ def test_engine_config_defaults() -> None:
     assert config.keyboard_matching is True
     assert config.jamo_composition_matching is True
     assert config.segmented_input_matching is True
-    assert config.fuzzy_matching is True
+    assert config.fuzzy_matching is False
     assert config.fuzzy_min_term_length == 3
     assert config.fuzzy_max_term_length == 32
     assert config.fuzzy_max_distance == 1
@@ -50,7 +50,7 @@ def test_engine_config_preserves_obfuscation_separator_positional_argument() -> 
     assert config.keyboard_matching is True
     assert config.jamo_composition_matching is True
     assert config.segmented_input_matching is True
-    assert config.fuzzy_matching is True
+    assert config.fuzzy_matching is False
 
 
 @pytest.mark.parametrize("value", [0, -1, False, 1.5])

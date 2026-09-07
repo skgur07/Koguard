@@ -161,7 +161,7 @@ def test_fuzzy_corpus_has_no_false_positives_or_false_negatives() -> None:
         blacklist=["개새끼", "돌아이", "빡대가리"],
         include_defaults=False,
     )
-    engine = KoguardEngine(dictionary=dictionary)
+    engine = KoguardEngine(config=EngineConfig(fuzzy_matching=True), dictionary=dictionary)
     true_positives = 0
     false_positives = 0
     false_negatives = 0

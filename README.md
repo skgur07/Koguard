@@ -4,7 +4,8 @@
 
 현재 v0.1에서는 기본 사전 기반 Exact Match, 반복·구분자 우회 view, 공백·혼합·초성·명시적
 Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy Match와 구간 단위 Whitelist
-처리를 제공합니다. 모든 탐지 단계는 기본으로 활성화되며 단계별로 끌 수 있습니다.
+처리를 제공합니다. Fuzzy를 제외한 탐지 단계는 기본으로 활성화되며 단계별로 켜고 끌 수
+있습니다.
 
 > **개발 우선순위:** Adapter·Plugin·AI 구현은 현재 보류했습니다. 최초 공개 `0.1.0` 전까지
 > 탐지 데이터, 독립 평가 corpus, 단순 profile API와 안전한 기본값을 먼저 완성합니다. 현재
@@ -38,7 +39,9 @@ engine = KoguardEngine(dictionary=dictionary)
 
 ### 탐지 단계 설정
 
-모든 탐지 플래그는 기본값이 `True`이고 정확한 `bool` 값만 허용합니다.
+`fuzzy_matching`을 제외한 모든 탐지 플래그는 기본값이 `True`이고 정확한 `bool` 값만
+허용합니다. Fuzzy는 독립 평가 corpus에서 추가 탐지 없이 오탐만 만들어 기본 비활성입니다.
+근거는 [정확도 기준선](docs/accuracy-baseline.md)에 기록되어 있습니다.
 
 | 설정 | 탐지 단계 | 기본값 |
 | --- | --- | --- |
@@ -52,7 +55,7 @@ engine = KoguardEngine(dictionary=dictionary)
 | `keyboard_matching` | `tlqkf` 같은 영문 두벌식 자판 입력 조합 | `True` |
 | `jamo_composition_matching` | `ㅅㅣㅂㅏㄹ` 같은 호환 자모 입력 조합 | `True` |
 | `segmented_input_matching` | `ㅅ * ㅂ`, `ㅅㅣ ㅂㅏㄹ`, `tl * qkf` 같은 제한된 조합 우회 | `True` |
-| `fuzzy_matching` | 독립 토큰의 제한된 Levenshtein 오타 탐지 | `True` |
+| `fuzzy_matching` | 독립 토큰의 제한된 Levenshtein 오타 탐지 | **`False`** |
 
 각 단계는 독립적으로 `False`로 끌 수 있습니다. 다음 설정은 Exact Match만 남깁니다.
 
@@ -76,7 +79,8 @@ engine = KoguardEngine(config=config)
 ```
 
 기본 사전은 프로젝트에서 직접 선별한 표현과 MIT 라이선스 Korcen에서 소량 선별한 Exact
-Match 표현을 포함하며 기본 Whitelist는 비어 있습니다. 고정한 원본 revision과 라이선스는
+Match 표현을 포함합니다. 기본 Whitelist에는 `꺼져 있`, `닥쳐올`, `뒤져 보`, `등신대`처럼
+금칙어와 형태가 같지만 의미가 다른 정상 결합형만 등록되어 있습니다. 고정한 원본 revision과 라이선스는
 [`src/koguard/data/NOTICE.md`](src/koguard/data/NOTICE.md)에 기록합니다.
 따라서 `시발점`, `병신년`처럼 금칙어를 포함한 복합어도 기본 정책에서는 탐지합니다.
 서비스 문맥에서 허용할 표현은 `whitelist` 또는 `whitelist_path`로 명시적으로 주입해야 합니다.

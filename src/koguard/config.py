@@ -28,7 +28,7 @@ class EngineConfig:
     keyboard_matching: bool = True
     jamo_composition_matching: bool = True
     segmented_input_matching: bool = True
-    fuzzy_matching: bool = True
+    fuzzy_matching: bool = False
     fuzzy_min_term_length: int = 3
     fuzzy_max_term_length: int = 32
     fuzzy_max_distance: int = 1
