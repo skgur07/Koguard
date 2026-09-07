@@ -19,7 +19,6 @@ def test_default_dictionary_loads_bundled_terms() -> None:
         "좆같다",
         "지랄",
         "염병",
-        "꺼져",
         "개자식",
         "뒤져",
         "느그애미",

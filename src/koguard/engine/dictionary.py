@@ -136,10 +136,20 @@ class KoguardDictionary:
     def default(
         cls,
         unicode_form: NormalizationForm = "NFKC",
+        *,
+        include_contextual: bool = False,
     ) -> "KoguardDictionary":
-        """Load the dictionaries bundled with Koguard."""
+        """Load the dictionaries bundled with Koguard.
 
-        return cls.from_sources(unicode_form=unicode_form)
+        ``include_contextual`` adds the terms whose ordinary Korean usage no
+        rule can separate. They are excluded by default because they flag
+        normal sentences; see ``docs/contextual-term-tier-design.md``.
+        """
+
+        return cls.from_sources(
+            unicode_form=unicode_form,
+            include_contextual=include_contextual,
+        )
 
     @classmethod
     def from_sources(
@@ -152,6 +162,7 @@ class KoguardDictionary:
         aliases: Iterable[AliasRule] = (),
         alias_path: str | Path | None = None,
         include_defaults: bool = True,
+        include_contextual: bool = False,
         unicode_form: NormalizationForm = "NFKC",
     ) -> "KoguardDictionary":
         """Build indexes from packaged data, iterables, and optional UTF-8 files."""
@@ -159,6 +170,12 @@ class KoguardDictionary:
         blacklist_entries: set[str] = set()
         whitelist_entries: set[str] = set()
         alias_rules: list[AliasRule] = []
+
+        if include_contextual and not include_defaults:
+            raise DictionaryError(
+                "include_contextual is a tier of the packaged defaults and "
+                "requires include_defaults"
+            )
 
         if include_defaults:
             blacklist_entries.update(
@@ -182,6 +199,15 @@ class KoguardDictionary:
             )
             alias_rules.extend(default_aliases)
             blacklist_entries.update(rule.term for rule in default_aliases)
+
+        if include_contextual:
+            blacklist_entries.update(
+                _normalize_entries(
+                    _read_packaged_lines("badwords-contextual.txt"),
+                    unicode_form,
+                    "blacklist",
+                )
+            )
 
         blacklist_entries.update(_normalize_entries(blacklist, unicode_form, "blacklist"))
         whitelist_entries.update(_normalize_entries(whitelist, unicode_form, "whitelist"))

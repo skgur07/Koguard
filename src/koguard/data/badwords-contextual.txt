@@ -1,0 +1,20 @@
+# Koguard contextual tier
+#
+# Terms whose ordinary Korean usage is written exactly the same way, takes the
+# same particles, and completes an open set of following words. No matching
+# rule can separate the two senses, and the whitelist cannot enumerate the
+# complement, so these terms stay out of the default dictionary.
+#
+# Load them with KoguardDictionary.default(include_contextual=True) when the
+# service accepts the false positives. See docs/contextual-term-tier-design.md
+# for the admission criterion and the measurements behind it.
+#
+# Provenance follows badwords.txt: `꺼져` was curated directly for Koguard and
+# `뒤질` was selected from the MIT-licensed Tanat05/korcen patterns. See
+# NOTICE.md.
+
+# 꺼지다 - a light or a device going out. Complement is any verb phrase.
+꺼져
+
+# 뒤지다 - searching through something. Adnominal `뒤질` takes any noun.
+뒤질

@@ -8,6 +8,23 @@ from koguard.exceptions import ConfigurationError
 
 NormalizationForm: TypeAlias = Literal["NFC", "NFKC"]
 
+#: Every detection stage that can be switched on or off, in the order the
+#: README documents them. Presets and validation both read this list, so a new
+#: stage cannot be added to one and forgotten in the other.
+MATCHER_FLAGS: tuple[str, ...] = (
+    "exact_matching",
+    "repeated_matching",
+    "separator_matching",
+    "whitespace_gap_matching",
+    "mixed_gap_matching",
+    "choseong_matching",
+    "alias_matching",
+    "keyboard_matching",
+    "jamo_composition_matching",
+    "segmented_input_matching",
+    "fuzzy_matching",
+)
+
 
 @dataclass(frozen=True, slots=True)
 class EngineConfig:
@@ -45,19 +62,7 @@ class EngineConfig:
             raise ConfigurationError(
                 "repeat_reduction_threshold must be an integer greater than or equal to 2"
             )
-        for field_name in (
-            "exact_matching",
-            "repeated_matching",
-            "separator_matching",
-            "whitespace_gap_matching",
-            "mixed_gap_matching",
-            "choseong_matching",
-            "alias_matching",
-            "keyboard_matching",
-            "jamo_composition_matching",
-            "segmented_input_matching",
-            "fuzzy_matching",
-        ):
+        for field_name in MATCHER_FLAGS:
             if type(getattr(self, field_name)) is not bool:
                 raise ConfigurationError(f"{field_name} must be a boolean")
         if type(self.max_whitespace_gap) is not int or self.max_whitespace_gap <= 0:
@@ -108,3 +113,78 @@ class EngineConfig:
             raise ConfigurationError("fuzzy_max_operations must be a positive integer")
         if type(self.fuzzy_max_index_entries) is not int or self.fuzzy_max_index_entries <= 0:
             raise ConfigurationError("fuzzy_max_index_entries must be a positive integer")
+
+    # Presets are values, not a separate policy layer: they return an ordinary
+    # ``EngineConfig`` that callers can narrow with ``dataclasses.replace``.
+    # Every stage is spelled out in every preset so that adding a stage forces a
+    # decision here rather than inheriting a field default. The measured cost of
+    # each choice is in ``docs/accuracy-baseline.md``.
+
+    @classmethod
+    def strict(cls) -> "EngineConfig":
+        """Dictionary terms and explicit aliases only.
+
+        The lowest-latency policy, not the most precise one: on the evaluation
+        corpus the obfuscation stages add no false positives, so what this gives
+        up is recall rather than precision.
+        """
+
+        return cls(
+            exact_matching=True,
+            repeated_matching=False,
+            separator_matching=False,
+            whitespace_gap_matching=False,
+            mixed_gap_matching=False,
+            choseong_matching=False,
+            alias_matching=True,
+            keyboard_matching=False,
+            jamo_composition_matching=False,
+            segmented_input_matching=False,
+            fuzzy_matching=False,
+        )
+
+    @classmethod
+    def balanced(cls) -> "EngineConfig":
+        """Every obfuscation stage, without fuzzy matching.
+
+        What ``EngineConfig()`` resolves to. Fuzzy is excluded because it found
+        nothing the other stages missed and only produced false positives.
+        """
+
+        return cls(
+            exact_matching=True,
+            repeated_matching=True,
+            separator_matching=True,
+            whitespace_gap_matching=True,
+            mixed_gap_matching=True,
+            choseong_matching=True,
+            alias_matching=True,
+            keyboard_matching=True,
+            jamo_composition_matching=True,
+            segmented_input_matching=True,
+            fuzzy_matching=False,
+        )
+
+    @classmethod
+    def aggressive(cls) -> "EngineConfig":
+        """Every stage, fuzzy matching included.
+
+        Pair it with ``KoguardDictionary.default(include_contextual=True)`` to
+        also cover terms whose ordinary Korean usage is indistinguishable. Both
+        halves raise false positives; neither bypasses the whitelist or the
+        configured cost limits.
+        """
+
+        return cls(
+            exact_matching=True,
+            repeated_matching=True,
+            separator_matching=True,
+            whitespace_gap_matching=True,
+            mixed_gap_matching=True,
+            choseong_matching=True,
+            alias_matching=True,
+            keyboard_matching=True,
+            jamo_composition_matching=True,
+            segmented_input_matching=True,
+            fuzzy_matching=True,
+        )

@@ -42,7 +42,7 @@
   {
     "id": "expanded_abusive_expressions",
     "text": "좆같다며 지랄하고 꺼져라고 했다",
-    "expected_terms": ["좆같다", "지랄", "꺼져"]
+    "expected_terms": ["좆같다", "지랄"]
   },
   {
     "id": "mit_korcen_general_expansion",

@@ -12,6 +12,12 @@ duplicates, and stored one term per line. It does not copy Korcen's matching
 implementation. Korcen's MIT license and copyright notice are preserved in
 `KORCEN-MIT.txt`.
 
+`badwords-contextual.txt` holds the same kind of terms under a separate tier,
+excluded from the default dictionary because their ordinary Korean usage cannot
+be told apart by any rule. Its provenance follows the same split: `꺼져` was
+curated for Koguard and `뒤질` was selected from the pinned Korcen revision
+above. Loading it is opt-in via `include_contextual=True`.
+
 The small alias mapping in `aliases.tsv` was manually selected for Koguard from
 user-reported false negatives. The following resource repository was consulted
 while researching Korean profanity representations:
