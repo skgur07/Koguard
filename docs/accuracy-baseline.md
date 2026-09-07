@@ -111,3 +111,80 @@ MIT 라이선스 Korcen의 고정 revision에서 명시적 표현을 소량 선�
 이 수치는 독립 영숫자 토큰의 작은 수동 corpus에만 적용된다. 조사·어미가 붙은 오타와 실제
 서비스의 정상 단어 분포를 대표하지 않으며, 외부 데이터셋 검토 후 false-positive 예산을 다시
 측정해야 한다.
+
+## 독립 평가 corpus 기준선
+
+측정일: 2026-09-04
+
+`evaluation/corpus`의 166개 케이스(hard negative 122, positive 40, review 4)를 기본
+`KoguardEngine()`으로 측정했다. 이 corpus는 기존 `tests/corpus/*`와 달리 구현 회귀가 아니라
+정상 문장 오탐을 측정하기 위해 작성했다. 재현 명령은 다음과 같다.
+
+```powershell
+uv run python -m evaluation.koguard_runner --split all --ablation
+```
+
+### 전체 결과
+
+| 지표 | 값 |
+| --- | --- |
+| occurrence precision | 0.7091 |
+| occurrence recall | 0.9286 |
+| occurrence F1 | 0.8041 |
+| 문장 수준 F1 | 0.8387 |
+| 정상 문장 false-positive rate | **11.4754%** (14/122) |
+| exact span 일치율 | 1.0000 |
+| 판정 보류 제외 | 4건 |
+
+정상 문장 FP rate 11.48%는 계획 §8.3의 balanced 게이트 0.5%를 23배 초과한다. 기존
+`tests/corpus/*`가 precision 1.0을 보고해 온 것은 정상 문장 대조군이 사실상 없었기
+때문이며, 구현이 좋아서가 아니다.
+
+### 오탐 원인
+
+14건 중 11건이 Exact Match, 3건이 Fuzzy다.
+
+| 사전어 | 오탐 사례 | 원인 |
+| --- | --- | --- |
+| `꺼져` | `불이 꺼져 있었다` | 정상 동사 활용과 동형 |
+| `닥쳐` | `닥쳐올 위기에 대비하자` | 정상 동사 활용과 동형 |
+| `등신` | `등신대 포스터를 주문했다` | 정상 명사의 부분 문자열 |
+| `뒤져` `뒤질` | `서랍을 뒤져 보니` | 정상 동사 활용과 동형 |
+| `미친년` | `미친 듯이 연습했더니` | Fuzzy 1글자 삭제 |
+| `돌아이` | `돌아 이쪽으로 와` | Fuzzy 1글자 삭제 |
+
+`꺼져`, `닥쳐`, `등신`, `뒤져`, `뒤질`은 문맥 없이는 판별할 수 없는 다의어인데 무조건
+차단어로 등록되어 있다. 사전 확장 이전에 이 항목들의 유지 여부를 먼저 결정해야 한다.
+
+### matcher ablation
+
+각 단계를 하나씩 끄고 측정한 leave-one-out 결과다.
+
+| 제거한 단계 | dTP | dFP |
+| --- | ---: | ---: |
+| exact_matching | -24 | -11 |
+| repeated_matching | -1 | 0 |
+| separator_matching | -2 | 0 |
+| whitespace_gap_matching | -1 | 0 |
+| mixed_gap_matching | -1 | 0 |
+| choseong_matching | -2 | 0 |
+| alias_matching | -2 | 0 |
+| keyboard_matching | -1 | 0 |
+| jamo_composition_matching | -1 | 0 |
+| segmented_input_matching | -1 | 0 |
+| **fuzzy_matching** | **0** | **-3** |
+
+우회 탐지 단계는 모두 오탐 없이 탐지를 늘린다. Fuzzy만 이 corpus에서 추가 탐지가 0이고
+오탐 3건을 만든다. 조사가 붙어 독립 토큰이 아닌 실제 오타(`빡대가라라고`)는 놓치고,
+독립 토큰인 정상어(`미친`, `돌아`)에서만 발화하기 때문이다.
+
+### 추가 발견
+
+`개새`가 `개새끼`와 별도 항목으로 등록되어 있어, `개새애끼`와 `개새기`가 `개새`로 매칭된다.
+탐지 자체는 되지만 canonical term이 실제 표현과 어긋난다.
+
+### 범위
+
+이 수치는 직접 작성한 166개 케이스에만 적용된다. 전 케이스가 단일 판정이며 실서비스
+분포에서 수집하지 않았다. 계획 §6.7의 목표 규모(positive 500, negative 2,000)에 도달하기
+전까지는 구현 간 상대 비교와 회귀 감지 용도로만 사용한다.

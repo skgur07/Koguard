@@ -1,0 +1,621 @@
+[
+  {
+    "id": "pos-direct-01",
+    "text": "시발 진짜 짜증나네",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-02",
+    "text": "병신같이 굴지 좀 마",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "병신",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-04",
+    "text": "혼자서 지랄하지 마라",
+    "expected_matches": [
+      {
+        "start": 4,
+        "end": 6,
+        "canonical_term": "지랄",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-05",
+    "text": "존나 힘들어 죽겠다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "존나",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-07",
+    "text": "그만 꺼져 좀",
+    "expected_matches": [
+      {
+        "start": 3,
+        "end": 5,
+        "canonical_term": "꺼져",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-08",
+    "text": "닥쳐 아무 말도 하지 마",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "닥쳐",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-10",
+    "text": "찐따같이 굴지 마",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "찐따",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-11",
+    "text": "완전 양아치 같은 짓이다",
+    "expected_matches": [
+      {
+        "start": 3,
+        "end": 6,
+        "canonical_term": "양아치",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-13",
+    "text": "등신도 아니고 그걸 못 하냐",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "등신",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-14",
+    "text": "꼴통이라는 소리 들을 만하다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "꼴통",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-16",
+    "text": "빡대가리라고 놀림받았대",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 4,
+        "canonical_term": "빡대가리",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-17",
+    "text": "느그애미 소리까지 나왔다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 4,
+        "canonical_term": "느그애미",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-19",
+    "text": "좆같다는 말이 절로 나왔다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 3,
+        "canonical_term": "좆같다",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-20",
+    "text": "미친놈처럼 소리를 질렀다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 3,
+        "canonical_term": "미친놈",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-multi-02",
+    "text": "개새끼라고 하더니 씨발이라고도 했다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 3,
+        "canonical_term": "개새끼",
+        "label": "blocked"
+      },
+      {
+        "start": 10,
+        "end": 12,
+        "canonical_term": "씨발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct",
+      "multiple_match"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-compound-01",
+    "text": "이 사업의 시발점부터 잘못됐다",
+    "expected_matches": [
+      {
+        "start": 6,
+        "end": 8,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "compound_substring",
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "정책상 복합어도 탐지"
+  },
+  {
+    "id": "pos-rep-01",
+    "text": "시이이발 진짜 짜증나",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 4,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "repeated_separator"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "반복 모음"
+  },
+  {
+    "id": "pos-rep-02",
+    "text": "개새애끼 뭐야",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 4,
+        "canonical_term": "개새끼",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "repeated_separator"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "반복 모음"
+  },
+  {
+    "id": "pos-sep-02",
+    "text": "개!새!끼야 그만해",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 5,
+        "canonical_term": "개새끼",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "repeated_separator"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "구분자 삽입"
+  },
+  {
+    "id": "pos-ws-01",
+    "text": "시 발 진짜 못 참겠다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 3,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "whitespace_mixed"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "공백 삽입"
+  },
+  {
+    "id": "pos-mix-01",
+    "text": "시 * 발 뭐야 대체",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 5,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "whitespace_mixed"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "공백과 구분자 혼합"
+  },
+  {
+    "id": "pos-cho-01",
+    "text": "ㅅㅂ 진짜 짜증나네",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "choseong_alias"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "초성"
+  },
+  {
+    "id": "pos-cho-03",
+    "text": "ㅈ같네 진짜",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "좆같다",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "choseong_alias"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "초성 Alias"
+  },
+  {
+    "id": "pos-seg-01",
+    "text": "ㅅ ㅂ 진짜 못 봐주겠다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 3,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "choseong_alias"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "분리 초성"
+  },
+  {
+    "id": "pos-jamo-01",
+    "text": "ㅅㅣㅂㅏㄹ 이라고 적혀 있었다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 5,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "jamo_keyboard"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "호환 자모"
+  },
+  {
+    "id": "pos-fuzzy-01",
+    "text": "개새기라고 욕했다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 3,
+        "canonical_term": "개새끼",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "fuzzy"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "1글자 치환 오타"
+  },
+  {
+    "id": "pos-spell-01",
+    "text": "씨발 소리가 절로 나온다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "씨발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "spelling_variant"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "final",
+    "single_review": true,
+    "notes": "표기 변형"
+  },
+  {
+    "id": "rev-quote-01",
+    "text": "기사에서 시발점이라는 표현을 그대로 인용했다",
+    "expected_matches": [],
+    "slices": [
+      "quotation_context",
+      "compound_substring"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "review",
+    "single_review": true,
+    "notes": "인용 문맥의 복합어 정책 미확정"
+  },
+  {
+    "id": "rev-quote-02",
+    "text": "염병은 장티푸스를 이르던 옛말이다",
+    "expected_matches": [],
+    "slices": [
+      "quotation_context",
+      "compound_substring"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "review",
+    "single_review": true,
+    "notes": "교육 문맥의 어원 설명 정책 미확정"
+  },
+  {
+    "id": "rev-domain-01",
+    "text": "돌아이 컨셉의 캐릭터를 만들었어",
+    "expected_matches": [],
+    "slices": [
+      "proper_noun_domain"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "tuning",
+    "status": "review",
+    "single_review": true,
+    "notes": "창작 맥락 정책 미확정"
+  }
+]

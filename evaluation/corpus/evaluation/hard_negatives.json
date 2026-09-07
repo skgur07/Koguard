@@ -1,0 +1,606 @@
+[
+  {
+    "id": "hn-boji-03",
+    "text": "알아보지 않고 결정해 버렸다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "보다+지 어미"
+  },
+  {
+    "id": "hn-boji-06",
+    "text": "쳐다보지 마세요",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "보다+지 어미"
+  },
+  {
+    "id": "hn-jaji-01",
+    "text": "어젯밤에 한숨도 자지 못했다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "자다+지 어미"
+  },
+  {
+    "id": "hn-jaji-04",
+    "text": "낮에는 자지 마라",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "자다+지 어미"
+  },
+  {
+    "id": "hn-saekki-03",
+    "text": "고양이가 새끼를 다섯 마리 낳았다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "동물 새끼"
+  },
+  {
+    "id": "hn-gae-01",
+    "text": "개발자 컨퍼런스에 참가 신청했다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "proper_noun_domain",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "개발"
+  },
+  {
+    "id": "hn-gae-04",
+    "text": "개인 정보는 수집하지 않습니다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "개인"
+  },
+  {
+    "id": "hn-gae-07",
+    "text": "삼 개월 뒤에 다시 만나자",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "단위명사"
+  },
+  {
+    "id": "hn-gae-10",
+    "text": "수도관 개보수 공사가 진행 중입니다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "개보수"
+  },
+  {
+    "id": "hn-gulle-01",
+    "text": "걸레로 책상을 닦았다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "청소도구"
+  },
+  {
+    "id": "hn-sip-01",
+    "text": "십 분만 더 기다려 주세요",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "수사"
+  },
+  {
+    "id": "hn-sip-04",
+    "text": "육십 년 만의 폭우라고 한다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "수사"
+  },
+  {
+    "id": "hn-ssi-02",
+    "text": "김 씨 아저씨가 찾아오셨어",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "호칭"
+  },
+  {
+    "id": "hn-jon-02",
+    "text": "생존 수영 수업이 있었다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "생존"
+  },
+  {
+    "id": "hn-hannam-02",
+    "text": "한남대교가 오늘따라 막힌다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "proper_noun_domain",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "지명"
+  },
+  {
+    "id": "hn-kimchi-02",
+    "text": "김치냉장고를 새로 샀어",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "가전"
+  },
+  {
+    "id": "hn-gubsik-03",
+    "text": "급식비 납부 안내문이 왔어",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "학교 급식"
+  },
+  {
+    "id": "hn-jangae-03",
+    "text": "장애인 복지 정책을 조사했어",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "정상 용어"
+  },
+  {
+    "id": "hn-teul-03",
+    "text": "붕어빵 틀을 하나 샀어",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "틀"
+  },
+  {
+    "id": "hn-kkeojyeo-01",
+    "text": "방에 들어가니 불이 꺼져 있었다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "소등"
+  },
+  {
+    "id": "hn-dakchyeo-01",
+    "text": "닥쳐올 위기에 미리 대비하자",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "닥치다 활용"
+  },
+  {
+    "id": "hn-deungsin-02",
+    "text": "김동리의 등신불을 읽었다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "proper_noun_domain",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "작품명"
+  },
+  {
+    "id": "hn-dwijyeo-03",
+    "text": "자료를 한참 뒤져서 찾아냈다",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "뒤지다 활용"
+  },
+  {
+    "id": "hn-dorai-02",
+    "text": "처음으로 되돌아 이야기해 보자",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "suffix_boundary",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "되돌다+어 경계"
+  },
+  {
+    "id": "hn-sseuregi-01",
+    "text": "오늘은 쓰레기 분리수거 하는 날이야",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "일반 명사"
+  },
+  {
+    "id": "hn-sex-01",
+    "text": "미들섹스 주에서 유학했어",
+    "expected_matches": [],
+    "slices": [
+      "compound_substring",
+      "proper_noun_domain",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "지명"
+  },
+  {
+    "id": "hn-si-02",
+    "text": "세 시 발표라고 공지가 왔어",
+    "expected_matches": [],
+    "slices": [
+      "suffix_boundary",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "시 발표 경계"
+  },
+  {
+    "id": "hn-byeong-01",
+    "text": "병원 예약을 내일로 미뤘다",
+    "expected_matches": [],
+    "slices": [
+      "suffix_boundary",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "병원"
+  },
+  {
+    "id": "hn-byeong-04",
+    "text": "김병만 씨가 방송에 나왔다",
+    "expected_matches": [],
+    "slices": [
+      "suffix_boundary",
+      "proper_noun_domain",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "인명"
+  },
+  {
+    "id": "hn-domain-03",
+    "text": "트롤하지 말고 집중하자",
+    "expected_matches": [],
+    "slices": [
+      "proper_noun_domain",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "게임 용어"
+  },
+  {
+    "id": "hn-domain-06",
+    "text": "브랜치를 dev에 머지했습니다",
+    "expected_matches": [],
+    "slices": [
+      "proper_noun_domain",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "개발 용어"
+  },
+  {
+    "id": "hn-domain-09",
+    "text": "핫픽스를 운영 서버에 배포했어",
+    "expected_matches": [],
+    "slices": [
+      "proper_noun_domain",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "개발 용어"
+  },
+  {
+    "id": "hn-domain-12",
+    "text": "신도림역에서 이호선으로 환승했어",
+    "expected_matches": [],
+    "slices": [
+      "proper_noun_domain",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "지명"
+  },
+  {
+    "id": "hn-quote-03",
+    "text": "선생님이 언어 습관을 지적하셨다",
+    "expected_matches": [],
+    "slices": [
+      "quotation_context",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "욕설 미포함"
+  },
+  {
+    "id": "hn-uni-02",
+    "text": "제로폭 문자​가 들어간 문장입니다",
+    "expected_matches": [],
+    "slices": [
+      "unicode_edge",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "U+200B"
+  },
+  {
+    "id": "hn-uni-05",
+    "text": "결합 문자 é 를 포함한 문장",
+    "expected_matches": [],
+    "slices": [
+      "unicode_edge",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "combining mark"
+  },
+  {
+    "id": "hn-limit-01",
+    "text": "",
+    "expected_matches": [],
+    "slices": [
+      "input_limits",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "빈 입력"
+  },
+  {
+    "id": "hn-limit-04",
+    "text": "\n\n",
+    "expected_matches": [],
+    "slices": [
+      "input_limits",
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "줄바꿈만"
+  },
+  {
+    "id": "hn-plain-03",
+    "text": "주말에 영화 보러 갈래",
+    "expected_matches": [],
+    "slices": [
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "기본"
+  },
+  {
+    "id": "hn-plain-06",
+    "text": "버스가 십오 분이나 늦게 왔다",
+    "expected_matches": [],
+    "slices": [
+      "hard_negative"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "기본"
+  }
+]

@@ -1,0 +1,297 @@
+[
+  {
+    "id": "pos-direct-03",
+    "text": "이 개새끼야 그만해",
+    "expected_matches": [
+      {
+        "start": 2,
+        "end": 5,
+        "canonical_term": "개새끼",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-06",
+    "text": "염병하네 진짜",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "염병",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-09",
+    "text": "저 또라이 또 시작이네",
+    "expected_matches": [
+      {
+        "start": 2,
+        "end": 5,
+        "canonical_term": "또라이",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-12",
+    "text": "이런 머저리 같은 실수를 하다니",
+    "expected_matches": [
+      {
+        "start": 3,
+        "end": 6,
+        "canonical_term": "머저리",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-15",
+    "text": "개자식이라고 욕을 퍼부었다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 3,
+        "canonical_term": "개자식",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-direct-18",
+    "text": "니애미 운운하는 건 선 넘었어",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 3,
+        "canonical_term": "니애미",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-multi-01",
+    "text": "병신 그리고 시발이라고 연달아 말했다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 2,
+        "canonical_term": "병신",
+        "label": "blocked"
+      },
+      {
+        "start": 7,
+        "end": 9,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "direct",
+      "multiple_match"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": ""
+  },
+  {
+    "id": "pos-compound-02",
+    "text": "기록에는 병신년으로 적혀 있다",
+    "expected_matches": [
+      {
+        "start": 5,
+        "end": 7,
+        "canonical_term": "병신",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "compound_substring",
+      "direct"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "정책상 복합어도 탐지"
+  },
+  {
+    "id": "pos-sep-01",
+    "text": "시*발 뭐라고",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 3,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "repeated_separator"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "구분자 삽입"
+  },
+  {
+    "id": "pos-ws-02",
+    "text": "개 새끼 라고 했다",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 4,
+        "canonical_term": "개새끼",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "whitespace_mixed"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "공백 삽입"
+  },
+  {
+    "id": "pos-cho-02",
+    "text": "ㅄ 아니냐 저거",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 1,
+        "canonical_term": "병신",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "choseong_alias"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "초성 Alias"
+  },
+  {
+    "id": "pos-kb-01",
+    "text": "tlqkf 뭐래 진짜",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 5,
+        "canonical_term": "시발",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "jamo_keyboard"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "영문 두벌식"
+  },
+  {
+    "id": "pos-fuzzy-02",
+    "text": "빡대가라라고 놀렸대",
+    "expected_matches": [
+      {
+        "start": 0,
+        "end": 4,
+        "canonical_term": "빡대가리",
+        "label": "blocked"
+      }
+    ],
+    "slices": [
+      "fuzzy"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "final",
+    "single_review": true,
+    "notes": "1글자 치환 오타"
+  },
+  {
+    "id": "rev-quote-03",
+    "text": "선생님이 지랄이라는 단어를 나쁜 예로 드셨다",
+    "expected_matches": [],
+    "slices": [
+      "quotation_context"
+    ],
+    "source": "curated",
+    "license": "curated",
+    "split": "evaluation",
+    "status": "review",
+    "single_review": true,
+    "notes": "교육 인용 정책 미확정"
+  }
+]
