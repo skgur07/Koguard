@@ -4,7 +4,14 @@
 
 ## 1. 검토 결론
 
-Engine과 Adapter를 분리하고, 사전 기반의 저비용 단계부터 선택적 AI Plugin까지 순차 실행하는 방향은 적절하다. 런타임 네트워크 의존성을 없애고 결과 캐시를 도입하지 않는 결정도 초기 버전의 복잡도를 낮추는 데 도움이 된다.
+Engine과 Adapter를 분리하고, 사전 기반의 저비용 단계부터 선택적 AI Plugin까지 순차 실행하는
+아키텍처 방향은 유지한다. 다만 2026-08-12 제품 재검토에서 탐지 데이터, 독립 평가 corpus,
+단순 API와 안전한 기본값이 외부 통합보다 우선이라는 결정을 내렸다. 따라서 기존 Phase 4~6은
+보류하고 최초 공개 `0.1.0` 전까지 [제품 집중 계획](product-focus-plan.md)의 Q0~Q4를 현재
+실행 로드맵으로 사용한다.
+
+아래 Phase 4~6 내용은 폐기된 설계가 아니라 재개 조건을 충족한 뒤 검토할 설계 초안이다.
+런타임 네트워크 의존성을 없애고 결과 캐시를 도입하지 않는 결정도 그대로 유지한다.
 
 다만 현재 문서만으로는 문장 안에서 발견된 여러 단어의 처리, 화이트리스트가 보호할 범위, 정규화 과정에서 원문 위치를 보존하는 방법, 유사도 탐색의 후보 생성 방법이 명확하지 않다. 이 항목은 탐지 정확도와 공개 API에 직접 영향을 주므로 v0.1 구현 전에 아래 권고안으로 확정한다.
 
@@ -286,7 +293,28 @@ Koguard/
 - 12문장 수동 corpus의 FP/FN은 0이며, 1,000개 사전·4,096자 Fuzzy 전용 정상 입력 기준은
   p50 4.6675ms, p95 5.7893ms다.
 
+### 품질 집중 트랙 Q0~Q4 — 최초 공개 0.1.0
+
+상태: **진행 대상**
+
+기존 Phase 4보다 먼저 다음 순서로 실행한다.
+
+1. Q0: corpus schema, 비교 runner, 현재 matcher ablation
+2. Q1: 독립 평가 corpus와 출처가 추적되는 탐지 데이터 확장
+3. Q2: `strict`·`balanced`·`aggressive` profile과 `contains()` API
+4. Q3: Unicode·오탐·성능, CI·패키징·라이선스 hardening
+5. Q4: TestPyPI 검증과 `0.1.0` 공개 판정
+
+세부 작업, 수치화 방법, 우선순위와 완료 조건은
+[제품 집중 계획](product-focus-plan.md)을 단일 기준으로 사용한다.
+
 ### Phase 4 — v0.4 Adapters
+
+상태: **보류 (2026-08-12)**
+
+Q2에서 core API가 안정되고 Q3 품질 게이트를 통과한 뒤, 최소 두 실제 통합에서 같은
+boilerplate 문제가 확인될 때만 재개한다. 재개 시에도 가장 수요가 큰 adapter 하나부터
+추가한다.
 
 작업:
 
@@ -304,6 +332,11 @@ Koguard/
 
 ### Phase 5 — v0.5 Plugin System
 
+상태: **보류 (2026-08-12)**
+
+core matcher 계약이 안정되고, 서로 다른 두 종류 이상의 외부 detector 요구와 단순 callback을
+넘는 timeout·ordering·오류 정책이 실제로 확인될 때만 재개한다.
+
 작업:
 
 - `BasePlugin`, `PluginManager`, 오류/timeout/순서 정책 구현
@@ -316,6 +349,12 @@ Koguard/
 - Plugin 오류 정책과 deterministic ordering 테스트 통과
 
 ### Phase 6 — v0.6 Embedding Plugin
+
+상태: **보류 (2026-08-12)**
+
+독립 evaluation에서 규칙과 데이터 확장으로 해결되지 않는 false-negative cluster가 반복
+확인되고, 합법적인 평가 데이터와 recall·오탐·지연·메모리·배포 크기 예산이 준비될 때만
+재개한다.
 
 작업:
 
@@ -331,6 +370,11 @@ Koguard/
 - Exact/Trie/Fuzzy 대비 추가 recall과 지연 비용이 측정됨
 
 ### Phase 7 — v1.0 배포
+
+상태: **분할**
+
+core의 CI, 패키징, 라이선스 감사와 clean-install 검증은 품질 집중 트랙 Q3~Q4로 앞당긴다.
+Adapter·Plugin·모델을 전제로 한 배포 항목은 각 보류 Phase가 재개될 때까지 진행하지 않는다.
 
 작업:
 
@@ -371,13 +415,14 @@ Koguard/
    - 분리된 초성: `ㅅ ㅂ`, `ㅅ*ㅂ`
    - 분리된 호환 자모: `ㅅㅣ ㅂㅏㄹ`
    - 구분자가 섞인 영문 두벌식 입력: `tl * qkf`
-5. 새 규칙 기반 탐지 단계는 정확한 `bool` 설정으로 켜고 끌 수 있게 만들며 기본값은
-   `True`로 한다. 공백을 전역 제거해 `시 발표` 같은 정상 문장을 결합하는 구현은 허용하지
-   않는다.
-6. 규칙 기반 탐지로 처리하기 어려운 문맥, 신조어, 미등록 변형은 선택적 AI Plugin으로
-   보완한다. AI 탐지는 기본값을 `False`로 하고, 활성화한 경우에만 모델과 의존성을 lazy
-   loading한다. 규칙 기반 단계를 먼저 실행하고 AI는 후순위 fallback으로 사용하며, 추가
-   지연 시간과 모델별 정확도·임계값을 문서화한다.
+5. 현재 구현된 규칙 기반 탐지 단계의 개별 설정과 기본값 `True`는 Q2 전까지의 호환 기준선으로
+   보존한다. 최초 공개 기본값으로 확정하지 않으며, matcher ablation 뒤 `balanced` profile을
+   기본으로 바꾼다. 초성·분리 입력·Fuzzy는 우선 `aggressive` 후보로 둔다. 공백을 전역 제거해
+   `시 발표` 같은 정상 문장을 결합하는 구현은 계속 허용하지 않는다.
+6. 규칙 기반 탐지로 처리하기 어려운 문맥, 신조어, 미등록 변형이 있다는 이유만으로 AI
+   Plugin을 먼저 구현하지 않는다. 독립 evaluation에서 규칙과 데이터로 해결되지 않는 cluster가
+   확인되고 [제품 집중 계획](product-focus-plan.md)의 재개 조건을 모두 충족할 때만 별도 extra,
+   기본 비활성화와 lazy loading 원칙으로 검토한다.
 7. 공개 결과 모델은 불변 `matches: tuple[Match, ...]` 구조를 채택한다. scalar 속성은 첫
    매치 기반 호환 property로 유지한다.
 8. 초기 기본 사전은 직접 선별 표현과 고정 revision의 MIT Korcen 일부만 포함한다. 라이선스가
@@ -387,5 +432,7 @@ Koguard/
 
 남은 결정:
 
-1. 실제 서비스 분포를 반영할 외부 정확도 corpus의 범위와 라이선스, false-positive 예산을
-   PyPI 배포 전에 확정한다.
+1. Q1 독립 기준선에서 최초 공개의 slice별 최소 recall과 정상 문장 false-positive 예산을
+   확정한다.
+2. matcher ablation 결과로 `balanced`에 포함할 탐지 단계를 확정한다.
+3. Q1 기준선과 false-negative cluster를 바탕으로 기본 데이터의 coverage 목표를 확정한다.
