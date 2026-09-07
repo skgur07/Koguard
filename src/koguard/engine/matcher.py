@@ -666,27 +666,35 @@ def _find_longest_whitespace_gap_occurrence(
 ) -> _NormalizedCandidate | None:
     """Return the longest eligible candidate at one normalized start."""
 
-    node = root.children.get(normalized.text[start])
+    text = normalized.text
+    node = root.children.get(text[start])
     if node is None:
         return None
+    # A candidate must begin on a token boundary. ``start`` never moves inside
+    # the loop, so an ineligible start can never record a term: leave before
+    # walking the trie rather than re-testing the same value each step.
+    if not boundaries.starts[start]:
+        return None
 
+    text_length = len(text)
     cursor = start + 1
     term_length = 1
     used_gap = False
     longest_term: str | None = None
     longest_end = 0
-    while cursor < len(normalized.text):
-        if normalized.text[cursor] == " ":
+    while cursor < text_length:
+        if text[cursor] == " ":
             if not allowed_gap_mask[cursor]:
                 break
             used_gap = True
             cursor += 1
-        if cursor >= len(normalized.text):
-            break
+            if cursor >= text_length:
+                break
 
-        node = node.children.get(normalized.text[cursor])
-        if node is None:
+        child = node.children.get(text[cursor])
+        if child is None:
             break
+        node = child
         cursor += 1
         term_length += 1
         if shorter_than is not None and term_length >= shorter_than:
@@ -694,7 +702,6 @@ def _find_longest_whitespace_gap_occurrence(
         if (
             node.term is not None
             and used_gap
-            and boundaries.starts[start]
             and _has_token_end_or_korean_postposition(cursor, boundaries, postpositions)
         ):
             longest_term = node.term

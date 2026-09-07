@@ -2,6 +2,7 @@
 
 import re
 from dataclasses import dataclass
+from functools import lru_cache
 from unicodedata import category, combining, decomposition, normalize
 
 from koguard.config import NormalizationForm
@@ -107,10 +108,40 @@ def _is_variation_selector(character: str) -> bool:
     return 0xFE00 <= codepoint <= 0xFE0F or 0xE0100 <= codepoint <= 0xE01EF
 
 
+#: Lowest code point that can carry a combining category, verified against the
+#: bundled Unicode tables by ``tests/test_normalizer_fast_paths.py``.
+_FIRST_COMBINING_CODEPOINT = 0x0300
+
+#: Precomputed Hangul syllable block, all category ``Lo``.
+_HANGUL_SYLLABLE_START = 0xAC00
+_HANGUL_SYLLABLE_END = 0xD7A3
+
+
+@lru_cache(maxsize=1024)
+def _lookup_cluster_extension(character: str) -> bool:
+    """Consult the Unicode tables for one code point.
+
+    Pure and deterministic: ``category`` reads a fixed table for a given Python
+    build, so a cached answer can never go stale. The cache is bounded at 1024
+    entries of one character each, and ``lru_cache`` serializes its own
+    bookkeeping, so concurrent ``check`` calls are safe.
+    """
+
+    return category(character).startswith("M") or _is_variation_selector(character)
+
+
 def _is_unicode_cluster_extension(character: str) -> bool:
     """Return whether one code point extends the preceding grapheme base."""
 
-    return category(character).startswith("M") or _is_variation_selector(character)
+    codepoint = ord(character)
+    # ASCII, punctuation and Hangul syllables carry no combining category and no
+    # variation selector. They dominate Korean chat, so answer them from a range
+    # test instead of a table lookup.
+    if codepoint < _FIRST_COMBINING_CODEPOINT:
+        return False
+    if _HANGUL_SYLLABLE_START <= codepoint <= _HANGUL_SYLLABLE_END:
+        return False
+    return _lookup_cluster_extension(character)
 
 
 def _is_hangul_character(character: str) -> bool:
