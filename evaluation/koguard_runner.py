@@ -6,7 +6,14 @@ from collections.abc import Sequence
 from evaluation.loader import load_all_cases, load_split
 from evaluation.report import CorpusReport, Prediction, Predictor, evaluate_cases
 from evaluation.schema import EvaluationCase, Split
-from koguard import EngineConfig, KoguardEngine
+from koguard import EngineConfig, KoguardDictionary, KoguardEngine
+
+#: The presets a release decision is measured against, per plan section 6.5.
+PRESETS: dict[str, EngineConfig] = {
+    "strict": EngineConfig.strict(),
+    "balanced": EngineConfig.balanced(),
+    "aggressive": EngineConfig.aggressive(),
+}
 
 
 def predictor_for(engine: KoguardEngine) -> Predictor:
@@ -29,8 +36,17 @@ def predictor_for(engine: KoguardEngine) -> Predictor:
 def measure(
     cases: Sequence[EvaluationCase],
     config: EngineConfig | None = None,
+    *,
+    include_contextual: bool = False,
 ) -> CorpusReport:
-    engine = KoguardEngine() if config is None else KoguardEngine(config=config)
+    resolved_config = EngineConfig() if config is None else config
+    engine = KoguardEngine(
+        config=resolved_config,
+        dictionary=KoguardDictionary.default(
+            resolved_config.unicode_form,
+            include_contextual=include_contextual,
+        ),
+    )
     return evaluate_cases(cases, predict=predictor_for(engine))
 
 
@@ -66,9 +82,9 @@ def format_report(report: CorpusReport) -> str:
     return "\n".join(lines)
 
 
-#: Each matcher stage paired with a config that switches only that stage off.
-#: Spelled out rather than built from strings so a wrong flag name is a type
-#: error instead of a silently ineffective run.
+#: Stages the default enables, each paired with a config that switches only that
+#: stage off. Spelled out rather than built from strings so a wrong flag name is
+#: a type error instead of a silently ineffective run.
 MATCHER_ABLATIONS: tuple[tuple[str, EngineConfig], ...] = (
     ("exact_matching", EngineConfig(exact_matching=False)),
     ("repeated_matching", EngineConfig(repeated_matching=False)),
@@ -80,32 +96,45 @@ MATCHER_ABLATIONS: tuple[tuple[str, EngineConfig], ...] = (
     ("keyboard_matching", EngineConfig(keyboard_matching=False)),
     ("jamo_composition_matching", EngineConfig(jamo_composition_matching=False)),
     ("segmented_input_matching", EngineConfig(segmented_input_matching=False)),
-    ("fuzzy_matching", EngineConfig(fuzzy_matching=False)),
+)
+
+#: What the default leaves off. Removing a stage that is already off measures
+#: nothing, so these are reported in the direction a caller would move them.
+MATCHER_ADDITIONS: tuple[tuple[str, EngineConfig, bool], ...] = (
+    ("fuzzy_matching", EngineConfig(fuzzy_matching=True), False),
+    ("contextual tier", EngineConfig(), True),
 )
 
 
 def ablate(cases: Sequence[EvaluationCase]) -> str:
-    """Report what each matcher stage costs by switching it off one at a time.
+    """Report what each stage is worth, measured against the default.
 
-    Leave-one-out rather than incremental: the default ships with every stage
-    enabled, so the question a reader actually has is what removing one buys.
+    Enabled stages are measured by switching one off; stages the default leaves
+    off are measured by switching one on. Both directions are reported against
+    the same baseline so the numbers can be compared to each other.
     """
 
     baseline = measure(cases)
     lines = [
-        f"{'stage removed':<28}{'TP':>5}{'FP':>5}{'FN':>5}{'dTP':>6}{'dFP':>6}",
-        f"{'(baseline, all enabled)':<28}"
+        f"{'change from the default':<28}{'TP':>5}{'FP':>5}{'FN':>5}{'dTP':>6}{'dFP':>6}",
+        f"{'(baseline, balanced)':<28}"
         f"{baseline.true_positives:>5}{baseline.false_positives:>5}"
         f"{baseline.false_negatives:>5}{'':>6}{'':>6}",
     ]
-    for flag, config in MATCHER_ABLATIONS:
-        report = measure(cases, config=config)
-        lines.append(
-            f"{flag:<28}{report.true_positives:>5}{report.false_positives:>5}"
+
+    def row(label: str, config: EngineConfig, contextual: bool) -> str:
+        report = measure(cases, config=config, include_contextual=contextual)
+        return (
+            f"{label:<28}{report.true_positives:>5}{report.false_positives:>5}"
             f"{report.false_negatives:>5}"
             f"{report.true_positives - baseline.true_positives:>+6}"
             f"{report.false_positives - baseline.false_positives:>+6}"
         )
+
+    for flag, config in MATCHER_ABLATIONS:
+        lines.append(row(f"-{flag}", config, False))
+    for flag, config, contextual in MATCHER_ADDITIONS:
+        lines.append(row(f"+{flag}", config, contextual))
     return "\n".join(lines)
 
 
@@ -122,6 +151,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         action="store_true",
         help="also report what removing each matcher stage costs",
     )
+    parser.add_argument(
+        "--preset",
+        choices=tuple(PRESETS),
+        default="balanced",
+        help="preset to score; 'balanced' is what KoguardEngine() resolves to",
+    )
+    parser.add_argument(
+        "--contextual",
+        action="store_true",
+        help="add the contextual dictionary tier, as 'aggressive' callers may",
+    )
     args = parser.parse_args(argv)
 
     if args.split == "all":
@@ -130,8 +170,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         split: Split = args.split
         cases = load_split(split)
 
-    print(f"# split: {args.split}")
-    print(format_report(measure(cases)))
+    print(f"# split: {args.split}  preset: {args.preset}  contextual: {args.contextual}")
+    print(
+        format_report(
+            measure(
+                cases,
+                config=PRESETS[args.preset],
+                include_contextual=args.contextual,
+            )
+        )
+    )
     if args.ablation:
         print()
         print(ablate(cases))

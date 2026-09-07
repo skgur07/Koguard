@@ -14,24 +14,36 @@ right unit once the corpus reaches the section 6.7 target.
 from evaluation.koguard_runner import measure
 from evaluation.loader import load_all_cases
 
+from koguard import EngineConfig
+
 #: Hard-negative sentences the default engine may still flag.
-#: Measured 2026-09-04: 2 of 122.
-#:   hn-kkeojyeo-03  촛불이 바람에 꺼져 어두워졌다  -- auxiliary verb not on the whitelist
-#:   hn-dwijil-01    온 집을 뒤질 각오로 찾았다      -- adnominal 뒤질 takes an open set of nouns
-#: Neither more whitelist entries nor a per-term matching mode can fix these:
-#: the term is the whole word here, so morphology carries no signal. They go
-#: away only by moving the term out of the default dictionary.
-MAX_CLEAN_FALSE_POSITIVE_CASES = 3
+#: Measured 2026-09-07: 0 of 122. The two that survived the whitelist work
+#: (`꺼져`, `뒤질`) moved to the contextual tier, which was the only remaining
+#: option: there the dictionary term is the whole word, so morphology carries no
+#: signal to separate the ordinary reading.
+#: The budget is zero rather than a cushion. A change that flags one clean
+#: sentence should require the decision record plan section 12 asks for instead
+#: of slipping in under slack left here.
+MAX_CLEAN_FALSE_POSITIVE_CASES = 0
 
 #: Occurrence recall the default engine must keep.
-#: Measured 2026-09-04: 0.9286.
+#: Measured 2026-09-07: 0.9048, down from 0.9286. The case given up is
+#: `pos-direct-07` (`그만 꺼져 봐`): a real insult the default loses together
+#: with the false positives that term caused. Services that need it opt into the
+#: contextual tier.
 MIN_OCCURRENCE_RECALL = 0.90
 
 #: Share of detections on real profanity that carry the gold canonical term.
-#: Measured 2026-09-04: 0.9512 (2 mismatches, both `개새` shadowing `개새끼`).
+#: Measured 2026-09-07: 0.9500 (2 mismatches, both `개새` shadowing `개새끼`).
 #: These still block the sentence, so they are tracked apart from clean-sentence
 #: false alarms rather than folded into the precision budget.
 MIN_CANONICAL_TERM_AGREEMENT = 0.90
+
+#: What opting into the widest configuration costs, so the price stays visible
+#: and cannot quietly grow. Measured 2026-09-07 with `aggressive` plus the
+#: contextual tier: 5 of 122 clean sentences, three from fuzzy matching and two
+#: from the contextual terms.
+MAX_OPT_IN_CLEAN_FALSE_POSITIVE_CASES = 5
 
 
 def test_default_engine_stays_within_the_clean_false_positive_budget() -> None:
@@ -64,13 +76,49 @@ def test_default_engine_does_not_fuzzy_match_ordinary_words() -> None:
 
 
 def test_default_whitelist_protects_ordinary_verb_usage() -> None:
-    """The bundled whitelist must cover the auxiliary-verb readings."""
+    """The bundled whitelist must cover the auxiliary-verb readings.
+
+    `hn-kkeojyeo-01` is checked with the contextual tier instead: its term is no
+    longer in the default dictionary, so it would pass here for the wrong reason.
+    """
 
     report = measure(load_all_cases())
     flagged = set(report.false_positive_case_ids)
 
+    for case_id in ("hn-dakchyeo-01", "hn-dwijyeo-01", "hn-deungsin-01"):
+        assert case_id not in flagged, f"{case_id} should be protected by the default whitelist"
+
+
+def test_contextual_tier_keeps_the_whitelist_protections() -> None:
+    """Opting in widens the dictionary. It must not discard layer-2 coverage.
+
+    Once `꺼져` and `뒤질` left the default dictionary, the default passes these
+    cases for free. The assertion only means something with the tier switched
+    back on, which is where it lives now.
+    """
+
+    report = measure(
+        load_all_cases(),
+        config=EngineConfig.aggressive(),
+        include_contextual=True,
+    )
+    flagged = set(report.false_positive_case_ids)
+
     for case_id in ("hn-kkeojyeo-01", "hn-dakchyeo-01", "hn-dwijyeo-01", "hn-deungsin-01"):
         assert case_id not in flagged, f"{case_id} should be protected by the default whitelist"
+
+
+def test_opting_into_the_widest_configuration_has_a_bounded_cost() -> None:
+    report = measure(
+        load_all_cases(),
+        config=EngineConfig.aggressive(),
+        include_contextual=True,
+    )
+
+    assert report.clean_cases_with_a_detection <= MAX_OPT_IN_CLEAN_FALSE_POSITIVE_CASES, (
+        f"{report.clean_cases_with_a_detection} clean sentences were flagged: "
+        f"{report.false_positive_case_ids}"
+    )
 
 
 def test_default_engine_labels_its_detections_with_the_gold_canonical_term() -> None:

@@ -40,8 +40,8 @@ engine = KoguardEngine(dictionary=dictionary)
 ### 탐지 단계 설정
 
 `fuzzy_matching`을 제외한 모든 탐지 플래그는 기본값이 `True`이고 정확한 `bool` 값만
-허용합니다. Fuzzy는 독립 평가 corpus에서 추가 탐지 없이 오탐만 만들어 기본 비활성입니다.
-근거는 [정확도 기준선](docs/accuracy-baseline.md)에 기록되어 있습니다.
+허용합니다. 이 조합에는 `balanced`라는 이름이 있고 `EngineConfig()`가 그것을 돌려줍니다.
+어떤 단계를 켤지는 아래 측정값을 보고 직접 판단할 수 있습니다.
 
 | 설정 | 탐지 단계 | 기본값 |
 | --- | --- | --- |
@@ -57,7 +57,78 @@ engine = KoguardEngine(dictionary=dictionary)
 | `segmented_input_matching` | `ㅅ * ㅂ`, `ㅅㅣ ㅂㅏㄹ`, `tl * qkf` 같은 제한된 조합 우회 | `True` |
 | `fuzzy_matching` | 독립 토큰의 제한된 Levenshtein 오타 탐지 | **`False`** |
 
-각 단계는 독립적으로 `False`로 끌 수 있습니다. 다음 설정은 Exact Match만 남깁니다.
+### 각 단계가 실제로 기여하는 양
+
+독립 평가 corpus 166개 케이스에서 기본값을 기준으로 한 단계씩 바꿔 측정한 값입니다. 켜져
+있는 단계는 끄는 방향으로, 꺼져 있는 단계는 켜는 방향으로 측정했습니다. `dTP`는 탐지
+증감, `dFP`는 오탐 증감입니다.
+
+| 변경 | dTP | dFP |
+| --- | ---: | ---: |
+| `exact_matching` 끄기 | -26 | -2 |
+| `separator_matching` 끄기 | -2 | 0 |
+| `whitespace_gap_matching` 끄기 | -2 | 0 |
+| `choseong_matching` 끄기 | -2 | 0 |
+| `alias_matching` 끄기 | -2 | 0 |
+| `repeated_matching` 끄기 | -1 | 0 |
+| `mixed_gap_matching` 끄기 | -1 | 0 |
+| `keyboard_matching` 끄기 | -1 | 0 |
+| `jamo_composition_matching` 끄기 | -1 | 0 |
+| `segmented_input_matching` 끄기 | -1 | 0 |
+| `fuzzy_matching` 켜기 | **0** | **+3** |
+| contextual 사전 tier 켜기 | +1 | +2 |
+
+읽는 방법은 이렇습니다. 우회 탐지 단계 9개는 각각 탐지를 1~2건 늘리면서 오탐을 하나도
+만들지 않으므로, 끌 이유는 정확도가 아니라 지연입니다. Fuzzy는 이 corpus에서 추가 탐지가
+0이고 오탐만 3건 만듭니다. `exact_matching`의 `dFP -2`는 정상 문장 오탐이 아니라 `개새`가
+`개새끼`를 가려 생기는 라벨 불일치이며, [정확도 기준선](docs/accuracy-baseline.md)에 별도로
+기록되어 있습니다.
+
+corpus가 166개 케이스뿐이고 전부 직접 작성한 단일 판정 자료이므로, 이 수치는 구성 간 상대
+비교용입니다. 실서비스 정확도를 대표하지 않습니다. 재현 명령은 다음과 같습니다.
+
+```powershell
+uv run python -m evaluation.koguard_runner --split all --ablation
+```
+
+### 프리셋
+
+매번 플래그 11개를 고르지 않아도 되도록, 위 측정에서 나온 조합 세 개에 이름을 붙여
+두었습니다. 프리셋은 별도의 정책 계층이 아니라 그냥 `EngineConfig` 값입니다.
+
+```python
+from koguard import EngineConfig, KoguardEngine
+
+KoguardEngine()                                  # EngineConfig.balanced() 와 같다
+KoguardEngine(config=EngineConfig.strict())
+KoguardEngine(config=EngineConfig.aggressive())
+```
+
+| 프리셋 | 포함 단계 | precision | recall | F1 | 정상 문장 FP | 짧은 입력 p95 | 4096자 p95 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `strict` | Exact, Alias | 0.9333 | 0.6667 | 0.7778 | 0.00% | 0.047 ms | 3.68 ms |
+| `balanced` | Fuzzy 제외 전부 | 0.9500 | 0.9048 | 0.9268 | 0.00% | 0.119 ms | 6.03 ms |
+| `aggressive` | 전부 | 0.8837 | 0.9048 | 0.8941 | 2.46% | 0.193 ms | 21.25 ms |
+| `aggressive` + contextual 사전 | 전부 + tier | 0.8478 | 0.9286 | 0.8864 | 4.10% | 0.340 ms | 22.48 ms |
+
+`strict`는 정밀도 프리셋이 아니라 **지연 프리셋**입니다. 위 표에서 정상 문장 오탐은
+`balanced`와 똑같이 0.00%이고, 실제로 다른 것은 재현율 0.6667과 4096자 p95 3.68ms입니다.
+지연이 극도로 중요한 경로에서 선택하세요.
+
+`aggressive`의 4096자 p95는 21.25ms로 `balanced`의 15ms 예산을 넘습니다. Fuzzy 색인 순회
+비용이며, 최대 입력 지연이 중요한 서비스에서는 켜기 전에 직접 측정하세요.
+
+각 단계는 독립적으로 `False`로 끌 수 있습니다. 프리셋을 시작점으로 삼아 좁힐 수도 있습니다.
+
+```python
+import dataclasses
+
+from koguard import EngineConfig
+
+config = dataclasses.replace(EngineConfig.balanced(), choseong_matching=False)
+```
+
+다음 설정은 Exact Match만 남깁니다.
 
 ```python
 from koguard import EngineConfig, KoguardEngine
@@ -82,6 +153,27 @@ engine = KoguardEngine(config=config)
 Match 표현을 포함합니다. 기본 Whitelist에는 `꺼져 있`, `닥쳐올`, `뒤져 보`, `등신대`처럼
 금칙어와 형태가 같지만 의미가 다른 정상 결합형만 등록되어 있습니다. 고정한 원본 revision과 라이선스는
 [`src/koguard/data/NOTICE.md`](src/koguard/data/NOTICE.md)에 기록합니다.
+
+### contextual 사전 tier
+
+`꺼져`, `뒤질`처럼 정상 국어 용법이 **표기와 조사까지 완전히 같고 뒤에 오는 말이 열린
+집합**인 표현은 어떤 규칙으로도 두 뜻을 가릴 수 없습니다. `촛불이 바람에 꺼져 어두워졌다`,
+`온 집을 뒤질 각오로 찾았다`가 그 예이고, Whitelist로는 뒤에 올 수 있는 용언·명사를 다
+열거할 수 없습니다. 이런 항목은 기본 사전에서 빼고 요청할 때만 넣습니다.
+
+```python
+from koguard import EngineConfig, KoguardDictionary, KoguardEngine
+
+engine = KoguardEngine(
+    config=EngineConfig.aggressive(),
+    dictionary=KoguardDictionary.default(include_contextual=True),
+)
+engine.check("그만 꺼져").detected  # True
+```
+
+**대가는 재현율입니다.** 기본값은 `그만 꺼져` 같은 실제 욕설도 놓칩니다. 오탐을 감수할 수
+있는 서비스는 위처럼 켜고, 그렇지 않은 서비스는 기본값을 그대로 두면 됩니다. 판정 기준과
+측정값은 [문맥 의존 term tier 설계](docs/contextual-term-tier-design.md)에 있습니다.
 따라서 `시발점`, `병신년`처럼 금칙어를 포함한 복합어도 기본 정책에서는 탐지합니다.
 서비스 문맥에서 허용할 표현은 `whitelist` 또는 `whitelist_path`로 명시적으로 주입해야 합니다.
 

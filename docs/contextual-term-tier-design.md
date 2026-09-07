@@ -1,7 +1,8 @@
 # 문맥 의존 term tier와 profile 설계 (층 3)
 
 - 작성일: 2026-09-04
-- 상태: **설계만 확정, 구현 보류**
+- 상태: **구현 완료 (2026-09-07)**. 아래 §3 API는 `profile=` 파라미터가 아니라
+  `EngineConfig` 프리셋과 `include_contextual` 인자로 구현했다. 근거는 §11.
 - 선행 문서: [제품 집중 계획](product-focus-plan.md) §7, [정확도 기준선](accuracy-baseline.md)
 
 ## 요약
@@ -10,8 +11,9 @@
 항목을 기본 사전에서 분리하고, `profile` 하나로 사전 tier와 matcher 집합을 함께 고르게
 하는 설계다.
 
-**지금 구현하지 않는다.** 현재 기본값 대비 이득이 문장 F1 +0.011로 작고, 독립 문장 세트에서는
-차이가 0이다. 이 설계의 값은 사전 확장 시점에 나타난다. 아래 §7에 근거를 수치로 남긴다.
+§9 재개 조건 2번(단순 진입 API 작업 시작)이 충족되어 구현했다. 실측 결과는
+[정확도 기준선](accuracy-baseline.md)의 「프리셋 도입과 contextual tier 적용」 절에 있다.
+§7의 "지금 구현하지 않는 이유"는 당시 판단 기록으로 남겨 둔다.
 
 ## 1. 문제
 
@@ -183,3 +185,24 @@ uv run python -m evaluation.koguard_runner --split all --ablation
 이 문서의 수치는 `evaluation/corpus`의 166개 케이스(hard negative 122, positive 40,
 review 4)에서 나왔다. corpus 규모가 계획 §6.7 목표에 못 미치므로 구현 간 상대 비교와 회귀
 감지 용도로만 쓴다.
+
+## 11. 구현 시 §3에서 달라진 것
+
+`profile="balanced"` 파라미터 대신 `EngineConfig.balanced()` 프리셋과
+`KoguardDictionary.default(include_contextual=True)` 두 축으로 나눠 구현했다. 이유는
+세 가지다.
+
+- 프리셋을 값으로 두면 새 개념이 아니다. 사용자는 README의 matcher별 증분 측정값을 보고
+  직접 조합할 수도 있고, 프리셋을 시작점으로 `dataclasses.replace`로 좁힐 수도 있다.
+  이름 세 개가 측정값을 가리는 문제를 피한다.
+- `profile`과 `config`의 충돌 규칙(§3의 `ConfigurationError`)이 필요 없어진다. 정책 출처가
+  애초에 하나다.
+- `benchmarks/`가 이미 `engine_profile`을 다른 뜻(측정용 matcher 격리 구성)으로 쓰고 있어
+  같은 저장소에서 `profile`이 두 의미를 갖게 된다.
+
+대신 사전 tier와 matcher 집합을 한 번에 고르는 편의는 없다. `aggressive`를 쓰는 사용자는
+`include_contextual=True`를 함께 넘겨야 한다. 이 짝은 README와 `aggressive()` docstring에
+적었다.
+
+`contains()` 편의 API는 이 작업에 포함하지 않았다. 계획 §7.1의 별도 항목(PF-010)이며
+프리셋과 독립적이다.
