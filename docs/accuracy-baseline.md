@@ -248,3 +248,52 @@ term별 매칭 모드로도 해결되지 않는다. 그 규칙은 `등신대`처
 계획 §8.4는 all-enabled를 `aggressive`로 보존한 뒤 profile을 도입하고 마지막에 기본값을
 바꾸도록 정했다. 이번 변경은 profile 도입보다 먼저 Fuzzy 하나만 옮긴 것이므로 계획보다
 앞선 부분 실행이다. profile 작업 시 Fuzzy는 `aggressive`에만 포함한다.
+
+## canonical term 일치율 지표 추가와 공개 표면 정리
+
+측정일: 2026-09-04
+
+### canonical term 일치율
+
+계획 §6.6은 "exact span 일치율과 canonical term 일치율"을 필수 지표로 요구하는데 후자가
+구현되어 있지 않았다. 이 때문에 실제 욕설 구간을 잡았지만 라벨이 다른 경우가 정상 문장
+오탐과 구분 없이 occurrence FP로 집계되었다.
+
+`evaluation/report.py`에 `term_mismatches`와 `canonical_term_agreement`를 추가했다.
+
+| 지표 | 값 |
+| --- | --- |
+| canonical term 일치율 | 0.9512 |
+| 라벨 불일치 | 2건 |
+
+이제 false positive 4건이 다음으로 분해된다.
+
+- 정상 문장 오탐 2건: `hn-kkeojyeo-03`, `hn-dwijil-01`
+- 라벨 불일치 2건: `pos-rep-02`, `pos-fuzzy-01`
+
+### `개새`를 제거하지 않기로 한 결정
+
+라벨 불일치 2건은 `badwords.txt`에 `개새`와 `개새끼`가 함께 있어 짧은 쪽이 Exact Match로
+먼저 잡히기 때문이다. `개새`를 제거하면 다음과 같다.
+
+| | 현재 | `개새` 제거 |
+| --- | ---: | ---: |
+| occurrence FP | 4 | 2 |
+| occurrence F1 | 0.9176 | 0.9398 |
+| 정상 문장 FP rate | 1.64% | 1.64% |
+
+수치는 좋아지지만 `이 개새야`, `개새 진짜`, `개새애끼 뭐야`가 전부 미탐지로 바뀐다. 지금은
+라벨이 `개새`일 뿐 문장은 정확히 차단되고 있으며, 문장 수준 precision 0.9512가 이를 이미
+반영한다. 모더레이션 관점에서 올바른 차단을 잃는 대가로 occurrence 지표를 올리는 것은
+제품 이익이 아니라고 판단해 제거하지 않았다.
+
+`개새애끼`가 `개새끼`로 축약되지 않는 것은 `repeat_reduction_threshold`가 2이기 때문이다.
+같은 모음을 한 번만 늘인 표현은 기본값에서 축약하지 않는다는 문서화된 정책과 일치한다.
+
+### 공개 표면 정리
+
+`MatchMethod.TRIE`와 `MatchMethod.EMBEDDING`을 제거했다. `src/koguard` 어디에서도 생성되지
+않는 값이었고, 특히 `EMBEDDING`은 보류 상태인 Phase 6을 공개 enum으로 약속하고 있었다.
+계획 §7.4의 "미구현 미래 API는 호환성 약속이 되기 전에 제거한다"에 해당한다.
+`tests/test_models.py::test_match_method_exposes_only_reachable_values`가 남은 값 목록을
+고정한다.

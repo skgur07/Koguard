@@ -128,7 +128,7 @@ def test_match_rejects_empty_text_fields(field: str) -> None:
             matched_text=values["matched_text"],
             start=None,
             end=None,
-            method=MatchMethod.EMBEDDING,
+            method=MatchMethod.LEVENSHTEIN,
             score=0.8,
         )
 
@@ -141,7 +141,7 @@ def test_match_rejects_invalid_scores(score: float) -> None:
             matched_text="금칙어",
             start=None,
             end=None,
-            method=MatchMethod.EMBEDDING,
+            method=MatchMethod.LEVENSHTEIN,
             score=score,
         )
 
@@ -162,3 +162,26 @@ def test_match_rejects_none_method() -> None:
 def test_result_rejects_invalid_elapsed_time(elapsed_ms: float) -> None:
     with pytest.raises(ValueError, match="elapsed_ms"):
         CheckResult(normalized_text="", elapsed_ms=elapsed_ms)
+
+
+def test_match_method_exposes_only_reachable_values() -> None:
+    """Every public method value must have a runtime path that produces it.
+
+    `docs/product-focus-plan.md` section 7.4 requires the public surface to carry
+    no unimplemented future API. `TRIE` and `EMBEDDING` were removed because no
+    code in `src/koguard` ever produced them.
+    """
+
+    assert {method.value for method in MatchMethod} == {
+        "exact",
+        "repeated",
+        "separator",
+        "whitespace",
+        "mixed",
+        "choseong",
+        "alias",
+        "keyboard",
+        "jamo",
+        "levenshtein",
+        "none",
+    }

@@ -45,9 +45,7 @@ class MatchMethod(StrEnum):
     ALIAS = "alias"
     KEYBOARD = "keyboard"
     JAMO = "jamo"
-    TRIE = "trie"
     LEVENSHTEIN = "levenshtein"
-    EMBEDDING = "embedding"
     NONE = "none"
 
 
