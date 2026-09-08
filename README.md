@@ -131,7 +131,10 @@ engine = KoguardEngine(config=config)
 ```
 
 기본 사전은 프로젝트에서 직접 선별한 표현, MIT Korcen에서 선별한 표현, 독립 검토 뒤
-MIT `2runo/Curse-detection-data`에서 승격한 표현을 포함하며 기본 Whitelist는 비어 있습니다.
+MIT `2runo/Curse-detection-data`에서 승격한 표현을 포함합니다. 기본 Whitelist에는 `꺼져 있`,
+`닥쳐올`, `뒤져 보`, `등신대`, `보지 못`처럼 금칙어와 표기가 같지만 의미가 다른 정상 결합형
+16개만 등록되어 있습니다. 뒤에 오는 말이 닫힌 집합이어서 열거할 수 있는 경우만 넣으며,
+`꺼져 어두워졌다`처럼 열린 집합인 표현은 여전히 탐지합니다.
 소문자 로마자 literal `sibal`, `ssibal`, `shibal`도 Exact Match로 탐지합니다. 고정한 원본
 revision과 라이선스는
 [`src/koguard/data/NOTICE.md`](https://github.com/skgur07/Koguard/blob/dev/src/koguard/data/NOTICE.md)에 기록합니다.
