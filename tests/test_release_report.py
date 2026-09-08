@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, cast
 
 import pytest
+import release.release_report as release_report_module
 from release.release_report import (
     CI_EVIDENCE_SCHEMA_PATH,
     RELEASE_REPORT_SCHEMA_PATH,
@@ -17,6 +18,7 @@ from release.release_report import (
     ReleaseReportError,
     build_release_report,
 )
+from release.release_report import main as release_report_main
 
 _RELEASE_COMMIT = "a" * 40
 _SOURCE_TREE = "b" * 40
@@ -466,3 +468,48 @@ def test_release_report_blocks_non_closed_testpypi_evidence() -> None:
 
     assert report["decision"] == "blocked"
     assert "testpypi-evidence-incomplete" in report["blockers"]
+
+
+@pytest.mark.parametrize("token", ["ghp_synthetic_token", None])
+def test_release_report_cli_forwards_github_token_without_recording_it(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    token: str | None,
+) -> None:
+    audit_path = tmp_path / "artifact-audit.json"
+    audit_path.write_text(json.dumps(_artifact_audit()), encoding="utf-8")
+    output_path = tmp_path / "release-report.json"
+    received: dict[str, Any] = {}
+
+    def fake_fetch(run_url: str, *, expected_commit: str, token: str | None = None) -> Any:
+        received["run_url"] = run_url
+        received["expected_commit"] = expected_commit
+        received["token"] = token
+        return _ci_evidence()
+
+    monkeypatch.setattr(release_report_module, "fetch_github_actions_evidence", fake_fetch)
+    if token is None:
+        monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    else:
+        monkeypatch.setenv("GITHUB_TOKEN", token)
+
+    exit_code = release_report_main(
+        [
+            "--artifact-audit",
+            str(audit_path),
+            "--release-commit",
+            _RELEASE_COMMIT,
+            "--ci-run-url",
+            "https://github.com/skgur07/Koguard/actions/runs/1",
+            "--output",
+            str(output_path),
+        ]
+    )
+
+    assert exit_code == 0
+    assert received["token"] == token
+    assert received["expected_commit"] == _RELEASE_COMMIT
+    if token is not None:
+        assert token not in output_path.read_text(encoding="utf-8")
+        assert token not in capsys.readouterr().out

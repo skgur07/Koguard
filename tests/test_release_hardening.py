@@ -57,8 +57,9 @@ def _write_sdist(
     *,
     forbidden_member: str | None = None,
     metadata: str = _METADATA,
+    root: str = "koguard-0.1.0",
+    duplicate_member: str | None = None,
 ) -> None:
-    root = "koguard-0.1.0"
     members = {
         "LICENSE": b"MIT\n",
         "README.md": b"# Koguard\n",
@@ -94,6 +95,11 @@ def _write_sdist(
             info = tarfile.TarInfo(f"{root}/{relative_name}")
             info.size = len(content)
             archive.addfile(info, io.BytesIO(content))
+        if duplicate_member is not None:
+            duplicate_content = b"duplicate\n"
+            info = tarfile.TarInfo(f"{root}/{duplicate_member}")
+            info.size = len(duplicate_content)
+            archive.addfile(info, io.BytesIO(duplicate_content))
 
 
 def test_release_audit_records_hash_size_metadata_and_zero_runtime_dependencies(
@@ -178,6 +184,88 @@ def test_release_audit_rejects_unsafe_archive_member(tmp_path: Path) -> None:
     _write_sdist(tmp_path / _SDIST_NAME)
 
     with pytest.raises(ReleaseAuditError, match="unsafe wheel member name"):
+        audit_distributions(
+            tmp_path,
+            release_commit=_RELEASE_COMMIT,
+            source_tree=_SOURCE_TREE,
+        )
+
+
+@pytest.mark.parametrize(
+    "member",
+    [
+        "../outside.py",
+        "/LICENSE",
+        "C:/LICENSE",
+        "C:LICENSE",
+        "c:/koguard/data/extra.py",
+    ],
+)
+def test_release_audit_rejects_platform_specific_escape_members(
+    tmp_path: Path,
+    member: str,
+) -> None:
+    # zipfile rewrites backslashes, so backslash and UNC forms are covered by the
+    # sdist roots below, where tarfile preserves the member name verbatim.
+    _write_wheel(tmp_path / _WHEEL_NAME, forbidden_member=member)
+    _write_sdist(tmp_path / _SDIST_NAME)
+
+    with pytest.raises(ReleaseAuditError, match="unsafe wheel member name"):
+        audit_distributions(
+            tmp_path,
+            release_commit=_RELEASE_COMMIT,
+            source_tree=_SOURCE_TREE,
+        )
+
+
+@pytest.mark.parametrize(
+    "root",
+    [
+        "C:",
+        "c:",
+        "C:/koguard-0.1.0",
+        "/koguard-0.1.0",
+        "..",
+        "\\\\server\\share",
+        "koguard-0.1.0\\nested",
+    ],
+)
+def test_release_audit_rejects_sdist_root_that_escapes_the_extraction_target(
+    tmp_path: Path,
+    root: str,
+) -> None:
+    _write_wheel(tmp_path / _WHEEL_NAME)
+    _write_sdist(tmp_path / _SDIST_NAME, root=root)
+
+    with pytest.raises(ReleaseAuditError, match="unsafe sdist member name"):
+        audit_distributions(
+            tmp_path,
+            release_commit=_RELEASE_COMMIT,
+            source_tree=_SOURCE_TREE,
+        )
+
+
+@pytest.mark.parametrize("root", ["koguard-9.9.9", "unrelated", "Koguard-0.1.0"])
+def test_release_audit_rejects_unexpected_sdist_top_level_directory(
+    tmp_path: Path,
+    root: str,
+) -> None:
+    _write_wheel(tmp_path / _WHEEL_NAME)
+    _write_sdist(tmp_path / _SDIST_NAME, root=root)
+
+    with pytest.raises(ReleaseAuditError, match="sdist top-level directory must be koguard-0.1.0"):
+        audit_distributions(
+            tmp_path,
+            release_commit=_RELEASE_COMMIT,
+            source_tree=_SOURCE_TREE,
+        )
+
+
+def test_release_audit_rejects_duplicate_sdist_members(tmp_path: Path) -> None:
+    _write_wheel(tmp_path / _WHEEL_NAME)
+    _write_sdist(tmp_path / _SDIST_NAME, duplicate_member="LICENSE")
+
+    with pytest.raises(ReleaseAuditError, match="sdist contains duplicate member names"):
         audit_distributions(
             tmp_path,
             release_commit=_RELEASE_COMMIT,

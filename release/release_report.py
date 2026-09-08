@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import re
 import sys
 from collections.abc import Mapping, Sequence
@@ -904,6 +905,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         ci_evidence = fetch_github_actions_evidence(
             arguments.ci_run_url,
             expected_commit=arguments.release_commit,
+            token=os.environ.get("GITHUB_TOKEN"),
         )
         report = build_release_report(
             _load_object(arguments.artifact_audit, "artifact audit"),

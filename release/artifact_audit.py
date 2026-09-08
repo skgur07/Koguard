@@ -16,7 +16,7 @@ from email import policy
 from email.message import Message
 from email.parser import BytesParser
 from hashlib import sha256
-from pathlib import Path, PurePosixPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any
 
 ARTIFACT_AUDIT_SCHEMA_PATH = Path(__file__).with_name("artifact-audit.schema.json")
@@ -178,7 +178,17 @@ def _validate_archive_names(names: Sequence[str], label: str) -> None:
         raise ReleaseAuditError(f"{label} contains duplicate member names")
     for name in names:
         path = PurePosixPath(name)
-        if not path.parts or path.is_absolute() or "\\" in name:
+        # Windows resolves drive-qualified and backslash names outside the extraction
+        # target even when POSIX semantics call them relative, so reject both forms.
+        windows_path = PureWindowsPath(name)
+        if (
+            not path.parts
+            or path.is_absolute()
+            or windows_path.is_absolute()
+            or windows_path.drive
+            or "\\" in name
+            or ":" in name
+        ):
             raise ReleaseAuditError(f"unsafe {label} member name: {name}")
         if any(part in {"", ".", ".."} for part in path.parts):
             raise ReleaseAuditError(f"unsafe {label} member name: {name}")
@@ -237,6 +247,11 @@ def _audit_sdist(path: Path) -> tuple[dict[str, object], dict[str, object]]:
         if len(roots) != 1:
             raise ReleaseAuditError("sdist must have exactly one top-level directory")
         root = next(iter(roots))
+        expected_root = f"{_PACKAGE_NAME}-{_PACKAGE_VERSION}"
+        if root != expected_root:
+            raise ReleaseAuditError(
+                f"sdist top-level directory must be {expected_root}, not {root}"
+            )
         prefix = f"{root}/"
         required_relative = (
             "LICENSE",
