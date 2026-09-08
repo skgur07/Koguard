@@ -59,8 +59,9 @@ def test_engine_config_rejects_invalid_max_length(value: object) -> None:
         EngineConfig(max_input_length=cast(int, value))
 
 
-def test_engine_config_rejects_invalid_unicode_form() -> None:
-    invalid_form = cast(NormalizationForm, "NFD")
+@pytest.mark.parametrize("value", ["NFD", [], {"NFC"}, 1, None])
+def test_engine_config_rejects_invalid_unicode_form(value: object) -> None:
+    invalid_form = cast(NormalizationForm, value)
 
     with pytest.raises(ConfigurationError, match="NFC"):
         EngineConfig(unicode_form=invalid_form)
@@ -111,6 +112,12 @@ def test_engine_config_rejects_invalid_max_whitespace_gap(gap: object) -> None:
 def test_config_rejects_invalid_obfuscation_separators(separators: set[str]) -> None:
     with pytest.raises(ConfigurationError, match="obfuscation_separators"):
         EngineConfig(obfuscation_separators=frozenset(separators))
+
+
+@pytest.mark.parametrize("separators", [{1}, {None}, {b"*"}, {"*", 1}])
+def test_config_rejects_non_string_obfuscation_separators(separators: set[object]) -> None:
+    with pytest.raises(ConfigurationError, match="obfuscation_separators"):
+        EngineConfig(obfuscation_separators=cast(frozenset[str], frozenset(separators)))
 
 
 def test_config_rejects_mutable_obfuscation_separator_set() -> None:

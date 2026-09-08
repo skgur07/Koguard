@@ -42,7 +42,7 @@ class EngineConfig:
     def __post_init__(self) -> None:
         if type(self.max_input_length) is not int or self.max_input_length <= 0:
             raise ConfigurationError("max_input_length must be a positive integer")
-        if self.unicode_form not in {"NFC", "NFKC"}:
+        if not isinstance(self.unicode_form, str) or self.unicode_form not in {"NFC", "NFKC"}:
             raise ConfigurationError("unicode_form must be either 'NFC' or 'NFKC'")
         if type(self.repeat_reduction_threshold) is not int or self.repeat_reduction_threshold < 2:
             raise ConfigurationError(
@@ -65,7 +65,9 @@ class EngineConfig:
                 raise ConfigurationError(f"{field_name} must be a boolean")
         if type(self.max_whitespace_gap) is not int or self.max_whitespace_gap <= 0:
             raise ConfigurationError("max_whitespace_gap must be a positive integer")
-        if not isinstance(self.obfuscation_separators, frozenset):
+        if not isinstance(self.obfuscation_separators, frozenset) or not all(
+            isinstance(separator, str) for separator in self.obfuscation_separators
+        ):
             raise ConfigurationError(
                 "obfuscation_separators must be a frozenset of single "
                 "non-alphanumeric, non-whitespace characters"

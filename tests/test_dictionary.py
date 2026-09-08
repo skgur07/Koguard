@@ -234,6 +234,69 @@ def test_dictionary_rejects_non_string_entries() -> None:
         )
 
 
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("blacklist", "bad"),
+        ("blacklist", b"bad"),
+        ("blacklist", 1),
+        ("whitelist", "badge"),
+        ("whitelist", b"badge"),
+        ("whitelist", object()),
+    ],
+)
+def test_dictionary_factory_rejects_non_collection_entries(field: str, value: object) -> None:
+    values: dict[str, object] = {"blacklist": ["욕설"], "whitelist": []}
+    values[field] = value
+
+    with pytest.raises(DictionaryError, match=f"{field} must be an iterable of strings"):
+        KoguardDictionary.from_sources(
+            blacklist=cast(list[str], values["blacklist"]),
+            whitelist=cast(list[str], values["whitelist"]),
+            include_defaults=False,
+        )
+
+
+@pytest.mark.parametrize("value", ["ㅄ", b"rule", 1])
+def test_dictionary_factory_rejects_non_collection_aliases(value: object) -> None:
+    with pytest.raises(DictionaryError, match="aliases must be an iterable"):
+        KoguardDictionary.from_sources(
+            blacklist=["병신"],
+            aliases=cast(list[AliasRule], value),
+            include_defaults=False,
+        )
+
+
+def test_dictionary_factory_keeps_supported_collection_types() -> None:
+    dictionary = KoguardDictionary.from_sources(
+        blacklist=(term for term in ["욕설"]),
+        whitelist=("정상 표현",),
+        aliases=iter([AliasRule("ㅄ", "욕설", AliasMode.EXACT_TOKEN)]),
+        include_defaults=False,
+    )
+
+    assert dictionary.ordered_blacklist == ("욕설",)
+    assert dictionary.ordered_whitelist == ("정상 표현",)
+    assert len(dictionary.ordered_aliases) == 1
+    assert dictionary.ordered_aliases[0].term == "욕설"
+    assert dictionary.ordered_aliases[0].mode is AliasMode.EXACT_TOKEN
+
+
+@pytest.mark.parametrize(
+    "blacklist",
+    [[], ["bad"], ["Ａ"], ["시발"]],
+)
+def test_dictionary_factory_rejects_unicode_form_before_normalizing(
+    blacklist: list[str],
+) -> None:
+    with pytest.raises(DictionaryError, match="unicode_form must be either 'NFC' or 'NFKC'"):
+        KoguardDictionary.from_sources(
+            blacklist=blacklist,
+            unicode_form=cast(NormalizationForm, "INVALID"),
+            include_defaults=False,
+        )
+
+
 def test_dictionary_wraps_file_errors(tmp_path: Path) -> None:
     missing_path = tmp_path / "missing.txt"
 

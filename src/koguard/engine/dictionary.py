@@ -31,6 +31,24 @@ def _read_file_lines(path: str | Path, label: str) -> tuple[str, ...]:
     return tuple(content.splitlines())
 
 
+def _require_unicode_form(unicode_form: object) -> NormalizationForm:
+    if not isinstance(unicode_form, str) or unicode_form not in {"NFC", "NFKC"}:
+        raise DictionaryError("unicode_form must be either 'NFC' or 'NFKC'")
+    return cast(NormalizationForm, unicode_form)
+
+
+def _require_entry_collection(entries: object, label: str) -> Iterable[str]:
+    if isinstance(entries, (str, bytes, bytearray)) or not isinstance(entries, Iterable):
+        raise DictionaryError(f"{label} must be an iterable of strings")
+    return cast(Iterable[str], entries)
+
+
+def _require_alias_collection(rules: object, label: str) -> Iterable[AliasRule]:
+    if isinstance(rules, (str, bytes, bytearray)) or not isinstance(rules, Iterable):
+        raise DictionaryError(f"{label} aliases must be an iterable of AliasRule instances")
+    return cast(Iterable[AliasRule], rules)
+
+
 def _normalize_entries(
     entries: Iterable[str],
     unicode_form: NormalizationForm,
@@ -121,18 +139,15 @@ class KoguardDictionary:
     aliases: tuple[AliasRule, ...] = ()
 
     def __post_init__(self) -> None:
-        if not isinstance(self.unicode_form, str) or self.unicode_form not in {"NFC", "NFKC"}:
-            raise DictionaryError("unicode_form must be either 'NFC' or 'NFKC'")
+        _require_unicode_form(self.unicode_form)
         normalized_collections: dict[str, frozenset[str]] = {}
         for label, entries in (
             ("blacklist", self.blacklist),
             ("whitelist", self.whitelist),
         ):
-            if isinstance(entries, (str, bytes)) or not isinstance(entries, Iterable):
-                raise DictionaryError(f"{label} must be an iterable of strings")
             normalized_collections[label] = frozenset(
                 _normalize_entries(
-                    cast(Iterable[str], entries),
+                    _require_entry_collection(entries, label),
                     self.unicode_form,
                     label,
                 )
@@ -140,9 +155,7 @@ class KoguardDictionary:
         object.__setattr__(self, "blacklist", normalized_collections["blacklist"])
         object.__setattr__(self, "whitelist", normalized_collections["whitelist"])
 
-        if isinstance(self.aliases, (str, bytes)) or not isinstance(self.aliases, Iterable):
-            raise DictionaryError("aliases must be an iterable of AliasRule instances")
-        source_aliases = tuple(self.aliases)
+        source_aliases = tuple(_require_alias_collection(self.aliases, "dictionary"))
         resolved_aliases = _normalize_alias_rules(
             source_aliases,
             self.unicode_form,
@@ -177,6 +190,11 @@ class KoguardDictionary:
         unicode_form: NormalizationForm = "NFKC",
     ) -> "KoguardDictionary":
         """Build indexes from packaged data, iterables, and optional UTF-8 files."""
+
+        unicode_form = _require_unicode_form(unicode_form)
+        blacklist = _require_entry_collection(blacklist, "blacklist")
+        whitelist = _require_entry_collection(whitelist, "whitelist")
+        aliases = _require_alias_collection(aliases, "custom")
 
         blacklist_entries: set[str] = set()
         whitelist_entries: set[str] = set()

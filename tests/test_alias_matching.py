@@ -156,3 +156,60 @@ def test_alias_matching_maps_nfkc_expansion_back_to_original_span() -> None:
     assert result.normalized_text == "fi ᄡ"
     assert result.matches[0].matched_text == "ㅄ"
     assert (result.matches[0].start, result.matches[0].end) == (2, 3)
+
+
+_NESTED_ALIAS_RULES = (
+    AliasRule("금칙", "차단어", AliasMode.EXACT_TOKEN),
+    AliasRule("금칙 허용", "차단어", AliasMode.EXACT_TOKEN),
+)
+
+
+def make_nested_alias_engine(*, whitelist: list[str]) -> KoguardEngine:
+    dictionary = KoguardDictionary.from_sources(
+        blacklist=["차단어"],
+        whitelist=whitelist,
+        aliases=_NESTED_ALIAS_RULES,
+        include_defaults=False,
+    )
+    return KoguardEngine(profile="strict", dictionary=dictionary)
+
+
+def test_alias_matching_selects_longest_alias_when_nothing_is_protected() -> None:
+    result = make_nested_alias_engine(whitelist=[]).check("금칙 허용")
+
+    assert [(match.matched_text, match.start, match.end) for match in result.matches] == [
+        ("금칙 허용", 0, 5)
+    ]
+
+
+def test_alias_matching_falls_back_to_shorter_alias_at_a_protected_start() -> None:
+    result = make_nested_alias_engine(whitelist=["허용"]).check("금칙 허용")
+
+    assert [
+        (match.term, match.matched_text, match.start, match.end) for match in result.matches
+    ] == [("차단어", "금칙", 0, 2)]
+
+
+def test_alias_matching_keeps_shorter_fallback_for_every_occurrence() -> None:
+    result = make_nested_alias_engine(whitelist=["허용"]).check("금칙 허용 금칙")
+
+    assert [(match.matched_text, match.start, match.end) for match in result.matches] == [
+        ("금칙", 0, 2),
+        ("금칙", 6, 8),
+    ]
+
+
+def test_alias_matching_maps_shorter_fallback_back_to_original_span() -> None:
+    result = make_nested_alias_engine(whitelist=["허용"]).check("ﬁ 금칙 허용")
+
+    assert result.normalized_text == "fi 금칙 허용"
+    assert [(match.matched_text, match.start, match.end) for match in result.matches] == [
+        ("금칙", 2, 4)
+    ]
+
+
+def test_alias_matching_drops_shorter_fallback_when_the_start_is_protected() -> None:
+    result = make_nested_alias_engine(whitelist=["금칙 허용"]).check("금칙 허용")
+
+    assert result.detected is False
+    assert result.matches == ()

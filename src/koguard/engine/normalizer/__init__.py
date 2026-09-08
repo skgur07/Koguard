@@ -819,32 +819,47 @@ def build_repeated_view(
     if _REPEATED_VOWEL_EXTENSION.search(normalized.text) is None:
         return normalized
 
+    text = normalized.text
+    spans = normalized.source_spans
+    length = len(text)
     characters: list[str] = []
     source_spans: list[tuple[int, int]] = []
     index = 0
-    while index < len(normalized.text):
-        character = normalized.text[index]
-        previous_vowel = _hangul_vowel_index(characters[-1]) if characters else None
+    while index < length:
+        character = text[index]
         run_end = index + 1
-        while run_end < len(normalized.text) and normalized.text[run_end] == character:
+        while run_end < length and text[run_end] == character:
             run_end += 1
 
+        previous_vowel = _hangul_vowel_index(characters[-1]) if characters else None
         if (
             previous_vowel is not None
             and run_end - index >= threshold
             and _is_standalone_vowel_extension(character, previous_vowel)
         ):
             previous_start, _ = source_spans[-1]
-            source_spans[-1] = (
-                previous_start,
-                normalized.source_spans[run_end - 1][1],
-            )
+            source_spans[-1] = (previous_start, spans[run_end - 1][1])
             index = run_end
             continue
 
         characters.append(character)
-        source_spans.append(normalized.source_spans[index])
-        index += 1
+        source_spans.append(spans[index])
+        remaining = run_end - index - 1
+        if remaining:
+            # Every later character of the run is preceded by the character just
+            # kept, so the whole remainder either collapses at once or never does.
+            self_vowel = _hangul_vowel_index(character)
+            if (
+                self_vowel is not None
+                and remaining >= threshold
+                and _is_standalone_vowel_extension(character, self_vowel)
+            ):
+                previous_start, _ = source_spans[-1]
+                source_spans[-1] = (previous_start, spans[run_end - 1][1])
+            else:
+                characters.extend(text[index + 1 : run_end])
+                source_spans.extend(spans[index + 1 : run_end])
+        index = run_end
 
     return NormalizedText(text="".join(characters), source_spans=tuple(source_spans))
 

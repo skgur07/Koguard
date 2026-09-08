@@ -1,7 +1,7 @@
 """Tests for Unicode normalization and source span tracking."""
 
 from collections.abc import Callable
-from typing import cast
+from typing import SupportsIndex, cast
 from unicodedata import normalize as unicode_normalize
 
 import pytest
@@ -184,6 +184,53 @@ def test_repeated_view_keeps_single_vowel_extension() -> None:
     normalized = normalize_text("시이발", "NFKC")
 
     assert build_repeated_view(normalized, threshold=2) == normalized
+
+
+def test_repeated_view_keeps_non_reducible_runs_and_following_extension() -> None:
+    normalized = normalize_text("시이이발가가가가이이이", "NFKC")
+
+    repeated = build_repeated_view(normalized, threshold=2)
+
+    assert repeated.text == "시발가가가가이"
+    assert repeated.source_spans == (
+        (0, 3),
+        (3, 4),
+        (4, 5),
+        (5, 6),
+        (6, 7),
+        (7, 8),
+        (8, 11),
+    )
+
+
+class _CountingText(str):
+    """Count single-character reads so run scanning cost stays observable."""
+
+    reads: int
+
+    def __new__(cls, value: str) -> "_CountingText":
+        instance = super().__new__(cls, value)
+        instance.reads = 0
+        return instance
+
+    def __getitem__(self, key: SupportsIndex | slice) -> str:
+        if not isinstance(key, slice):
+            self.reads += 1
+        return str.__getitem__(self, key)
+
+
+@pytest.mark.parametrize("length", [1024, 2048, 4096])
+def test_repeated_view_scans_long_non_reducible_runs_linearly(length: int) -> None:
+    text = _CountingText("이이" + "가" * (length - 2))
+    normalized = NormalizedText(
+        text=text,
+        source_spans=tuple((index, index + 1) for index in range(length)),
+    )
+
+    reduced = build_repeated_view(normalized, threshold=2)
+
+    assert reduced.text == "이이" + "가" * (length - 2)
+    assert text.reads <= 3 * length
 
 
 def test_separator_view_removes_allowed_run_between_characters_and_preserves_span() -> None:

@@ -485,6 +485,27 @@ def _has_alias_boundary(
     )
 
 
+def _resolve_bounded_alias(
+    candidate: _NormalizedCandidate | None,
+    text: str,
+    automaton: _TermAutomaton,
+    boundaries: _AlphanumericBoundaries,
+    hangul_suffixes: bytes,
+    modes: Mapping[str, AliasMode],
+) -> _NormalizedCandidate | None:
+    """Return the longest candidate at this start that satisfies its alias boundary."""
+
+    while candidate is not None and not _has_alias_boundary(
+        candidate,
+        text,
+        boundaries,
+        hangul_suffixes,
+        modes,
+    ):
+        candidate = _next_shorter_occurrence(candidate, automaton)
+    return candidate
+
+
 def _build_mixed_projection(
     original_text: str,
     normalized: NormalizedText,
@@ -1128,18 +1149,14 @@ class AliasMatcher:
             normalized.text,
             self._automaton,
         ):
-            normalized_candidate: _NormalizedCandidate | None = longest_candidate
-            while normalized_candidate is not None and not _has_alias_boundary(
-                normalized_candidate,
+            normalized_candidate = _resolve_bounded_alias(
+                longest_candidate,
                 normalized.text,
+                self._automaton,
                 boundaries,
                 hangul_suffixes,
                 self._modes,
-            ):
-                normalized_candidate = _next_shorter_occurrence(
-                    normalized_candidate,
-                    self._automaton,
-                )
+            )
             if normalized_candidate is not None:
                 heappush(
                     candidates,
@@ -1154,18 +1171,49 @@ class AliasMatcher:
 
         while candidates:
             mapped_candidate = heappop(candidates).candidate
-            if _is_occupied(
+            if not _is_occupied(
                 mapped_candidate,
                 protected_masks.normalized,
                 protected_original,
-            ) or _is_occupied(
+            ) and not _is_occupied(
+                mapped_candidate,
+                selected_normalized,
+                selected_original,
+            ):
+                selected.append(mapped_candidate)
+                _occupy(mapped_candidate, selected_normalized, selected_original)
+                continue
+
+            if _is_start_occupied(
+                mapped_candidate,
+                protected_masks.normalized,
+                protected_original,
+            ) or _is_start_occupied(
                 mapped_candidate,
                 selected_normalized,
                 selected_original,
             ):
                 continue
-            selected.append(mapped_candidate)
-            _occupy(mapped_candidate, selected_normalized, selected_original)
+
+            shorter_candidate = _resolve_bounded_alias(
+                _next_shorter_occurrence(mapped_candidate.normalized, self._automaton),
+                normalized.text,
+                self._automaton,
+                boundaries,
+                hangul_suffixes,
+                self._modes,
+            )
+            if shorter_candidate is not None:
+                heappush(
+                    candidates,
+                    _prioritize(
+                        _map_candidate(
+                            shorter_candidate,
+                            normalized,
+                            extension_ends=boundaries.extension_ends,
+                        )
+                    ),
+                )
 
         return _build_matches(
             original_text,
