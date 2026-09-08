@@ -1,3 +1,7 @@
+# The pinned commit, run-id, and artifact hashes below belong to release candidate
+# 813fc36, which the 2026-09-08 scope decision superseded. See
+# docs/release-0.1.0-execution-plan.md section 3.1 (blocker B-07): update all three
+# to the new candidate before dispatching this workflow.
 name: Publish fixed candidate to TestPyPI
 
 on:

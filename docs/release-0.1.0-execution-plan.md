@@ -1,9 +1,10 @@
 # Koguard `0.1.0` 출시 실행 계획
 
-- 상태: **차단 — hidden·최종 CI 통과, TestPyPI 대기**
-- 기준일: 2026-09-04
+- 상태: **차단 — 새 release candidate 준비 필요, TestPyPI 대기**
+- 기준일: 2026-09-08
 - 기준 브랜치: `dev`
 - 계획 시작 기능 commit: `bb919046a455b09f75cb69c720b9753973dcf150`
+- 이전 고정 RC: `813fc36c6988a7bdab68027964a206e970ab9f52` (2026-09-08 기준 **대체 예정**)
 - 추적 이슈: [PF-005 #7](https://github.com/skgur07/Koguard/issues/7),
   [PF-014 #16](https://github.com/skgur07/Koguard/issues/16)
 
@@ -36,8 +37,9 @@
 5. hidden evaluation은 최종 품질 확인에만 사용하며 결과를 보고 규칙을 다시 튜닝하지 않는다.
 6. 모든 자동 gate가 통과해도 `main` 병합, tag, TestPyPI/PyPI 게시는 소유자의 명시적 승인 뒤에
    실행한다.
-7. hidden aggregate를 기록한 후속 commit에서 패키지를 다시 만들지 않는다. TestPyPI와 실제
-   공개에는 평가된 `813fc36` artifact hash를 그대로 사용한다.
+7. 한 후보의 hidden aggregate를 기록한 뒤에는 그 후보를 다시 튜닝하거나 다시 패키징하지
+   않는다. 새 후보가 필요하면 §3.1의 절차로 별도 후보를 만들고, TestPyPI와 실제 공개에는
+   그 후보의 평가된 artifact hash만 사용한다. 이전 후보의 결과는 덮어쓰지 않는다.
 
 ## 3. 현재까지 완료된 상태
 
@@ -51,8 +53,10 @@
 | positive 변형 판정 | 완료 | 독립 합의 480건: positive 240, hard-negative 240, review·불일치 0 |
 | 패키징·CI | 완료 | [760 tests, coverage 95.63%, 3 OS·재현성 gate 통과](https://github.com/skgur07/Koguard/actions/runs/33581853944) |
 | 배포물 격리 | 완료 | tuning 자료는 wheel/sdist에 포함되지 않음 |
-| 최종 hidden 평가 | 완료 | RC `813fc36`, 독립 424건, balanced 문장 TP/FP/FN `14/0/2`, gate 통과 |
-| TestPyPI·공개 | 대기 | 최종 artifact와 소유자 승인 필요 |
+| 최종 hidden 평가 | 이전 후보 완료 | RC `813fc36`, 독립 424건, balanced 문장 TP/FP/FN `14/0/2`, gate 통과 |
+| 출시 후보 선택 | 확정 | 새 RC로 전환 — §3.1 |
+| 새 후보 근거 | 미착수 | 품질 검사·hidden·CI·artifact 증거 필요 |
+| TestPyPI·공개 | 대기 | 새 후보 artifact와 소유자 승인 필요 |
 
 두 독립 reviewer는 설계 의도와 detector 출력 없이 480건 전부에 합의했다. 확정 label은
 positive 240건, hard-negative 240건이며 review·불일치·privacy 제외는 0건이다. 같은 고정
@@ -64,6 +68,41 @@ label 오류는 0건이었다. 이 표본은 독립 tuning
 근거이지만 프로젝트 작성 targeted corpus이며 `gold_ready=false`라 실서비스 전체 성능으로
 일반화하지 않는다. 기존 tuning 2,763건에서는 strict·balanced 결과와 FP가 유지됐고
 aggressive만 문장·occurrence TP가 각각 1건 늘었다.
+
+### 3.1 출시 후보 결정 (2026-09-08)
+
+**결정: 이전 고정 RC `813fc36`을 게시하지 않고, 이후 수정을 담은 새 release candidate를
+만든다.** 근거는 [2026-09-08 검토 피드백](project-review-2026-09-08.md)의 F-05다.
+
+`813fc36` 이후 `src/koguard`에 들어간 변경은 다음과 같다.
+
+| commit | 내용 | 이전 RC 포함 여부 |
+| --- | --- | --- |
+| `110faa3` | matcher·normalizer 정규화·공백 매칭 최적화 | 미포함 |
+| `ade45f2` | 기본 Whitelist 16개로 정상 용법 오탐 제거 | 미포함 |
+| 2026-09-08 검토 수정 | F-01 반복 축약 선형화, F-02 사전 collection 검증, F-03 보호된 Alias 뒤 짧은 후보 재평가, F-04 공개 예외 계약 | 미포함 |
+
+현재 README는 이 중 새 Whitelist 동작을 이미 설명하므로, 이전 RC를 게시하면 문서와 배포물이
+어긋난다. F-03은 탐지 결과를, F-02·F-04는 공개 예외 계약을 바꾸므로 배포 후 수정이 아니라
+후보 단계에서 포함해야 한다.
+
+이전 후보의 근거 처리 원칙:
+
+- `813fc36`의 hidden aggregate, attestation, CI 기록, artifact hash는 **그 후보의 역사적
+  근거로 그대로 보존한다.** 새 후보의 결과로 덮어쓰거나 대체하지 않는다.
+- 새 후보의 hidden 처리는 기존 [split 정책](corpus-split-policy.md)을 그대로 따른다. hidden은
+  최종 확인에만 1회 사용하고, 결과를 보고 같은 후보를 다시 튜닝하지 않는다.
+- 이전 후보의 aggregate를 새 후보의 기능·정확도·성능 근거로 인용하지 않는다.
+
+새 후보 확정 전 반드시 갱신해야 하는 고정값:
+
+| 위치 | 현재 값 | 갱신 대상 |
+| --- | --- | --- |
+| [`publish-testpypi.yml`](../.github/workflows/publish-testpypi.yml) `RELEASE_COMMIT` | `813fc36c6988a7bdab68027964a206e970ab9f52` | 새 후보 commit |
+| 같은 workflow `run-id` | `33581853944` | 새 후보의 CI run |
+| 같은 workflow `WHEEL_SHA256`·`SDIST_SHA256` | 이전 후보 hash | 새 후보 audit hash |
+
+이 세 값을 갱신하기 전에는 TestPyPI 게시 workflow를 실행하지 않는다.
 
 ## 4. 실행 순서와 체크리스트
 
@@ -121,6 +160,9 @@ aggressive만 문장·occurrence TP가 각각 1건 늘었다.
 - [x] README의 지원 범위·성능·한계가 실제 결과와 일치하는지 검토
 - [x] 최종 release candidate commit 고정 — `813fc36c6988a7bdab68027964a206e970ab9f52`
 
+R3의 결과는 `813fc36` 후보의 근거로 확정되어 있다. 2026-09-08 결정(§3.1)으로 이 후보는
+게시하지 않으므로, 아래 완료 조건은 새 후보에 대해 R5에서 다시 충족해야 한다.
+
 완료 조건:
 
 - unresolved hidden review와 split 누출이 0건이다.
@@ -144,11 +186,29 @@ aggressive만 문장·occurrence TP가 각각 1건 늘었다.
 - [ ] 소유자에게 `dev → main`, tag `v0.1.0`, PyPI 게시 승인 요청
 - [ ] 승인 후에만 `main` 승격·tag·PyPI 게시
 
+R4의 완료 표시도 `813fc36` 후보 기준이다. `uv build` 이하 패키지 검증과 CI 항목은 새 후보
+commit에서 다시 실행해야 하며, 그 재실행은 R5에서 추적한다.
+
 완료 조건:
 
 - release report의 blocker가 0개이고 판정이 `ready-for-maintainer-approval`이다.
 - TestPyPI evidence의 artifact hash가 최종 audit와 일치한다.
 - 소유자 승인 후 PyPI `koguard==0.1.0` 설치와 quickstart가 재현된다.
+
+### R5. 새 release candidate 준비 (2026-09-08 결정, §3.1)
+
+- [x] 2026-09-08 검토 수정 F-01~F-04, F-06~F-07 구현과 회귀 테스트 추가
+- [x] 수정 후 전체 로컬 품질 검사 통과 — 839 passed, branch coverage 95.88%
+- [x] 공개 ablation corpus에서 이전 HEAD와 정확도 동일함을 확인
+- [ ] 새 후보 commit 고정과 3 OS·재현성 CI 통과
+- [ ] 새 후보 wheel/sdist artifact audit와 clean-install smoke 재실행
+- [ ] 새 후보로 hidden evaluation 1회 실행 (기존 split 정책, 이전 결과 보존)
+- [ ] `publish-testpypi.yml`의 commit·run-id·artifact hash를 새 후보로 갱신
+
+완료 조건:
+
+- 새 후보의 근거가 이전 후보 근거와 분리되어 각각 남아 있다.
+- TestPyPI와 PyPI에 올라갈 artifact hash가 새 후보의 audit 결과와 일치한다.
 
 ## 5. 단계별 산출물
 
@@ -158,6 +218,7 @@ aggressive만 문장·occurrence TP가 각각 1건 늘었다.
 | R2 | aggregate 판정·profile 보고서, 정책 상태 갱신 | case별 reviewer, 보호 annotation 원문 |
 | R3 | aggregate 성능, limitation, corpus·artifact hash | hidden 원문·case ID·canonical 정답 |
 | R4 | release report, artifact hash, changelog | token·credential·보호 환경 경로 |
+| R5 | 새 후보 commit·CI run·artifact hash, 이전 후보와 분리된 aggregate | hidden 원문, 이전 후보 결과의 덮어쓰기 |
 
 ## 6. 진행 상태 갱신 방법
 
@@ -179,6 +240,8 @@ aggressive만 문장·occurrence TP가 각각 1건 늘었다.
 | B-03 | 해결 | 최종 hidden aggregate 없음 | 독립 424건 보호 평가·attestation·aggregate 완료 |
 | B-03A | 해결 | tuning에서 balanced가 strict 대비 occurrence FP +2로 전체 gate 실패 | hidden에서 occurrence TP +2·FP +0 및 전체 gate 통과 |
 | B-04 | 열림 | TestPyPI 동일 artifact 설치 증거 없음 | R4 TestPyPI smoke 완료 |
+| B-06 | 열림 | 이전 RC `813fc36`에 `110faa3`·`ade45f2`와 2026-09-08 검토 수정이 빠져 있음 | R5 새 후보 확정·CI·hidden·artifact 증거 완료 |
+| B-07 | 열림 | `publish-testpypi.yml`이 이전 후보의 commit·run-id·hash를 고정 중 | 새 후보 값으로 갱신 |
 | B-05 | 열림 | `main`·PyPI 공개 승인 전 | B-01~04 해제 후 소유자 명시 승인 |
 
 ## 8. `0.1.0` 이후로 넘긴 작업

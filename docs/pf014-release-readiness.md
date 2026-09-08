@@ -4,6 +4,9 @@
 - 대상: Koguard `0.1.0`
 - 현재 판정: **blocked — hidden evaluation·최종 RC CI 통과, TestPyPI 대기**
 - 공개 상태: `main` 미승격, PyPI 미게시
+- 후보 상태 (2026-09-08 갱신): 이 보고서의 근거는 **release candidate `813fc36`**의 것이다.
+  2026-09-08 결정으로 이 후보는 게시하지 않으며, 새 후보의 근거는 별도로 만든다.
+  [실행 현황판 §3.1](release-0.1.0-execution-plan.md)을 참고한다.
 
 ## 완료된 선행 근거
 
@@ -100,8 +103,13 @@ direct/normalized leak은 모두 0건이다. case-level 원문·ID·canonical te
 `evaluation/results/pf014-hidden-khaters-v1.aggregate.json` 하나뿐이다.
 
 이 aggregate와 문서를 기록한 후속 commit은 측정 증거 보존용이며 새 release candidate가 아니다.
-README metadata가 달라져 후속 commit에서 다시 만든 wheel·sdist hash는 바뀌므로 TestPyPI에는
-반드시 hidden 평가와 artifact audit에 결박된 `813fc36`의 wheel·sdist를 그대로 사용한다.
+README metadata가 달라져 후속 commit에서 다시 만든 wheel·sdist hash는 바뀌므로, 이 후보를
+게시한다면 hidden 평가와 artifact audit에 결박된 `813fc36`의 wheel·sdist를 그대로 사용해야 한다.
+
+**2026-09-08 갱신:** 이후 `110faa3`·`ade45f2`와 2026-09-08 검토 수정이 `src/koguard`에 들어가
+`813fc36`은 게시 대상에서 제외됐다. 위 표와 아래 수치는 `813fc36`의 역사적 근거로 유효하지만,
+새 후보의 기능·정확도·성능을 검증한 증거로 인용할 수 없다. 새 후보의 hidden 평가는 기존 split
+정책에 따라 별도로 1회 실행하고, 이 결과는 덮어쓰지 않는다.
 
 | profile | 문장 TP/FP/FN/TN | 문장 precision/recall/F1 | occurrence TP/FP/FN |
 | --- | --- | --- | --- |

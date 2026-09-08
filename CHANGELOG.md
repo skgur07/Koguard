@@ -68,6 +68,21 @@ Semantic Versioning after the first public release.
 - Review queue planning can prioritize text-shape signals while retaining per-source round-robin selection
   and explicit no-prediction/no-upstream-label evidence.
 
+### Fixed
+
+- Repeated-vowel reduction no longer rescans long runs of identical characters, so the `aggressive`
+  normalization cost grows linearly with input length instead of quadratically.
+- `KoguardDictionary.from_sources()` validates blacklist, whitelist, and alias collections before reading
+  them, so a bare string no longer registers one dictionary entry per character.
+- An Alias candidate discarded for overlapping a protected span now falls back to a shorter Alias at the
+  same start, so adding a longer Alias cannot remove an existing unprotected match.
+- Invalid Unicode forms, collection types, and separator element types raise `DictionaryError` or
+  `ConfigurationError` instead of the underlying `ValueError` or `TypeError`.
+- Artifact audit rejects Windows drive, UNC, and backslash member names regardless of host platform, and
+  requires the sdist top-level directory to be the expected package and version.
+- The release report CLI forwards `GITHUB_TOKEN` to the GitHub Actions evidence fetch as documented,
+  without recording the token in the report or console output.
+
 ### Security
 
 - Maximum-input and matcher candidate bounds are enforced on adversarial Unicode, prefix, Whitelist, and gap

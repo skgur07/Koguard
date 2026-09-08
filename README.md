@@ -181,8 +181,25 @@ Whitelist에 `시발 자동차`가 있어도 입력 `시 발 자동차`와 `시 
 탐지합니다. Whitelist는 입력에 실제로 겹치는 기존 정규화 view의 구간만 보호합니다.
 
 초성 표현 탐지는 기본 `balanced`와 `aggressive`에서 활성화됩니다. 초성 인덱스의 오탐
-가능성이나 추가 메모리 비용을 피하려면 `strict`를 사용하거나
-`EngineConfig(choseong_matching=False)`로 끌 수 있습니다.
+가능성이나 추가 메모리 비용을 피하려면 `strict`를 사용하거나 초성 단계만 끈 설정을
+사용할 수 있습니다.
+
+`EngineConfig(choseong_matching=False)`는 직접 만든 설정이므로 나머지 모든 단계가 켜집니다.
+기본 `balanced`에서 초성만 끄려면 현재 설정을 복사해 해당 항목만 바꿉니다.
+
+```python
+from dataclasses import replace
+
+from koguard import KoguardEngine
+
+engine = KoguardEngine()
+engine = KoguardEngine(
+    config=replace(engine.config, choseong_matching=False),
+    dictionary=engine.dictionary,
+)
+```
+
+초성 매칭을 켜면 blacklist 항목에서 파생한 초성 표현을 탐지합니다.
 
 ```python
 from koguard import KoguardDictionary, KoguardEngine
