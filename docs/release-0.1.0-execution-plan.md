@@ -1,7 +1,7 @@
 # Koguard `0.1.0` 출시 실행 계획
 
-- 상태: **차단 — 새 release candidate 준비 필요, TestPyPI 대기**
-- 기준일: 2026-09-08
+- 상태: **차단 — 새 후보 `e657692` CI·artifact 통과, hidden 평가 대기**
+- 기준일: 2026-09-09
 - 기준 브랜치: `dev`
 - 계획 시작 기능 commit: `bb919046a455b09f75cb69c720b9753973dcf150`
 - 이전 고정 RC: `813fc36c6988a7bdab68027964a206e970ab9f52` (2026-09-08 기준 **대체 예정**)
@@ -94,15 +94,45 @@ aggressive만 문장·occurrence TP가 각각 1건 늘었다.
   최종 확인에만 1회 사용하고, 결과를 보고 같은 후보를 다시 튜닝하지 않는다.
 - 이전 후보의 aggregate를 새 후보의 기능·정확도·성능 근거로 인용하지 않는다.
 
+### 3.2 새 후보 `e657692`의 확정 근거 (2026-09-09)
+
+R5의 CI와 artifact 검증을 통과했다. 아래 값이 게시 대상이다.
+
+| 항목 | 값 |
+| --- | --- |
+| commit | `e6576925cfce46ed0c23356d4610be3a5b0cebbe` |
+| CI run | [`34191885636`](https://github.com/skgur07/Koguard/actions/runs/34191885636) |
+| wheel sha256 | `61bd9c35a722b6e5c2cf94f1d17ed9e500205a99dae2f27d066841488152a658` |
+| sdist sha256 | `fea513b21000060c91afa3133b3b4c0912fea65e7d388842c56275fa717a383a` |
+| authoritative artifact | `koguard-0.1.0-release-candidate` (id `10042510763`) |
+
+artifact 내부 경로는 `candidates/koguard-0.1.0-candidate-Linux-python311/dist/`로 게시
+workflow가 기대하는 형태와 같다.
+
+로컬 Windows 빌드의 hash는 이 값과 다르다. sdist 멤버 222개의 이름과 개수는 같고 텍스트
+파일 29개만 크기가 다르며, 원인은 작업 복사본의 CRLF 줄바꿈이다. 릴리즈 판정에는 CI가 만든
+artifact만 사용하고 로컬 빌드 hash를 근거로 쓰지 않는다.
+
+**artifact 보존 기한:**
+
+| artifact | 만료 |
+| --- | --- |
+| `koguard-0.1.0-release-candidate` | 2026-09-22 (실질 마감) |
+| OS별 `koguard-0.1.0-candidate-*-python311` | 2026-09-11 |
+
+이 기한을 넘기면 같은 commit이라도 CI를 다시 실행해 run-id와 artifact를 새로 고정해야 한다.
+
 새 후보 확정 전 반드시 갱신해야 하는 고정값:
 
 | 위치 | 현재 값 | 갱신 대상 |
 | --- | --- | --- |
-| [`publish-testpypi.yml`](../.github/workflows/publish-testpypi.yml) `RELEASE_COMMIT` | `813fc36c6988a7bdab68027964a206e970ab9f52` | 새 후보 commit |
-| 같은 workflow `run-id` | `33581853944` | 새 후보의 CI run |
-| 같은 workflow `WHEEL_SHA256`·`SDIST_SHA256` | 이전 후보 hash | 새 후보 audit hash |
+| [`publish-testpypi.yml`](../.github/workflows/publish-testpypi.yml) `RELEASE_COMMIT` | `813fc36c6988a7bdab68027964a206e970ab9f52` | 위 표의 commit |
+| 같은 workflow `run-id` | `33581853944` | 위 표의 CI run |
+| 같은 workflow `WHEEL_SHA256`·`SDIST_SHA256` | 이전 후보 hash | 위 표의 hash |
 
-이 세 값을 갱신하기 전에는 TestPyPI 게시 workflow를 실행하지 않는다.
+값은 확보했으나 아직 반영하지 않았다. hidden 평가를 통과하기 전에 반영하면 평가되지 않은
+후보를 게시 가능한 상태로 두게 되므로, §2 규칙 7에 따라 hidden 완료 뒤에 갱신한다.
+갱신 전에는 TestPyPI 게시 workflow를 실행하지 않는다.
 
 ## 4. 실행 순서와 체크리스트
 
@@ -200,8 +230,14 @@ commit에서 다시 실행해야 하며, 그 재실행은 R5에서 추적한다.
 - [x] 2026-09-08 검토 수정 F-01~F-04, F-06~F-07 구현과 회귀 테스트 추가
 - [x] 수정 후 전체 로컬 품질 검사 통과 — 839 passed, branch coverage 95.88%
 - [x] 공개 ablation corpus에서 이전 HEAD와 정확도 동일함을 확인
-- [ ] 새 후보 commit 고정과 3 OS·재현성 CI 통과
-- [ ] 새 후보 wheel/sdist artifact audit와 clean-install smoke 재실행
+- [x] 새 후보 commit 고정과 3 OS·재현성 CI 통과 — `e6576925cfce46ed0c23356d4610be3a5b0cebbe`,
+      run [`34191885636`](https://github.com/skgur07/Koguard/actions/runs/34191885636).
+      Ubuntu·Windows·macOS CPython 3.11.9 각 839 passed, branch coverage 95.88%.
+      재현성 판정 `builders=Linux,Windows,macOS`로 3 OS 빌드가 바이트 단위로 동일하다.
+- [x] 새 후보 wheel/sdist artifact audit와 clean-install smoke 재실행 — audit 통과,
+      wheel `61bd9c35a722b6e5c2cf94f1d17ed9e500205a99dae2f27d066841488152a658`,
+      sdist `fea513b21000060c91afa3133b3b4c0912fea65e7d388842c56275fa717a383a`.
+      wheel·sdist 각각 새 환경 설치와 quickstart를 통과했다.
 - [ ] 새 후보로 hidden evaluation 1회 실행 (기존 split 정책, 이전 결과 보존)
 - [ ] `publish-testpypi.yml`의 commit·run-id·artifact hash를 새 후보로 갱신
 
@@ -240,8 +276,9 @@ commit에서 다시 실행해야 하며, 그 재실행은 R5에서 추적한다.
 | B-03 | 해결 | 최종 hidden aggregate 없음 | 독립 424건 보호 평가·attestation·aggregate 완료 |
 | B-03A | 해결 | tuning에서 balanced가 strict 대비 occurrence FP +2로 전체 gate 실패 | hidden에서 occurrence TP +2·FP +0 및 전체 gate 통과 |
 | B-04 | 열림 | TestPyPI 동일 artifact 설치 증거 없음 | R4 TestPyPI smoke 완료 |
-| B-06 | 열림 | 이전 RC `813fc36`에 `110faa3`·`ade45f2`와 2026-09-08 검토 수정이 빠져 있음 | R5 새 후보 확정·CI·hidden·artifact 증거 완료 |
-| B-07 | 열림 | `publish-testpypi.yml`이 이전 후보의 commit·run-id·hash를 고정 중 | 새 후보 값으로 갱신 |
+| B-06 | 열림 | 이전 RC `813fc36`에 `110faa3`·`ade45f2`와 2026-09-08 검토 수정이 빠져 있음 | R5 새 후보 확정·CI·hidden·artifact 증거 완료. commit·CI·artifact는 §3.2로 완료, hidden 평가만 남음 |
+| B-07 | 열림 | `publish-testpypi.yml`이 이전 후보의 commit·run-id·hash를 고정 중 | 새 후보 값으로 갱신. 값은 §3.2에 확보했고 hidden 통과 후 반영 |
+| B-08 | 열림 | authoritative artifact가 2026-09-22에 만료 | 그 전에 TestPyPI 게시, 또는 CI 재실행 후 run-id 재고정 |
 | B-05 | 열림 | `main`·PyPI 공개 승인 전 | B-01~04 해제 후 소유자 명시 승인 |
 
 ## 8. `0.1.0` 이후로 넘긴 작업
