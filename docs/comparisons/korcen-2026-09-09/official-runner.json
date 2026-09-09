@@ -1,0 +1,1612 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-09T05:00:14.279431+00:00",
+  "corpus": {
+    "sha256": "4ad85de87665defd4fdfbe9eca89884a9f1f8fa228fd005c4afc45c862bc2ce7",
+    "files": [
+      {
+        "corpus_id": "koguard-provisional-ablation-v1",
+        "sha256": "8d08bea11eff313f0c7ba6cf19aea6b90d5255083d1053308619f6c303e337df"
+      }
+    ],
+    "case_count": 20,
+    "evaluated_case_count": 20,
+    "excluded_review_count": 0
+  },
+  "runner": {
+    "name": "koguard-comparison-runner",
+    "version": "1",
+    "python_version": "3.11.9",
+    "implementation": "CPython",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "configuration_sha256": "02a61cca97fd5d84c64a71ba9bd76432556e825805985ee5a0a1d538c7f845dc"
+  },
+  "detectors": [
+    {
+      "detector_id": "koguard",
+      "artifact": {
+        "package": "koguard",
+        "version": "0.1.0",
+        "filename": "koguard-0.1.0-py3-none-any.whl",
+        "sha256": "f5e5e13ed31b6cf88e586476b0259391723c4566e57d2b48dbb91f181d17f3ec",
+        "size_bytes": 43783
+      },
+      "profile": "current-all-enabled",
+      "settings": {
+        "alias_matching": true,
+        "choseong_matching": true,
+        "exact_matching": true,
+        "fuzzy_matching": true,
+        "fuzzy_max_distance": 1,
+        "fuzzy_max_index_entries": 100000,
+        "fuzzy_max_operations": 250000,
+        "fuzzy_max_term_length": 32,
+        "fuzzy_min_score": 0.0,
+        "fuzzy_min_term_length": 3,
+        "jamo_composition_matching": true,
+        "keyboard_matching": true,
+        "max_input_length": 4096,
+        "max_whitespace_gap": 3,
+        "mixed_gap_matching": true,
+        "obfuscation_separators": "!#$%&*+,-.=@^_~·",
+        "repeat_reduction_threshold": 2,
+        "repeated_matching": true,
+        "segmented_input_matching": true,
+        "separator_matching": true,
+        "unicode_form": "NFKC",
+        "whitespace_gap_matching": true
+      },
+      "capabilities": {
+        "sentence": true,
+        "occurrences": true,
+        "spans": true,
+        "canonical_terms": true
+      },
+      "runtime": {
+        "python_version": "3.11.9",
+        "implementation": "CPython",
+        "platform": "Windows-10-10.0.26200-SP0",
+        "dependencies": [],
+        "suppressed_output": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 13,
+          "fp": 0,
+          "fn": 3,
+          "tn": 4
+        },
+        "precision": 1.0,
+        "recall": 0.8125,
+        "f1": 0.896551724137931,
+        "accuracy": 0.85
+      },
+      "occurrence_metrics": {
+        "status": "available",
+        "exact": {
+          "counts": {
+            "tp": 13,
+            "fp": 0,
+            "fn": 3
+          },
+          "precision": 1.0,
+          "recall": 0.8125,
+          "f1": 0.896551724137931
+        },
+        "span": {
+          "counts": {
+            "tp": 13,
+            "fp": 0,
+            "fn": 3
+          },
+          "precision": 1.0,
+          "recall": 0.8125,
+          "f1": 0.896551724137931
+        },
+        "canonical": {
+          "counts": {
+            "tp": 13,
+            "fp": 0,
+            "fn": 3
+          },
+          "precision": 1.0,
+          "recall": 0.8125,
+          "f1": 0.896551724137931
+        }
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "span": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "canonical": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "tn": 2
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "span": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "canonical": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6666666666666666
+            },
+            "span": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6666666666666666
+            },
+            "canonical": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6666666666666666
+            }
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "span": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "canonical": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": null,
+              "recall": null,
+              "f1": null
+            },
+            "span": {
+              "counts": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": null,
+              "recall": null,
+              "f1": null
+            },
+            "canonical": {
+              "counts": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": null,
+              "recall": null,
+              "f1": null
+            }
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "span": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "canonical": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": null,
+              "recall": null,
+              "f1": null
+            },
+            "span": {
+              "counts": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": null,
+              "recall": null,
+              "f1": null
+            },
+            "canonical": {
+              "counts": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": null,
+              "recall": null,
+              "f1": null
+            }
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "span": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "canonical": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "accuracy": 0.6666666666666666
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": 1.0,
+              "recall": 0.6666666666666666,
+              "f1": 0.8
+            },
+            "span": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": 1.0,
+              "recall": 0.6666666666666666,
+              "f1": 0.8
+            },
+            "canonical": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": 1.0,
+              "recall": 0.6666666666666666,
+              "f1": 0.8
+            }
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "span": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "canonical": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "span": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "canonical": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0
+              },
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "accuracy": 0.6666666666666666
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": 1.0,
+              "recall": 0.6666666666666666,
+              "f1": 0.8
+            },
+            "span": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": 1.0,
+              "recall": 0.6666666666666666,
+              "f1": 0.8
+            },
+            "canonical": {
+              "counts": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": 1.0,
+              "recall": 0.6666666666666666,
+              "f1": 0.8
+            }
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": null,
+              "recall": 0.0,
+              "f1": null
+            },
+            "span": {
+              "counts": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": null,
+              "recall": 0.0,
+              "f1": null
+            },
+            "canonical": {
+              "counts": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1
+              },
+              "precision": null,
+              "recall": 0.0,
+              "f1": null
+            }
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 0.3333333333333333,
+            "f1": 0.5,
+            "accuracy": 0.3333333333333333
+          },
+          "occurrence_metrics": {
+            "status": "available",
+            "exact": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 2
+              },
+              "precision": 1.0,
+              "recall": 0.3333333333333333,
+              "f1": 0.5
+            },
+            "span": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 2
+              },
+              "precision": 1.0,
+              "recall": 0.3333333333333333,
+              "f1": 0.5
+            },
+            "canonical": {
+              "counts": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 2
+              },
+              "precision": 1.0,
+              "recall": 0.3333333333333333,
+              "f1": 0.5
+            }
+          }
+        }
+      ],
+      "limitations": []
+    },
+    {
+      "detector_id": "korcen",
+      "artifact": {
+        "package": "korcen",
+        "version": "1.0.3",
+        "filename": "korcen-1.0.3-py3-none-any.whl",
+        "sha256": "5139fb973ab40f2f4caaa722c97553397993e6a83a463a1098a85061834fb446",
+        "size_bytes": 29448
+      },
+      "profile": "korean-all",
+      "settings": {
+        "foreign": false
+      },
+      "capabilities": {
+        "sentence": true,
+        "occurrences": false,
+        "spans": false,
+        "canonical_terms": false
+      },
+      "runtime": {
+        "python_version": "3.11.9",
+        "implementation": "CPython",
+        "platform": "Windows-10-10.0.26200-SP0",
+        "dependencies": [
+          {
+            "package": "better-profanity",
+            "version": "0.7.0"
+          },
+          {
+            "package": "colorama",
+            "version": "0.4.6"
+          }
+        ],
+        "suppressed_output": false
+      },
+      "sentence_metrics": {
+        "counts": {
+          "tp": 7,
+          "fp": 0,
+          "fn": 9,
+          "tn": 4
+        },
+        "precision": 1.0,
+        "recall": 0.4375,
+        "f1": 0.6086956521739131,
+        "accuracy": 0.55
+      },
+      "occurrence_metrics": {
+        "status": "unsupported",
+        "reason": "detector does not expose occurrence spans or canonical terms"
+      },
+      "slice_metrics": [
+        {
+          "slice": "alias",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "benign-substring",
+          "case_count": 4,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 2
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "choseong",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
+            "accuracy": 0.5
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "direct",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "domain-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "fuzzy",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "game-term",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 0,
+              "tn": 1
+            },
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "accuracy": 1.0
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "jamo",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "keyboard",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "accuracy": 0.6666666666666666
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "mixed-gap",
+          "case_count": 2,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "repeated",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "separator",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "token-boundary",
+          "case_count": 1,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "accuracy": 0.0
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        },
+        {
+          "slice": "whitespace",
+          "case_count": 3,
+          "sentence_metrics": {
+            "counts": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 1,
+              "tn": 0
+            },
+            "precision": 1.0,
+            "recall": 0.6666666666666666,
+            "f1": 0.8,
+            "accuracy": 0.6666666666666666
+          },
+          "occurrence_metrics": {
+            "status": "unsupported",
+            "reason": "detector does not expose occurrence spans or canonical terms"
+          }
+        }
+      ],
+      "limitations": [
+        "detector does not expose occurrence spans or canonical terms"
+      ]
+    }
+  ],
+  "case_results": [
+    {
+      "case_id": "ablation-positive-exact",
+      "label": "positive",
+      "slices": [
+        "direct"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-alias",
+      "label": "positive",
+      "slices": [
+        "alias"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-repeated",
+      "label": "positive",
+      "slices": [
+        "repeated"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-separator",
+      "label": "positive",
+      "slices": [
+        "separator"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-whitespace",
+      "label": "positive",
+      "slices": [
+        "whitespace"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-mixed",
+      "label": "positive",
+      "slices": [
+        "mixed-gap"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-keyboard",
+      "label": "positive",
+      "slices": [
+        "keyboard"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-jamo",
+      "label": "positive",
+      "slices": [
+        "jamo"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-choseong",
+      "label": "positive",
+      "slices": [
+        "choseong"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-segmented",
+      "label": "positive",
+      "slices": [
+        "keyboard",
+        "separator",
+        "mixed-gap"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-positive-fuzzy",
+      "label": "positive",
+      "slices": [
+        "fuzzy"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-normal-chat",
+      "label": "hard-negative",
+      "slices": [
+        "game-term"
+      ],
+      "gold_detected": false,
+      "gold_occurrence_count": 0,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-benign-substring",
+      "label": "positive",
+      "slices": [
+        "benign-substring"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-presentation",
+      "label": "positive",
+      "slices": [
+        "whitespace",
+        "token-boundary"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-watermelon",
+      "label": "hard-negative",
+      "slices": [
+        "benign-substring"
+      ],
+      "gold_detected": false,
+      "gold_occurrence_count": 0,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-finger",
+      "label": "positive",
+      "slices": [
+        "benign-substring"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": 1
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-development",
+      "label": "hard-negative",
+      "slices": [
+        "domain-term"
+      ],
+      "gold_detected": false,
+      "gold_occurrence_count": 0,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-returning",
+      "label": "hard-negative",
+      "slices": [
+        "benign-substring"
+      ],
+      "gold_detected": false,
+      "gold_occurrence_count": 0,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "tn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-unconfigured-separator",
+      "label": "positive",
+      "slices": [
+        "choseong",
+        "separator"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "detector_id": "korcen",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": null
+        }
+      ]
+    },
+    {
+      "case_id": "ablation-negative-newline-keyboard",
+      "label": "positive",
+      "slices": [
+        "keyboard",
+        "whitespace"
+      ],
+      "gold_detected": true,
+      "gold_occurrence_count": 1,
+      "detectors": [
+        {
+          "detector_id": "koguard",
+          "detected": false,
+          "sentence_outcome": "fn",
+          "predicted_occurrence_count": 0
+        },
+        {
+          "detector_id": "korcen",
+          "detected": true,
+          "sentence_outcome": "tp",
+          "predicted_occurrence_count": null
+        }
+      ]
+    }
+  ]
+}
