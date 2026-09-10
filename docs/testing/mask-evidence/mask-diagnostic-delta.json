@@ -1,0 +1,32 @@
+{
+  "strict": {
+    "case_count": 52,
+    "changed_cases": [
+      {
+        "id": "direct-12",
+        "before": false,
+        "after": true
+      }
+    ]
+  },
+  "balanced": {
+    "case_count": 52,
+    "changed_cases": [
+      {
+        "id": "direct-12",
+        "before": false,
+        "after": true
+      }
+    ]
+  },
+  "aggressive": {
+    "case_count": 52,
+    "changed_cases": [
+      {
+        "id": "direct-12",
+        "before": false,
+        "after": true
+      }
+    ]
+  }
+}

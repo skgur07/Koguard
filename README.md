@@ -20,13 +20,13 @@ Alias 매칭, 영문 두벌식 자판·호환 자모 조합, 독립 토큰 Fuzzy
 [PF-005 corpus 상태](https://github.com/skgur07/Koguard/blob/dev/docs/corpus-intake-status.md)를 참고하세요.
 
 `0.1.0`은 아직 PyPI에 공개하지 않았습니다. PF-013의 MIT·CI·artifact hardening은 완료했고
-비공개 취약점 신고도 활성화했습니다. 독립 hidden gate와 최종 release candidate CI는 통과했고
-남은 공개 gate는 TestPyPI 동일 artifact 설치 검증입니다. 실제 `main` 승격과 PyPI 업로드는
+비공개 취약점 신고도 활성화했습니다. 이전 후보의 평가·CI 근거는 새 마스킹·사전 변경의 검증을 대신하지 않습니다.
+새 후보의 평가·CI와 TestPyPI 동일 artifact 설치 검증이 필요합니다. 실제 `main` 승격과 PyPI 업로드는
 유지관리자의 별도 승인을 요구합니다.
 현재 판정과 안전한 실행 절차는
 [PF-014 릴리즈 준비 보고서](https://github.com/skgur07/Koguard/blob/dev/docs/pf014-release-readiness.md)에 기록합니다.
 
-0.1.0의 폐쇄된 import 목록, 제거한 미래 enum과 Adapter·Plugin·AI·masking 비지원 경계는
+0.1.0의 폐쇄된 import 목록, 제거한 미래 enum과 Adapter·Plugin·AI 비지원 경계는
 [공개 API inventory](https://github.com/skgur07/Koguard/blob/dev/docs/public-api-inventory.md)에 기록되어 있습니다.
 
 ## 사용법
@@ -47,6 +47,29 @@ print(engine.contains("검사할 문장"))  # bool
 result = engine.check("검사할 문장")  # CheckResult
 print(result.detected)
 print(result.matches)
+```
+
+### 욕설 마스킹
+
+```python
+print(engine.mask("븅신 하지 마"))            # ** 하지 마
+print(engine.mask("시발 하지 마", char="#"))  # ## 하지 마
+aggressive = KoguardEngine(profile="aggressive")
+print(aggressive.mask("시 * 발 하지 마"))      # ***** 하지 마
+```
+
+`mask()`는 탐지된 원문 구간을 문자 수만큼 가리고, 나머지 공백·기호·Unicode는
+그대로 보존합니다. 대체 문자는 Unicode 코드 포인트 한 개로 지정합니다.
+허용어·프로필·입력 제한은 `check()`와 같으며, 탐지하지 못한 표현은 가리지 않습니다.
+[마스킹 API 계약](https://github.com/skgur07/Koguard/blob/dev/docs/mask-api.md)을 참고하세요.
+
+```python
+from koguard import KoguardDictionary
+
+custom = KoguardEngine(dictionary=KoguardDictionary.from_sources(
+    blacklist=["추가금칙어"], whitelist=["새끼손가락"],
+))  # 기본 사전에 추가
+print(custom.mask("새끼손가락 추가금칙어"))  # 새끼손가락 *****
 ```
 
 ### 탐지 프로필

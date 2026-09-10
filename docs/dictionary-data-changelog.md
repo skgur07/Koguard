@@ -138,3 +138,16 @@ TP +12·FP +4다. 문장 FP 개선만으로 전체 FP 증분 0 gate를 통과한
 
 hidden·private 원문이나 canonical term 목록을 이 문서에 복사하지 않는다. 공개할 수 있는 aggregate
 report 경로 또는 hash만 기록한다.
+
+## v6/2026-09-10 — 소유자 승인 변형 한 개 보완
+
+- candidate: `core.literal.curated.036`; source: `koguard-curated-20260910`, project MIT.
+- 변경: `븅신`을 직접 선별하여 추가. 외부 데이터셋 복사 없음.
+- 사용자 승인: 마스킹 기능 및 해당 누락 표현의 소규모 보완 제안에 대한 2026-09-10 진행 요청.
+- packaged literal: 68개 (`badwords.txt` 66개 + Alias canonical 2개), Alias 5개.
+- 근거: `tests/test_mask.py`, `docs/testing/mask-api.tdd.md`.
+- 단독 누락 회귀는 미탐지에서 탐지로 변경, 직접 작성 정상 문장 4건은 미탐지 유지.
+- 독립 tuning/hidden 평가 통과 주장이 아니다. 기존 provenance 승격 규칙 중
+  독립 tuning 근거 대신 이번 명시적 사용자 승인과 공개 로컬 회귀를 사용한 범위 한정 변경이다.
+- 정상 복합어 포함 substring도 탐지하는 기존 정책을 따른다. 새 사전에 따른 초성·Fuzzy 영향은
+  전체 회귀와 공개 진단으로 확인하며 실제 서비스 분포의 오탐률은 보장하지 않는다.

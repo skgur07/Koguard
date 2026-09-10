@@ -1,7 +1,7 @@
 # Koguard `0.1.0` 출시 실행 계획
 
-- 상태: **차단 — 새 후보 `e657692` CI·artifact 통과, hidden 평가 대기**
-- 기준일: 2026-09-09
+- 상태: **마스킹·사전 로컬 검증 완료 — 새 RC 평가·CI·TestPyPI 필요**
+- 기준일: 2026-09-10
 - 기준 브랜치: `dev`
 - 계획 시작 기능 commit: `bb919046a455b09f75cb69c720b9753973dcf150`
 - 이전 고정 RC: `813fc36c6988a7bdab68027964a206e970ab9f52` (2026-09-08 기준 **대체 예정**)
@@ -11,6 +11,10 @@
 이 문서는 `0.1.0` 공개까지의 **단일 실행 현황판**이다. 장기 방향과 정책 근거는
 [제품 집중 계획](product-focus-plan.md)에 보존하되, 지금 무엇을 하고 있고 다음에 무엇을 할지는
 이 문서에서만 관리한다.
+
+2026-09-10 사용자 승인으로 `mask()`와 단일 누락 literal 보완을 범위에 추가했다.
+이전 후보 근거는 새 변경을 포함하지 않으며, 로컬 검증은
+[마스킹 검증 기록](testing/mask-api.tdd.md)에 남긴다.
 
 ## 1. 이번 출시의 종료점
 
@@ -45,9 +49,9 @@
 
 | 영역 | 상태 | 현재 근거 |
 | --- | --- | --- |
-| Core API | 완료 | `check()`, `contains()`, match span, Whitelist |
+| Core API | 로컬 검증 완료 | `check()`, `contains()`, `mask()`, match span, Whitelist |
 | 공개 profile | 완료 | `strict`, 기본 `balanced`, 선택 `aggressive` |
-| 기본 데이터 provenance | 완료 | packaged term 67개, Alias 5개, 미확인 항목 0개 |
+| 기본 데이터 provenance | 완료 | packaged term 68개, Alias 5개, 미확인 항목 0개 |
 | tuning 기준선 | 완료 | 확정 2,763건: positive 639, hard-negative 2,124 |
 | positive 변형 입력 | 생성 완료 | 8개 slice, positive-target 240 + decoy 240 |
 | positive 변형 판정 | 완료 | 독립 합의 480건: positive 240, hard-negative 240, review·불일치 0 |
