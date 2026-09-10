@@ -58,6 +58,7 @@ def test_engine_and_dictionary_expose_only_implemented_core_operations() -> None
         "config",
         "contains",
         "dictionary",
+        "mask",
     }
     assert _public_class_names(KoguardDictionary) == {
         "aliases",

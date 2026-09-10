@@ -50,3 +50,7 @@ of `slang.csv`.
 No third-party model is bundled. Applications should review their own policy,
 context, and false-positive requirements before using the defaults for moderation
 decisions.
+
+The variant `븅신` was directly curated for Koguard and approved by the owner
+on 2026-09-10 under the project MIT license. It was not copied from an external
+dataset. Local regression evidence does not establish independent corpus recall.

@@ -150,6 +150,25 @@ class KoguardEngine:
 
         return self.check(text).detected
 
+    def mask(self, text: str, *, char: str = "*") -> str:
+        """Replace detected original spans with one ``char`` per Unicode code point.
+
+        Validate the replacement first, then preserve all ``check`` input and
+        work limits. Text outside the returned matches is kept verbatim.
+        """
+
+        if not isinstance(char, str):
+            raise TypeError("char must be a string")
+        if len(char) != 1:
+            raise ValueError("char must contain exactly one Unicode code point")
+        result = self.check(text)
+        if not result.matches:
+            return text
+        masked = list(text)
+        for match in result.matches:
+            masked[match.start : match.end] = [char] * (match.end - match.start)
+        return "".join(masked)
+
     def check(self, text: str) -> CheckResult:
         """Check one input string and return every non-whitelisted profanity match."""
 

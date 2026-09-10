@@ -22,6 +22,9 @@ engine = KoguardEngine()
 assert engine.contains("시발")
 assert engine.contains("틀딱")
 assert engine.contains("sibal")
+assert engine.contains("븅신")
+assert engine.mask("븅신 하지 마", char="#") == "## 하지 마"
+assert KoguardEngine(profile="aggressive").mask("시 * 발") == "*****"
 assert not engine.contains("오늘 저녁에 같이 게임할래?")
 result = engine.check("시발")
 assert result.detected and result.matches[0].term == "시발"

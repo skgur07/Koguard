@@ -9,7 +9,7 @@
 
 | 분류 | 공개 심볼 | 실제 사용 경로 |
 | --- | --- | --- |
-| Engine | `KoguardEngine` | 불변 설정·사전을 조립하고 `contains()`·`check()` 실행 |
+| Engine | `KoguardEngine` | 불변 설정·사전을 조립하고 `contains()`·`check()`·`mask()` 실행 |
 | Dictionary | `KoguardDictionary` | 기본 또는 사용자 blacklist·whitelist·Alias 구성 |
 | 설정 | `EngineConfig` | 고급 사용자의 matcher·입력·계산량 상한 직접 설정 |
 | 타입 | `NormalizationForm` | 사전과 Engine의 `NFC`·`NFKC` 정규화 선택 |
@@ -26,7 +26,7 @@
 | 예외 | `FuzzyOperationLimitError` | Fuzzy 결정적 작업량 상한 초과 |
 | 메타데이터 | `__version__` | 설치된 배포 버전 |
 
-`KoguardEngine`의 공개 동작은 `config`, `dictionary`, `contains(text)`, `check(text)`다.
+`KoguardEngine`의 공개 동작은 `config`, `dictionary`, `contains(text)`, `check(text)`, `mask(text, *, char="*")`다.
 `KoguardDictionary`의 권장 생성 경로는 `default()`와 `from_sources()`다. dataclass 직접
 생성자도 같은 불변식으로 검증되며, 불변 원본 필드와 `ordered_blacklist`,
 `ordered_whitelist`, `ordered_aliases`를 읽을 수 있다.
@@ -77,20 +77,13 @@ config는 고급 경로로 구분한다.
 
 ## 비지원 기능과 확장 경계
 
-0.1.0 core에는 Adapter, Plugin manager, AI/Embedding detector, async 검사, masking 함수,
+0.1.0 core에는 Adapter, Plugin manager, AI/Embedding detector, async 검사,
 module-level singleton `check()`·`contains()`가 없다. 이를 암시하는 import, 설정, extra와 런타임
 의존성도 제공하지 않는다.
 
-masking은 정확한 원문 span으로 호출자가 정책에 맞게 구현할 수 있고, 대체 문자·중첩·보존
-규칙에 대한 반복 요구가 아직 없으므로 core에 추가하지 않는다.
-
-```python
-result = engine.check(text)
-masked = list(text)
-for match in result.matches:
-    masked[match.start : match.end] = "*" * (match.end - match.start)
-masked_text = "".join(masked)
-```
+`engine.mask(text, char="*")`는 `check()`가 반환한 원문 구간을 가린다.
+대체 문자는 Unicode 코드 포인트 한 개이며, 허용어와 구간 밖 원문을 보존한다.
+자세한 계약과 예제는 [마스킹 API](mask-api.md)를 참고한다.
 
 향후 AI는 독립 hidden evaluation에서 규칙·사전으로 해결되지 않는 cluster와 비용 예산이 먼저
 확인될 때만 선택적 post-core 계층으로 검토한다. 그 계층은 core match를 취소하거나

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "reviewed_at": "2026-09-04",
+  "reviewed_at": "2026-09-10",
   "project_license": "MIT",
   "artifact_policy": "Only approved payload may enter the wheel or sdist; pending sources remain reference-only or local quarantine.",
   "sources": [
@@ -17,14 +17,14 @@
     },
     {
       "source_id": "koguard-curated-defaults",
-      "reference": "evaluation/dictionary-provenance.v1.json#koguard-curated-v1",
-      "revision": "2026-08-18",
+      "reference": "evaluation/dictionary-provenance.v1.json",
+      "revision": "2026-08-18 and 2026-09-10",
       "declared_license": "MIT",
       "rights_status": "approved",
       "allowed_scope": "packaged lexical defaults under project MIT license",
       "payload_in_artifacts": true,
       "runtime_dependency": false,
-      "evidence": "LICENSE; evaluation/dictionary-provenance.v1.json; owner approval on 2026-08-18."
+      "evidence": "LICENSE; evaluation/dictionary-provenance.v1.json; owner approval on 2026-08-18 and 2026-09-10; docs/dictionary-data-changelog.md."
     },
     {
       "source_id": "korcen-selected-literals",

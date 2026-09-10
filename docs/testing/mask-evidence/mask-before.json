@@ -1,0 +1,26 @@
+{
+  "balanced/clean_short": {
+    "p95_ms": 0.0257
+  },
+  "balanced/positive_short": {
+    "p95_ms": 0.0338
+  },
+  "balanced/clean_4096": {
+    "p95_ms": 8.0069
+  },
+  "balanced/positive_4096": {
+    "p95_ms": 9.9748
+  },
+  "aggressive/clean_short": {
+    "p95_ms": 0.2549
+  },
+  "aggressive/positive_short": {
+    "p95_ms": 0.2621
+  },
+  "aggressive/clean_4096": {
+    "p95_ms": 17.0071
+  },
+  "aggressive/positive_4096": {
+    "p95_ms": 16.7202
+  }
+}

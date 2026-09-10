@@ -3,6 +3,7 @@
   "manifest_id": "koguard-default-dictionary-v1",
   "normalization_form": "NFKC",
   "sources": [
+    {"source_id": "koguard-curated-20260910", "kind": "curated", "name": "Koguard owner-approved variant regression", "reference": null, "revision": "2026-09-10", "license": "MIT", "license_status": "approved", "redistribution_allowed": true},
     {
       "source_id": "koguard-curated-v1",
       "kind": "curated",
@@ -35,6 +36,7 @@
     }
   ],
   "candidates": [
+    {"candidate_id": "core.literal.curated.036", "surface": "븅신", "normalized_surface": "븅신", "canonical": "븅신", "normalized_canonical": "븅신", "representation": "literal", "matcher": "exact", "target_layer": "core", "classification": "positive", "status": "packaged", "source_id": "koguard-curated-20260910", "evaluation_refs": ["tests/test_mask.py", "docs/testing/mask-api.tdd.md"], "review": {"status": "approved", "decision_reference": "docs/dictionary-data-changelog.md", "notes": "Owner authorized the explicitly proposed missing variant on 2026-09-10; local regressions only, no independent corpus claim."}, "notes": "Directly curated variant; no external dataset copied."},
     {"candidate_id":"core.literal.curated.001","surface":"병신","normalized_surface":"병신","canonical":"병신","normalized_canonical":"병신","representation":"literal","matcher":"exact","target_layer":"core","classification":"positive","status":"packaged","source_id":"koguard-curated-v1","evaluation_refs":["tests/corpus/exact_cases.json","docs/accuracy-baseline.md"],"review":{"status":"approved","decision_reference":"src/koguard/data/NOTICE.md","notes":"Koguard default lexical core."},"notes":"Context-independent exact substring."},
     {"candidate_id":"core.literal.curated.002","surface":"시발","normalized_surface":"시발","canonical":"시발","normalized_canonical":"시발","representation":"literal","matcher":"exact","target_layer":"core","classification":"positive","status":"packaged","source_id":"koguard-curated-v1","evaluation_refs":["tests/corpus/exact_cases.json","docs/accuracy-baseline.md"],"review":{"status":"approved","decision_reference":"src/koguard/data/NOTICE.md","notes":"Koguard default lexical core."},"notes":"Context-independent exact substring."},
     {"candidate_id":"core.literal.curated.003","surface":"씨발","normalized_surface":"씨발","canonical":"씨발","normalized_canonical":"씨발","representation":"literal","matcher":"exact","target_layer":"core","classification":"positive","status":"packaged","source_id":"koguard-curated-v1","evaluation_refs":["tests/corpus/exact_cases.json","docs/accuracy-baseline.md"],"review":{"status":"approved","decision_reference":"src/koguard/data/NOTICE.md","notes":"Koguard default lexical core."},"notes":"Context-independent exact substring."},

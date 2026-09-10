@@ -7,6 +7,9 @@ Semantic Versioning after the first public release.
 
 ### Added
 
+- `KoguardEngine.mask(text, char="*")` with original-span and Whitelist preservation.
+- Owner-approved literal variant `븅신` with provenance and local regressions.
+
 - Reproducible public corpus, matcher ablation, profile reporting, and artifact audit tooling.
 - `strict`, `balanced`, and `aggressive` profiles plus the `contains()` convenience API.
 - Unicode format-character, combining-mark, compatibility-jamo, span, Whitelist, and adversarial regressions.

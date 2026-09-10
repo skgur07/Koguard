@@ -1,0 +1,318 @@
+{
+  "kind": "author-selected-diagnostic-not-independent-gold",
+  "selection": "Fixed before executing either detector. Ordinary cases include 16 existing Whitelist regression cases; policy-boundary has no correctness label. Do not merge with official gold corpus.",
+  "cases": [
+    {
+      "id": "direct-01",
+      "group": "direct",
+      "text": "시발",
+      "expected": true
+    },
+    {
+      "id": "direct-02",
+      "group": "direct",
+      "text": "씨발",
+      "expected": true
+    },
+    {
+      "id": "direct-03",
+      "group": "direct",
+      "text": "병신",
+      "expected": true
+    },
+    {
+      "id": "direct-04",
+      "group": "direct",
+      "text": "개새끼",
+      "expected": true
+    },
+    {
+      "id": "direct-05",
+      "group": "direct",
+      "text": "지랄",
+      "expected": true
+    },
+    {
+      "id": "direct-06",
+      "group": "direct",
+      "text": "좆같다",
+      "expected": true
+    },
+    {
+      "id": "direct-07",
+      "group": "direct",
+      "text": "닥쳐",
+      "expected": true
+    },
+    {
+      "id": "direct-08",
+      "group": "direct",
+      "text": "개자식",
+      "expected": true
+    },
+    {
+      "id": "direct-09",
+      "group": "direct",
+      "text": "미친놈",
+      "expected": true
+    },
+    {
+      "id": "direct-10",
+      "group": "direct",
+      "text": "느금마",
+      "expected": true
+    },
+    {
+      "id": "direct-11",
+      "group": "direct",
+      "text": "멍청이",
+      "expected": true
+    },
+    {
+      "id": "direct-12",
+      "group": "direct",
+      "text": "븅신",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-01",
+      "group": "obfuscation",
+      "text": "시이이발",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-02",
+      "group": "obfuscation",
+      "text": "시*!발",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-03",
+      "group": "obfuscation",
+      "text": "시 발",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-04",
+      "group": "obfuscation",
+      "text": "시 * 발",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-05",
+      "group": "obfuscation",
+      "text": "ㅅㅂ",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-06",
+      "group": "obfuscation",
+      "text": "ㅈ같네",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-07",
+      "group": "obfuscation",
+      "text": "ㅄ",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-08",
+      "group": "obfuscation",
+      "text": "tlqkf",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-09",
+      "group": "obfuscation",
+      "text": "ㅅㅣㅂㅏㄹ",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-10",
+      "group": "obfuscation",
+      "text": "ㅅ * ㅂ",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-11",
+      "group": "obfuscation",
+      "text": "개세끼",
+      "expected": true
+    },
+    {
+      "id": "obfuscation-12",
+      "group": "obfuscation",
+      "text": "SIBAL",
+      "expected": true
+    },
+    {
+      "id": "ordinary-01",
+      "group": "ordinary",
+      "text": "전원이 꺼져 있었다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-02",
+      "group": "ordinary",
+      "text": "불이 꺼져 버렸다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-03",
+      "group": "ordinary",
+      "text": "촛불이 꺼져 가는 중이다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-04",
+      "group": "ordinary",
+      "text": "전등이 꺼져서 어두웠다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-05",
+      "group": "ordinary",
+      "text": "위기가 닥쳐올 것이다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-06",
+      "group": "ordinary",
+      "text": "위기가 닥쳐온 뒤였다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-07",
+      "group": "ordinary",
+      "text": "마감이 닥쳐서 서둘렀다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-08",
+      "group": "ordinary",
+      "text": "서랍을 뒤져 보았다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-09",
+      "group": "ordinary",
+      "text": "온 집을 뒤져도 없었다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-10",
+      "group": "ordinary",
+      "text": "가방을 뒤져서 찾았다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-11",
+      "group": "ordinary",
+      "text": "등신대 모형을 세웠다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-12",
+      "group": "ordinary",
+      "text": "절에서 등신불을 보았다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-13",
+      "group": "ordinary",
+      "text": "영화를 보지 못했어",
+      "expected": false
+    },
+    {
+      "id": "ordinary-14",
+      "group": "ordinary",
+      "text": "그것을 보지 않았다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-15",
+      "group": "ordinary",
+      "text": "쳐다보지 말고 가자",
+      "expected": false
+    },
+    {
+      "id": "ordinary-16",
+      "group": "ordinary",
+      "text": "뒤돌아보지 마",
+      "expected": false
+    },
+    {
+      "id": "ordinary-17",
+      "group": "ordinary",
+      "text": "오늘 날씨가 좋습니다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-18",
+      "group": "ordinary",
+      "text": "수박을 먹었다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-19",
+      "group": "ordinary",
+      "text": "개발 작업을 시작한다",
+      "expected": false
+    },
+    {
+      "id": "ordinary-20",
+      "group": "ordinary",
+      "text": "돌아오는 길이다",
+      "expected": false
+    },
+    {
+      "id": "policy-boundary-01",
+      "group": "policy-boundary",
+      "text": "시발점은 시작 위치다",
+      "expected": null
+    },
+    {
+      "id": "policy-boundary-02",
+      "group": "policy-boundary",
+      "text": "역사 기록의 병신년",
+      "expected": null
+    },
+    {
+      "id": "policy-boundary-03",
+      "group": "policy-boundary",
+      "text": "새끼손가락을 다쳤다",
+      "expected": null
+    },
+    {
+      "id": "policy-boundary-04",
+      "group": "policy-boundary",
+      "text": "촛불이 바람에 꺼져 어두워졌다",
+      "expected": null
+    },
+    {
+      "id": "policy-boundary-05",
+      "group": "policy-boundary",
+      "text": "온 집을 뒤질 각오로 찾았다",
+      "expected": null
+    },
+    {
+      "id": "policy-boundary-06",
+      "group": "policy-boundary",
+      "text": "고양이가 새끼를 낳았다",
+      "expected": null
+    },
+    {
+      "id": "policy-boundary-07",
+      "group": "policy-boundary",
+      "text": "시 발표",
+      "expected": null
+    },
+    {
+      "id": "policy-boundary-08",
+      "group": "policy-boundary",
+      "text": "https://example.com/시발",
+      "expected": null
+    }
+  ]
+}
